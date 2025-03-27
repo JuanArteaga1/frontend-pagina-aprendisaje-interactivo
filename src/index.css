@@ -1,3 +1,4 @@
+@import "tailwindcss";
 body {
   font-family: sans-serif, sans-serif;
   background-color: #f8f9fa;
@@ -6,32 +7,62 @@ body {
 }
 
 /* NAVBAR */
-nav {
+.navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
+  padding: 10px 30px; /* Más espacio lateral */
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.nav-left {
-  display: flex;
-  align-items: center;
-  gap: 20px;
+/* Logo más grande */
+.logo {
+  height: 90px; 
+  width: auto;
 }
 
+/* Alinear enlaces al centro-derecha */
 .nav-links {
   display: flex;
-  gap: 20px;
+  gap: 40px; /* Más espacio entre enlaces */
   list-style: none;
   padding: 0;
+  margin-left: auto; /* Empuja a la derecha */
 }
 
+/* Estilo de enlaces */
 .nav-links a {
   text-decoration: none;
   color: #333;
-  font-weight: 400;
+  font-weight: 500; /* Más grueso para destacar */
+  text-transform: uppercase; /* Texto en mayúsculas */
+}
+
+/* Hover para enlaces */
+.hover-link:hover {
+  color: #1809e8; /* Color */
+}
+
+/* Iconos alineados a la derecha */
+.nav-icons {
+  display: flex;
+  gap: 40px;
+  margin-left: 60px;
+}
+
+/* Estilo para los botones de íconos */
+.icon-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Tamaño de los íconos */
+.icon {
+  width: 30px;
+  height: 30px;
+  color: #333;
 }
 
 /* PERFIL */

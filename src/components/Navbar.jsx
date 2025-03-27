@@ -1,22 +1,41 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Search, User } from "lucide-react";
 
 const Navbar = () => {
     return (
-        <nav>
+        <nav className="navbar">
+            {/* Sección Izquierda: Logo */}
             <div className="nav-left">
                 <Link to="/">
-                    <img src="/img/logo.png" alt="Logo de Academia Ingeniería" className="h-10" style={{ height: "50px", width: "auto" }} />
+                    <img
+                        src="/img/logo.png"
+                        alt="Logo de Academia Ingeniería"
+                        className="logo"
+                    />
                 </Link>
-                <ul className="nav-links">
-                    <li><Link to="/simulaciones">Simulaciones</Link></li>
-                    <li><Link to="/appmovil">Aplicaciones Móviles</Link></li>
-                    <li><Link to="/investigaciones">Investigaciones</Link></li>
-                    <li><Link to="/podcast">Podcast</Link></li>
-                </ul>
+            </div>
+
+            {/* Menú de Navegación */}
+            <ul className="nav-links">
+                <li><Link to="/simulaciones" className="hover-link">SIMULACIONES</Link></li>
+                <li><Link to="/appmovil" className="hover-link">APP MOVILES</Link></li>
+                <li><Link to="/investigaciones" className="hover-link">INVESTIGACIONES</Link></li>
+                <li><Link to="/podcast" className="hover-link">PODCAST</Link></li>
+            </ul>
+
+            {/* Sección Derecha: Iconos de búsqueda y usuario */}
+            <div className="nav-icons">
+                <button aria-label="Buscar" className="icon-button">
+                    <Search className="icon" />
+                </button>
+                <Link to="/login" aria-label="Iniciar Sesión" className="icon-button">
+                    <User className="icon" />
+                </Link>
             </div>
         </nav>
     );
 };
+
 
 export default Navbar;

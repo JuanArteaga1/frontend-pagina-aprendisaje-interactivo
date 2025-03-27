@@ -17,11 +17,13 @@ const Home = () => {
         </button>
       </div>
 
+
       {/* Sección de categorías */}
       <div className="categories">
         <div className="category">
           <img src="/img/physics.png" alt="Física" />
           <p>FÍSICA</p>
+
         </div>
         <div className="category">
           <img src="/img/civil.png" alt="Ing Civil" />

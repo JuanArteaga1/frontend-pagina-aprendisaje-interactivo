@@ -1,0 +1,105 @@
+/* Contenedor Principal */
+.login-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    background: #f8f9fa;
+  }
+  
+  /* Caja del formulario */
+  .login-container {
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    width: 400px;
+  }
+  
+  /* Logo */
+  .login-logo {
+    width: 150px;
+    margin-bottom: 15px;
+    padding: -100px;
+  }
+  
+  /* Título */
+  .login-title {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 25px;
+    font-weight:600;
+    color: #333;
+  }
+  
+  /* Etiquetas */
+  .login-label {
+    display: block;
+    text-align: left;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #333;
+  }
+  
+  /* Inputs */
+  .login-input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    background: #fff;
+    transition: all 0.3s ease;
+  }
+  
+  .login-input:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+  }
+  
+  /* Sección Recuérdame */
+  .login-remember {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px; /* Espacio entre checkbox y texto */
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+  
+  /* Botón */
+  .login-button {
+    width: 100%;
+    padding: 12px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+  }
+  
+  .login-button:hover {
+    background: #0056b3;
+    transform: scale(1.03);
+  }
+  
+  /* Olvidaste tu contraseña */
+  .login-forgot {
+    display: block;
+    margin-top: 15px;
+    font-size: 14px;
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .login-forgot:hover {
+    text-decoration: underline;
+    color: #0056b3;
+  }
