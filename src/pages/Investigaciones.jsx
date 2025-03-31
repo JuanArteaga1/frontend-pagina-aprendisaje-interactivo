@@ -11,9 +11,7 @@ const Investigaciones = () => {
       <Navbar loggedIn={loggedIn} />
       <p>¿Investigaciones?</p>
       {/* Botón que redirige a SubirInvestigaciones */}
-      <button className="hero-button" onClick={() => navigate("/SubirInvestigaciones")}>
-          SubirInvestigacion
-        </button>
+      
     </div>
   );
 };

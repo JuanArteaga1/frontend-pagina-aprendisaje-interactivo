@@ -15,7 +15,6 @@ const Login = () => {
     console.log("Nombre Completo:", fullName);
     console.log("Correo:", email);
     console.log("Contraseña:", password);
-    alert("Inicio de sesión exitoso");
   };
 
   return (
@@ -53,7 +52,7 @@ const Login = () => {
               required
             />
 
-            <button type="submit" className="login-button">Acceder</button>
+            <button type="submit" className="login-button" onClick={() => navigate("/")} >Acceder</button>
           </form>
 
           <a href="#" className="login-forgot">¿Has perdido tu contraseña?</a>
