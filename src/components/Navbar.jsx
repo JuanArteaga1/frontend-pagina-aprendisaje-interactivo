@@ -20,7 +20,7 @@ const Navbar = () => {
             <ul className="nav-links">
                 <li><Link to="/simulaciones" className="hover-link">SIMULACIONES</Link></li>
                 <li><Link to="/appmovil" className="hover-link">APP MOVILES</Link></li>
-                <li><Link to="/investigaciones" className="hover-link">INVESTIGACIONES</Link></li>
+                <li><Link to="/investigaciones" className="hover-link">INVESTIGACION</Link></li>
                 <li><Link to="/podcast" className="hover-link">PODCAST</Link></li>
             </ul>
 
