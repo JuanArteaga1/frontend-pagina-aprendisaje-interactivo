@@ -11,10 +11,11 @@ const MenuAdministrador= ({ rol }) => {
       { nombre: "Configuración", ruta: "/admin/config", icono: "⚙️" }
     ],
     docente: [
-      { nombre: "Mis Proyectos", ruta: "/docente/proyectos", icono: "📁" },
-      { nombre: "Nuevo Proyecto", ruta: "/docente/nuevo", icono: "➕" },
-      { nombre: "Calificaciones", ruta: "/docente/calificaciones", icono: "📝" },
-      { nombre: "Perfil", ruta: "/docente/perfil", icono: "👤" }
+      { nombre: "Subir Proyectos", ruta: "/docente/proyectos", icono: "➕" },
+      { nombre: "Subir investigaciones", ruta: "/SubirInvestigaciones", icono: "📝" },
+      { nombre: "Subir Podcast", ruta: "/docente/nuevo", icono: "➕" },
+      { nombre: "Subir Simulacines", ruta: "/subirsimulaciones", icono: "📝" },
+      { nombre: "Mis Proyectos", ruta: "/docente/perfil", icono: "📁" }
     ]
   };
 
@@ -51,11 +52,11 @@ const MenuAdministrador= ({ rol }) => {
       </nav>
 
       {/* Pie */}
-      <div className="p-4 border-t border-gray-700 text-sm">
+      <div className="p-4 border-t border-gray-700 text-sm " >
         <p>Sesión: {rol === 'admin' ? 'Administrador' : 'Docente'}</p>
       </div>
-      <div className="p-4 border-t border-gray-700 text-sm">
-        <p>CerrarSesion: {rol == 'admin' ? 'Administrador' : 'Docente'}</p>
+      <div >
+        <button className="p-4 bg-blue-400 py-1 rounded hover:bg-red-600 " onClick={() => navigate("/")} >Cerrar Sesion</button>
       </div>
     </div>
   );

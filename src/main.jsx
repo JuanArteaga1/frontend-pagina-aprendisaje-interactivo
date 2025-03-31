@@ -16,18 +16,27 @@ import MenuDocen from "./pages/MenuDocen";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <Routes>
+
+      //rutas de estudiante y visualizacion
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/simulaciones" element={<Simulaciones />} />
       <Route path="/podcast" element={<Podcast />} />
       <Route path="/appmovil" element={<Appmovil />} />
       <Route path="/investigaciones" element={<Investigaciones />} />
+
+      //rutas de docentes
+      <Route path="/menuadministrador" element={<MenuAdmin />} />
+
+      //rutas de docentes
+      <Route path="/menudocente" element={<MenuDocen />} />
+
+
+      //rutas de carga de elementos 
       <Route path="/subirsimulaciones" element={<Subirsimulaciones />} />
       <Route path="/SubirInvestigaciones" element={<SubirInvestigaciones />} />
       <Route path="/subirproyectos" element={<h1>proyectos</h1>} />
       <Route path="/subirpodcast" element={<h1>podcast</h1>} />
-      <Route path="/menuadministrador" element={<MenuAdmin />} />
-      <Route path="/menudocente" element={<MenuDocen />} />
 
 
 
