@@ -12,7 +12,7 @@ const Home = () => {
       {/* Imagen de fondo con botón de ingreso */}
       <div className="hero">
         <img src="/img/uni.jpg" alt="Bienvenida" />
-        <button className="hero-button" onClick={() => navigate("/menuadministrador")}>
+        <button className="hero-button" onClick={() => navigate("/login")}>
           INGRESO
         </button>
       </div>

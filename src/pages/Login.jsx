@@ -52,7 +52,7 @@ const Login = () => {
               required
             />
 
-            <button type="submit" className="login-button" onClick={() => navigate("/menuadministrador")} >Acceder</button>
+            <button type="submit" className="login-button" onClick={() => navigate("/")} >Acceder</button>
           </form>
 
           <a href="#" className="login-forgot">¿Has perdido tu contraseña?</a>
