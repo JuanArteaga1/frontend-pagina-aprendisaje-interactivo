@@ -12,6 +12,7 @@ import "./index.css";
 import SubirInvestigaciones from "./pages/SubirInvestigaciones";
 import MenuAdmin from "./pages/MenuAdmin";
 import MenuDocen from "./pages/MenuDocen";
+import SubirDocente from "./pages/SubirDocente";
 import NuevaCategoria from "./pages/NuevaCategoria";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -33,6 +34,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
       //rutas de docentes
       <Route path="/menudocente" element={<MenuDocen />} />
+      <Route path="/SubirDocente" element={<SubirDocente />} />
+
 
 
       //rutas de carga de elementos 

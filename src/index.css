@@ -1,4 +1,8 @@
 @import "tailwindcss";
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";
+
+
 body {
   font-family: sans-serif, sans-serif;
   background-color: #f8f9fa;
@@ -11,15 +15,24 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 30px; /* Más espacio lateral */
-  background-color: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 10px 30px;
+
 }
 
 /* Logo más grande */
 .logo {
-  height: 90px; 
+  height: 70px; 
   width: auto;
+}
+
+.nav-container {
+  background-color: #3C64C9;
+  padding: 20px 160px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Albert Sans', sans-serif;
 }
 
 /* Alinear enlaces al centro-derecha */
@@ -34,14 +47,17 @@ body {
 /* Estilo de enlaces */
 .nav-links a {
   text-decoration: none;
-  color: #333;
+  color: white;
   font-weight: 500; /* Más grueso para destacar */
-  text-transform: uppercase; /* Texto en mayúsculas */
+  text-transform: capitalize; 
+  font-size: 16px;
 }
 
 /* Hover para enlaces */
 .hover-link:hover {
-  color: #1809e8; /* Color */
+  text-decoration: none;
+  color: #081e57; /* Color */
+  font-family: 'Albert Sans', sans-serif;
 }
 
 /* Iconos alineados a la derecha */
@@ -222,34 +238,65 @@ body {
 }
 
 
-/*Home*/
+/*Home + Carrusel*/
 .hero {
   position: relative;
-  width: 100%;
-  height: 100vh; /* Toma toda la pantalla */
-  background-size: cover;
-  background-position: center;
+  width: 100%; /* Asegura que el carrusel ocupe todo el ancho de su contenedor */
+  height: 400px; /* Ajusta el alto que desees */
+  overflow: hidden; /* Evita que las imágenes se salgan del contenedor */
 }
 
 .hero img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  width: 100%; /* Hace que las imágenes se ajusten al contenedor */
+  height: 100%; 
+  object-fit: cover; /* Hace que la imagen mantenga su aspecto pero se recorte si es necesario */
 }
 
 .hero-button {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: rgba(0, 0, 0, 0.7);
+  left: 250px; 
+  bottom: 50px; 
+  padding: 20px 45px;
+  background-color: #FFDB4A;
   color: white;
-  padding: 15px 30px;
   border: none;
-  border-radius: 10px;
-  font-size: 18px;
+  border-radius: 5px;
+  font-size: 16px;
   cursor: pointer;
+  font-weight: 700;
+  font-size: 20px;
 }
+
+.hero-button:hover {
+  background-color: #0056b3;
+}
+
+.slick-dots {
+  position: absolute;
+  top: 345px;
+  left: 50%;
+  transform: translateX(-50%); /* Centra los puntos en el carrusel */
+  display: flex;
+  justify-content: center;
+  gap: 10px; /* Espaciado entre los puntos */
+}
+
+/* Estilos para los puntos de navegación */
+.slick-dots li button {
+  width: 20px; /* Aumenta el tamaño del botón */
+  height: 20px; /* Aumenta el tamaño del botón */
+  border-radius: 50%; /* Hace que los puntos sean circulares */
+  background-color: black; /* Fondo negro para todos los puntos inactivos */
+  border: none; /* Elimina cualquier borde predeterminado */
+  opacity: 0.5; /* Hace que los puntos inactivos sean más suaves */
+}
+
+/* Estilos para el punto activo */
+.slick-dots li.slick-active button {
+  background-color: white; /* Fondo blanco para el punto activo */
+  opacity: 1; /* Asegura que el punto activo sea completamente visible */
+}
+
 
 /* CATEGORÍAS */
 .categories {
@@ -283,6 +330,47 @@ body {
   width: 60px;
   height: 60px;
   margin-bottom: 10px;
+}
+
+.university-info {
+  background-color: #3C64C9; /* Fondo  */
+  padding: 20px;
+  text-align: center;
+  margin-top: 50px;
+  border-top: 2px solid #ccc; /* Línea superior para separar */
+}
+
+.university-info h3 {
+  font-size: 10px;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.university-info p {
+  font-size: 10px;
+  margin: 5px 0;
+  color: #ffffff;
+}
+
+.social-media {
+  margin-top: 15px;
+  color: #ffffff;
+}
+
+.social-media h4 {
+  font-size: 10px;
+  margin-bottom: 10px;
+}
+
+.social-media a {
+  text-decoration: none;
+  font-size: 10px;
+  margin: 0 10px;
+  color: #ffffff; /* Color-enlaces */
+}
+
+.social-media a:hover {
+  text-decoration: underline; /* Subraya los enlaces al pasar el ratón */
 }
 
 
@@ -339,4 +427,128 @@ body {
   background-color: #0056b3;
 }
 
+/*Simulaciones*/
+.contenido-simulaciones {
+  width: 90%;
+  margin: auto;
+  text-align: center;
+}
+
+/* Título */
+.titulo-simulaciones {
+  font-size: 28px;
+  font-weight: bold;
+  margin: 20px 0;
+  text-align: left;
+}
+
+/* Imagen de presentación */
+.presentacion img {
+  width: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* Botón de ordenar */
+.ordenar-btn {
+  margin: 20px;
+  padding: 10px;
+  background-color: #f0d53d;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-left: -1050px; /* Ajusta la posición */
+}
+
+/*Titulos de las categorias*/
+h2 {
+  text-align: left;
+  width: 100%;
+  font-weight: bold;
+}
+/* Categorías */
+.categorias {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Alinea el contenido a la izquierda */
+  margin-left: 20px; /* Ajusta según sea necesario */
+}
+
+.categoria {
+  background: #f3f3f3;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+/* Contenedor de simulaciones */
+.cards-container {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Tarjetas */
+.card {
+  width: 150px;
+  height: 150px;
+  perspective: 1000px; /* Da la sensación de profundidad */
+  cursor: pointer;
+}
+
+.card-inner {
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+}
+
+.card:hover .card-inner {
+  transform: rotateY(180deg); /* Rota la tarjeta en el eje Y */
+}
+
+.card-front, .card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden; /* Oculta la parte posterior cuando la tarjeta está volteada */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+.card-front {
+  background: white;
+}
+
+.card-back {
+  background: #3C64C9;
+  color: white;
+  text-align: center;
+  transform: rotateY(180deg); /* Coloca la parte posterior al revés */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Esto distribuye el espacio entre el nombre y el botón */
+}
+
+.card-back h3 {
+  margin-bottom: 20px; /* Añade un margen entre el nombre y el botón */
+}
+
+.card-back button {
+  padding: 5px 10px;
+  background-color: #121e3b;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.card-back button:hover {
+  background-color: white;
+  color: rgb(0, 0, 0);
+}
 
