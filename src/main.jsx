@@ -17,9 +17,15 @@ import AdministrarDocentes from "./pages/AdministracionDocente";
 import SubirProyecto from "./pages/SubirProyecto";
 import SubirPodcast from "./pages/SubirPodcast";
 import NuevaCategoria from "./pages/NuevaCategoria";
+
+import AdministrarDocentes from "./pages/AdministracionDocente";
+import MirarProyectos from "./pages/VerProyectos";
+import ProyectosPorAprobar from "./pages/ProyectosAprobar";
+
 import Fisica from "./pages/Fisica";
 import IngCivil from "./pages/IngCivil";
 import Matematicas from "./pages/Matematicas";
+
 
 
 
@@ -39,6 +45,12 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Route path="/menuadministrador" element={<MenuAdmin />} />
       <Route path="/SubirCategoria" element={<NuevaCategoria />} />
       <Route path="/AdministrarDocente" element={<AdministrarDocentes />} />
+
+      <Route path="/VerProyectos" element={<MirarProyectos />} />
+      <Route path="/Aprobar" element={<ProyectosPorAprobar />} />
+
+      
+
 
 
 
