@@ -13,9 +13,9 @@ const MenuAdministrador= ({ rol }) => {
 
     ],
     docente: [
-      { nombre: "Subir Proyectos", ruta: "/docente/proyectos", icono: "➕" },
+      { nombre: "Subir Proyectos", ruta: "/subir-proyecto", icono: "➕" },
       { nombre: "Subir investigaciones", ruta: "/SubirInvestigaciones", icono: "📝" },
-      { nombre: "Subir Podcast", ruta: "/docente/nuevo", icono: "➕" },
+      { nombre: "Subir Podcast", ruta: "/subir-podcast", icono: "➕" },
       { nombre: "Subir Simulacines", ruta: "/subirsimulaciones", icono: "📝" },
       { nombre: "Mis Proyectos", ruta: "/docente/perfil", icono: "📁" }
     ]
