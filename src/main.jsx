@@ -14,6 +14,10 @@ import MenuAdmin from "./pages/MenuAdmin";
 import MenuDocen from "./pages/MenuDocen";
 import SubirDocente from "./pages/SubirDocente";
 import NuevaCategoria from "./pages/NuevaCategoria";
+import Fisica from "./pages/Fisica";
+import IngCivil from "./pages/IngCivil";
+import Matematicas from "./pages/Matematicas";
+
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
@@ -44,6 +48,10 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Route path="/subirproyectos" element={<h1>proyectos</h1>} />
       <Route path="/subirpodcast" element={<h1>podcast</h1>} />
 
+      //Rutas de las categorias de HOME
+      <Route path="/Fisica" element={<Fisica />} />
+      <Route path="/IngCivil" element={<IngCivil />} />
+      <Route path="/Matematicas" element={<Matematicas />} />
 
 
     </Routes>

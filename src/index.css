@@ -311,7 +311,7 @@ body {
   height: 180px;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 10px; /* Bordes redondeados */
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -321,14 +321,21 @@ body {
   transition: transform 0.2s ease-in-out;
 }
 
+.category-box img {
+  width: 100px; /* Ajusta según el tamaño deseado */
+  height: auto; /* Mantiene la proporción */
+  object-fit: contain; /* Asegura que la imagen no se deforme */
+}
+
 .category:hover {
   transform: scale(1.05);
   background-color: #e0f7fa;
 }
 
 .category img {
-  width: 60px;
-  height: 60px;
+  width: 80px; /* Ajusta según sea necesario */
+  height: auto;
+  object-fit: contain;
   margin-bottom: 10px;
 }
 

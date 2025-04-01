@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar"; // Asegúrate de que esta ruta sea correcta.
 import Slider from "react-slick"; // Importa el Slider de react-slick
+import CategoryBox from "../components/CategoryBox";
 
 
 const Home = () => {
@@ -42,18 +43,9 @@ const Home = () => {
 
       {/* Sección de categorías */}
       <div className="categories">
-        <div className="category">
-          <img src="/img/physics.png" alt="Física" />
-          <p>FÍSICA</p>
-        </div>
-        <div className="category">
-          <img src="/img/civil.png" alt="Ing Civil" />
-          <p>ING CIVIL</p>
-        </div>
-        <div className="category">
-          <img src="/img/math.png" alt="Matemáticas" />
-          <p>MATEMÁTICAS</p>
-        </div>
+        <CategoryBox title="FÍSICA" image="/img/physics.png" path="/Fisica" />
+        <CategoryBox title="ING CIVIL" image="/img/civil.png" path="/IngCivil" />
+        <CategoryBox title="MATEMÁTICAS" image="/img/math.png" path="/Matematicas" />
       </div>
 
       <div className="university-info">
@@ -76,7 +68,7 @@ const Home = () => {
           </a>
         </div>
       </div>
-      
+
     </div>
   );
 };
