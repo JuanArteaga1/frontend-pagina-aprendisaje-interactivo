@@ -13,7 +13,7 @@ import SubirInvestigaciones from "./pages/SubirInvestigaciones";
 import MenuAdmin from "./pages/MenuAdmin";
 import MenuDocen from "./pages/MenuDocen";
 import SubirDocente from "./pages/SubirDocente";
-import AdministrarDocentes from "./pages/AdministracionDocente";
+
 import SubirProyecto from "./pages/SubirProyecto";
 import SubirPodcast from "./pages/SubirPodcast";
 import NuevaCategoria from "./pages/NuevaCategoria";
