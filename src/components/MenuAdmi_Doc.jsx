@@ -9,7 +9,11 @@ const MenuAdministrador= ({ rol }) => {
       { nombre: "Subir Docente", ruta: "/SubirDocente", icono: "➕" },
       { nombre: "Mirar Proyectos", ruta: "/VerProyectos", icono: "✅" },
       { nombre: "Proyectos por Aprovar", ruta: "/Aprobar", icono: "📊" },
+
       { nombre: "Agregar Categoria", ruta: "/SubirCategoria", icono: "⚙️" }
+=======
+      { nombre: "Agregar Categoria", ruta: "/SubirCategoria", icono: "⚙" }
+
 
     ],
     docente: [
