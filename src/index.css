@@ -1,4 +1,6 @@
 @import "tailwindcss";
+
+
 body {
   font-family: sans-serif, sans-serif;
   background-color: #f8f9fa;
@@ -11,15 +13,24 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 30px; /* Más espacio lateral */
+  padding: 10px 30px;
   background-color: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Logo más grande */
 .logo {
-  height: 90px; 
+  height: 70px; 
   width: auto;
+}
+
+.nav-container {
+  background-color: #3C64C9;
+  padding: 20px 160px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Albert Sans', sans-serif;
 }
 
 /* Alinear enlaces al centro-derecha */
@@ -34,14 +45,17 @@ body {
 /* Estilo de enlaces */
 .nav-links a {
   text-decoration: none;
-  color: #333;
+  color: white;
   font-weight: 500; /* Más grueso para destacar */
-  text-transform: uppercase; /* Texto en mayúsculas */
+  text-transform: capitalize; 
+  font-size: 16px;
 }
 
 /* Hover para enlaces */
 .hover-link:hover {
-  color: #1809e8; /* Color */
+  text-decoration: none;
+  color: #081e57; /* Color */
+  font-family: 'Albert Sans', sans-serif;
 }
 
 /* Iconos alineados a la derecha */

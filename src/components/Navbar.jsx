@@ -16,13 +16,15 @@ const Navbar = () => {
                 </Link>
             </div>
 
-            {/* Menú de Navegación */}
-            <ul className="nav-links">
-                <li><Link to="/simulaciones" className="hover-link">SIMULACIONES</Link></li>
-                <li><Link to="/appmovil" className="hover-link">APP MOVILES</Link></li>
-                <li><Link to="/investigaciones" className="hover-link">INVESTIGACION</Link></li>
-                <li><Link to="/podcast" className="hover-link">PODCAST</Link></li>
-            </ul>
+            {/* Menú de Navegación-Contenedor azul con los enlaces */}
+             <div className="nav-container">
+                <ul className="nav-links">
+                    <li><Link to="/simulaciones" className="hover-link">Simulaciones</Link></li>
+                    <li><Link to="/appmovil" className="hover-link">Aplicaciones Móviles</Link></li>
+                    <li><Link to="/investigaciones" className="hover-link">Investigaciones</Link></li>
+                    <li><Link to="/podcast" className="hover-link">Podcast</Link></li>
+                </ul>
+            </div>
 
             {/* Sección Derecha: Iconos de búsqueda y usuario */}
             <div className="nav-icons">
