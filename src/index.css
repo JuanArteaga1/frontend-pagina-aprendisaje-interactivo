@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";
 
 
 body {
@@ -236,34 +238,65 @@ body {
 }
 
 
-/*Home*/
+/*Home + Carrusel*/
 .hero {
   position: relative;
-  width: 100%;
-  height: 100vh; /* Toma toda la pantalla */
-  background-size: cover;
-  background-position: center;
+  width: 100%; /* Asegura que el carrusel ocupe todo el ancho de su contenedor */
+  height: 400px; /* Ajusta el alto que desees */
+  overflow: hidden; /* Evita que las imágenes se salgan del contenedor */
 }
 
 .hero img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  width: 100%; /* Hace que las imágenes se ajusten al contenedor */
+  height: 100%; 
+  object-fit: cover; /* Hace que la imagen mantenga su aspecto pero se recorte si es necesario */
 }
 
 .hero-button {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: rgba(0, 0, 0, 0.7);
+  left: 250px; 
+  bottom: 50px; 
+  padding: 20px 45px;
+  background-color: #FFDB4A;
   color: white;
-  padding: 15px 30px;
   border: none;
-  border-radius: 10px;
-  font-size: 18px;
+  border-radius: 5px;
+  font-size: 16px;
   cursor: pointer;
+  font-weight: 700;
+  font-size: 20px;
 }
+
+.hero-button:hover {
+  background-color: #0056b3;
+}
+
+.slick-dots {
+  position: absolute;
+  top: 345px;
+  left: 50%;
+  transform: translateX(-50%); /* Centra los puntos en el carrusel */
+  display: flex;
+  justify-content: center;
+  gap: 10px; /* Espaciado entre los puntos */
+}
+
+/* Estilos para los puntos de navegación */
+.slick-dots li button {
+  width: 20px; /* Aumenta el tamaño del botón */
+  height: 20px; /* Aumenta el tamaño del botón */
+  border-radius: 50%; /* Hace que los puntos sean circulares */
+  background-color: black; /* Fondo negro para todos los puntos inactivos */
+  border: none; /* Elimina cualquier borde predeterminado */
+  opacity: 0.5; /* Hace que los puntos inactivos sean más suaves */
+}
+
+/* Estilos para el punto activo */
+.slick-dots li.slick-active button {
+  background-color: white; /* Fondo blanco para el punto activo */
+  opacity: 1; /* Asegura que el punto activo sea completamente visible */
+}
+
 
 /* CATEGORÍAS */
 .categories {
@@ -297,6 +330,47 @@ body {
   width: 60px;
   height: 60px;
   margin-bottom: 10px;
+}
+
+.university-info {
+  background-color: #3C64C9; /* Fondo  */
+  padding: 20px;
+  text-align: center;
+  margin-top: 50px;
+  border-top: 2px solid #ccc; /* Línea superior para separar */
+}
+
+.university-info h3 {
+  font-size: 10px;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.university-info p {
+  font-size: 10px;
+  margin: 5px 0;
+  color: #ffffff;
+}
+
+.social-media {
+  margin-top: 15px;
+  color: #ffffff;
+}
+
+.social-media h4 {
+  font-size: 10px;
+  margin-bottom: 10px;
+}
+
+.social-media a {
+  text-decoration: none;
+  font-size: 10px;
+  margin: 0 10px;
+  color: #ffffff; /* Color-enlaces */
+}
+
+.social-media a:hover {
+  text-decoration: underline; /* Subraya los enlaces al pasar el ratón */
 }
 
 
