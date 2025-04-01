@@ -5,14 +5,12 @@ import "./login.css";
 
 const Login = () => {
   const [loggedIn] = useState(false);
-  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   // Función para manejar el inicio de sesión
   const handleLogin = (e) => {
     e.preventDefault();
-    console.log("Nombre Completo:", fullName);
     console.log("Correo:", email);
     console.log("Contraseña:", password);
   };
