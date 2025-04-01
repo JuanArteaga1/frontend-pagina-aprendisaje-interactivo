@@ -12,9 +12,14 @@ const Simulaciones = () => {
         "Ingeniería Civil": [] /* Entre comillas porque JS no permite espacios */
     };
 
+    // Función para navegar a la vista de detalle
+    const goToSimulacion = (simulacion) => {
+        navigate(`/simulacion/${simulacion}`);
+    };
+
     return (
         <div>
-            <Navbar/>
+            <Navbar />
 
             {/* Contenedor principal de Simulaciones */}
             <div className="contenido-simulaciones">
@@ -35,7 +40,7 @@ const Simulaciones = () => {
 
                     {/* Contenedor de categorías */}
                     <div className="categorias">
-                        {Object.keys(simulaciones).map((categoria) => ( /*Object Keys es para obtener los nombres de las categorias y el map es para recorrer cada una de ellas que exista y mostrarlas**/ 
+                        {Object.keys(simulaciones).map((categoria) => ( /*Object Keys es para obtener los nombres de las categorias y el map es para recorrer cada una de ellas que exista y mostrarlas**/
                             <div className="categoria" key={categoria}>
                                 <h2>{categoria}</h2>
                                 <div className="cards-container">
