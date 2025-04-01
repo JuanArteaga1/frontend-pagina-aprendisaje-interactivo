@@ -427,15 +427,15 @@ body {
   background-color: #0056b3;
 }
 
-/*Simulaciones*/
-.contenido-simulaciones {
+/* Contenedor principal */
+.contenido-proyectos {
   width: 90%;
   margin: auto;
   text-align: center;
 }
 
 /* Título */
-.titulo-simulaciones {
+.titulo-proyectos {
   font-size: 28px;
   font-weight: bold;
   margin: 20px 0;
@@ -460,27 +460,29 @@ body {
   margin-left: -1050px; /* Ajusta la posición */
 }
 
-/*Titulos de las categorias*/
+/* Títulos de las categorías */
 h2 {
   text-align: left;
   width: 100%;
   font-weight: bold;
 }
-/* Categorías */
+
+/* Contenedor de categorías */
 .categorias {
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* Alinea el contenido a la izquierda */
-  margin-left: 20px; /* Ajusta según sea necesario */
+  align-items: flex-start;
+  margin-left: 20px;
 }
 
+/* Cada categoría */
 .categoria {
   background: #f3f3f3;
   padding: 20px;
   border-radius: 10px;
 }
 
-/* Contenedor de simulaciones */
+/* Contenedor de tarjetas */
 .cards-container {
   display: flex;
   gap: 15px;
@@ -492,7 +494,7 @@ h2 {
 .card {
   width: 150px;
   height: 150px;
-  perspective: 1000px; /* Da la sensación de profundidad */
+  perspective: 1000px;
   cursor: pointer;
 }
 
@@ -504,14 +506,14 @@ h2 {
 }
 
 .card:hover .card-inner {
-  transform: rotateY(180deg); /* Rota la tarjeta en el eje Y */
+  transform: rotateY(180deg);
 }
 
 .card-front, .card-back {
   position: absolute;
   width: 100%;
   height: 100%;
-  backface-visibility: hidden; /* Oculta la parte posterior cuando la tarjeta está volteada */
+  backface-visibility: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -528,14 +530,14 @@ h2 {
   background: #3C64C9;
   color: white;
   text-align: center;
-  transform: rotateY(180deg); /* Coloca la parte posterior al revés */
+  transform: rotateY(180deg);
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* Esto distribuye el espacio entre el nombre y el botón */
+  justify-content: space-between;
 }
 
 .card-back h3 {
-  margin-bottom: 20px; /* Añade un margen entre el nombre y el botón */
+  margin-bottom: 20px;
 }
 
 .card-back button {
@@ -549,6 +551,6 @@ h2 {
 
 .card-back button:hover {
   background-color: white;
-  color: rgb(0, 0, 0);
+  color: black;
 }
 
