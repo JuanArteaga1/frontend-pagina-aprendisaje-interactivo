@@ -13,8 +13,10 @@ import SubirInvestigaciones from "./pages/SubirInvestigaciones";
 import MenuAdmin from "./pages/MenuAdmin";
 import MenuDocen from "./pages/MenuDocen";
 import SubirDocente from "./pages/SubirDocente";
+import AdministrarDocentes from "./pages/AdministracionDocente";
 import SubirProyecto from "./pages/SubirProyecto";
 import SubirPodcast from "./pages/SubirPodcast";
+import NuevaCategoria from "./pages/NuevaCategoria";
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -29,8 +31,15 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Route path="/appmovil" element={<Appmovil />} />
       <Route path="/investigaciones" element={<Investigaciones />} />
 
-      //rutas de docentes
+      //rutas de Administrador
       <Route path="/menuadministrador" element={<MenuAdmin />} />
+      <Route path="/SubirCategoria" element={<NuevaCategoria />} />
+      <Route path="/AdministrarDocente" element={<AdministrarDocentes />} />
+
+
+
+
+      //rutas de docentes
       <Route path="/menudocente" element={<MenuDocen />} />
       <Route path="/SubirDocente" element={<SubirDocente />} />
       <Route path="/subir-proyecto" element={<SubirProyecto />} />
@@ -41,7 +50,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       //rutas de carga de elementos 
       <Route path="/subirsimulaciones" element={<Subirsimulaciones />} />
       <Route path="/SubirInvestigaciones" element={<SubirInvestigaciones />} />
-
       <Route path="/subirpodcast" element={<h1>podcast</h1>} />
 
 

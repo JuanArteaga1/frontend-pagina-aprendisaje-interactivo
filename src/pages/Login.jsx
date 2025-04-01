@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import imagenlogin from "../img/logou.png";
+import { useNavigate } from "react-router-dom";
 import "./login.css";
 
 const Login = () => {
@@ -8,6 +9,7 @@ const Login = () => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   // Función para manejar el inicio de sesión
   const handleLogin = (e) => {
@@ -52,7 +54,7 @@ const Login = () => {
               required
             />
 
-            <button type="submit" className="login-button" onClick={() => navigate("/")} >Acceder</button>
+            <button type="submit" className="login-button" onClick={() => navigate("/menuadministrador")} >Acceder</button>
           </form>
 
           <a href="#" className="login-forgot">¿Has perdido tu contraseña?</a>

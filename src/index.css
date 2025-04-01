@@ -16,7 +16,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 10px 30px;
-  background-color: white;
+
 }
 
 /* Logo más grande */
@@ -427,4 +427,130 @@ body {
   background-color: #0056b3;
 }
 
+/* Contenedor principal */
+.contenido-proyectos {
+  width: 90%;
+  margin: auto;
+  text-align: center;
+}
+
+/* Título */
+.titulo-proyectos {
+  font-size: 28px;
+  font-weight: bold;
+  margin: 20px 0;
+  text-align: left;
+}
+
+/* Imagen de presentación */
+.presentacion img {
+  width: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* Botón de ordenar */
+.ordenar-btn {
+  margin: 20px;
+  padding: 10px;
+  background-color: #f0d53d;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-left: -1050px; /* Ajusta la posición */
+}
+
+/* Títulos de las categorías */
+h2 {
+  text-align: left;
+  width: 100%;
+  font-weight: bold;
+}
+
+/* Contenedor de categorías */
+.categorias {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: 20px;
+}
+
+/* Cada categoría */
+.categoria {
+  background: #f3f3f3;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+/* Contenedor de tarjetas */
+.cards-container {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Tarjetas */
+.card {
+  width: 150px;
+  height: 150px;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.card-inner {
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+}
+
+.card:hover .card-inner {
+  transform: rotateY(180deg);
+}
+
+.card-front, .card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+.card-front {
+  background: white;
+}
+
+.card-back {
+  background: #3C64C9;
+  color: white;
+  text-align: center;
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-back h3 {
+  margin-bottom: 20px;
+}
+
+.card-back button {
+  padding: 5px 10px;
+  background-color: #121e3b;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.card-back button:hover {
+  background-color: white;
+  color: black;
+}
 

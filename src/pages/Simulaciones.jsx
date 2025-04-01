@@ -1,18 +1,20 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import ListaProyectos from "../components/ListaProyectos";
 
 const Simulaciones = () => {
-    const navigate = useNavigate();
+    const simulaciones = {
+        Fisica: ["Simulación A", "Simulación B", "Simulación C"],
+        Matematica: ["Simulación D", "Simulación E", "Simulación F"],
+        "Ingeniería Civil": []
+    };
 
     return (
         <div>
-             <Navbar />
-            <h1>Simulaciones</h1>
-            <button onClick={() => navigate(-1)}>⬅️ Volver</button>
+            <Navbar />
+            <ListaProyectos titulo="Simulaciones" proyectos={simulaciones} />
         </div>
     );
 };
 
 export default Simulaciones;
-
