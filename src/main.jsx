@@ -13,6 +13,7 @@ import SubirInvestigaciones from "./pages/SubirInvestigaciones";
 import MenuAdmin from "./pages/MenuAdmin";
 import MenuDocen from "./pages/MenuDocen";
 import SubirDocente from "./pages/SubirDocente";
+import NuevaCategoria from "./pages/NuevaCategoria";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
@@ -28,6 +29,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
       //rutas de docentes
       <Route path="/menuadministrador" element={<MenuAdmin />} />
+      <Route path="/SubirCategoria" element={<NuevaCategoria />} />
+
 
       //rutas de docentes
       <Route path="/menudocente" element={<MenuDocen />} />
