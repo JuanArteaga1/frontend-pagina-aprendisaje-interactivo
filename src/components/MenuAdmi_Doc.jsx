@@ -7,15 +7,15 @@ const MenuAdministrador= ({ rol }) => {
     admin: [
       { nombre: "Administrar Docente", ruta: "/AdministrarDocente", icono: "👨‍🏫" },
       { nombre: "Subir Docente", ruta: "/SubirDocente", icono: "➕" },
-      { nombre: "Mirar Proyectos", ruta: "/admin/aprobar", icono: "✅" },
-      { nombre: "Proyectos por Aprovar", ruta: "/admin/reportes", icono: "📊" },
-      { nombre: "Agregar Categoria", ruta: "/SubirCategoria", icono: "⚙️" }
+      { nombre: "Mirar Proyectos", ruta: "/VerProyectos", icono: "✅" },
+      { nombre: "Proyectos por Aprovar", ruta: "/Aprobar", icono: "📊" },
+      { nombre: "Agregar Categoria", ruta: "/SubirCategoria", icono: "⚙" }
 
     ],
     docente: [
-      { nombre: "Subir Proyectos", ruta: "/subir-proyecto", icono: "➕" },
+      { nombre: "Subir Proyectos", ruta: "/docente/proyectos", icono: "➕" },
       { nombre: "Subir investigaciones", ruta: "/SubirInvestigaciones", icono: "📝" },
-      { nombre: "Subir Podcast", ruta: "/subir-podcast", icono: "➕" },
+      { nombre: "Subir Podcast", ruta: "/docente/nuevo", icono: "➕" },
       { nombre: "Subir Simulacines", ruta: "/subirsimulaciones", icono: "📝" },
       { nombre: "Mis Proyectos", ruta: "/docente/perfil", icono: "📁" }
     ]
