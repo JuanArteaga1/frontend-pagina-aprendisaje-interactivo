@@ -5,11 +5,11 @@ const MenuAdministrador= ({ rol }) => {
   // Definición de opciones por rol
   const opcionesMenu = {
     admin: [
-      { nombre: "Administrar Docente", ruta: "/admin/docentes", icono: "👨‍🏫" },
+      { nombre: "Administrar Docente", ruta: "/AdministrarDocente", icono: "👨‍🏫" },
       { nombre: "Subir Docente", ruta: "/SubirDocente", icono: "➕" },
-      { nombre: "Mirar Proyectos", ruta: "/admin/aprobar", icono: "✅" },
-      { nombre: "Proyectos por Aprovar", ruta: "/admin/reportes", icono: "📊" },
-      { nombre: "Agregar Categoria", ruta: "/admin/config", icono: "⚙️" }
+      { nombre: "Mirar Proyectos", ruta: "/VerProyectos", icono: "✅" },
+      { nombre: "Proyectos por Aprovar", ruta: "/Aprobar", icono: "📊" },
+      { nombre: "Agregar Categoria", ruta: "/SubirCategoria", icono: "⚙️" }
 
     ],
     docente: [

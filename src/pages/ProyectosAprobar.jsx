@@ -1,0 +1,210 @@
+import React, { useState } from "react";
+import Navbar from "../components/Navbar";
+import TablaDinamica from "../components/Tabla";
+import MenuAdministrador from "../components/MenuAdmi_Doc";
+import { Link } from 'react-router-dom';
+
+const ProyectosPorAprobar = () => {
+  // Datos de ejemplo para proyectos pendientes
+  const [proyectos, setProyectos] = useState([
+    { 
+      id: 1, 
+      nombre: "Sistema de Gestión Escolar", 
+      tipo: "Aplicación Web",
+      fecha: "2023-05-15",
+      docente: "Juan Pérez",
+      estado: "Pendiente",
+      prioridad: "Alta"
+    },
+    { 
+      id: 2, 
+      nombre: "App Móvil para Clínica", 
+      tipo: "Aplicación Móvil",
+      fecha: "2023-06-20",
+      docente: "María García",
+      estado: "Pendiente",
+      prioridad: "Media"
+    },
+    { 
+      id: 3, 
+      nombre: "Plataforma de Podcast", 
+      tipo: "Podcast",
+      fecha: "2023-07-10",
+      docente: "Carlos López",
+      estado: "Pendiente",
+      prioridad: "Baja"
+    }
+  ]);
+
+  // Estados para filtros
+  const [busqueda, setBusqueda] = useState("");
+  const [filtroPrioridad, setFiltroPrioridad] = useState("");
+
+  // Filtrar proyectos pendientes
+  const proyectosFiltrados = proyectos.filter(proyecto => {
+    const coincideBusqueda = proyecto.nombre.toLowerCase().includes(busqueda.toLowerCase()) || 
+                          proyecto.docente.toLowerCase().includes(busqueda.toLowerCase());
+    const coincidePrioridad = filtroPrioridad ? proyecto.prioridad === filtroPrioridad : true;
+    return coincideBusqueda && coincidePrioridad;
+  });
+
+  // Funciones de acciones
+  const handleAprobar = (proyecto) => {
+    if (window.confirm(`¿Aprobar el proyecto "${proyecto.nombre}"?`)) {
+      setProyectos(proyectos.filter(p => p.id !== proyecto.id));
+      // Aquí iría la lógica para mover a proyectos aprobados
+    }
+  };
+
+  const handleRechazar = (proyecto) => {
+    if (window.confirm(`¿Rechazar el proyecto "${proyecto.nombre}"?`)) {
+      setProyectos(proyectos.filter(p => p.id !== proyecto.id));
+      // Aquí iría la lógica para mover a proyectos rechazados
+    }
+  };
+
+  const handleVerDetalles = (proyecto) => {
+    console.log('Ver detalles:', proyecto);
+    // Navegar a página de detalles
+  };
+
+  return (
+    <div className="flex flex-col min-h-screen bg-gray-50">
+      {/* Navbar Superior */}
+      <Navbar />
+      
+      {/* Contenido Principal */}
+      <div className="flex flex-1 pt-16">
+        {/* Menú Lateral */}
+        <MenuAdministrador rol="admin" />
+        
+        {/* Área de Contenido */}
+        <main className="flex-1 overflow-y-auto p-4 lg:p-8 ml-64">
+          {/* Encabezado */}
+          <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
+            <h1 className="text-2xl font-bold text-gray-800 mb-4 md:mb-0">Proyectos por Aprobar</h1>
+            <div className="flex space-x-4">
+              <Link 
+                to="/admin/proyectos/nuevo"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors text-sm"
+              >
+                + Nuevo Proyecto
+              </Link>
+            </div>
+          </div>
+          
+          {/* Filtros */}
+          <div className="bg-white p-4 rounded-lg shadow-sm mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="busqueda" className="block text-sm font-medium text-gray-700 mb-1">Buscar</label>
+                <input
+                  id="busqueda"
+                  type="text"
+                  placeholder="Nombre o docente..."
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  value={busqueda}
+                  onChange={(e) => setBusqueda(e.target.value)}
+                />
+              </div>
+              <div>
+                <label htmlFor="prioridad" className="block text-sm font-medium text-gray-700 mb-1">Prioridad</label>
+                <select 
+                  id="prioridad"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  value={filtroPrioridad}
+                  onChange={(e) => setFiltroPrioridad(e.target.value)}
+                >
+                  <option value="">Todas las prioridades</option>
+                  <option value="Alta">Alta</option>
+                  <option value="Media">Media</option>
+                  <option value="Baja">Baja</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          {/* Tabla de Proyectos Pendientes */}
+          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+            <TablaDinamica
+              datos={proyectosFiltrados}
+              columnas={[
+                { 
+                  key: 'id', 
+                  nombre: '#', 
+                  className: 'w-12 text-center text-sm' 
+                },
+                { 
+                  key: 'nombre', 
+                  nombre: 'NOMBRE DEL PROYECTO', 
+                  className: 'text-sm' 
+                },
+                { 
+                  key: 'tipo', 
+                  nombre: 'TIPO', 
+                  className: 'text-sm' 
+                },
+                { 
+                  key: 'docente', 
+                  nombre: 'DOCENTE', 
+                  className: 'text-sm' 
+                },
+                { 
+                  key: 'fecha', 
+                  nombre: 'FECHA', 
+                  className: 'text-sm',
+                  formateador: (fecha) => new Date(fecha).toLocaleDateString()
+                },
+                { 
+                  key: 'prioridad', 
+                  nombre: 'PRIORIDAD', 
+                  className: 'w-24 text-center',
+                  formateador: (prioridad) => (
+                    <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${
+                      prioridad === "Alta" 
+                        ? 'bg-red-100 text-red-800' 
+                        : prioridad === "Media"
+                          ? 'bg-yellow-100 text-yellow-800'
+                          : 'bg-green-100 text-green-800'
+                    }`}>
+                      {prioridad}
+                    </span>
+                  )
+                }
+              ]}
+              acciones={[
+                { 
+                  nombre: 'Detalles', 
+                  fn: handleVerDetalles,
+                  estilo: 'bg-blue-500 hover:bg-blue-600 text-white text-xs px-3 py-1'
+                },
+                { 
+                  nombre: 'Aprobar', 
+                  fn: handleAprobar,
+                  estilo: 'bg-green-500 hover:bg-green-600 text-white text-xs px-3 py-1'
+                },
+                { 
+                  nombre: 'Rechazar', 
+                  fn: handleRechazar,
+                  estilo: 'bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1'
+                }
+              ]}
+            />
+          </div>
+          
+          {/* Pie de tabla */}
+          <div className="mt-4 text-sm text-gray-600 flex justify-between items-center">
+            <p>Mostrando {proyectosFiltrados.length} de {proyectos.length} proyectos pendientes</p>
+            <div className="flex items-center space-x-2">
+              <button className="px-3 py-1 border rounded text-sm hover:bg-gray-100">Anterior</button>
+              <span className="text-sm">Página 1 de 1</span>
+              <button className="px-3 py-1 border rounded text-sm hover:bg-gray-100">Siguiente</button>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+};
+
+export default ProyectosPorAprobar;

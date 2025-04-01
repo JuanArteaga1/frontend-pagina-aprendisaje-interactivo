@@ -14,6 +14,9 @@ import MenuAdmin from "./pages/MenuAdmin";
 import MenuDocen from "./pages/MenuDocen";
 import SubirDocente from "./pages/SubirDocente";
 import NuevaCategoria from "./pages/NuevaCategoria";
+import AdministrarDocentes from "./pages/AdministracionDocente";
+import MirarProyectos from "./pages/VerProyectos";
+import ProyectosPorAprobar from "./pages/ProyectosAprobar";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
@@ -27,9 +30,16 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Route path="/appmovil" element={<Appmovil />} />
       <Route path="/investigaciones" element={<Investigaciones />} />
 
-      //rutas de docentes
+      //rutas de Administrador
       <Route path="/menuadministrador" element={<MenuAdmin />} />
       <Route path="/SubirCategoria" element={<NuevaCategoria />} />
+      <Route path="/AdministrarDocente" element={<AdministrarDocentes />} />
+      <Route path="/VerProyectos" element={<MirarProyectos />} />
+      <Route path="/Aprobar" element={<ProyectosPorAprobar />} />
+
+      
+
+
 
 
       //rutas de docentes
