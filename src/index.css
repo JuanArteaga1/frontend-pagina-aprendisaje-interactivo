@@ -561,3 +561,107 @@ h2 {
   color: black;
 }
 
+/* === DETALLE DE LOS PROYECTOS === */
+.detalle-proyecto {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* === Contenedor principal === */
+.detalle-contenedor {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* === Bloques generales (cabecera, media e inferior) === */
+.detalle-header,
+.detalle-media,
+.detalle-inferior {
+  background-color: #f8f8f8; /* Fondo claro para diferenciarlos */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* === Sección 1: Cabecera con imagen y botón === */
+.detalle-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.imagen-app img {
+  width: 150px;
+  border-radius: 10px;
+}
+
+.boton-descargar {
+  padding: 10px 20px;
+  background-color: #3C64C9;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.boton-descargar:hover {
+  background-color: #3052A3;
+}
+
+/* === Sección 2: Video e imágenes === */
+.detalle-media {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
+
+.detalle-media video {
+  max-width: 400px;
+  height: auto;
+  border-radius: 10px;
+}
+
+/* Contenedor de imágenes alineadas en fila */
+.imagenes {
+  display: flex;
+  gap: 15px;
+}
+
+.imagenes img {
+  width: 120px; /* Tamaño uniforme */
+  border-radius: 10px;
+  border: 2px solid #ddd;
+}
+
+/* === Sección 3: Descripción y documentos === */
+.detalle-inferior {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
+}
+
+.descripcion {
+  width: 55%;
+}
+
+.documentos {
+  width: 40%;
+}
+
+.documentos a {
+  display: block;
+  margin: 5px 0;
+  color: #0000EE;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.documentos a:hover {
+  text-decoration: underline;
+}

@@ -20,7 +20,7 @@ import NuevaCategoria from "./pages/NuevaCategoria";
 import Fisica from "./pages/Fisica";
 import IngCivil from "./pages/IngCivil";
 import Matematicas from "./pages/Matematicas";
-
+import DetalleProyecto from "./pages/DetalleProyecto";
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -61,6 +61,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Route path="/IngCivil" element={<IngCivil />} />
       <Route path="/Matematicas" element={<Matematicas />} />
 
+      <Route path="/detalle/:proyecto" element={<DetalleProyecto />} />
 
     </Routes>
   </BrowserRouter>
