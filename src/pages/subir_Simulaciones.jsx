@@ -11,7 +11,6 @@ import {
     FaSignOutAlt, // Icono de cerrar sesión
     FaSearch      // Icono de búsqueda
 } from 'react-icons/fa';
-
 // Componente principal para subir simulaciones
 const SubirSimulaciones = () => {
     // Estado para manejar los datos del formulario
@@ -157,7 +156,7 @@ const SubirSimulaciones = () => {
                         <div className="bg-white p-3 rounded shadow flex justify-between items-center">
                             <button 
                                 type="submit" 
-                                className="px-5 py-2 text-sm text-white bg-blue-500 rounded flex items-center"
+                                className="px-6 py-3 text-sm text-white bg-blue-500 rounded flex items-center"
                                 onClick={handleSubmit}
                             >
                                 <FaSearch className="mr-1" />
