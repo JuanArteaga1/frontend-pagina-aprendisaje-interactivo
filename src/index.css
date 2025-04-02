@@ -436,21 +436,14 @@ body {
 
 /*AQUI VAN LOS TITULOS E IMAGENES DE SIMULACIONES Y APLICACIONES MOVILES */
 
-/* Para las secciones 'Simulaciones' y 'Aplicaciones Móviles' */
-/* Para las secciones 'Simulaciones' y 'Aplicaciones Móviles' */
-.simulaciones, .aplicaciones-moviles {
-  padding: 20px; /* Espaciado adicional */
-}
-
 /* Título de la sección */
 .titulo-seccion {
-  font-size: 1.5rem; /* Tamaño más pequeño */
-  font-weight: bold; /* Hace el texto más grueso */
-  margin-top: 20px; /* Espacio en la parte superior del título */
-  color: #333; /* Color del título */
-  text-align: left; /* Alineación a la izquierda */
-  width: 75%; /* Asegura que ocupe todo el ancho disponible */
-  margin-left: 20px; /* Margen izquierdo para un pequeño espacio */
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 20px auto; /* Centrado controlado */
+  color: #333;
+  text-align: left;
+  width: 70%;
 }
 
 /* Centrar la imagen */
@@ -469,12 +462,8 @@ body {
 .simulaciones, .aplicaciones-moviles {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Centra otros contenidos */
   justify-content: center;
 }
-
-
-
 
 /* Contenedor principal */
 .contenido-proyectos {
