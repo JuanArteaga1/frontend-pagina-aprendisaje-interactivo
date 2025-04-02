@@ -3,16 +3,19 @@ import Navbar from "../components/Navbar";
 import ListaProyectos from "../components/ListaProyectos";
 
 const AplicacionesMoviles = () => {
-    const aplicaciones = {
-        "Fisica": ["App 1", "App 2"],
-        "Matematicas": ["App 3", "App 4"],
-        "Ingeniera Civil": []
+    const proyectos = {
+        categoria1: ["App 1", "App 2"],
+        categoria2: ["App A", "App B"],
     };
 
     return (
-        <div>
+        <div className="aplicaciones-moviles">
             <Navbar />
-            <ListaProyectos titulo="Aplicaciones Móviles" proyectos={aplicaciones} />
+            <h1 className="titulo-seccion">Aplicaciones Móviles</h1>
+            <div className="imagen-seccion">
+                <img src="img/970x250.jpg" alt="Imagen de aplicaciones móviles" />
+            </div>
+            <ListaProyectos proyectos={proyectos} />
         </div>
     );
 };
