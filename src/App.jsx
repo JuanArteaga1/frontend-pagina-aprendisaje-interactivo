@@ -7,7 +7,7 @@ import IngCivil from "./pages/IngCivil";
 import Matematicas from "./pages/Matematicas";
 import Simulaciones from "./Simulaciones";
 import Visualizacion from "./Visualizacion";
-
+import DetalleProyecto from "./pages/DetalleProyecto";
 
 function App() {
   return (
@@ -20,6 +20,7 @@ function App() {
         <Route path="/Fisica" element={<Fisica />} />
         <Route path="/IngCivil" element={<IngCivil />} />
         <Route path="/Matematicas" element={<Matematicas />} />
+        <Route path="/detalle/:proyecto" element={<DetalleProyecto />} />
       </Routes>
     </Router>
   );

@@ -31,7 +31,8 @@ const ListaProyectos = ({ titulo, proyectos }) => {
                                         <div className="card" key={index}>
                                             <div className="card-inner">
                                                 <div className="card-front">
-                                                    {proyecto}
+                                                    <img src="/img/fotoapp.png" alt={`Imagen de ${proyecto}`} /> {/* Aquí está la imagen */}
+                                                    {/* El nombre del proyecto ya no está aquí */}
                                                 </div>
                                                 <div className="card-back">
                                                     <h3>{proyecto}</h3>
@@ -53,3 +54,4 @@ const ListaProyectos = ({ titulo, proyectos }) => {
 };
 
 export default ListaProyectos;
+
