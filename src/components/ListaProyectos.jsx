@@ -1,21 +1,14 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const ListaProyectos = ({ titulo, proyectos }) => {
+const ListaProyectos = ({ proyectos }) => {
     const navigate = useNavigate();
-
     const goToDetalle = (proyecto) => {
         navigate(`/detalle/${proyecto}`);
     };
 
     return (
         <div className="contenido-proyectos">
-            <h1 className="titulo-proyectos">{titulo}</h1>
-
-            <div className="presentacion">
-                <img src="img/970x250.jpg" alt={`Presentación de ${titulo}`} />
-            </div>
-
             <div className="contenedor-ordenamiento-proyectos">
                 <div className="ordenamiento">
                     <button className="ordenar-btn">Ordenar por: ▼</button>
@@ -31,8 +24,7 @@ const ListaProyectos = ({ titulo, proyectos }) => {
                                         <div className="card" key={index}>
                                             <div className="card-inner">
                                                 <div className="card-front">
-                                                    <img src="/img/fotoapp.png" alt={`Imagen de ${proyecto}`} /> {/* Aquí está la imagen */}
-                                                    {/* El nombre del proyecto ya no está aquí */}
+                                                    <img src="/img/fotoapp.png" alt={`Imagen de ${proyecto}`} />
                                                 </div>
                                                 <div className="card-back">
                                                     <h3>{proyecto}</h3>
