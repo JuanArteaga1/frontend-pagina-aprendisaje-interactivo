@@ -10,11 +10,36 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  // Función para manejar el inicio de sesión
+  // Lista de usuarios válidos
+  const USUARIOS = [
+    {
+      email: "ana@gmail.com",
+      password: "ana123",
+      redirectPath: "/menudocente"
+    },
+    {
+      email: "kevin@gmail.com",
+      password: "kevin123",
+      redirectPath: "/menuadministrador"
+    }
+  ];
+
   const handleLogin = (e) => {
     e.preventDefault();
-    console.log("Correo:", email);
-    console.log("Contraseña:", password);
+    
+    // Buscar usuario coincidente
+    const usuarioValido = USUARIOS.find(
+      (user) => user.email === email && user.password === password
+    );
+
+    if (usuarioValido) {
+      navigate(usuarioValido.redirectPath);
+    } else {
+      alert("Credenciales incorrectas. Prueba con:\n\n" +
+            "Docente: docente@example.com / docente123\n" +
+            "Admin 1: admin@example.com / admin123\n" +
+            "Admin 2: otroadmin@example.com / otraclave123");
+    }
   };
 
   return (
@@ -23,15 +48,10 @@ const Login = () => {
 
       <div className="login-page">
         <div className="login-container">
-          {/* Logo */}
           <img src={imagenlogin} alt="Logo" className="login-logo" />
-
           <h2 className="login-title">Iniciar Sesión</h2>
 
-          {/* Formulario de Inicio de Sesión */}
           <form onSubmit={handleLogin}>
-
-            {/* Correo */}
             <label className="login-label">Correo Electrónico:</label>
             <input
               type="email"
@@ -42,7 +62,6 @@ const Login = () => {
               required
             />
 
-            {/* Contraseña */}
             <label className="login-label">Contraseña:</label>
             <input
               type="password"
@@ -52,7 +71,9 @@ const Login = () => {
               required
             />
 
-            <button type="submit" className="login-button" onClick={() => navigate("/menuadministrador")} >Acceder</button>
+            <button type="submit" className="login-button">
+              Acceder
+            </button>
           </form>
 
           <a href="#" className="login-forgot">¿Recuperar contraseña?</a>
