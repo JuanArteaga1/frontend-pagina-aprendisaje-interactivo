@@ -9,15 +9,15 @@ const AdministrarDocente= () => {
   const [docentes, setDocentes] = useState([
     { 
       id: 1, 
-      nombre: "Juan Pérez", 
-      especialidad: "Matemáticas Avanzadas",
+      nombre: "Cristian Cañar", 
+      especialidad: "Matemáticas",
       estado: "Activo",
       accion: "Editar"
     },
     { 
       id: 2, 
-      nombre: "María García", 
-      especialidad: "Ciencias de la Computación",
+      nombre: "Ana María Caviedes", 
+      especialidad: "Fisica",
       estado: "Inactivo",
       accion: "Editar"
     }
@@ -72,7 +72,7 @@ const AdministrarDocente= () => {
             <h1 className="text-2xl font-bold text-gray-800 mb-4 md:mb-0">Administrar Docentes</h1>
             <div className="flex space-x-4">
               <Link 
-                to="/admin/docentes/nuevo"
+                to="/SubirDocente"
                 className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors text-sm"
               >
                 + Nuevo Docente

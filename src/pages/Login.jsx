@@ -55,7 +55,7 @@ const Login = () => {
             <button type="submit" className="login-button" onClick={() => navigate("/menuadministrador")} >Acceder</button>
           </form>
 
-          <a href="#" className="login-forgot">¿Has perdido tu contraseña?</a>
+          <a href="#" className="login-forgot">¿Recuperar contraseña?</a>
         </div>
       </div>
     </>

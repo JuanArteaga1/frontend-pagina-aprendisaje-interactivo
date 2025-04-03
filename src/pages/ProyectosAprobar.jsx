@@ -10,9 +10,9 @@ const ProyectosPorAprobar = () => {
     { 
       id: 1, 
       nombre: "Sistema de Gestión Escolar", 
-      tipo: "Aplicación Web",
-      fecha: "2023-05-15",
-      docente: "Juan Pérez",
+      tipo: "Simulaciones",
+      fecha: "2025-04-3",
+      docente: "Cristian Cañar",
       estado: "Pendiente",
       prioridad: "Alta"
     },
@@ -20,8 +20,8 @@ const ProyectosPorAprobar = () => {
       id: 2, 
       nombre: "App Móvil para Clínica", 
       tipo: "Aplicación Móvil",
-      fecha: "2023-06-20",
-      docente: "María García",
+      fecha: "2025-04-3",
+      docente: "Ana María Caviedes",
       estado: "Pendiente",
       prioridad: "Media"
     },
@@ -29,8 +29,17 @@ const ProyectosPorAprobar = () => {
       id: 3, 
       nombre: "Plataforma de Podcast", 
       tipo: "Podcast",
-      fecha: "2023-07-10",
-      docente: "Carlos López",
+      fecha: "2025-04-3",
+      docente: "Valentina Urbano",
+      estado: "Pendiente",
+      prioridad: "Baja"
+    },
+    { 
+      id: 4, 
+      nombre: "Plataforma de Investigaciones", 
+      tipo: "Investigacion",
+      fecha: "2025-04-3",
+      docente: "Kevin Ruiz",
       estado: "Pendiente",
       prioridad: "Baja"
     }
@@ -84,12 +93,6 @@ const ProyectosPorAprobar = () => {
           <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
             <h1 className="text-2xl font-bold text-gray-800 mb-4 md:mb-0">Proyectos por Aprobar</h1>
             <div className="flex space-x-4">
-              <Link 
-                to="/admin/proyectos/nuevo"
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors text-sm"
-              >
-                + Nuevo Proyecto
-              </Link>
             </div>
           </div>
           
@@ -155,22 +158,7 @@ const ProyectosPorAprobar = () => {
                   className: 'text-sm',
                   formateador: (fecha) => new Date(fecha).toLocaleDateString()
                 },
-                { 
-                  key: 'prioridad', 
-                  nombre: 'PRIORIDAD', 
-                  className: 'w-24 text-center',
-                  formateador: (prioridad) => (
-                    <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${
-                      prioridad === "Alta" 
-                        ? 'bg-red-100 text-red-800' 
-                        : prioridad === "Media"
-                          ? 'bg-yellow-100 text-yellow-800'
-                          : 'bg-green-100 text-green-800'
-                    }`}>
-                      {prioridad}
-                    </span>
-                  )
-                }
+                
               ]}
               acciones={[
                 { 
