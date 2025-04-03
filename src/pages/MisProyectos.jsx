@@ -1,9 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import TablaDinamica from "../components/Tabla";
 import MenuAdministrador from "../components/MenuAdmi_Doc";
 
 const MisProyectos = () => {
+  const navigate = useNavigate();
+  
   // Datos de ejemplo
   const [proyectos, setProyectos] = useState([
     { id: 1, nombre: "Proyecto 1", descripcion: "Descripción del proyecto 1" },
@@ -12,10 +15,8 @@ const MisProyectos = () => {
   ]);
 
   // Función para actualizar un proyecto
-  const handleActualizar = (proyecto) => {
-    console.log("Actualizar:", proyecto);
-    // Aquí implementa la lógica para actualizar el proyecto
-    alert(`Actualizando: ${proyecto.nombre}`);
+  const handleActualizar = () => {
+    navigate(`/actualizar-proyectos`);
   };
 
   // Función para eliminar un proyecto
@@ -98,4 +99,3 @@ const MisProyectos = () => {
 };
 
 export default MisProyectos;
-
