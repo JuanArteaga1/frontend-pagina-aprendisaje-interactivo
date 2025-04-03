@@ -3,165 +3,239 @@ import Navbar from "../components/Navbar";
 import "./SubirSimulaciones.css";
 import MenuLateral from "../components/MenuAdmi_Doc"
 import { 
-    FaFileUpload, // Icono de subida de archivos
-    FaFilePdf,    // Icono de archivo PDF
-    FaFileVideo,  // Icono de archivo de video
-    FaCalendarAlt,// Icono de calendario para fecha
-    FaUserEdit,   // Icono de edición de usuario
-    FaSignOutAlt, // Icono de cerrar sesión
-    FaSearch      // Icono de búsqueda
+    FaFileUpload,
+    FaAndroid,        // Icono de Android para APK
+    FaFileCode,       // Icono para archivos de código
+    FaImage,          // Icono para imágenes
+    FaCalendarAlt,
+    FaUserEdit,
+    FaUpload          // Icono más adecuado para subir
 } from 'react-icons/fa';
-// Componente principal para subir simulaciones
-const SubirSimulaciones = () => {
-    // Estado para manejar los datos del formulario
+
+const SubirAPK = () => {
     const [formData, setFormData] = useState({
-        nombre: '',       // Nombre de la simulación
-        descripcion: '',  // Descripción de la simulación
-        autores: '',      // Autores de la simulación
-        fecha: '',        // Fecha de creación
-        archivos: []      // Array para archivos subidos
+        nombre: '',
+        descripcion: '',
+        autores: '',
+        fecha: '',
+        apk: null,          // Archivo APK principal
+        requisitos: null,   // Documento de requisitos
+        capturas: []        // Capturas de pantalla
     });
 
-    // Manejador de cambios en los campos del formulario
     const handleChange = (e) => {
         const { name, value } = e.target;
-        // Actualizar el estado del formulario manteniendo los otros campos
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleFileChange = (tipo, files) => {
+        // Validar tipos de archivo
+        const validaciones = {
+            apk: file => file.type === 'application/vnd.android.package-archive',
+            requisitos: file => file.type === 'application/pdf',
+            capturas: file => file.type.startsWith('image/')
+        };
+
+        const archivosValidos = Array.from(files).filter(validaciones[tipo]);
+        
+        if (archivosValidos.length === 0) {
+            alert(`Formato no válido para ${tipo}`);
+            return;
+        }
+
         setFormData(prev => ({
             ...prev,
-            [name]: value
+            [tipo]: tipo === 'capturas' ? [...prev[tipo], ...archivosValidos] : archivosValidos[0]
         }));
     };
 
-    // Manejador de cambios en los inputs de archivos
-    const handleFileChange = (e) => {
-        // Actualizar el array de archivos con los nuevos archivos seleccionados
-        setFormData(prev => ({
-            ...prev,
-            archivos: [...e.target.files]
-        }));
-    };
-
-    // Manejador de envío del formulario
     const handleSubmit = (e) => {
-        e.preventDefault(); // Prevenir el comportamiento por defecto
-        console.log('Datos de la simulación:', formData); // Mostrar datos en consola
-        alert('Simulación enviada exitosamente'); // Mostrar mensaje de éxito
-        // En una aplicación real, aquí se enviarían los datos al servidor
+        e.preventDefault();
+        if (!formData.apk) {
+            alert("Debe subir un archivo APK");
+            return;
+        }
+        console.log('Datos del APK:', formData);
+        alert('APK enviado exitosamente');
     };
 
-    // Renderizado del componente
+    const removeFile = (tipo, index) => {
+        setFormData(prev => {
+            if (tipo === 'capturas') {
+                return { ...prev, capturas: prev.capturas.filter((_, i) => i !== index) };
+            }
+            return { ...prev, [tipo]: null };
+        });
+    };
+
     return (
         <>
-            {/* Barra de navegación superior */}
             <Navbar loggedIn={true} />
-            
-            {/* Contenedor principal con diseño flex */}
             <div className="flex h-screen bg-gray-50">
-                {/* Menú lateral izquierdo para docentes */}
                 <MenuLateral rol="docente" />
                 
-                {/* Área de contenido principal */}
                 <div className="flex-1 p-4 overflow-auto">
-                    {/* Contenedor centrado con ancho máximo */}
                     <div className="max-w-md mx-auto">
-                        {/* Sección del formulario de simulaciones */}
                         <div className="bg-white p-3 rounded shadow mb-4">
-                            {/* Títulos de sección */}
-                            <h2 className="text-md font-semibold text-gray-800 mb-2">SIMULACIONES</h2>
-                            <h3 className="text-sm font-medium text-blue-600 mb-3">SUBIR SIMULACIONES</h3>
+                            <h2 className="text-md font-semibold text-gray-800 mb-2">APLICACIONES ANDROID</h2>
+                            <h3 className="text-sm font-medium text-green-600 mb-3">SUBIR APK</h3>
                             
-                            {/* Formulario principal */}
                             <form onSubmit={handleSubmit} className="space-y-3">
-                                {/* Campo para el nombre */}
                                 <div>
-                                    <label className="block text-xs font-medium text-gray-600 mb-1">Nombre:</label>
+                                    <label className="block text-xs font-medium text-gray-600 mb-1">Nombre del APK:</label>
                                     <input
                                         type="text"
                                         name="nombre"
                                         value={formData.nombre}
                                         onChange={handleChange}
                                         className="w-full px-3 py-1 text-sm border border-gray-300 rounded"
-                                        placeholder="Ingreso el nombre"
+                                        placeholder="Ej: MiAplicación v1.0"
                                         required
                                     />
                                 </div>
                                 
-                                {/* Campo para la descripción */}
                                 <div>
-                                    <label className="block text-xs font-medium text-gray-600 mb-1">Descripción:</label>
+                                    <label className="block text-xs font-medium text-gray-600 mb-1">Descripción técnica:</label>
                                     <textarea
                                         name="descripcion"
                                         value={formData.descripcion}
                                         onChange={handleChange}
                                         className="w-full px-3 py-1 text-sm border border-gray-300 rounded"
                                         rows="2"
-                                        placeholder="Descripción del proyecto"
+                                        placeholder="Especificaciones técnicas requeridas"
+                                        required
                                     ></textarea>
                                 </div>
                                 
-                                {/* Campo para los autores */}
                                 <div>
-                                    <label className="block text-xs font-medium text-gray-600 mb-1">Autores:</label>
+                                    <label className="block text-xs font-medium text-gray-600 mb-1">Desarrolladores:</label>
                                     <input
                                         type="text"
                                         name="autores"
                                         value={formData.autores}
                                         onChange={handleChange}
                                         className="w-full px-3 py-1 text-sm border border-gray-300 rounded"
-                                        placeholder="Nombres de los autores"
+                                        placeholder="Equipo de desarrollo"
+                                        required
                                     />
                                 </div>
+
+                                <div className="bg-white p-3 rounded shadow mb-4">
+                                    <h3 className="text-sm font-medium text-gray-700 mb-2">Fecha de compilación:</h3>
+                                    <input
+                                        type="date"
+                                        name="fecha"
+                                        value={formData.fecha}
+                                        onChange={handleChange}
+                                        className="w-full px-3 py-1 text-sm border border-gray-300 rounded mb-3"
+                                        required
+                                    />
+                                    
+                                    <h3 className="text-sm font-medium text-gray-700 mb-2">Archivos requeridos:</h3>
+                                    <div className="grid grid-cols-3 gap-2">
+                                        {/* APK Principal */}
+                                        <label className="flex flex-col items-center p-2 border border-gray-300 rounded cursor-pointer hover:bg-gray-50">
+                                            <FaAndroid className="text-green-500 text-xl mb-1" />
+                                            <span className="text-xs text-center">APK Principal</span>
+                                            <input 
+                                                type="file" 
+                                                className="hidden" 
+                                                accept=".apk"
+                                                onChange={(e) => handleFileChange('apk', e.target.files)}
+                                            />
+                                            {formData.apk && (
+                                                <div className="text-xs mt-1 text-green-600">
+                                                    {formData.apk.name}
+                                                    <button 
+                                                        type="button" 
+                                                        onClick={() => removeFile('apk')}
+                                                        className="ml-1 text-red-500"
+                                                    >
+                                                        ×
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </label>
+                                        
+                                        {/* Requisitos */}
+                                        <label className="flex flex-col items-center p-2 border border-gray-300 rounded cursor-pointer hover:bg-gray-50">
+                                            <FaFileCode className="text-blue-500 text-xl mb-1" />
+                                            <span className="text-xs text-center">Requisitos (PDF)</span>
+                                            <input 
+                                                type="file" 
+                                                className="hidden" 
+                                                accept=".pdf"
+                                                onChange={(e) => handleFileChange('requisitos', e.target.files)}
+                                            />
+                                            {formData.requisitos && (
+                                                <div className="text-xs mt-1 text-blue-600">
+                                                    {formData.requisitos.name}
+                                                    <button 
+                                                        type="button" 
+                                                        onClick={() => removeFile('requisitos')}
+                                                        className="ml-1 text-red-500"
+                                                    >
+                                                        ×
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </label>
+                                        
+                                        {/* Capturas */}
+                                        <label className="flex flex-col items-center p-2 border border-gray-300 rounded cursor-pointer hover:bg-gray-50">
+                                            <FaImage className="text-purple-500 text-xl mb-1" />
+                                            <span className="text-xs text-center">Capturas</span>
+                                            <input 
+                                                type="file" 
+                                                className="hidden" 
+                                                accept="image/*"
+                                                multiple
+                                                onChange={(e) => handleFileChange('capturas', e.target.files)}
+                                            />
+                                            {formData.capturas.length > 0 && (
+                                                <div className="text-xs mt-1 text-purple-600">
+                                                    {formData.capturas.length} imágenes
+                                                </div>
+                                            )}
+                                        </label>
+                                    </div>
+                                </div>
+
+                                {/* Vista previa de capturas */}
+                                {formData.capturas.length > 0 && (
+                                    <div className="mt-4">
+                                        <h4 className="text-xs font-medium text-gray-600 mb-2">Vista previa de capturas:</h4>
+                                        <div className="flex flex-wrap gap-2">
+                                            {formData.capturas.map((file, index) => (
+                                                <div key={index} className="relative">
+                                                    <img
+                                                        src={URL.createObjectURL(file)}
+                                                        alt={`Captura ${index + 1}`}
+                                                        className="w-16 h-16 object-cover rounded border"
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => removeFile('capturas', index)}
+                                                        className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full text-xs w-4 h-4 flex items-center justify-center"
+                                                    >
+                                                        ×
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                <div className="bg-white p-3 rounded shadow flex justify-between items-center">
+                                    <button 
+                                        type="submit" 
+                                        className="px-6 py-3 text-sm text-white bg-blue-500 rounded flex items-center hover:bg-blue-600 transition-colors"
+                                    >
+                                        <FaUpload className="mr-1" />
+                                        Subir APK
+                                    </button>
+                                </div>
                             </form>
-                        </div>
-                        
-                        {/* Sección de fecha y archivos */}
-                        <div className="bg-white p-3 rounded shadow mb-4">
-                            {/* Selector de fecha */}
-                            <h3 className="text-sm font-medium text-gray-700 mb-2">Fecha:</h3>
-                            <input
-                                type="date"
-                                name="fecha"
-                                value={formData.fecha}
-                                onChange={handleChange}
-                                className="w-full px-3 py-1 text-sm border border-gray-300 rounded mb-3"
-                            />
-                            
-                            {/* Sección para subir archivos */}
-                            <h3 className="text-sm font-medium text-gray-700 mb-2">Cargar archivos:</h3>
-                            <div className="grid grid-cols-3 gap-2">
-                                {/* Opción para subir simulación */}
-                                <label className="flex flex-col items-center p-2 border border-gray-300 rounded cursor-pointer">
-                                    <FaFileUpload className="text-blue-500 mb-1" />
-                                    <span className="text-xs">SIMULACIÓN</span>
-                                    <input type="file" className="hidden" onChange={handleFileChange} />
-                                </label>
-                                
-                                {/* Opción para subir documentos */}
-                                <label className="flex flex-col items-center p-2 border border-gray-300 rounded cursor-pointer">
-                                    <FaFilePdf className="text-red-500 mb-1" />
-                                    <span className="text-xs">DOCUMENTOS</span>
-                                    <input type="file" className="hidden" accept=".pdf,.doc,.docx" multiple onChange={handleFileChange} />
-                                </label>
-                                
-                                {/* Opción para subir video */}
-                                <label className="flex flex-col items-center p-2 border border-gray-300 rounded cursor-pointer">
-                                    <FaFileVideo className="text-purple-500 mb-1" />
-                                    <span className="text-xs">VIDEO</span>
-                                    <input type="file" className="hidden" accept=".mp4,.mov,.avi" onChange={handleFileChange} />
-                                </label>
-                            </div>
-                        </div>
-                        
-                        {/* Botones de acción */}
-                        <div className="bg-white p-3 rounded shadow flex justify-between items-center">
-                            <button 
-                                type="submit" 
-                                className="px-6 py-3 text-sm text-white bg-blue-500 rounded flex items-center"
-                                onClick={handleSubmit}
-                            >
-                                <FaSearch className="mr-1" />
-                                Subir
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -169,4 +243,4 @@ const SubirSimulaciones = () => {
         </>
     );
 };
-export default SubirSimulaciones;
+export default SubirAPK;

@@ -17,6 +17,7 @@ import SubirDocente from "./pages/SubirDocente";
 import SubirProyecto from "./pages/SubirProyecto";
 import SubirPodcast from "./pages/SubirPodcast";
 import NuevaCategoria from "./pages/NuevaCategoria";
+import MisProyectos from "./pages/MisProyectos";
 
 import AdministrarDocentes from "./pages/AdministracionDocente";
 import MirarProyectos from "./pages/VerProyectos";
@@ -60,6 +61,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Route path="/SubirDocente" element={<SubirDocente />} />
       <Route path="/subir-proyecto" element={<SubirProyecto />} />
       <Route path="subir-podcast" element={<SubirPodcast />}/>
+      <Route path="misproyectos" element={<MisProyectos/>}/>
       
 
 
