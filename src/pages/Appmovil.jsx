@@ -13,7 +13,7 @@ const AplicacionesMoviles = () => {
             <Navbar />
             <h1 className="titulo-seccion">Aplicaciones Móviles</h1>
             <div className="imagen-seccion">
-                <img src="img/970x250.jpg" alt="Imagen de aplicaciones móviles" />
+                <img src="img/aplicacionesportada.png" alt="Imagen de aplicaciones móviles" />
             </div>
             <ListaProyectos proyectos={proyectos} />
         </div>

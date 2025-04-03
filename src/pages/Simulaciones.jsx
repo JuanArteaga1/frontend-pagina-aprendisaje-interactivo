@@ -14,7 +14,7 @@ const Simulaciones = () => {
             <Navbar /> {/* Aquí se coloca la barra de navegación */}
             <h1 className="titulo-seccion">Simulaciones</h1>
             <div className="imagen-seccion">
-                <img src="img/970x250.jpg" alt="Imagen de simulaciones" />
+                <img src="img/simulacionesportada.png" alt="Imagen de simulaciones" />
             </div>
             <ListaProyectos proyectos={proyectos} />
         </div>
