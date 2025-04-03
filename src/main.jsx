@@ -27,6 +27,7 @@ import Fisica from "./pages/Fisica";
 import IngCivil from "./pages/IngCivil";
 import Matematicas from "./pages/Matematicas";
 import DetalleProyecto from "./pages/DetalleProyecto";
+import ActualizarProyecto from "./pages/ActualizarProyectos";
 
 
 
@@ -62,7 +63,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Route path="/subir-proyecto" element={<SubirProyecto />} />
       <Route path="subir-podcast" element={<SubirPodcast />}/>
       <Route path="misproyectos" element={<MisProyectos/>}/>
-      
+      <Route path="actualizar-proyectos" element={<ActualizarProyecto/>}/>
 
 
       //rutas de carga de elementos 
