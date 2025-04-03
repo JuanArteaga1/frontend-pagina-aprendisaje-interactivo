@@ -18,7 +18,7 @@ const Podcast = () => {
       <h1 style={{ marginBottom: "10px", display: "block", marginLeft: "190px" }}>Podcast</h1>
       {/* Banner */}
       <div className="ban">
-        <img src="/img/970x250.jpg" alt="Banner podcast" />
+        <img src="/img/podcast.png" alt="Banner podcast" />
 
         {/* Cuadro flotante con info del episodio seleccionado */}
         <div className="episodio-info-box">
