@@ -10,26 +10,34 @@ const MirarProyectos = () => {
     { 
       id: 1, 
       nombre: "Sistema de Gestión Escolar", 
-      tipo: "Aplicación Web",
+      tipo: "Simulaciones",
       estado: "Aprobado",
-      fecha: "2023-05-15",
-      docente: "Juan Pérez"
+      fecha: "2025-04-3",
+      docente: "Cristian Cañar"
     },
     { 
       id: 2, 
       nombre: "App Móvil para Clínica", 
       tipo: "Aplicación Móvil",
       estado: "En Revisión",
-      fecha: "2023-06-20",
-      docente: "María García"
+      fecha: "2025-04-3",
+      docente: "Ana María Caviedes"
     },
     { 
       id: 3, 
       nombre: "Plataforma de Podcast", 
       tipo: "Podcast",
       estado: "Pendiente",
-      fecha: "2023-07-10",
-      docente: "Carlos López"
+      fecha: "2025-04-3",
+      docente: "Valentina Urbano"
+    },
+    {
+      id: 4, 
+      nombre: "Plataforma de Investigaciones", 
+      tipo: "Investigaciones",
+      estado: "Pendiente",
+      fecha: "2025-04-3",
+      docente: "Kevin Ruiz"
     }
   ]);
 
@@ -85,14 +93,8 @@ const MirarProyectos = () => {
         <main className="flex-1 overflow-y-auto p-4 lg:p-8 ml-64">
           {/* Encabezado */}
           <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
-            <h1 className="text-2xl font-bold text-gray-800 mb-4 md:mb-0">Mirar Proyectos</h1>
+            <h1 className="text-2xl font-bold text-gray-800 mb-4 md:mb-0">Ver Proyectos</h1>
             <div className="flex space-x-4">
-              <Link 
-                to="/admin/proyectos/nuevo"
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors text-sm"
-              >
-                + Nuevo Proyecto
-              </Link>
             </div>
           </div>
           
