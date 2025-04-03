@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import "./SubirProyecto.css"; // Importamos el archivo CSS
+import Navbar from "../components/Navbar";
+import MenuLateral from "../components/MenuAdmi_Doc";
 
 function SubirProyecto() {
   const [proyecto, setProyecto] = useState({
@@ -40,7 +41,13 @@ function SubirProyecto() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!proyecto.nombre || !proyecto.descripcion || !proyecto.autores || !proyecto.fecha || !proyecto.categoria) {
+    if (
+      !proyecto.nombre ||
+      !proyecto.descripcion ||
+      !proyecto.autores ||
+      !proyecto.fecha ||
+      !proyecto.categoria
+    ) {
       alert("Por favor, complete todos los campos requeridos.");
       return;
     }
@@ -49,124 +56,141 @@ function SubirProyecto() {
   };
 
   return (
-    <div className="contenedor-formulario">
-      <h2 className="titulo-principal">Subir Proyecto</h2>
-      
-      <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          <div className="grupo-formulario">
-            <label>Nombre del proyecto:</label>
-            <input
-              type="text"
-              name="nombre"
-              className="input-estilo"
-              onChange={handleChange}
-              required
-            />
-          </div>
-          
-          <div className="grupo-formulario">
-            <label>Descripción:</label>
-            <textarea
-              name="descripcion"
-              className="input-estilo"
-              onChange={handleChange}
-              required
-              rows="4"
-            ></textarea>
-          </div>
-          
-          <div className="grupo-formulario">
-            <label>Autores:</label>
-            <input
-              type="text"
-              name="autores"
-              className="input-estilo"
-              onChange={handleChange}
-              required
-            />
-          </div>
-          
-          <div className="grupo-formulario">
-            <label>Fecha de realización:</label>
-            <input
-              type="date"
-              name="fecha"
-              className="input-estilo"
-              onChange={handleChange}
-              required
-            />
-          </div>
-          
-          <div className="grupo-formulario">
-            <label>Categoría:</label>
-            <select
-              name="categoria"
-              className="input-estilo"
-              onChange={handleChange}
-              required
-            >
-              <option value="">Seleccionar categoría</option>
-              <option value="software">Fisica</option>
-              <option value="hardware">Cal</option>
-              <option value="investigacion">Investigación</option>
-            </select>
+    <>
+      <Navbar loggedIn={true} />
+      <div className="flex h-screen bg-gray-100">
+        <MenuLateral rol="docente" />
+        
+        <div className="flex-1 p-8 ml-64">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl font-bold text-gray-800 mb-8">Subir Proyecto</h2>
+            
+            <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-lg shadow-md">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Nombre del proyecto</label>
+                  <input
+                    type="text"
+                    name="nombre"
+                    onChange={handleChange}
+                    required
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Autores</label>
+                  <input
+                    type="text"
+                    name="autores"
+                    onChange={handleChange}
+                    required
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Fecha de realización</label>
+                  <input
+                    type="date"
+                    name="fecha"
+                    onChange={handleChange}
+                    required
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
+                  <select
+                    name="categoria"
+                    onChange={handleChange}
+                    required
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  >
+                    <option value="">Seleccionar categoría</option>
+                    <option value="software">Física</option>
+                    <option value="hardware">Cálculo</option>
+                    <option value="investigacion">Investigación</option>
+                  </select>
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+                  <textarea
+                    name="descripcion"
+                    onChange={handleChange}
+                    required
+                    rows="4"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-lg font-medium text-gray-900">Cargar Archivos</h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <label className="flex flex-col items-center justify-center h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
+                    <input
+                      type="file"
+                      onChange={(e) => handleFileUpload(e, "apk")}
+                      className="hidden"
+                    />
+                    <span className="text-3xl">🪷</span>
+                    <span className="text-sm text-gray-600 mt-1">Subir imagen</span>
+                  </label>
+
+
+                  <label className="flex flex-col items-center justify-center h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
+                    <input
+                      type="file"
+                      onChange={(e) => handleFileUpload(e, "avance")}
+                      className="hidden"
+                    />
+                    <span className="text-3xl">📈</span>
+                    <span className="text-sm text-gray-600 mt-1">Investigación</span>
+                  </label>
+
+                  <label className="flex flex-col items-center justify-center h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
+                    <input
+                      type="file"
+                      onChange={(e) => handleFileUpload(e, "imagenes")}
+                      className="hidden"
+                    />
+                    <span className="text-3xl">📄</span>
+                    <span className="text-sm text-gray-600 mt-1">Artículo</span>
+                  </label>
+                </div>
+
+                {archivos.imagenes.length > 0 && (
+                  <div className="mt-4">
+                    <h4 className="text-sm font-medium text-gray-700 mb-2">Vista previa de archivos:</h4>
+                    <div className="flex flex-wrap gap-4">
+                      {archivos.imagenes.map((file, index) => (
+                        <img
+                          key={index}
+                          src={URL.createObjectURL(file)}
+                          alt={`Imagen ${index + 1}`}
+                          className="max-w-xs h-32 object-cover rounded-lg shadow-sm"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <button
+                type="submit"
+                className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+              >
+                Publicar Proyecto
+              </button>
+            </form>
           </div>
         </div>
-
-        <h3 className="subtitulo">Cargar Archivos</h3>
-        <div className="contenedor-archivos">
-          <label className="label-archivo">
-            <input
-              type="file"
-              onChange={(e) => handleFileUpload(e, "apk")}
-            />
-            📂 Subir APK
-          </label>
-          
-          <label className="label-archivo">
-            <input
-              type="file"
-              onChange={(e) => handleFileUpload(e, "documentos")}
-            />
-            ⏯️ Podcast
-          </label>
-          
-          <label className="label-archivo">
-            <input
-              type="file"
-              onChange={(e) => handleFileUpload(e, "avance")}
-            />
-            📈 Avance
-          </label>
-          
-          <label className="label-archivo">
-            <input
-              type="file"
-              onChange={(e) => handleFileUpload(e, "imagenes")}
-            />
-            📄 Articulo
-          </label>
-        </div>
-
-        {archivos.imagenes.length > 0 && (
-          <div className="previsualizacion-imagenes">
-            <h4 className="subtitulo">Vista previa de imágenes:</h4>
-            {archivos.imagenes.map((file, index) => (
-              <img
-                key={index}
-                src={URL.createObjectURL(file)}
-                alt={`Imagen ${index + 1}`}
-              />
-            ))}
-          </div>
-        )}
-
-        <button type="submit" className="boton-enviar">
-          Publicar Proyecto
-        </button>
-      </form>
-    </div>
+      </div>
+    </>
   );
 }
 

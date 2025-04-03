@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import Navbar from "../components/Navbar";
+import MenuLateral from "../components/MenuAdmi_Doc";
 
 function SubirPodcast() {
   const [podcast, setPodcast] = useState({
@@ -36,152 +38,157 @@ function SubirPodcast() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
-      <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-lg p-8">
-        <h2 className="text-4xl font-bold text-gray-800 mb-8 text-center">
-          Subir Nuevo Podcast
-        </h2>
+    <>
+      <Navbar loggedIn={true} />
+      <div className="flex h-screen bg-gradient-to-br from-gray-50 to-indigo-50">
+        <MenuLateral rol="docente" />
         
-        <form onSubmit={handleSubmit} className="space-y-8">
-          {/* Sección de Información Básica */}
-          <div className="space-y-6">
-            <h3 className="text-xl font-semibold text-gray-700 border-b pb-2">
-              Información del Podcast
-            </h3>
+        <div className="flex-1 p-8 ml-64">
+          <div className="max-w-2xl mx-auto">
+            <div className="mb-8 text-center">
+              <h2 className="text-3xl font-bold text-gray-800 mb-2 bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-600">
+                Subir Nuevo Podcast
+              </h2>
+              <p className="text-gray-500">Comparte tu contenido auditivo con la comunidad</p>
+            </div>
             
-            <div className="grid grid-cols-1 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-600 mb-2">
-                  Título del Podcast
-                </label>
-                <input
-                  type="text"
-                  name="titulo"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition duration-200"
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-600 mb-2">
-                  Descripción
-                </label>
-                <textarea
-                  name="descripcion"
-                  rows="4"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition duration-200"
-                  onChange={handleChange}
-                  required
-                ></textarea>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-600 mb-2">
-                    Autor
-                  </label>
+            <form onSubmit={handleSubmit} className="space-y-6 bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
+              {/* Sección de información básica */}
+              <div className="space-y-6">
+                <div className="space-y-2">
+                  <label className="block text-sm font-semibold text-gray-700">Título del Podcast</label>
                   <input
                     type="text"
-                    name="autor"
-                    className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition duration-200"
+                    name="titulo"
                     onChange={handleChange}
                     required
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all placeholder-gray-400"
+                    placeholder="Ej: La revolución de la inteligencia artificial"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-600 mb-2">
-                    Fecha de Publicación
-                  </label>
-                  <input
-                    type="date"
-                    name="fecha"
-                    className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition duration-200"
+                <div className="space-y-2">
+                  <label className="block text-sm font-semibold text-gray-700">Descripción</label>
+                  <textarea
+                    name="descripcion"
                     onChange={handleChange}
                     required
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 h-40 transition-all placeholder-gray-400"
+                    placeholder="Describe el contenido de tu podcast..."
                   />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="block text-sm font-semibold text-gray-700">Autor</label>
+                    <input
+                      type="text"
+                      name="autor"
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all placeholder-gray-400"
+                      placeholder="Nombre del autor"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block text-sm font-semibold text-gray-700">Fecha de Publicación</label>
+                    <input
+                      type="date"
+                      name="fecha"
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block text-sm font-semibold text-gray-700">Categoría</label>
+                  <select
+                    name="categoria"
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all appearance-none"
+                  >
+                    <option value="">Selecciona una categoría</option>
+                    <option value="tecnologia">Tecnología</option>
+                    <option value="educacion">Educación</option>
+                    <option value="entretenimiento">Entretenimiento</option>
+                    <option value="negocios">Negocios</option>
+                  </select>
                 </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-600 mb-2">
-                  Categoría
-                </label>
-                <select
-                  name="categoria"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition duration-200"
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">Selecciona una categoría</option>
-                  <option value="tecnologia">Tecnología</option>
-                  <option value="educacion">Educación</option>
-                  <option value="entretenimiento">Entretenimiento</option>
-                  <option value="negocios">Negocios</option>
-                </select>
+              {/* Sección de archivos */}
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">Cargar Archivos</h3>
+                
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <label className="block text-sm font-semibold text-gray-700">Subir Audio</label>
+                    <label className="flex flex-col items-center justify-center border-2 border-dashed border-gray-200 rounded-xl p-6 cursor-pointer hover:border-indigo-500 bg-gray-50 hover:bg-indigo-50 transition-colors group">
+                      <input
+                        type="file"
+                        accept="audio/*"
+                        className="hidden"
+                        onChange={(e) => handleFileUpload(e, "audio")}
+                      />
+                      <div className="text-4xl mb-3 text-gray-400 group-hover:text-indigo-500">
+                        🎧
+                      </div>
+                      <p className="text-center text-sm text-gray-500">
+                        {archivos.audio 
+                          ? <span className="text-indigo-600 font-semibold">{archivos.audio.name}</span>
+                          : "Haz clic para subir el archivo de audio"}
+                      </p>
+                    </label>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block text-sm font-semibold text-gray-700">Subir Portada</label>
+                    <label className="flex flex-col items-center justify-center border-2 border-dashed border-gray-200 rounded-xl p-6 cursor-pointer hover:border-indigo-500 bg-gray-50 hover:bg-indigo-50 transition-colors group">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => handleFileUpload(e, "portada")}
+                      />
+                      <div className="text-4xl mb-3 text-gray-400 group-hover:text-indigo-500">
+                        🖼️
+                      </div>
+                      <p className="text-center text-sm text-gray-500">
+                        {archivos.portada 
+                          ? <span className="text-indigo-600 font-semibold">{archivos.portada.name}</span>
+                          : "Haz clic para subir la imagen de portada"}
+                      </p>
+                    </label>
+                  </div>
+
+                  {archivos.portada && (
+                    <div className="mt-4">
+                      <h4 className="text-sm font-semibold text-gray-700 mb-2">Vista previa de la portada:</h4>
+                      <img
+                        src={URL.createObjectURL(archivos.portada)}
+                        alt="Portada"
+                        className="max-w-xs rounded-xl shadow-md border-2 border-gray-100"
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
+
+              <button
+                type="submit"
+                className="w-full bg-gradient-to-br from-indigo-600 to-blue-600 text-white py-4 px-6 rounded-xl font-semibold hover:from-indigo-700 hover:to-blue-700 focus:outline-none focus:ring-4 focus:ring-indigo-200 transition-all transform hover:scale-[1.01] shadow-lg hover:shadow-indigo-200/50"
+              >
+                Publicar Podcast
+              </button>
+            </form>
           </div>
-
-          {/* Sección de Archivos */}
-          <div className="space-y-6">
-            <h3 className="text-xl font-semibold text-gray-700 border-b pb-2">
-              Archivos Multimedia
-            </h3>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <label className="flex flex-col items-center justify-center h-48 border-2 border-dashed border-gray-300 rounded-xl hover:border-blue-500 transition duration-200 cursor-pointer bg-gray-50 hover:bg-gray-100">
-                <input
-                  type="file"
-                  accept="audio/*"
-                  className="hidden"
-                  onChange={(e) => handleFileUpload(e, "audio")}
-                />
-                <svg className="w-12 h-12 text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
-                </svg>
-                <span className="text-gray-600 font-medium">
-                  {archivos.audio ? archivos.audio.name : "Subir Audio (.mp3, .wav)"}
-                </span>
-              </label>
-
-              <label className="flex flex-col items-center justify-center h-48 border-2 border-dashed border-gray-300 rounded-xl hover:border-blue-500 transition duration-200 cursor-pointer bg-gray-50 hover:bg-gray-100">
-                <input
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={(e) => handleFileUpload(e, "portada")}
-                />
-                <svg className="w-12 h-12 text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                </svg>
-                <span className="text-gray-600 font-medium">
-                  {archivos.portada ? archivos.portada.name : "Subir Portada (.jpg, .png)"}
-                </span>
-              </label>
-            </div>
-
-            {archivos.portada && (
-              <div className="mt-4 flex justify-center">
-                <img
-                  src={URL.createObjectURL(archivos.portada)}
-                  alt="Portada del Podcast"
-                  className="w-32 h-32 object-cover rounded-lg shadow-md border border-gray-200"
-                />
-              </div>
-            )}
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-4 px-6 rounded-xl font-semibold hover:from-blue-600 hover:to-blue-700 transition duration-300 transform hover:scale-[1.01] shadow-md"
-          >
-            Publicar Podcast
-          </button>
-        </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
