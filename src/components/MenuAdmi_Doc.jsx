@@ -1,9 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 
 const MenuAdministrador= ({ rol }) => {
+  const navigate = useNavigate();
   // Definición de opciones por rol
   const opcionesMenu = {
+    
     admin: [
       { nombre: "Administrar Docente", ruta: "/AdministrarDocente", icono: "👨‍🏫" },
       { nombre: "Subir Docente", ruta: "/SubirDocente", icono: "➕" },
