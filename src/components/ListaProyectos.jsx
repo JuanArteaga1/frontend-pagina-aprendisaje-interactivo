@@ -23,8 +23,10 @@ const ListaProyectos = ({ proyectos }) => {
                                     proyectos[categoria].map((proyecto, index) => (
                                         <div className="card" key={index}>
                                             <div className="card-inner">
-                                                <div className="card-front">
-                                                    <img src="/img/fotoapp.png" alt={`Imagen de ${proyecto}`} />
+                                                <div className="card-front w-full h-full">
+                                                    <img src="/img/fotoapp.png" 
+                                                    alt={`Imagen de ${proyecto}`} 
+                                                    style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "10px" }}/>
                                                 </div>
                                                 <div className="card-back">
                                                     <h3>{proyecto}</h3>

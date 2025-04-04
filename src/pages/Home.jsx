@@ -22,39 +22,54 @@ const Home = () => {
     <div>
       <Navbar />
 
-      {/* Carrusel de imágenes */}
-      <div className="hero w-full max-w-screen-lg mx-auto mt-4">
-        <Slider {...settings}>
-          <div className="relative w-full h-[500px]">
+       {/* Carrusel de imágenes */}
+       <div className="hero w-full mt-4 relative max-h-[400px]">
+        <Slider {...settings} className="h-[400px]">
+          {/* Slide 1 */}
+          <div className="relative w-full max-h-[400px] -mt-4">
             <img
               src="/img/uni.jpg"
               alt="Imagen 1"
-              className="w-full h-full object-cover rounded-lg"
+              className="w-full h-auto aspect-[16/9] object-cover"
             />
+            <button
+              className="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-10 bg-yellow-500 text-white px-6 py-3 rounded-xl shadow-lg hover:bg-blue-700 transition font-bold cursor-pointer"
+              onClick={() => navigate("/simulaciones")}
+            >
+              Explora nuestras simulaciones
+            </button>
           </div>
-          <div className="relative w-full h-[500px]">
+
+          {/* Slide 2 */}
+          <div className="relative w-full max-h-[400px] -mt-4">
             <img
               src="/img/uni1.jpg"
               alt="Imagen 2"
-              className="w-full h-full object-cover rounded-lg"
+              className="w-full h-auto aspect-[16/9] object-cover"
             />
+            <button
+              className="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-10 bg-red-500 text-white px-6 py-3 rounded-xl shadow-lg hover:bg-blue-700 transition font-bold cursor-pointer"
+              onClick={() => navigate("/investigaciones")}
+            >
+              Consulta nuestra investigaciones
+            </button>
           </div>
-          <div className="relative w-full h-[500px]">
+
+          {/* Slide 3 */}
+          <div className="relative w-full max-h-[400px] -mt-4">
             <img
               src="/img/uni2.jpg"
               alt="Imagen 3"
-              className="w-full h-full object-cover rounded-lg"
+              className="w-full h-auto aspect-[16/9] object-cover"
             />
+            <button
+              className="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-10 bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg hover:bg-blue-700 transition font-bold cursor-pointer"
+              onClick={() => navigate("/podcast")}
+            >
+              Explora nuestro podcast
+            </button>
           </div>
         </Slider>
-
-        {/* Botón en la parte inferior izquierda */}
-        <button
-          className="absolute bottom-4 left-4 bg-yellow-500 text-white px-6 py-2 rounded-md shadow-lg hover:bg-blue-700 transition"
-          onClick={() => navigate("/login")}
-        >
-          INGRESO AQUÍ
-        </button>
       </div>
 
       {/* Sección de categorías */}
