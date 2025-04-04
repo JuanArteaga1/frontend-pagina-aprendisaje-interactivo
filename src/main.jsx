@@ -29,6 +29,7 @@ import Matematicas from "./pages/Matematicas";
 import DetalleProyecto from "./pages/DetalleProyecto";
 import ActualizarProyecto from "./pages/ActualizarProyectos";
 import Episodio from "./pages/Episodio";
+import InvestigacionDetalle from "./pages/InvestigacionDetalle";
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -77,6 +78,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Route path="/Matematicas" element={<Matematicas />} />
 
       <Route path="/detalle/:proyecto" element={<DetalleProyecto />} />
+      <Route path="/investigaciones/:id" element={<InvestigacionDetalle />} />
       <Route path="/episodio/:id" element={<Episodio />} />
 
     </Routes>

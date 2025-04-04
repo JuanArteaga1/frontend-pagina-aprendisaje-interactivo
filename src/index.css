@@ -749,6 +749,80 @@ h2 {
   gap: 15px;
 }
 
+.investigacion-container {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.investigacion-layout {
+  display: flex;
+  background: #fff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  max-width: 800px;
+  width: 100%;
+}
+
+.investigacion-left, .investigacion-right {
+  flex: 1;
+  padding: 20px;
+}
+
+.investigacion-left {
+  text-align: left;
+}
+
+.investigacion-titulo {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.investigacion-descripcion {
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.descargar-boton {
+  display: inline-block;
+  background-color: #007bff;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 5px;
+  text-decoration: none;
+  margin-top: 15px;
+}
+
+.descargar-boton:hover {
+  background-color: #0056b3;
+}
+
+/* Línea separadora */
+.linea-separadora {
+  width: 2px;
+  background: rgba(0, 0, 0, 0.2);
+  margin: 0 20px;
+}
+
+/* Derecha */
+.investigacion-right p {
+  font-size: 16px;
+  margin: 10px 0;
+}
+
+.fuente-link {
+  display: inline-block;
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.fuente-link:hover {
+  text-decoration: underline;
+}
+
 /* Tarjetas de investigaciones */
 .card-investigacion {
   width: 250px;
