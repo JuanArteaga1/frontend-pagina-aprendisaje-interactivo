@@ -30,6 +30,7 @@ import DetalleProyecto from "./pages/DetalleProyecto";
 import ActualizarProyecto from "./pages/ActualizarProyectos";
 import Episodio from "./pages/Episodio";
 import AyudaT from "./pages/Ayuda";
+import InvestigacionDetalle from "./pages/InvestigacionDetalle";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
@@ -53,12 +54,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Route path="/VerProyectos" element={<MirarProyectos />} />
       <Route path="/Aprobar" element={<ProyectosPorAprobar />} />
 
-      
-
-
-
-
-
+  
       //rutas de docentes
       <Route path="/menudocente" element={<MenuDocen />} />
       <Route path="/SubirDocente" element={<SubirDocente />} />
@@ -79,6 +75,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Route path="/Matematicas" element={<Matematicas />} />
 
       <Route path="/detalle/:proyecto" element={<DetalleProyecto />} />
+      <Route path="/investigaciones/:id" element={<InvestigacionDetalle />} />
       <Route path="/episodio/:id" element={<Episodio />} />
 
     </Routes>
