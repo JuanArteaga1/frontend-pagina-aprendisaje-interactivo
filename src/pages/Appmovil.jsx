@@ -15,7 +15,9 @@ const AplicacionesMoviles = () => {
             <div className="imagen-seccion">
                 <img src="img/aplicacionesportada.png" alt="Imagen de aplicaciones móviles" />
             </div>
-            <ListaProyectos proyectos={proyectos} />
+            <div className="ml-20">
+                <ListaProyectos proyectos={proyectos} />
+            </div>
         </div>
     );
 };

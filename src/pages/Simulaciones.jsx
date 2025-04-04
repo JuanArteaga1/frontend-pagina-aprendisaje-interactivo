@@ -15,8 +15,10 @@ const Simulaciones = () => {
             <h1 className="titulo-seccion">Simulaciones</h1>
             <div className="imagen-seccion">
                 <img src="img/simulacionesportada.png" alt="Imagen de simulaciones" />
+            </div >
+            <div className="ml-20">
+                <ListaProyectos proyectos={proyectos} />
             </div>
-            <ListaProyectos proyectos={proyectos} />
         </div>
     );
 };
