@@ -1,40 +1,67 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Search, User } from "lucide-react";
 
 const Navbar = () => {
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    let timeoutId = null;
+
+    const handleMouseEnter = () => {
+        clearTimeout(timeoutId); // Evita que se cierre inmediatamente
+        setIsDropdownOpen(true);
+    };
+
+    const handleMouseLeave = () => {
+        timeoutId = setTimeout(() => {
+            setIsDropdownOpen(false);
+        }, 300); // Pequeño retraso para estabilidad
+    };
+
     return (
-        <nav className="bg-blue-800 shadow-md py-4 px-6 flex items-center justify-between">
-            {/* Sección Izquierda: Logo */}
-            <div className="flex items-center">
+        <nav className="navbar">
+            {/* Logo */}
+            <div className="nav-left">
                 <Link to="/">
                     <img
                         src="/img/logo.png"
                         alt="Logo de Academia Ingeniería"
-                        className="h-12"
+                        className="logo"
                     />
                 </Link>
             </div>
 
-            {/* Menú de Navegación (Movido más a la derecha) */}
-            <div className="flex-grow flex justify-end pr-6">
-                <ul className="flex space-x-6 text-lg font-semibold text-white">
-                    <li><Link to="/" className="hover:text-gray-300 transition">Inicio</Link></li>
-                    <li><Link to="/simulaciones" className="hover:text-gray-300 transition">Simulaciones</Link></li>
-                    <li><Link to="/appmovil" className="hover:text-gray-300 transition">Aplicaciones Móviles</Link></li>
-                    <li><Link to="/investigaciones" className="hover:text-gray-300 transition">Investigaciones</Link></li>
-                    <li><Link to="/podcast" className="hover:text-gray-300 transition">Podcast</Link></li>
+            {/* Menú de Navegación */}
+            <div className="nav-container">
+                <ul className="nav-links">
+                    <li><Link to="/" className="hover-link font-semibold">Inicio</Link></li>
+                    <li><Link to="/simulaciones" className="hover-link font-semibold">Simulaciones</Link></li>
+                    <li><Link to="/appmovil" className="hover-link font-semibold">Aplicaciones Móviles</Link></li>
+                    <li><Link to="/investigaciones" className="hover-link font-semibold">Investigaciones</Link></li>
+                    <li><Link to="/podcast" className="hover-link font-semibold">Podcast</Link></li>
                 </ul>
             </div>
 
-            {/* Sección Derecha: Iconos */}
-            <div className="flex items-center space-x-4">
-                <button aria-label="Buscar" className="p-2 rounded-full hover:bg-blue-700 transition">
-                    <Search className="h-6 w-6 text-white hover:text-gray-300" />
+            {/* Iconos de búsqueda y usuario con Menú Desplegable */}
+            <div className="nav-icons">
+                <button aria-label="Buscar" className="icon-button">
+                    <Search className="icon hover:text-blue-300" />
                 </button>
-                <Link to="/login" aria-label="Iniciar Sesión" className="p-2 rounded-full hover:bg-blue-700 transition">
-                    <User className="h-6 w-6 text-white hover:text-gray-300" />
-                </Link>
+
+                {/* Contenedor del menú desplegable */}
+                <div className="relative" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                    <button aria-label="Iniciar Sesión" className="icon-button">
+                        <User className="icon hover:text-blue-300" />
+                    </button>
+                        {isDropdownOpen && (
+                    <div className="absolute right-0 top-full mt-2 w-40 bg-white border rounded-lg shadow-lg z-50">
+                        <ul className="py-2 text-gray-800">
+                        <li><Link to="/login" className="block px-4 py-2 hover:bg-gray-200">Iniciar sesión</Link></li>
+                        <li><Link to="/logout" className="block px-4 py-2 hover:bg-gray-200">Cerrar sesión</Link></li>
+                        <li><Link to="/ayuda" className="block px-4 py-2 hover:bg-gray-200">Ayuda</Link></li>
+                        </ul>
+                    </div>
+                    )}
+                </div>
             </div>
         </nav>
     );

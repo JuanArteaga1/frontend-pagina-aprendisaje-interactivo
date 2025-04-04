@@ -29,7 +29,7 @@ import Matematicas from "./pages/Matematicas";
 import DetalleProyecto from "./pages/DetalleProyecto";
 import ActualizarProyecto from "./pages/ActualizarProyectos";
 import Episodio from "./pages/Episodio";
-
+import AyudaT from "./pages/Ayuda";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
@@ -42,6 +42,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Route path="/podcast" element={<Podcast />} />
       <Route path="/appmovil" element={<Appmovil />} />
       <Route path="/investigaciones" element={<Investigaciones />} />
+      <Route path="/ayuda" element={<AyudaT />} />
+
 
       //rutas de Administrador
       <Route path="/menuadministrador" element={<MenuAdmin />} />
