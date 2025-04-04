@@ -1,95 +1,50 @@
-import React, { useState } from "react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 
 const Podcast = () => {
-  const [loggedIn] = useState(true);
-  const [episodioActual, setEpisodioActual] = useState(null);
-  const [reproduciendo, setReproduciendo] = useState(false);
+  const navigate = useNavigate();
 
   const episodios = [
-    { id: 1, titulo: "Episodio 1", descripcion: "Introducción al aprendizaje", imagen: "/img/pdexample.jpg", audio: "/audio/episodio1.mp3" },
-    { id: 2, titulo: "Episodio 2", descripcion: "Técnicas avanzadas", imagen: "/img/pdexample.jpg", audio: "/audio/episodio2.mp3" },
-    { id: 3, titulo: "Episodio 3", descripcion: "Casos de éxito", imagen: "/img/pdexample.jpg", audio: "/audio/episodio3.mp3" },
+    { id: 1, titulo: "Episodio 1", descripcion: "Introducción al aprendizaje", imagen: "/img/pdexample.jpg" },
+    { id: 2, titulo: "Episodio 2", descripcion: "Técnicas avanzadas", imagen: "/img/pdexample.jpg" },
+    { id: 3, titulo: "Episodio 3", descripcion: "Casos de éxito", imagen: "/img/pdexample.jpg" },
   ];
 
   return (
     <div>
-      <Navbar loggedIn={loggedIn} />
-      <h1 style={{ marginBottom: "10px", display: "block", marginLeft: "190px" }}>Podcast</h1>
-      {/* Banner */}
-      <div className="ban">
-        <img src="/img/podcast.png" alt="Banner podcast" />
+      <Navbar />
 
-        {/* Cuadro flotante con info del episodio seleccionado */}
-        <div className="episodio-info-box">
-          {episodioActual ? (
-            <div style={{ position: "relative", textAlign: "center" }}>
-              <img
-                src={episodioActual.imagen}
-                alt={episodioActual.titulo}
-                style={{
-                  width: "100%",
-                  maxHeight: "250px",
-                  objectFit: "cover",
-                  borderRadius: "10px"
-                }}
-              />
-              <div style={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                color: "white",
-                padding: "10px",
-                borderRadius: "10px"
-              }}>
-                <h2>{episodioActual.titulo}</h2>
-                <p>{episodioActual.descripcion}</p>
-              </div>
-            </div>
-          ) : (
-            <p>Selecciona un episodio para ver la información</p>
-          )}
-        </div>
+      {/* Título mejorado */}
+      <h1 className="titulo-seccion">Podcasts</h1>
 
-
-        {/* Botón para escuchar */}
-        <button className="button-podcast" onClick={() => setReproduciendo(true)}>
-          Escuchar
-        </button>
+      {/* Banner más redondeado */}
+      <div className="podcast-banner">
+        <img src="/img/podcast.png" alt="Banner Podcast" />
       </div>
 
-      <h2 style={{ marginTop: "20px", textAlign: "left", marginLeft: "190px" }}>Episodios</h2>
+      <h2 className="subtitulo-seccion">Lista de Episodios</h2>
 
-      {/* Contenedor de episodios */}
+      {/* Contenedor de episodios con tarjetas interactivas */}
       <div className="episodios-container">
         {episodios.map((ep) => (
-          <div key={ep.id} className="episodio" onClick={() => setEpisodioActual(ep)}>
-            <img src={ep.imagen} alt={ep.titulo} />
-            <div className="overlay">
-              <h3>{ep.titulo}</h3>
-              <p>{ep.descripcion}</p>
-              <button onClick={(e) => {
-                e.stopPropagation();
-                setEpisodioActual(ep);
-                setReproduciendo(false);
-              }}>
-                Seleccionar
-              </button>
+          <div key={ep.id} className="card">
+            <div className="card-inner">
+              {/* Lado frontal */}
+              <div className="card-front">
+                <img src={ep.imagen} alt={ep.titulo} />
+              </div>
+
+              {/* Lado trasero con botón para navegar */}
+              <div className="card-back">
+                <h3>{ep.titulo}</h3>
+                <p>{ep.descripcion}</p>
+                <button onClick={() => navigate(`/episodio/${ep.id}`)}>Ver más</button>
+              </div>
             </div>
           </div>
         ))}
       </div>
-
-      {/* Controles de reproducción */}
-      {reproduciendo && episodioActual && (
-        <div className="reproductor">
-          <audio controls autoPlay>
-            <source src={episodioActual.audio} type="audio/mp3" />
-            Tu navegador no soporta el elemento de audio.
-          </audio>
-        </div>
-      )}
     </div>
   );
 };
