@@ -1,45 +1,19 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import MenuLateral from "../components/MenuAdmi_Doc";
-import {
-    FaUserGraduate,
-    FaIdCard,
-    FaEnvelope,
-    FaLock,
-    FaChalkboardTeacher,
-    FaSave
-} from 'react-icons/fa';
+import { FaUserGraduate, FaIdCard, FaEnvelope, FaLock, FaChalkboardTeacher, FaSave } from 'react-icons/fa'
+import { useForm } from "react-hook-form"
+import { subirDocenteAPI } from "../api/SubirDocenteApi";
+
+
 
 const SubirDocente = () => {
-    const [formData, setFormData] = useState({
-        nombre: '',
-        codigo: '',
-        correo: '',
-        contrasena: '',
-        identificacion: ''
-    });
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log('Datos del docente:', formData);
-        alert('Docente registrado exitosamente');
-    };
-
+    const { register, handleSubmit } = useForm()
     return (
         <>
             <Navbar />
-            
             <div className="flex min-h-screen bg-gradient-to-br from-blue-50 to-gray-50">
                 <MenuLateral rol="admin" />
-
                 {/* Contenido principal con mejor manejo del zoom */}
                 <div className="flex-1 p-4 md:p-6 overflow-auto">
                     {/* Tarjeta contenedora con mejor escalado */}
@@ -56,13 +30,26 @@ const SubirDocente = () => {
                             </p>
                         </div>
 
-                        <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
+
+                        <form onSubmit={handleSubmit(async (values) => {
+                            // Agregar campos adicionales automáticamente
+                            const datosCompletos = {
+                                ...values,
+                                rol: "6618fa88a1c23d6abc123def", // puedes poner "admin" si deseas
+                                funcion: "6618fb99a1c23d6abc456def",
+                                estado: "activo"
+                            };
+                            console.log(values)
+                            const res = await subirDocenteAPI(values)
+                            console.log(res)
+                        })}
+                            className="space-y-4 md:space-y-6">
                             {/* Sección 1: Información personal */}
                             <div className="space-y-4 md:space-y-5">
                                 <h3 className="text-base md:text-lg font-semibold text-gray-700 border-b pb-2">
                                     Información Personal
                                 </h3>
-                                
+
                                 {/* Nombre completo */}
                                 <div className="relative">
                                     <label className="block text-xs md:text-sm font-medium text-gray-700 mb-1 flex items-center">
@@ -71,14 +58,10 @@ const SubirDocente = () => {
                                     </label>
                                     <input
                                         type="text"
-                                        name="nombre"
-                                        value={formData.nombre}
-                                        onChange={handleChange}
+                                        {...register('Nombre', { required: true })}
                                         className="w-full pl-9 md:pl-10 pr-3 py-2 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500"
-                                        required
                                         placeholder="Ingrese el nombre completo"
                                     />
-                                    <FaUserGraduate className="absolute left-3 top-8 md:top-9 text-gray-400" />
                                 </div>
 
                                 {/* Identificación */}
@@ -89,13 +72,11 @@ const SubirDocente = () => {
                                     </label>
                                     <input
                                         type="text"
-                                        name="identificacion"
-                                        value={formData.identificacion}
-                                        onChange={handleChange}
+                                        {...register('identificacion', { required: true })}
+
                                         className="w-full pl-9 md:pl-10 pr-3 py-2 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500"
                                         placeholder="Ej: 1234567890"
                                     />
-                                    <FaIdCard className="absolute left-3 top-8 md:top-9 text-gray-400" />
                                 </div>
                             </div>
 
@@ -104,7 +85,7 @@ const SubirDocente = () => {
                                 <h3 className="text-base md:text-lg font-semibold text-gray-700 border-b pb-2">
                                     Información Institucional
                                 </h3>
-                                
+
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
                                     {/* Código del docente */}
                                     <div className="relative">
@@ -115,14 +96,11 @@ const SubirDocente = () => {
                                         <input
                                             type="text"
                                             name="codigo"
-                                            value={formData.codigo}
-                                            onChange={handleChange}
+                                            {...register('Codigo', { required: true })}
                                             className="w-full pl-9 md:pl-10 pr-3 py-2 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500"
                                             placeholder="Ej: PROF-001"
                                         />
-                                        <FaIdCard className="absolute left-3 top-8 md:top-9 text-gray-400" />
                                     </div>
-
                                     {/* Correo institucional */}
                                     <div className="relative">
                                         <label className="block text-xs md:text-sm font-medium text-gray-700 mb-1 flex items-center">
@@ -132,13 +110,11 @@ const SubirDocente = () => {
                                         <input
                                             type="email"
                                             name="correo"
-                                            value={formData.correo}
-                                            onChange={handleChange}
+                                            {...register('email', { required: true })}
                                             className="w-full pl-9 md:pl-10 pr-3 py-2 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500"
                                             required
                                             placeholder="ejemplo@institucion.edu"
                                         />
-                                        <FaEnvelope className="absolute left-3 top-8 md:top-9 text-gray-400" />
                                     </div>
                                 </div>
                             </div>
@@ -148,24 +124,35 @@ const SubirDocente = () => {
                                 <h3 className="text-base md:text-lg font-semibold text-gray-700 border-b pb-2">
                                     Credenciales de acceso
                                 </h3>
-                                
+
                                 <div className="relative">
                                     <label className="block text-xs md:text-sm font-medium text-gray-700 mb-1 flex items-center">
                                         <FaLock className="mr-2 text-blue-500 flex-shrink-0" />
-                                        Contraseña 
+                                        Contraseña
                                     </label>
                                     <input
                                         type="password"
                                         name="contrasena"
-                                        value={formData.contrasena}
-                                        onChange={handleChange}
+                                        {...register('contrasena', { required: true })}
                                         className="w-full pl-9 md:pl-10 pr-3 py-2 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500"
                                         required
                                         placeholder="••••••••"
                                     />
-                                    <FaLock className="absolute left-3 top-8 md:top-9 text-gray-400" />
                                 </div>
                             </div>
+                            <select {...register('rol', { required: true })}>
+                                <option value="">Selecciona un rol</option>
+                                <option value="Docente">Docente</option>
+                                <option value="Administrador">Administrador</option>
+                            </select>
+
+                            <select {...register('estado', { required: true })}>
+                                <option value="">Selecciona un estado</option>
+                                <option value="activo">Activo</option>
+                                <option value="inactivo">Inactivo</option>
+                            </select>
+
+                            <input {...register('funcion', { required: true })} placeholder="Función que cumple" />
 
                             {/* Botones de acción */}
                             <div className="flex justify-between pt-6 md:pt-8 border-t border-gray-200">
@@ -177,6 +164,7 @@ const SubirDocente = () => {
                                     Registrar Docente
                                 </button>
                             </div>
+
                         </form>
                     </div>
                 </div>
