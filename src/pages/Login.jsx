@@ -2,45 +2,16 @@ import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import imagenlogin from "../img/logou.png";
 import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form"
+
 import "./login.css";
 
 const Login = () => {
   const [loggedIn] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
-
-  // Lista de usuarios válidos
-  const USUARIOS = [
-    {
-      email: "ana@gmail.com",
-      password: "ana123",
-      redirectPath: "/menudocente"
-    },
-    {
-      email: "kevin@gmail.com",
-      password: "kevin123",
-      redirectPath: "/menuadministrador"
-    }
-  ];
-
-  const handleLogin = (e) => {
-    e.preventDefault();
-    
-    // Buscar usuario coincidente
-    const usuarioValido = USUARIOS.find(
-      (user) => user.email === email && user.password === password
-    );
-
-    if (usuarioValido) {
-      navigate(usuarioValido.redirectPath);
-    } else {
-      alert("Credenciales incorrectas. Prueba con:\n\n" +
-            "Docente: docente@example.com / docente123\n" +
-            "Admin 1: admin@example.com / admin123\n" +
-            "Admin 2: otroadmin@example.com / otraclave123");
-    }
-  };
+  const { register, handleSubmit } = useForm()
+  
 
   return (
     <>
@@ -51,12 +22,11 @@ const Login = () => {
           <img src={imagenlogin} alt="Logo" className="login-logo" />
           <h2 className="login-title">Iniciar Sesión</h2>
 
-          <form onSubmit={handleLogin}>
+          <form >
             <label className="login-label">Correo Electrónico:</label>
             <input
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
               className="login-input"
               placeholder="ejemplo@correo.com"
               required
@@ -66,7 +36,6 @@ const Login = () => {
             <input
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
               className="login-input"
               required
             />
