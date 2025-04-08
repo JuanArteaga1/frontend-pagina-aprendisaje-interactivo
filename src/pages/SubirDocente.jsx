@@ -8,7 +8,21 @@ import { subirDocenteAPI } from "../api/SubirDocenteApi";
 
 
 const SubirDocente = () => {
-    const { register, handleSubmit } = useForm()
+    const { register, handleSubmit } = useForm();
+  
+    const onSubmit = async (data) => {
+        try {
+            const response = await subirDocenteAPI(data);
+            
+        
+            // Guardar el token en localStorage
+            localStorage.setItem("token",response.data.token);
+            console.log(response.data.token)
+        
+          } catch (error) {
+            console.error("Error:", error);
+          }
+    };
     return (
         <>
             <Navbar />
