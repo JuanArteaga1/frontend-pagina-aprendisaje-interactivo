@@ -31,6 +31,7 @@ import ActualizarProyecto from "./pages/ActualizarProyectos";
 import Episodio from "./pages/Episodio";
 import AyudaT from "./pages/Ayuda";
 import InvestigacionDetalle from "./pages/InvestigacionDetalle";
+import QuienesSomos from "./pages/quienes-somos";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
@@ -44,6 +45,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Route path="/appmovil" element={<Appmovil />} />
       <Route path="/investigaciones" element={<Investigaciones />} />
       <Route path="/ayuda" element={<AyudaT />} />
+      <Route path="/quienes-somos" element={<QuienesSomos />} />
 
 
       //rutas de Administrador
