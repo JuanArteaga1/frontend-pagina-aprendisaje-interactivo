@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 
 const Podcast = () => {
+  const [seccionActual, setSeccionActual] = useState("Podcasts");
   const navigate = useNavigate();
 
   const episodios = [
@@ -15,13 +16,11 @@ const Podcast = () => {
     <div>
       <Navbar />
 
-      {/* Título mejorado */}
-      <h1 className="titulo-seccion">Podcasts</h1>
+      <div className="imagen-seccion">
+                <img src="img/podcast.png" alt="" />
+                <h1 className="titulo-seccion">Ahora estás en: {seccionActual}</h1> 
+            </div>
 
-      {/* Banner más redondeado */}
-      <div className="podcast-banner">
-        <img src="/img/podcast.png" alt="Banner Podcast" />
-      </div>
 
       <h2 className="subtitulo-seccion">Lista de Episodios</h2>
 

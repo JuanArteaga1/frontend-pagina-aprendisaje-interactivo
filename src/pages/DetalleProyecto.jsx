@@ -23,19 +23,28 @@ const DetalleProyecto = () => {
                             <button className="boton-descargar">Descargar</button>
                         </div>
                     </div>
-                    
-                    {/* Sección media: Video e imágenes */}
-                    <div className="detalle-media">
-                        <video controls>
-                            <source src="video/video.mp4" type="video/mp4" />
-                            Tu navegador no soporta el elemento de video.
-                        </video>
-                        <div className="imagenes">
+
+                    {/* Sección media: Video e imágenes con carrusel */}
+                    {/* Carrusel horizontal: cada ítem debe ser una sola media individual */}
+                    <div className="detalle-media-carrusel">
+                        <div className="media-item">
+                            <video controls>
+                                <source src="video/video.mp4" type="video/mp4" />
+                                Tu navegador no soporta el elemento de video.
+                            </video>
+                        </div>
+                        <div className="media-item">
                             <img src="/img/fotoapp.png" alt="Imagen 1" />
+                        </div>
+                        <div className="media-item">
                             <img src="/img/fotoapp.png" alt="Imagen 2" />
                         </div>
+                        <div className="media-item">
+                            <img src="/img/fotoapp.png" alt="Imagen 3" />
+                        </div>
                     </div>
-                    
+
+
                     {/* Sección inferior: Información y Documentación */}
                     <div className="detalle-inferior">
                         <div className="descripcion">
@@ -57,6 +66,4 @@ const DetalleProyecto = () => {
     );
 };
 
-
 export default DetalleProyecto;
-
