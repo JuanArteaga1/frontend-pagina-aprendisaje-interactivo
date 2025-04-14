@@ -250,26 +250,34 @@ body {
 /*AQUI VAN LOS TITULOS E IMAGENES DE SIMULACIONES Y APLICACIONES MOVILES */
 
 /* Título de la sección */
-.titulo-seccion {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin: 20px auto; /* Centrado controlado */
-  color: #333;
-  text-align: left;
-  width: 70%;
+.imagen-seccion {
+  position: relative; /* Necesario para posicionar el texto sobre la imagen */
+  width: 100%; /* Asegúrate de que el contenedor ocupe todo el ancho de la pantalla */
+  overflow: hidden; /* Evita que se salgan elementos si la imagen es más grande */
 }
 
-/* Centrar la imagen */
+/* Imagen */
 .imagen-seccion img {
-  width: 100%;
-  max-width: 970px;
-  height: auto;
-  margin-top: 20px;
-  border-radius: 10px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+  width: 100%; /* Asegura que la imagen ocupe todo el ancho de la pantalla */
+  height: auto; /* Mantiene la relación de aspecto */
+  object-fit: cover; /* Asegura que la imagen cubra el área de la imagen sin distorsionarse */
 }
+
+/* Título sobre la imagen */
+.titulo-seccion {
+  position: absolute; /* Posiciona el título sobre la imagen */
+  top: 50%; /* Ajusta el título verticalmente en el medio de la imagen */
+  left: 50%; /* Ajusta el título horizontalmente al centro */
+  transform: translate(-50%, -50%); /* Ajusta el texto para que esté centrado */
+  font-size: 2rem; /* Ajusta el tamaño del texto */
+  font-weight: bold;
+  color: white; /* Color blanco para el texto */
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); /* Sombra para mejorar la visibilidad */
+  text-align: center; /* Centrado */
+  width: 100%; /* Asegura que el título se mantenga dentro de los límites del contenedor */
+}
+
+
 
 /* Estilo para el contenedor de las secciones para centrar otros elementos */
 .simulaciones, .aplicaciones-moviles {
@@ -329,54 +337,72 @@ h2 {
 .cards-container {
   display: flex;
   gap: 15px;
-  justify-content: center;
-  flex-wrap: wrap;
+  overflow-x: auto; /* Desplazamiento horizontal */
+  scroll-snap-type: x mandatory; /* Para alinear las tarjetas al hacer scroll */
+  padding: 20px;
+  -webkit-overflow-scrolling: touch; /* Suaviza en móviles */
 }
+
+.cards-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.cards-container::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 4px;
+}
+
 
 /* Tarjetas */
 .card {
-  width: 200px;
-  height: 250px;
+  width: 250px; /* o el tamaño que prefieras */
+  height: 200px;
   perspective: 1000px;
-  cursor: pointer;
 }
 
 .card-inner {
   width: 100%;
   height: 100%;
-  transform-style: preserve-3d;
+  position: relative;
   transition: transform 0.6s;
+  transform-style: preserve-3d;
 }
 
 .card:hover .card-inner {
   transform: rotateY(180deg);
 }
 
-.card-front, .card-back {
+.card-front,
+.card-back {
   position: absolute;
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
-  border: 1px solid #ccc;
   border-radius: 10px;
+  overflow: hidden; /* IMPORTANTE para que nada se salga */
 }
 
 .card-front {
-  background: white;
+  background-color: #fff;
+}
+
+.card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Muy importante para que no se deforme */
+  display: block;
 }
 
 .card-back {
-  background: #3C64C9;
-  color: white;
-  text-align: center;
+  background-color: #3C64C9;
   transform: rotateY(180deg);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px;
+  border-radius: 10px;
 }
 
 .card-back h3 {
@@ -416,7 +442,7 @@ h2 {
 .detalle-header,
 .detalle-media,
 .detalle-inferior {
-  background-color: #f8f8f8; /* Fondo claro para diferenciarlos */
+  background-color: #f8f8f8;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
@@ -449,11 +475,37 @@ h2 {
 }
 
 /* === Sección 2: Video e imágenes === */
-.detalle-media {
+.detalle-media-carrusel {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 20px;
+  padding-bottom: 10px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.media-item {
+  flex-shrink: 0;
+  scroll-snap-align: start;
+  width: 400px; /* mismo ancho para todo */
+  height: 225px; /* altura fija para igualar al video */
   display: flex;
   align-items: center;
-  gap: 20px;
+  justify-content: center;
+}
+
+.media-item video,
+.media-item img {
   width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.detalle-media {
+  flex-shrink: 0;
+  display: flex;
+  gap: 15px;
 }
 
 .detalle-media video {
@@ -462,16 +514,20 @@ h2 {
   border-radius: 10px;
 }
 
-/* Contenedor de imágenes alineadas en fila */
+/* Contenedor de imágenes alineadas en carrusel */
 .imagenes {
   display: flex;
   gap: 15px;
+  flex-shrink: 0;
 }
 
 .imagenes img {
-  width: 120px; /* Tamaño uniforme */
+  width: 200px; /* Tamaño uniforme para las imágenes */
+  height: 150px; /* Altura uniforme */
   border-radius: 10px;
   border: 2px solid #ddd;
+  object-fit: cover; /* Esto asegura que las imágenes mantengan su proporción sin deformarse */
+  scroll-snap-align: start; /* Hace que cada imagen se alinee correctamente */
 }
 
 /* === Sección 3: Descripción y documentos === */
