@@ -11,6 +11,10 @@ const Simulaciones = () => {
             { nombre: "Simulación 1", imagen: "/img/fotoapp.png" },
             { nombre: "Simulación 2", imagen: "/img/fotoapp.png" },
             { nombre: "Simulación 3", imagen: "/img/fotoapp.png" },
+            { nombre: "Simulación 4", imagen: "/img/fotoapp.png" },
+            { nombre: "Simulación 1", imagen: "/img/fotoapp.png" },
+            { nombre: "Simulación 2", imagen: "/img/fotoapp.png" },
+            { nombre: "Simulación 3", imagen: "/img/fotoapp.png" },
             { nombre: "Simulación 4", imagen: "/img/fotoapp.png" }
         ],
         Matemáticas: [

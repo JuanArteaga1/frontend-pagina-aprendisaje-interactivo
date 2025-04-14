@@ -358,6 +358,8 @@ h2 {
   width: 250px; /* o el tamaño que prefieras */
   height: 200px;
   perspective: 1000px;
+  flex-shrink: 0;
+  scroll-snap-align: start;
 }
 
 .card-inner {
