@@ -39,9 +39,15 @@ const Episodio = () => {
   const episodio = episodios.find(ep => ep.id === parseInt(id));
 
   if (!episodio) {
-    return <h2>Episodio no encontrado</h2>;
+    return (
+      <div>
+        <Navbar />
+        <div className="episodio-container">
+          <h2>Episodio no encontrado</h2>
+        </div>
+      </div>
+    );
   }
-
   return (
     <div>
       <Navbar loggedIn={true} />
