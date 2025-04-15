@@ -196,30 +196,6 @@ body {
   animation: fadeInUp 1s ease-out forwards;
 }
 
-/* ESTILOS PARA EL FORMULARIO DE INICIO DE SESIÓN */
-.login-page {
-  display: flex;
-  height: 100vh; /* Ocupa toda la pantalla */
-}
-
-.login-container {
-  width: 50%; /* Ocupa la mitad izquierda */
-  max-width: none; /* Evita que se limite a 400px */
-  margin: auto;
-  padding: 100px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center; /* Centra el contenido verticalmente */
-
-}
-
-.login-image {
-  width: 50%; /* Ocupa la mitad derecha */
-  min-height: 100vh;
-  background: url("/logouniautonoma.png") no-repeat center center;
-  background-size: cover;
-}
-
 .login-container h2 {
   margin-bottom: 20px;
 }

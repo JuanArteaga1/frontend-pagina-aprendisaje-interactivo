@@ -56,15 +56,15 @@ function SubirProyecto() {
   };
 
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <Navbar loggedIn={true} />
-      <div className="flex h-screen bg-gray-100">
+      <div className="flex flex-1 bg-gray-100">
         <MenuLateral rol="docente" />
-        
-        <div className="flex-1 p-8 ml-64">
+
+        <main className="flex-1 p-8 overflow-y-auto">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-bold text-gray-800 mb-8">Subir Proyecto</h2>
-            
+
             <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-lg shadow-md">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -129,35 +129,22 @@ function SubirProyecto() {
 
               <div className="space-y-4">
                 <h3 className="text-lg font-medium text-gray-900">Cargar Archivos</h3>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   <label className="flex flex-col items-center justify-center h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
-                    <input
-                      type="file"
-                      onChange={(e) => handleFileUpload(e, "apk")}
-                      className="hidden"
-                    />
+                    <input type="file" onChange={(e) => handleFileUpload(e, "apk")} className="hidden" />
                     <span className="text-3xl">🪷</span>
                     <span className="text-sm text-gray-600 mt-1">Subir imagen</span>
                   </label>
 
-
                   <label className="flex flex-col items-center justify-center h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
-                    <input
-                      type="file"
-                      onChange={(e) => handleFileUpload(e, "avance")}
-                      className="hidden"
-                    />
+                    <input type="file" onChange={(e) => handleFileUpload(e, "avance")} className="hidden" />
                     <span className="text-3xl">📈</span>
                     <span className="text-sm text-gray-600 mt-1">Investigación</span>
                   </label>
 
                   <label className="flex flex-col items-center justify-center h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
-                    <input
-                      type="file"
-                      onChange={(e) => handleFileUpload(e, "imagenes")}
-                      className="hidden"
-                    />
+                    <input type="file" onChange={(e) => handleFileUpload(e, "imagenes")} className="hidden" />
                     <span className="text-3xl">📄</span>
                     <span className="text-sm text-gray-600 mt-1">Artículo</span>
                   </label>
@@ -188,9 +175,9 @@ function SubirProyecto() {
               </button>
             </form>
           </div>
-        </div>
+        </main>
       </div>
-    </>
+    </div>
   );
 }
 
