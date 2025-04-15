@@ -32,11 +32,13 @@ import Episodio from "./pages/Episodio";
 import AyudaT from "./pages/Ayuda";
 import InvestigacionDetalle from "./pages/InvestigacionDetalle";
 import QuienesSomos from "./pages/quienes-somos";
+import { DocenteProvider } from "./context/DocenteContext"
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <Routes>
-
+    <Route path="/SubirDocente" element={ <DocenteProvider>  <SubirDocente/> </DocenteProvider> }
+      />
       //rutas de estudiante y visualizacion
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
@@ -52,21 +54,23 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Route path="/menuadministrador" element={<MenuAdmin />} />
       <Route path="/SubirCategoria" element={<NuevaCategoria />} />
       <Route path="/AdministrarDocente" element={<AdministrarDocentes />} />
-
       <Route path="/VerProyectos" element={<MirarProyectos />} />
       <Route path="/Aprobar" element={<ProyectosPorAprobar />} />
 
-  
+
       //rutas de docentes
       <Route path="/menudocente" element={<MenuDocen />} />
-      <Route path="/SubirDocente" element={<SubirDocente />} />
+
+
+
+
       <Route path="/subir-proyecto" element={<SubirProyecto />} />
-      <Route path="subir-podcast" element={<SubirPodcast />}/>
-      <Route path="misproyectos" element={<MisProyectos/>}/>
-      <Route path="actualizar-proyectos" element={<ActualizarProyecto/>}/>
+      <Route path="subir-podcast" element={<SubirPodcast />} />
+      <Route path="misproyectos" element={<MisProyectos />} />
+      <Route path="actualizar-proyectos" element={<ActualizarProyecto />} />
 
 
-      //rutas de carga de elementos 
+      //rutas de carga de elementos
       <Route path="/subirsimulaciones" element={<Subirsimulaciones />} />
       <Route path="/SubirInvestigaciones" element={<SubirInvestigaciones />} />
       <Route path="/subirpodcast" element={<h1>podcast</h1>} />
