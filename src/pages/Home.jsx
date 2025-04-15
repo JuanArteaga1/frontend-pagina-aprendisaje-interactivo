@@ -27,7 +27,7 @@ const Home = () => {
       <Navbar />
 
       {/* Carrusel de imágenes */}
-      <div className="hero w-full mt-4 relative max-h-[600px] overflow-hidden">
+      <div className="hero w-full mt-0 relative max-h-[600px] pb-8">
         <Slider {...settings} className="h-full">
           {[1, 2, 3].map((n) => (
             <div key={n} className="relative w-full h-[300px] sm:h-[400px] md:h-[600px]">

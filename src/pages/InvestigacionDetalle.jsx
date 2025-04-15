@@ -55,19 +55,18 @@ const InvestigacionDetalle = () => {
     <div>
       <Navbar />
 
-      <div className="investigacion-container">
-        {/* Diseño en dos columnas */}
-        <div className="investigacion-layout">
+      <div className="investigacion-container p-5 flex justify-center">
+        <div className="investigacion-layout flex bg-white shadow-lg rounded-lg p-5 max-w-4xl w-full">
           {/* Columna Izquierda */}
-          <div className="investigacion-left">
-            <h1 className="investigacion-titulo">{investigacion.titulo}</h1>
-            <p className="investigacion-descripcion">
+          <div className="investigacion-left flex-1 p-5">
+            <h1 className="investigacion-titulo text-2xl font-bold mb-4">{investigacion.titulo}</h1>
+            <p className="investigacion-descripcion text-base mb-4">
               <strong>Descripción:</strong> {investigacion.descripcion}
             </p>
             {/* Mostrar botón de descarga solo si hay un archivo disponible */}
             {investigacion.archivo && investigacion.id !== 2 && (
               <a
-                className="descargar-boton"
+                className="descargar-boton inline-block bg-blue-500 text-white py-2 px-4 rounded-lg mt-4 hover:bg-blue-700"
                 href={investigacion.archivo}
                 download
               >
@@ -77,18 +76,18 @@ const InvestigacionDetalle = () => {
           </div>
 
           {/* Línea separadora */}
-          <div className="linea-separadora"></div>
+          <div className="linea-separadora w-px bg-gray-300 mx-5"></div>
 
           {/* Columna Derecha */}
-          <div className="investigacion-right">
-            <p className="investigacion-autor">
+          <div className="investigacion-right flex-1 p-5">
+            <p className="investigacion-autor text-base mb-2">
               <strong>Autor(es):</strong> {investigacion.autor}
             </p>
-            <p className="investigacion-fecha">
+            <p className="investigacion-fecha text-base mb-4">
               <strong>Fecha de publicación:</strong> {investigacion.fecha}
             </p>
             <a
-              className="fuente-link"
+              className="fuente-link inline-block text-blue-500 font-bold hover:underline"
               href={investigacion.fuente}
               target="_blank"
               rel="noopener noreferrer"
