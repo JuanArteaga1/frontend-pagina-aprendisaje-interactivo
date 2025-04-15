@@ -19,9 +19,9 @@ const Navbar = () => {
     };
 
     return (
-        <nav className="bg-white shadow-md sticky top-0 z-50">
+        <nav className="bg-white shadow-md sticky top-0 z-50 mb-0">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between items-center h-20">
+                <div className="flex justify-between items-center h-24 relative">
                     {/* Logo */}
                     <div className="flex-shrink-0">
                         <Link to="/">
@@ -33,18 +33,13 @@ const Navbar = () => {
                         </Link>
                     </div>
 
-                    {/* Botón hamburguesa */}
-                    <button
-                        className="text-4xl text-blue-600 md:hidden focus:outline-none"
-                        onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        aria-label="Abrir menú"
+                    {/* Menú principal */}
+                    <div
+                        className={`${
+                            isMenuOpen ? "block" : "hidden md:flex"
+                        } absolute md:static top-full md:top-auto left-1/2 md:left-auto transform md:transform-none -translate-x-1/2 md:translate-x-0 bg-[#3356af] border-none rounded-xl md:rounded-full px-6 py-3 md:py-2 shadow-none transition-all duration-300 z-40`}
                     >
-                        {isMenuOpen ? "✕" : "☰"}
-                    </button>
-
-                    {/* Menú de navegación */}
-                    <div className={`${isMenuOpen ? "block" : "hidden"} md:block absolute md:relative top-20 md:top-0 left-0 w-full md:w-auto bg-blue-600 md:bg-transparent z-40`}>
-                        <ul className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-8 p-4 md:p-0">
+                        <ul className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6">
                             {[
                                 { to: "/", name: "Inicio" },
                                 { to: "/simulaciones", name: "Simulaciones" },
@@ -55,7 +50,7 @@ const Navbar = () => {
                                 <li key={item.name}>
                                     <Link
                                         to={item.to}
-                                        className="block text-white md:text-gray-800 hover:text-blue-100 md:hover:text-blue-600 text-lg font-medium py-2 px-4 rounded transition-colors duration-200"
+                                        className="block text-white hover:text-blue-100 text-sm font-medium py-2 px-4 rounded transition-colors duration-200"
                                         onClick={() => setIsMenuOpen(false)}
                                     >
                                         {item.name}
@@ -65,16 +60,25 @@ const Navbar = () => {
                         </ul>
                     </div>
 
+                    {/* Botón hamburguesa */}
+                    <button
+                        className="text-4xl text-blue-600 md:hidden focus:outline-none"
+                        onClick={() => setIsMenuOpen(!isMenuOpen)}
+                        aria-label="Abrir menú"
+                    >
+                        {isMenuOpen ? "✕" : "☰"}
+                    </button>
+
                     {/* Iconos */}
                     <div className="flex items-center space-x-6 ml-4">
-                        <button 
-                            aria-label="Buscar" 
+                        <button
+                            aria-label="Buscar"
                             className="text-gray-700 hover:text-blue-600 p-2 rounded-full transition-colors duration-200"
                         >
                             <Search className="w-7 h-7" />
                         </button>
 
-                        <div 
+                        <div
                             className="relative"
                             onMouseEnter={handleMouseEnter}
                             onMouseLeave={handleMouseLeave}
@@ -85,9 +89,9 @@ const Navbar = () => {
                             >
                                 <User className="w-7 h-7" />
                             </button>
-                            
+
                             {isDropdownOpen && (
-                                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 z-50 transform transition-all duration-200 ease-out">
+                                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 z-50">
                                     <ul className="py-1">
                                         {[
                                             { to: "/login", name: "Iniciar sesión" },
