@@ -2,20 +2,22 @@ import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
 
+export const proyectosAplicaciones = {
+    Fisica: [
+        { nombre: "App 1", imagen: "/img/fotoapp.png" },
+        { nombre: "App 2", imagen: "/img/fotoapp.png" },
+    ],
+    Matemáticas: [
+        { nombre: "App A", imagen: "/img/fotoapp.png" },
+        { nombre: "App B", imagen: "/img/fotoapp.png" },
+    ],
+    "Ingeniería Civil": []
+};
+
 
 const AplicacionesMoviles = () => {
     const navigate = useNavigate();
     const [seccionActual, setSeccionActual] = useState("Aplicaciones Moviles");
-    const proyectos = {
-        categoria1: [
-            { nombre: "App 1", imagen: "/img/fotoapp.png" },
-            { nombre: "App 2", imagen: "/img/fotoapp.png" },
-        ],
-        categoria2: [
-            { nombre: "App A", imagen: "/img/fotoapp.png" },
-            { nombre: "App B", imagen: "/img/fotoapp.png" },
-        ],
-    };
 
     return (
         <div className="aplicaciones-moviles">
@@ -26,7 +28,7 @@ const AplicacionesMoviles = () => {
             </div>
 
             <div className="contenido-proyectos">
-                {Object.entries(proyectos).map(([categoria, items]) => (
+                {Object.entries(proyectosAplicaciones).map(([categoria, items]) => (
                     <div key={categoria} className="categoria">
                         <h2>{categoria}</h2>
                         {items.length > 0 ? (

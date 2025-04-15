@@ -2,28 +2,28 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 
+export const proyectosSimulaciones = {
+    Fisica: [
+        { nombre: "Simulación 1", imagen: "/img/fotoapp.png" },
+        { nombre: "Simulación 2", imagen: "/img/fotoapp.png" },
+        { nombre: "Simulación 3", imagen: "/img/fotoapp.png" },
+        { nombre: "Simulación 4", imagen: "/img/fotoapp.png" },
+        { nombre: "Simulación 1", imagen: "/img/fotoapp.png" },
+        { nombre: "Simulación 2", imagen: "/img/fotoapp.png" },
+        { nombre: "Simulación 3", imagen: "/img/fotoapp.png" },
+        { nombre: "Simulación 4", imagen: "/img/fotoapp.png" }
+    ],
+    Matemáticas: [
+        { nombre: "Simulación A", imagen: "/img/fotoapp.png" },
+        { nombre: "Simulación B", imagen: "/img/fotoapp.png" },
+        { nombre: "Simulación C", imagen: "/img/fotoapp.png" }
+    ],
+    "Ingeniería Civil": []
+};
+
 const Simulaciones = () => {
     const [seccionActual] = useState("Simulaciones");
     const navigate = useNavigate();
-
-    const proyectos = {
-        Fisica: [
-            { nombre: "Simulación 1", imagen: "/img/fotoapp.png" },
-            { nombre: "Simulación 2", imagen: "/img/fotoapp.png" },
-            { nombre: "Simulación 3", imagen: "/img/fotoapp.png" },
-            { nombre: "Simulación 4", imagen: "/img/fotoapp.png" },
-            { nombre: "Simulación 1", imagen: "/img/fotoapp.png" },
-            { nombre: "Simulación 2", imagen: "/img/fotoapp.png" },
-            { nombre: "Simulación 3", imagen: "/img/fotoapp.png" },
-            { nombre: "Simulación 4", imagen: "/img/fotoapp.png" }
-        ],
-        Matemáticas: [
-            { nombre: "Simulación A", imagen: "/img/fotoapp.png" },
-            { nombre: "Simulación B", imagen: "/img/fotoapp.png" },
-            { nombre: "Simulación C", imagen: "/img/fotoapp.png" }
-        ],
-        "Ingeniería Civil": []
-    };
 
     const irADetalle = (proyecto) => {
         const nombreCodificado = encodeURIComponent(proyecto);
@@ -39,7 +39,7 @@ const Simulaciones = () => {
             </div>
 
             <div className="contenido-proyectos">
-                {Object.entries(proyectos).map(([categoria, items]) => (
+                {Object.entries(proyectosSimulaciones).map(([categoria, items]) => (
                     <div key={categoria} className="categoria">
                         <h2>{categoria}</h2>
                         {items.length > 0 ? (
@@ -71,3 +71,4 @@ const Simulaciones = () => {
 };
 
 export default Simulaciones;
+

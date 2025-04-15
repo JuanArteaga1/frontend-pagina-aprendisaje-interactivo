@@ -1,36 +1,26 @@
 import React from "react";
 import Navbar from "../components/Navbar";
 import CategoriaProyectos from "../components/CategoriaProyectos";
-
-const simulacionesIngCivil = {
-  "Ingeniería Civil": ["Simulación 1", "Simulación 2", "Simulación 3"]
-};
-
-const aplicacionesIngCivil = {
-  "Ingeniería Civil": ["App 1", "App 2"]
-};
+import { proyectosSimulaciones } from "../pages/Simulaciones"; // Importa los proyectos de simulaciones
+import { proyectosAplicaciones } from "../pages/Appmovil"; // Importa los proyectos de aplicaciones
 
 const IngCivil = () => {
   return (
     <div>
       <Navbar />
       
-      {/* Sección de Simulaciones */}
+      {/* Sección de Simulaciones de Ingeniería Civil */}
       <CategoriaProyectos 
         titulo="Simulaciones de Ingeniería Civil" 
         categoria="Ingeniería Civil" 
-        proyectos={simulacionesIngCivil} 
-        showImage={false} // Oculta la imagen
-        showButton={false} // Oculta el botón
+        proyectos={proyectosSimulaciones} // Usamos los proyectos importados de Simulaciones
       />
 
-      {/* Sección de Aplicaciones Móviles */}
+      {/* Sección de Aplicaciones Móviles de Ingeniería Civil */}
       <CategoriaProyectos 
         titulo="Aplicaciones Móviles de Ingeniería Civil" 
         categoria="Ingeniería Civil" 
-        proyectos={aplicacionesIngCivil} 
-        showImage={false} // Oculta la imagen
-        showButton={false} // Oculta el botón
+        proyectos={proyectosAplicaciones} // Usamos los proyectos importados de Aplicaciones
       />
     </div>
   );
