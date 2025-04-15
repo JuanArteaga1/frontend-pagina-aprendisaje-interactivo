@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
-import "./SubirSimulaciones.css";
-import MenuLateral from "../components/MenuAdmi_Doc"
+import MenuLateral from "../components/MenuAdmi_Doc";
 import { 
     FaFileUpload,
     FaAndroid,        // Icono de Android para APK
@@ -29,7 +28,6 @@ const SubirAPK = () => {
     };
 
     const handleFileChange = (tipo, files) => {
-        // Validar tipos de archivo
         const validaciones = {
             apk: file => file.type === 'application/vnd.android.package-archive',
             requisitos: file => file.type === 'application/pdf',

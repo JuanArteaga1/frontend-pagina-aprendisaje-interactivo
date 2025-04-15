@@ -127,11 +127,6 @@ body {
 
 
 /*Home + Carrusel*/
-.hero {
-  width: 100%;
-  overflow: visible;  /* Cambiar overflow-x: hidden a visible */
-}
-
 .hero img {
   object-fit: cover;
   width: 100%;
@@ -139,41 +134,18 @@ body {
 }
 
 /* Estilos para los puntos de navegación */
-.slick-dots {
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  justify-content: center;
-  padding: 0;
-  margin: 0;
-}
-
-.slick-dots li {
-  margin: 0 5px; /* Espaciado entre los puntos */
-}
-
-.slick-dots li button:before {
-  display: none ; /* Oculta los puntos por defecto (los negros) */
-}
-
 .slick-dots li button {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.5);
-  border: none;
-  outline: none;
-  content: "" ; 
+  opacity: 0.5; /* Hace que los puntos inactivos sean más suaves */
 }
 
+/* Estilos para el punto activo */
 .slick-dots li.slick-active button {
-  background-color: rgba(255, 255, 255, 1) !important;
+  opacity: 1; /* Asegura que el punto activo sea completamente visible */
 }
-/* Categorías  */
+
+/* Categorías - Si deseas personalizar el tamaño de las imágenes */
 .category-box img {
-  width: 100px; /* Ajustar tamaño */
+  width: 100px; /* Ajusta según el tamaño deseado */
   height: auto;
   object-fit: contain; /* Asegura que la imagen no se deforme */
 }
@@ -222,41 +194,6 @@ body {
 
 .fade-in-up {
   animation: fadeInUp 1s ease-out forwards;
-}
-
-/* ESTILOS PARA EL FORMULARIO DE INICIO DE SESIÓN */
-.login-card {
-  max-width: 900px;
-  width: 100%;
-}
-
-.form-section input:focus {
-  outline: none;
-  border-color: #3C64C9;
-  box-shadow: 0 0 0 2px rgba(60, 100, 201, 0.2);
-}
-
-.login-page {
-  display: flex;
-  height: 100vh; /* Ocupa toda la pantalla */
-}
-
-.login-container {
-  width: 50%; /* Ocupa la mitad izquierda */
-  max-width: none; /* Evita que se limite a 400px */
-  margin: auto;
-  padding: 100px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center; /* Centra el contenido verticalmente */
-
-}
-
-.login-image {
-  width: 50%; /* Ocupa la mitad derecha */
-  min-height: 100vh;
-  background: url("/logouniautonoma.png") no-repeat center center;
-  background-size: cover;
 }
 
 .login-container h2 {

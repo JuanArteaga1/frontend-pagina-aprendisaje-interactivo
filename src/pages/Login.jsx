@@ -1,96 +1,89 @@
-import React, { useState } from "react";
-import Navbar from "../components/Navbar";
-import imagenlogin from "../img/logou.png";
-import { useNavigate } from "react-router-dom"; 
+import React from "react";
 import { useForm } from "react-hook-form";
-import { Eye, EyeOff } from "lucide-react"; // lucide-react para los íconos (instala con: npm install lucide-react)
-
-import "./login.css";
+import imagenlogin from "../img/logou.png"; // Verifica que esta ruta sea correcta
 
 const Login = () => {
   const { register, handleSubmit } = useForm();
-  const navigate = useNavigate();
 
-  const [showPassword, setShowPassword] = useState(false);
-
-  const togglePassword = () => setShowPassword((prev) => !prev);
-
-   // Función que simula validación y redirección por tipo de usuario-, solo es para probar si sirve. 
-   const onSubmit = (data) => {
-    console.log("Datos enviados:", data);
-
-    const usuariosSimulados = {
-      "admin@correo.com": "admin",
-      "docente@correo.com": "docente"
-    };
-
-    const rol = usuariosSimulados[data.email];
-
-    if (rol === "admin") {
-      navigate("/menuadministrador");
-    } else if (rol === "docente") {
-      navigate("/menudocente");
-    } else {
-      alert("Correo no reconocido o sin permisos.");
-    }
+  // Función que se ejecuta al enviar el formulario
+  const onSubmit = (data) => {
+    console.log("Datos del formulario:", data);
+    // Aquí podrías conectar con tu backend
   };
 
-
   return (
-    <>
-      <Navbar />
+    // Fondo gris claro, centrado vertical y horizontalmente
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      
+      {/* Contenedor principal más ancho y alto */}
+      <div className="w-full max-w-xl bg-white p-10 rounded-lg shadow-lg">
+        
+        {/* Logo */}
+      <div className="flex justify-center mb-8">
+        <img src={imagenlogin} alt="Logo" className="w-40 md:w-48" />
+      </div>
 
-      <div className="login-page bg-gray-100 min-h-screen flex items-center justify-center px-4">
-        <div className="login-card bg-white shadow-lg rounded-lg overflow-hidden flex flex-col md:flex-row w-full max-w-5xl">
+        {/* Título */}
+        <h2 className="text-2xl font-semibold text-center mb-6 text-gray-700">
+          Iniciar sesión
+        </h2>
+
+        {/* Formulario */}
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           
-          {/* Formulario */}
-          <div className="form-section w-full md:w-1/2 p-10 flex flex-col justify-center items-center">
-            <img src={imagenlogin} alt="Logo" className="w-32 mb-6" />
-            <h2 className="text-2xl font-semibold mb-6">Iniciar Sesión</h2>
+          {/* Campo de usuario */}
+          <input
+            type="email"
+            placeholder="Nombre de usuario"
+            className="w-full border border-gray-300 rounded-lg px-5 py-3 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            {...register("email", { required: true })}
+          />
 
-            <form onSubmit={handleSubmit(onSubmit)}  className="w-full max-w-sm flex flex-col gap-4">
-              <input
-                {...register("email")}
-                type="email"
-                placeholder="Correo electrónico"
-                className="border rounded px-4 py-2 w-full"
-              />
+          {/* Campo de contraseña */}
+          <input
+            type="password"
+            placeholder="Contraseña"
+            className="w-full border border-gray-300 rounded-lg px-5 py-3 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            {...register("password", { required: true })}
+          />
 
-              <div className="relative w-full">
-                <input
-                  {...register("password")}
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Contraseña"
-                  className="border rounded px-4 py-2 w-full pr-10"
-                />
-                <span
-                  className="absolute right-3 top-2.5 cursor-pointer text-gray-500"
-                  onClick={togglePassword}
-                >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                </span>
-              </div>
+          {/* Botón */}
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white py-3 text-lg rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Acceder
+          </button>
+        </form>
 
-              <button type="submit" className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
-                Acceder
-              </button>
+        {/* Enlace de contraseña */}
+        <div className="text-right mt-3">
+          <a href="#" className="text-blue-600 text-sm hover:underline">
+            ¿Olvidó su contraseña?
+          </a>
+        </div>
 
-              <a href="#" className="text-sm text-blue-600 hover:underline mt-2">
-                ¿Olvidó su contraseña?
-              </a>
-            </form>
-          </div>
+        {/* Línea divisora */}
+        <div className="border-t my-8"></div>
 
-          {/* Opciones de ingreso */}
-          <div className="bg-blue-100 w-full md:w-1/2 p-10 flex flex-col justify-center items-center text-center">
-            <h3 className="text-lg font-semibold mb-6">O accede con: </h3>
-            <button className="bg-white text-gray-700 px-6 py-2 rounded shadow hover:bg-gray-100 transition">
-              Iniciar sesión con Google
-            </button>
-          </div>
+        {/* Login con Google */}
+        <button className="flex items-center justify-center gap-3 w-full border border-gray-300 py-3 rounded-lg hover:bg-gray-50 transition-colors">
+          <img
+            src="https://img.icons8.com/color/24/000000/google-logo.png"
+            alt="Google"
+          />
+          <span className="text-base">Iniciar sesión con Google</span>
+        </button>
+
+        {/* Footer */}
+        <div className="flex justify-between items-center text-sm text-gray-600 mt-8">
+          <span>Español - Internacional (es)</span>
+          <button className="text-blue-600 hover:underline">
+            Aviso de Cookies
+          </button>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
