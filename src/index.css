@@ -43,6 +43,7 @@ body {
   margin-top: 30px;
 }
 
+
 .episodio-container {
   max-width: 900px;
   margin: auto;
@@ -123,6 +124,7 @@ body {
   font-weight: bold;
   align-self: flex-start;
 }
+
 
 /*Home + Carrusel*/
 .hero img {
@@ -620,6 +622,7 @@ h2 {
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
+  justify-content: space-between; /* Esto asegura que las tarjetas estén distribuidas */
 }
 
 .investigacion-container {
@@ -728,17 +731,25 @@ h2 {
   background: #0056b3;
 }
 
-/* Responsive */
+/* Añadimos el ajuste para pantallas móviles */
 @media (max-width: 768px) {
   .contenedor-investigaciones {
     flex-direction: column;
   }
-  
+
   .sidebar {
     width: 100%;
   }
-  
+
+  /* Establecemos el grid para la lista de investigaciones */
   .lista-investigaciones {
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Dos columnas */
+    gap: 15px;
+  }
+
+  /* También podemos ajustar las tarjetas para que no se estiren mucho en pantallas pequeñas */
+  .card-investigacion {
+    width: 100%; /* Hacemos que las tarjetas ocupen el 100% del espacio disponible */
   }
 }

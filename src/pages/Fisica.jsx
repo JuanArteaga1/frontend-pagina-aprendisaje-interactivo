@@ -1,27 +1,27 @@
 import React from "react";
 import Navbar from "../components/Navbar";
 import CategoriaProyectos from "../components/CategoriaProyectos";
-
-const simulaciones = {
-    Fisica: ["Simulación A", "Simulación B", "Simulación C"]
-};
-
-const aplicaciones = {
-    Fisica: ["App 1", "App 2"]
-};
+import { proyectosSimulaciones } from "../pages/Simulaciones"; 
+import { proyectosAplicaciones } from "../pages/Appmovil"; 
 
 const Fisica = () => {
     return (
         <div>
             <Navbar />
-            {/* Sección de Simulaciones */}
-            <CategoriaProyectos titulo="Simulaciones de Física" categoria="Fisica" proyectos={simulaciones} />
-
-            {/* Sección de Aplicaciones Móviles */}
-            <CategoriaProyectos titulo="Aplicaciones Móviles de Física" categoria="Fisica" proyectos={aplicaciones} />
+            <CategoriaProyectos
+                titulo="Simulaciones de Física"
+                categoria="Fisica"
+                proyectos={proyectosSimulaciones}
+            />
+            <CategoriaProyectos
+                titulo="Aplicaciones de Física"
+                categoria="Fisica"
+                proyectos={proyectosAplicaciones}
+            />
         </div>
     );
 };
 
 export default Fisica;
+
 

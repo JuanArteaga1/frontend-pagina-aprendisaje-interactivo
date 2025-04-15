@@ -10,6 +10,10 @@ const Podcast = () => {
     { id: 1, titulo: "Episodio 1", descripcion: "Introducción al aprendizaje", imagen: "/img/pdexample.jpg" },
     { id: 2, titulo: "Episodio 2", descripcion: "Técnicas avanzadas", imagen: "/img/pdexample.jpg" },
     { id: 3, titulo: "Episodio 3", descripcion: "Casos de éxito", imagen: "/img/pdexample.jpg" },
+    { id: 4, titulo: "Episodio 4", descripcion: "Casos de éxito", imagen: "/img/pdexample.jpg" },
+    { id: 5, titulo: "Episodio 5", descripcion: "Casos de éxito", imagen: "/img/pdexample.jpg" },
+    { id: 6, titulo: "Episodio 6", descripcion: "Casos de éxito", imagen: "/img/pdexample.jpg" },
+    { id: 7, titulo: "Episodio 7", descripcion: "Casos de éxito", imagen: "/img/pdexample.jpg" },
   ];
 
   return (
