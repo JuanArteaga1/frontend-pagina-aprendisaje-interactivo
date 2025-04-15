@@ -18,7 +18,7 @@ const TablaDinamica = ({ titulo, datos, columnas, acciones, onFilaClick }) => {
         <table className="w-full border-collapse">
           <thead>
             <tr className="bg-gray-100">
-              {columnas.map((col) => (
+              {((col) => (
                 <th 
                   key={col.key} 
                   className={`text-left p-3 border-b ${col.className || ''}`}
