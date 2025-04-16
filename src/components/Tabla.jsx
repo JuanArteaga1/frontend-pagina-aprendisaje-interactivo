@@ -3,22 +3,18 @@ import React from 'react';
 /**
  * Componente de tabla reutilizable
  * 
- * @param {string} titulo - Título que aparecerá sobre la tabla
  * @param {Array} datos - Los datos que se mostrarán en la tabla
  * @param {Array} columnas - Configuración de las columnas
  * @param {Array} acciones - Acciones disponibles para cada fila
- * @param {function} onFilaClick - Función opcional al hacer click en una fila
  */
-const TablaDinamica = ({ titulo, datos, columnas, acciones, onFilaClick }) => {
+const TablaDinamica = ({ datos, columnas, acciones }) => {
   return (
     <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-      {titulo && <h3 className="text-xl font-bold mb-4">{titulo}</h3>}
-      
       <div className="overflow-x-auto">
         <table className="w-full border-collapse">
           <thead>
             <tr className="bg-gray-100">
-              {((col) => (
+              {columnas.map((col) => (
                 <th 
                   key={col.key} 
                   className={`text-left p-3 border-b ${col.className || ''}`}
@@ -32,18 +28,11 @@ const TablaDinamica = ({ titulo, datos, columnas, acciones, onFilaClick }) => {
             </tr>
           </thead>
           <tbody>
-            {datos.map((item, index) => (
-              <tr 
-                key={index} 
-                className={`hover:bg-gray-50 ${onFilaClick ? 'cursor-pointer' : ''}`}
-                onClick={() => onFilaClick && onFilaClick(item)}
-              >
+            {datos?.data.map((item, index) => (
+              <tr key={index} className="hover:bg-gray-50">
                 {columnas.map((col) => (
-                  <td 
-                    key={col.key} 
-                    className={`p-3 border-b ${col.className || ''}`}
-                  >
-                    {col.formateador ? col.formateador(item[col.key], item) : item[col.key]}
+                  <td key={col.key} className={`p-3 border-b ${col.className || ''}`}>
+                    {item[col.key]}
                   </td>
                 ))}
                 

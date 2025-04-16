@@ -1,5 +1,5 @@
 import { Children, createContext, useEffect, useState, useContext } from "react";
-import { subirDocenteAPI } from "../api/AdmimnistrarDocente";
+import { subirDocenteAPI,GetAllDocentes } from "../api/AdmimnistrarDocente";
 
 export const DocenteContext = createContext();
 
@@ -14,7 +14,20 @@ export const UseDocente = () => {
 export const DocenteProvider = ({ children }) => {
     const [Docente, SetDocente] = useState(null);
     const [errors,setErrors ] = useState([])
-    const [mensaje, setMensaje] = useState(null); // <-- mensaje de éxito
+    const [mensaje, setMensaje] = useState(null); 
+    
+    const TraerDocentes = async() =>{
+        
+        try {
+            const Docentes = await GetAllDocentes()
+            console.log(Docentes)
+            SetDocente(Docentes)
+        } catch (error) {
+            console.log(error)
+            
+        }
+
+    }
     const sigout = async (data) => {
         try {
             const response = await subirDocenteAPI(data);
@@ -33,7 +46,7 @@ export const DocenteProvider = ({ children }) => {
     };
 
     return (
-        <DocenteContext.Provider value={{ sigout, Docente,errors,mensaje, setMensaje }}>
+        <DocenteContext.Provider value={{ sigout, Docente,errors,mensaje, setMensaje,SetDocente,TraerDocentes }}>
             {children}
         </DocenteContext.Provider>
     );

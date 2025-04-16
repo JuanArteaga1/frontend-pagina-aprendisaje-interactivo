@@ -15,11 +15,11 @@ function MenuDocen() {
         <div className="flex-1 overflow-y-auto ml-64 p-6 pt-20">
           {/* Contenedor de bienvenida */}
           <div className="text-center mb-8 animate-fade-in-down">
-            <div className="relative inline-block">
-              <h1 className="text-6xl md:text-7xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent animate-float">
+            <div className="relative inline-block card">
+            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent">
                 ¡Bienvenido Docente!
-                <span className="absolute -top-6 -right-8 text-4xl animate-spin-slow">🌟</span>
-                <span className="absolute -bottom-6 -left-8 text-4xl animate-bounce">🎓</span>
+                <span className="absolute -top-4 -right-6 text-2xl">🌟</span>
+                <span className="absolute -bottom-4 -left-6 text-2xl">🎓</span>
               </h1>
             </div>
             <p className="mt-6 text-2xl text-blue-500 animate-slide-in-blurred-top animate-delay-300">
