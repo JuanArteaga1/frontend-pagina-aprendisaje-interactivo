@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Navbar from "../components/Navbar";
 import MenuLateral from "../components/MenuAdmi_Doc";
 
 function SubirPodcast() {
@@ -38,12 +37,15 @@ function SubirPodcast() {
   };
 
   return (
-    <>
-      <Navbar loggedIn={true} />
-      <div className="flex h-screen bg-gradient-to-br from-gray-50 to-indigo-50">
+    <div className="flex h-screen bg-gray-100 overflow-hidden">
+      {/* Menú Lateral Fijo */}
+      <div className="fixed h-full w-64 bg-white shadow-lg z-10">
         <MenuLateral rol="docente" />
-        
-        <div className="flex-1 p-8 ml-64">
+      </div>
+      
+      {/* Contenido Principal Desplazable */}
+      <div className="flex-1 ml-64 overflow-y-auto">
+        <div className="p-8">
           <div className="max-w-2xl mx-auto">
             <div className="mb-8 text-center">
               <h2 className="text-3xl font-bold text-gray-800 mb-2 bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-600">
@@ -188,7 +190,7 @@ function SubirPodcast() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

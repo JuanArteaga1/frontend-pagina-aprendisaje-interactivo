@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Navbar from "../components/Navbar";
 import MenuLateral from "../components/MenuAdmi_Doc";
 import { useForm } from "react-hook-form"
 import { UseProyectos } from "../context/ProyectoContext"
@@ -11,9 +10,8 @@ function SubirProyecto() {
     const [registroExitoso, setRegistroExitoso] = useState(false);
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar loggedIn={true} />
-      <div className="flex flex-1 bg-gray-100">
+    <div className="flex h-screen bg-gray-100">
+      {/* Menú Lateral */}
         <MenuLateral rol="docente" />
 
         <main className="flex-1 p-8 overflow-y-auto">
@@ -135,7 +133,6 @@ function SubirProyecto() {
             </form>
           </div>
         </main>
-      </div>
     </div>
   );
 }
