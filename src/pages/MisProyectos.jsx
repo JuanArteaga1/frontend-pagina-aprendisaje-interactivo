@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
 import TablaDinamica from "../components/Tabla";
 import MenuAdministrador from "../components/MenuAdmi_Doc";
 
@@ -28,17 +27,12 @@ const MisProyectos = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
-      {/* Navbar Superior */}
-      <Navbar />
-
-      {/* Contenido Principal */}
-      <div className="flex flex-1 pt-16">
+    <div className="flex h-screen bg-gray-100">
         {/* Menú Lateral */}
         <MenuAdministrador rol="docente" />
 
         {/* Área de Contenido */}
-        <main className="flex-1 overflow-y-auto p-4 lg:p-8 ml-64">
+        <main className="flex-1 p-8 overflow-y-auto">
           <h1 className="text-2xl font-bold text-gray-800 mb-4">
             Mis Proyectos
           </h1>
@@ -93,7 +87,6 @@ const MisProyectos = () => {
             </div>
           </div>
         </main>
-      </div>
     </div>
   );
 };
