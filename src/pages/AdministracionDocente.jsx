@@ -4,8 +4,7 @@ import TablaDinamica from "../components/Tabla";
 import MenuAdministrador from "../components/MenuAdmi_Doc";
 import { Link } from 'react-router-dom';
 
-const AdministrarDocente= () => {
-// Datos de ejemplo para docentes
+const AdministrarDocente = () => {
   const [docentes, setDocentes] = useState([
     { 
       id: 1, 
@@ -23,11 +22,9 @@ const AdministrarDocente= () => {
     }
   ]);
 
-  // Estados para filtros
   const [busqueda, setBusqueda] = useState("");
   const [filtroEstado, setFiltroEstado] = useState("");
 
-  // Filtrar docentes
   const docentesFiltrados = docentes.filter(docente => {
     const coincideBusqueda = docente.nombre.toLowerCase().includes(busqueda.toLowerCase()) || 
                           docente.especialidad.toLowerCase().includes(busqueda.toLowerCase());
@@ -35,14 +32,12 @@ const AdministrarDocente= () => {
     return coincideBusqueda && coincideEstado;
   });
 
-  // Funciones de acciones
   const handleActualizar = (docente) => {
     console.log('Actualizar:', docente);
-    // Lógica para abrir modal de edición
   };
 
   const handleEliminar = (docente) => {
-    if (window.confirm('¿Estás seguro de eliminar a ${docente.nombre}?')) {
+    if (window.confirm(`¿Estás seguro de eliminar a ${docente.nombre}?`)) {
       setDocentes(docentes.filter(d => d.id !== docente.id));
     }
   };
@@ -57,48 +52,42 @@ const AdministrarDocente= () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
-      {/* Navbar Superior */}
       <Navbar />
       
-      {/* Contenido Principal */}
-      <div className="flex flex-1 pt-16"> {/* Ajuste para el navbar fijo */}
-        {/* Menú Lateral */}
+      <div className="flex flex-1 pt-16">
         <MenuAdministrador rol="admin" />
         
-        {/* Área de Contenido */}
-        <main className="flex-1 overflow-y-auto p-4 lg:p-8 ml-64"> {/* Ajuste para el menú lateral */}
-          {/* Encabezado */}
+        <main className="flex-1 overflow-y-auto p-6 ml-64 max-w-7xl mx-auto">
           <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
-            <h1 className="text-2xl font-bold text-gray-800 mb-4 md:mb-0">Administrar Docentes</h1>
-            <div className="flex space-x-4">
+            <h1 className="text-2xl font-bold text-gray-800">Administrar Docentes</h1>
+            <div className="mt-4 md:mt-0">
               <Link 
                 to="/SubirDocente"
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors text-sm"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors text-sm font-medium"
               >
                 + Nuevo Docente
               </Link>
             </div>
           </div>
           
-          {/* Filtros */}
-          <div className="bg-white p-4 rounded-lg shadow-sm mb-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="busqueda" className="block text-sm font-medium text-gray-700 mb-1">Buscar</label>
+          <div className="bg-white p-6 rounded-lg shadow-sm mb-6 border border-gray-200">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label htmlFor="busqueda" className="block text-sm font-medium text-gray-700">Buscar</label>
                 <input
                   id="busqueda"
                   type="text"
                   placeholder="Nombre o especialidad..."
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                   value={busqueda}
                   onChange={(e) => setBusqueda(e.target.value)}
                 />
               </div>
-              <div>
-                <label htmlFor="estado" className="block text-sm font-medium text-gray-700 mb-1">Estado</label>
+              <div className="space-y-2">
+                <label htmlFor="estado" className="block text-sm font-medium text-gray-700">Estado</label>
                 <select 
                   id="estado"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                   value={filtroEstado}
                   onChange={(e) => setFiltroEstado(e.target.value)}
                 >
@@ -110,71 +99,77 @@ const AdministrarDocente= () => {
             </div>
           </div>
           
-          {/* Tabla de Docentes */}
-          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-            <TablaDinamica
-              datos={docentesFiltrados}
-              columnas={[
-                { 
-                  key: 'id', 
-                  nombre: '#', 
-                  className: 'w-16 text-center text-sm' 
-                },
-                { 
-                  key: 'nombre', 
-                  nombre: 'NOMBRE COMPLETO', 
-                  className: 'text-sm' 
-                },
-                { 
-                  key: 'especialidad', 
-                  nombre: 'ESPECIALIDAD', 
-                  className: 'text-sm' 
-                },
-                { 
-                  key: 'estado', 
-                  nombre: 'ESTADO', 
-                  className: 'w-24 text-center',
-                  formateador: (estado) => (
-                    <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${
-                      estado === "Activo" 
-                        ? 'bg-green-100 text-green-800' 
-                        : 'bg-red-100 text-red-800'
-                    }`}>
-                      {estado}
-                    </span>
-                  )
-                }
-              ]}
-              acciones={[
-                { 
-                  nombre: 'Editar', 
-                  fn: handleActualizar,
-                  estilo: 'bg-blue-500 hover:bg-blue-600 text-white text-xs px-3 py-1'
-                },
-                { 
-                  nombre: (docente) => docente.estado === "Activo" ? "Desactivar" : "Activar",
-                  fn: handleCambiarEstado,
-                  estilo: (docente) => 
-                    `text-xs px-3 py-1 ${docente.estado === "Activo" 
-                      ? 'bg-yellow-500 hover:bg-yellow-600' 
-                      : 'bg-green-500 hover:bg-green-600'} text-white`
-                },
-                { 
-                  nombre: 'Eliminar', 
-                  fn: handleEliminar,
-                  estilo: 'bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1'
-                }
-              ]}
-            />
+          <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
+            <div className="overflow-x-auto">
+              <TablaDinamica
+                datos={docentesFiltrados}
+                columnas={[
+                  { 
+                    key: 'id', 
+                    nombre: '#', 
+                    className: 'w-16 text-center text-sm font-medium' 
+                  },
+                  { 
+                    key: 'nombre', 
+                    nombre: 'NOMBRE COMPLETO', 
+                    className: 'text-sm font-medium' 
+                  },
+                  { 
+                    key: 'especialidad', 
+                    nombre: 'ESPECIALIDAD', 
+                    className: 'text-sm' 
+                  },
+                  { 
+                    key: 'estado', 
+                    nombre: 'ESTADO', 
+                    className: 'w-24 text-center',
+                    formateador: (estado) => (
+                      <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${
+                        estado === "Activo" 
+                          ? 'bg-green-100 text-green-800' 
+                          : 'bg-red-100 text-red-800'
+                      }`}>
+                        {estado}
+                      </span>
+                    )
+                  }
+                ]}
+                acciones={[
+                  { 
+                    nombre: 'Editar', 
+                    fn: handleActualizar,
+                    estilo: 'bg-blue-500 hover:bg-blue-600 text-white text-xs px-3 py-1 rounded-md'
+                  },
+                  { 
+                    nombre: (docente) => docente.estado === "Activo" ? "Desactivar" : "Activar",
+                    fn: handleCambiarEstado,
+                    estilo: (docente) => 
+                      `text-xs px-3 py-1 rounded-md ${docente.estado === "Activo" 
+                        ? 'bg-yellow-500 hover:bg-yellow-600' 
+                        : 'bg-green-500 hover:bg-green-600'} text-white`
+                  },
+                  { 
+                    nombre: 'Eliminar', 
+                    fn: handleEliminar,
+                    estilo: 'bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1 rounded-md'
+                  }
+                ]}
+              />
+            </div>
           </div>
           
-          {/* Pie de tabla */}
-          <div className="mt-4 text-sm text-gray-600 flex justify-between items-center">
-            <p>Mostrando {docentesFiltrados.length} de {docentes.length} docentes</p>
+          <div className="mt-6 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+            <p className="text-sm text-gray-600">
+              Mostrando <span className="font-medium">{docentesFiltrados.length}</span> de <span className="font-medium">{docentes.length}</span> docentes
+            </p>
             <div className="flex items-center space-x-2">
-              <button className="px-3 py-1 border rounded text-sm">Anterior</button>
-              <span className="text-sm">Página 1 de 1</span>
-              <button className="px-3 py-1 border rounded text-sm">Siguiente</button>
+              <button className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+                Anterior
+              </button>
+              <span className="text-sm text-gray-700">Página 1 de 1</span>
+              <button className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+                Siguiente
+              </button>
             </div>
           </div>
         </main>

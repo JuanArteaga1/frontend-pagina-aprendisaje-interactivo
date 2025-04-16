@@ -19,95 +19,126 @@ const Navbar = () => {
     };
 
     return (
-        <nav className="bg-white shadow-md sticky top-0 z-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between items-center h-20">
-                    {/* Logo */}
-                    <div className="flex-shrink-0">
-                        <Link to="/">
-                            <img
-                                src="/img/logos autonoma_2.png"
-                                alt="Logo de Academia Ingeniería"
-                                className="h-16 md:h-20 w-auto transition-transform duration-300 hover:scale-105"
-                            />
+        <nav className="flex flex-wrap justify-between items-center p-4 md:p-6">
+            {/* Logo */}
+            <div className="flex-shrink-0 mr-4">
+                <Link to="/">
+                    <img
+                        src="/img/logos autonoma_2.png"
+                        alt="Logo de Academia Ingeniería"
+                        className="h-12 md:h-[70px] w-auto"
+                    />
+                </Link>
+            </div>
+
+            {/* Botón hamburguesa */}
+            <button
+                className="text-3xl text-[#3C64C9] md:hidden"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                aria-label="Abrir menú"
+            >
+                ☰
+            </button>
+
+            {/* Menú de navegación */}
+            <div
+                className={`${isMenuOpen ? "flex" : "hidden"
+                    } flex-col md:flex md:mx-auto bg-[#3C64C9] rounded-lg mt-4 md:mt-0 w-full md:w-auto px-6 py-4 md:px-40 md:py-5 items-center`}
+            >
+                <ul className="flex flex-col md:flex-row gap-5 md:gap-10 text-white font-medium text-[16px] capitalize w-full md:w-auto justify-center">
+                    <li>
+                        <Link
+                            to="/"
+                            className="hover:text-[#081e57]"
+                        >
                         </Link>
-                    </div>
+                    </li>
+                    <li>
+                        <Link
+                            to="/simulaciones"
+                            className="hover:text-[#081e57]"
+                            onClick={() => setIsMenuOpen(false)}
+                        >
+                            Simulaciones
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            to="/appmovil"
+                            className="hover:text-[#081e57]"
+                            onClick={() => setIsMenuOpen(false)}
+                        >
+                            Aplicaciones Móviles
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            to="/investigaciones"
+                            className="hover:text-[#081e57]"
+                            onClick={() => setIsMenuOpen(false)}
+                        >
+                            Investigaciones
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            to="/podcast"
+                            className="hover:text-[#081e57]"
+                            onClick={() => setIsMenuOpen(false)}
+                        >
+                            Podcast
+                        </Link>
+                    </li>
+                </ul>
+            </div>
 
-                    {/* Botón hamburguesa */}
+            {/* Iconos */}
+            <div className="flex gap-6 mt-4 md:mt-0 ml-auto items-center">
+                <button aria-label="Buscar" className="text-[#333] hover:text-blue-300">
+                    <Search className="w-[30px] h-[30px]" />
+                </button>
+
+                <div
+                    className="relative"
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
+                >
                     <button
-                        className="text-4xl text-blue-600 md:hidden focus:outline-none"
-                        onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        aria-label="Abrir menú"
+                        aria-label="Iniciar Sesión"
+                        className="text-[#333] hover:text-blue-300"
                     >
-                        {isMenuOpen ? "✕" : "☰"}
+                        <User className="w-[30px] h-[30px]" />
                     </button>
-
-                    {/* Menú de navegación */}
-                    <div className={`${isMenuOpen ? "block" : "hidden"} md:block absolute md:relative top-20 md:top-0 left-0 w-full md:w-auto bg-blue-600 md:bg-transparent z-40`}>
-                        <ul className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-8 p-4 md:p-0">
-                            {[
-                                { to: "/", name: "Inicio" },
-                                { to: "/simulaciones", name: "Simulaciones" },
-                                { to: "/appmovil", name: "Aplicaciones Móviles" },
-                                { to: "/investigaciones", name: "Investigaciones" },
-                                { to: "/podcast", name: "Podcast" }
-                            ].map((item) => (
-                                <li key={item.name}>
+                    {isDropdownOpen && (
+                        <div className="absolute right-0 top-full mt-2 w-40 bg-white border rounded-lg shadow-lg z-50">
+                            <ul className="py-2 text-gray-800">
+                                <li>
                                     <Link
-                                        to={item.to}
-                                        className="block text-white md:text-gray-800 hover:text-blue-100 md:hover:text-blue-600 text-lg font-medium py-2 px-4 rounded transition-colors duration-200"
-                                        onClick={() => setIsMenuOpen(false)}
+                                        to="/login"
+                                        className="block px-4 py-2 hover:bg-gray-200"
                                     >
-                                        {item.name}
+                                        Iniciar sesión
                                     </Link>
                                 </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    {/* Iconos */}
-                    <div className="flex items-center space-x-6 ml-4">
-                        <button 
-                            aria-label="Buscar" 
-                            className="text-gray-700 hover:text-blue-600 p-2 rounded-full transition-colors duration-200"
-                        >
-                            <Search className="w-7 h-7" />
-                        </button>
-
-                        <div 
-                            className="relative"
-                            onMouseEnter={handleMouseEnter}
-                            onMouseLeave={handleMouseLeave}
-                        >
-                            <button
-                                aria-label="Cuenta de usuario"
-                                className="text-gray-700 hover:text-blue-600 p-2 rounded-full transition-colors duration-200"
-                            >
-                                <User className="w-7 h-7" />
-                            </button>
-                            
-                            {isDropdownOpen && (
-                                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 z-50 transform transition-all duration-200 ease-out">
-                                    <ul className="py-1">
-                                        {[
-                                            { to: "/login", name: "Iniciar sesión" },
-                                            { to: "/logout", name: "Cerrar sesión" },
-                                            { to: "/ayuda", name: "Ayuda" }
-                                        ].map((item) => (
-                                            <li key={item.name}>
-                                                <Link
-                                                    to={item.to}
-                                                    className="block px-4 py-3 text-gray-800 hover:bg-gray-100 text-base transition-colors duration-150"
-                                                >
-                                                    {item.name}
-                                                </Link>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            )}
+                                <li>
+                                    <Link
+                                        to="/logout"
+                                        className="block px-4 py-2 hover:bg-gray-200"
+                                    >
+                                        Cerrar sesión
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        to="/ayuda"
+                                        className="block px-4 py-2 hover:bg-gray-200"
+                                    >
+                                        Ayuda
+                                    </Link>
+                                </li>
+                            </ul>
                         </div>
-                    </div>
+                    )}
                 </div>
             </div>
         </nav>
