@@ -43,14 +43,16 @@ const Navbar = () => {
             {/* Menú de navegación */}
             <div
                 className={`${isMenuOpen ? "flex" : "hidden"
-                    } flex-col md:flex md:mx-auto bg-[#3C64C9] rounded-lg mt-4 md:mt-0 w-full md:w-auto px-6 py-4 md:px-40 md:py-5 items-center`}
+                    } flex-col md:flex md:flex-row bg-[#3C64C9] rounded-lg mt-4 md:mt-0 w-full md:w-auto px-6 py-4 md:px-40 md:py-5 items-center`}
             >
                 <ul className="flex flex-col md:flex-row gap-5 md:gap-10 text-white font-medium text-[16px] capitalize w-full md:w-auto justify-center">
                     <li>
                         <Link
                             to="/"
                             className="hover:text-[#081e57]"
+                            onClick={() => setIsMenuOpen(false)}
                         >
+                            Inicio
                         </Link>
                     </li>
                     <li>

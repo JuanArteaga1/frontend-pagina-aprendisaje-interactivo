@@ -42,37 +42,47 @@ const Episodio = () => {
     return (
       <div>
         <Navbar />
-        <div className="episodio-container">
-          <h2>Episodio no encontrado</h2>
+        <div className="max-w-screen-xl mx-auto p-5">
+          {/* Contenedor con el mismo estilo que los episodios normales */}
+          <div className="flex gap-6 bg-white shadow-md rounded-lg p-6 justify-center items-center">
+            <div className="flex-1 text-center">
+              <h2 className="text-2xl font-semibold text-gray-700">Episodio no encontrado 😢</h2>
+            </div>
+          </div>
         </div>
       </div>
     );
   }
+
   return (
     <div>
-      <Navbar loggedIn={true} />
+      <Navbar />
 
-      <div className="episodio-container">
+      {/* Contenedor principal */}
+      <div className="max-w-screen-xl mx-auto p-5">
 
-        {/* Contenedor con dos columnas */}
-        <div className="episodio-layout">
+        {/* Layout con dos columnas */}
+        <div className="flex gap-6 bg-white shadow-md rounded-lg p-6">
+
           {/* Columna Izquierda */}
-          <div className="episodio-left">
-            <h1 className="episodio-titulo">{episodio.titulo}</h1>
-            <img className="episodio-img" src={episodio.imagen} alt={episodio.titulo} />
-            <a className="spotify-link" href={episodio.spotify} target="_blank" rel="noopener noreferrer">
+          <div className="flex-1">
+            <h1 className="text-3xl font-bold text-gray-800 mb-4">{episodio.titulo}</h1>
+            <img className="w-full max-w-sm rounded-lg mb-4" src={episodio.imagen} alt={episodio.titulo} />
+            <a className="inline-block bg-green-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-400 w-95 text-center" href={episodio.spotify} target="_blank" rel="noopener noreferrer">
               🎵 Escuchar en Spotify
             </a>
           </div>
 
           {/* Columna Derecha */}
-          <div className="episodio-right">
-            <p><strong>Descripción:</strong></p>
-            <p className="episodio-descripcion">{episodio.descripcion}</p>
-            <p className="episodio-autor"><strong>Autor(es):</strong> {episodio.autor}</p>
-            <p className="episodio-fecha"><strong>Fecha de publicación:</strong> {episodio.fecha}</p>
+          <div className="flex-1">
+            <p className="font-semibold text-lg text-gray-700 mb-2">Descripción:</p>
+            <p className="text-gray-600 mb-4">{episodio.descripcion}</p>
+            <p className="text-sm text-gray-500 mb-2"><strong>Autor(es):</strong> {episodio.autor}</p>
+            <p className="text-sm text-gray-500"><strong>Fecha de publicación:</strong> {episodio.fecha}</p>
           </div>
+
         </div>
+
       </div>
     </div>
   );
