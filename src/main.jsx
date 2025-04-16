@@ -38,8 +38,9 @@ import { ProyectosProvider } from "./context/ProyectoContext"
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <Routes>
-    <Route path="/SubirDocente" element={ <DocenteProvider>  <SubirDocente/> </DocenteProvider> }
-      />
+    <Route path="/SubirDocente" element={ <DocenteProvider>  <SubirDocente/> </DocenteProvider> }/>
+    <Route path="/AdministrarDocente" element={<DocenteProvider> <AdministrarDocentes/> </DocenteProvider>} />
+
       //rutas de estudiante y visualizacion
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
@@ -54,7 +55,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       //rutas de Administrador
       <Route path="/menuadministrador" element={<MenuAdmin />} />
       <Route path="/SubirCategoria" element={<NuevaCategoria />} />
-      <Route path="/AdministrarDocente" element={<AdministrarDocentes />} />
       <Route path="/VerProyectos" element={<MirarProyectos />} />
       <Route path="/Aprobar" element={<ProyectosPorAprobar />} />
 

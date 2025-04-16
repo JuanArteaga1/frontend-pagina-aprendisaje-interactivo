@@ -1,60 +1,56 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import MenuDocente from '../components/MenuAdmi_Doc';
+import Navbar from '../components/Navbar';
 
 function MenuDocen() {
   const userRole = 'docente';
   
   return (
-    <div className="flex h-screen bg-gray-100">
-      {/* Menú Lateral */}
-      <MenuDocente rol={userRole} />
-      
-      {/* Contenido Principal */}
-      <main className="flex-1 p-8 overflow-y-auto">
-        {/* Sección de Bienvenida */}
-        <div className="text-center mb-12">
-          {/* Título principal con efecto de gradiente */}
-          <div className="relative inline-block mb-6">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent">
-              ¡Bienvenido Docente!
-            </h1>
-            <span className="absolute -top-4 -right-6 text-2xl">👋</span>
+    <div>
+      <Navbar />
+      <div className="flex h-screen bg-gray-100">
+        <MenuDocente rol={userRole} />
+        
+        <div className="flex-1 overflow-y-auto ml-64 p-6 pt-20">
+          {/* Contenedor de bienvenida */}
+          <div className="text-center mb-8 animate-fade-in-down">
+            <div className="relative inline-block card">
+            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent">
+                ¡Bienvenido Docente!
+                <span className="absolute -top-4 -right-6 text-2xl">🌟</span>
+                <span className="absolute -bottom-4 -left-6 text-2xl">🎓</span>
+              </h1>
+            </div>
+            <p className="mt-6 text-2xl text-blue-500 animate-slide-in-blurred-top animate-delay-300">
+              Tu panel de control para gestionar proyectos educativos
+            </p>
           </div>
-          
-          {/* Subtítulo */}
-          <p className="text-xl md:text-2xl text-gray-600">
-            Tu panel de control para gestionar proyectos educativos
-          </p>
+
+          {/* Tarjetas de acceso rápido */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 animate-jump-in animate-delay-500">
+              <div className="text-blue-400 text-4xl mb-2">📚</div>
+              <h3 className="text-2xl font-semibold text-blue-600 mb-2">Proyectos Activos</h3>
+              <p className="text-blue-500">Revisa tus proyectos en desarrollo</p>
+            </div>
+            
+            <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 animate-jump-in animate-delay-700">
+              <div className="text-blue-400 text-4xl mb-2">✅</div>
+              <h3 className="text-2xl font-semibold text-blue-600 mb-2">Tareas Pendientes</h3>
+              <p className="text-blue-500">Administra tus actividades próximas</p>
+            </div>
+            
+            <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 animate-jump-in animate-delay-1000">
+              <div className="text-blue-400 text-4xl mb-2">💡</div>
+              <h3 className="text-2xl font-semibold text-blue-600 mb-2">Nuevo Proyecto</h3>
+              <p className="text-blue-500">Comienza una nueva iniciativa educativa</p>
+            </div>
+          </div>
+
+          <Outlet />
         </div>
-  
-        {/* Tarjetas de Acceso Rápido */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          {/* Tarjeta 1 - Proyectos Activos */}
-          <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow duration-300">
-            <div className="text-blue-500 text-3xl mb-3">📚</div>
-            <h2 className="text-xl font-semibold text-gray-800 mb-2">Proyectos Activos</h2>
-            <p className="text-gray-600">Revisa tus proyectos en desarrollo</p>
-          </div>
-          
-          {/* Tarjeta 2 - Tareas Pendientes */}
-          <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow duration-300">
-            <div className="text-blue-500 text-3xl mb-3">✅</div>
-            <h2 className="text-xl font-semibold text-gray-800 mb-2">Tareas Pendientes</h2>
-            <p className="text-gray-600">Administra tus actividades próximas</p>
-          </div>
-          
-          {/* Tarjeta 3 - Nuevo Proyecto */}
-          <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow duration-300">
-            <div className="text-blue-500 text-3xl mb-3">💡</div>
-            <h2 className="text-xl font-semibold text-gray-800 mb-2">Nuevo Proyecto</h2>
-            <p className="text-gray-600">Comienza una nueva iniciativa educativa</p>
-          </div>
-        </div>
-  
-        {/* Espacio para contenido adicional */}
-        <Outlet />
-      </main>
+      </div>
     </div>
   );
 }

@@ -1,46 +1,44 @@
 import React from 'react';
 
-const TablaDinamica = ({ titulo, datos, columnas, acciones, onFilaClick }) => {
+/**
+ * Componente de tabla reutilizable
+ * 
+ * @param {Array} datos - Los datos que se mostrarán en la tabla
+ * @param {Array} columnas - Configuración de las columnas
+ * @param {Array} acciones - Acciones disponibles para cada fila
+ */
+const TablaDinamica = ({ datos, columnas, acciones }) => {
   return (
-    <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-      {titulo && <h3 className="text-lg font-semibold p-4 bg-gray-50 border-b">{titulo}</h3>}
-      
+    <div className="bg-white rounded-lg shadow-md p-6 mb-8">
       <div className="overflow-x-auto">
-        <table className="w-full">
+        <table className="w-full border-collapse">
           <thead>
-            <tr className="bg-gray-100 text-left text-gray-700 text-sm font-medium">
+            <tr className="bg-gray-100">
               {columnas.map((col) => (
                 <th 
                   key={col.key} 
-                  className={`p-3 ${col.className || ''}`}
+                  className={`text-left p-3 border-b ${col.className || ''}`}
                 >
                   {col.nombre}
                 </th>
               ))}
               {acciones && acciones.length > 0 && (
-                <th className="p-3 text-right">Acciones</th>
+                <th className="text-left p-3 border-b">ACCIONES</th>
               )}
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200">
-            {datos.map((item, index) => (
-              <tr 
-                key={index} 
-                className={`hover:bg-gray-50 ${onFilaClick ? 'cursor-pointer' : ''}`}
-                onClick={() => onFilaClick && onFilaClick(item)}
-              >
+          <tbody>
+            {datos?.data.map((item, index) => (
+              <tr key={index} className="hover:bg-gray-50">
                 {columnas.map((col) => (
-                  <td 
-                    key={col.key} 
-                    className={`p-3 text-sm ${col.className || ''}`}
-                  >
-                    {col.formateador ? col.formateador(item[col.key], item) : item[col.key]}
+                  <td key={col.key} className={`p-3 border-b ${col.className || ''}`}>
+                    {item[col.key]}
                   </td>
                 ))}
                 
                 {acciones && acciones.length > 0 && (
-                  <td className="p-3">
-                    <div className="flex justify-end space-x-2">
+                  <td className="p-3 border-b">
+                    <div className="flex space-x-2">
                       {acciones.map((accion, i) => (
                         <button
                           key={i}
@@ -48,15 +46,9 @@ const TablaDinamica = ({ titulo, datos, columnas, acciones, onFilaClick }) => {
                             e.stopPropagation();
                             accion.fn(item);
                           }}
-                          className={`text-xs px-3 py-1 rounded transition-colors ${
-                            typeof accion.estilo === 'function' 
-                              ? accion.estilo(item)
-                              : accion.estilo
-                          }`}
+                          className={`px-3 py-1 rounded ${accion.estilo || 'bg-blue-500 text-white hover:bg-blue-600'}`}
                         >
-                          {typeof accion.nombre === 'function' 
-                            ? accion.nombre(item) 
-                            : accion.nombre}
+                          {accion.nombre}
                         </button>
                       ))}
                     </div>

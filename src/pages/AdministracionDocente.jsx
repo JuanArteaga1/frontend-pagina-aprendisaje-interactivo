@@ -1,161 +1,73 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import Navbar from "../components/Navbar";
 import TablaDinamica from "../components/Tabla";
 import MenuAdministrador from "../components/MenuAdmi_Doc";
 import { Link } from 'react-router-dom';
+import { UseDocente } from "../context/DocenteContext";
 
 const AdministrarDocente = () => {
-  const [docentes, setDocentes] = useState([
-    { id: 1, nombre: "Cristian Cañar", especialidad: "Matemáticas", estado: "Activo" },
-    { id: 2, nombre: "Ana María Caviedes", especialidad: "Física", estado: "Inactivo" }
-  ]);
+  const { Docente, TraerDocentes } = UseDocente();
+  const [columnas, setColumnas] = useState([]);
+  useEffect(() => {
+    TraerDocentes()
+  }, [])
+ // <- Asegúrate de que `docentes` ya tiene los datos
 
-  const [busqueda, setBusqueda] = useState("");
-  const [filtroEstado, setFiltroEstado] = useState("");
+  useEffect(() => {
+    setColumnas([
+      { key: 'nombre', nombre: 'Nombre' },
+      { key: 'identificacion', nombre: 'Identificación' },
+      { key: 'email', nombre: 'Correo' },
+      { key: 'Codigo', nombre: 'Código' },
+      { key: 'estado', nombre: 'Estado' }
+    ]);
+  }, []);
 
-  const docentesFiltrados = docentes.filter(docente => {
-    const coincideBusqueda = docente.nombre.toLowerCase().includes(busqueda.toLowerCase()) || 
-                           docente.especialidad.toLowerCase().includes(busqueda.toLowerCase());
-    const coincideEstado = filtroEstado ? docente.estado === filtroEstado : true;
-    return coincideBusqueda && coincideEstado;
-  });
-
-  const handleActualizar = (docente) => {
-    console.log('Actualizar:', docente);
-  };
-
-  const handleEliminar = (docente) => {
-    if (window.confirm(`¿Estás seguro de eliminar a ${docente.nombre}?`)) {
-      setDocentes(docentes.filter(d => d.id !== docente.id));
+  // Opcional: Acciones
+  const acciones = [
+    {
+      nombre: "Editar",
+      fn: (fila) => {
+        console.log("Editar:", fila);
+        // Puedes redirigir o abrir modal aquí
+      },
+      estilo: "bg-yellow-500 text-white hover:bg-yellow-600"
+    },
+    {
+      nombre: "Eliminar",
+      fn: (fila) => {
+        console.log("Eliminar:", fila);
+      },
+      estilo: "bg-red-500 text-white hover:bg-red-600"
     }
-  };
-
-  const handleCambiarEstado = (docente) => {
-    setDocentes(docentes.map(d => 
-      d.id === docente.id 
-        ? { ...d, estado: d.estado === "Activo" ? "Inactivo" : "Activo" }
-        : d
-    ));
-  };
+  ];
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      {/* Menú Lateral */}
-      <div className="w-64 bg-gray-800 text-white">
+    <div className="flex flex-col min-h-screen bg-gray-50">
+      <Navbar />
+
+      <div className="flex flex-1 pt-16">
         <MenuAdministrador rol="admin" />
-      </div>
 
-      {/* Contenido Principal */}
-      <div className="flex-1 overflow-y-auto">
-        {/* Barra superior */}
-        <div className="bg-white shadow-sm p-4 border-b sticky top-0 z-10">
-          <div className="flex justify-between items-center">
-            <h1 className="text-xl font-bold text-gray-800">Administración de Docentes</h1>
-            <Link 
-              to="/SubirDocente"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm font-medium"
-            >
-              + Nuevo Docente
-            </Link>
-          </div>
-        </div>
-
-        {/* Contenido */}
-        <div className="p-6">
-          {/* Filtros */}
-          <div className="bg-white p-4 rounded-lg shadow mb-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Buscar</label>
-                <input
-                  type="text"
-                  placeholder="Nombre o especialidad..."
-                  className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-                  value={busqueda}
-                  onChange={(e) => setBusqueda(e.target.value)}
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Estado</label>
-                <select
-                  className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-                  value={filtroEstado}
-                  onChange={(e) => setFiltroEstado(e.target.value)}
-                >
-                  <option value="">Todos</option>
-                  <option value="Activo">Activo</option>
-                  <option value="Inactivo">Inactivo</option>
-                </select>
-              </div>
+        <main className="flex-1 overflow-y-auto p-4 lg:p-8 ml-64">
+          <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
+            <h1 className="text-2xl font-bold text-gray-800 mb-4 md:mb-0">Administrar Docentes</h1>
+            <div className="flex space-x-4">
+              <Link
+                to="/SubirDocente"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors text-sm"
+              >
+                + Nuevo Docente
+              </Link>
             </div>
           </div>
 
-          {/* Tabla */}
-          <div className="bg-white rounded-lg shadow overflow-hidden">
-            <TablaDinamica
-              datos={docentesFiltrados}
-              columnas={[
-                { 
-                  key: 'id', 
-                  nombre: 'ID', 
-                  className: 'w-16 text-center text-sm' 
-                },
-                { 
-                  key: 'nombre', 
-                  nombre: 'NOMBRE', 
-                  className: 'font-medium' 
-                },
-                { 
-                  key: 'especialidad', 
-                  nombre: 'ESPECIALIDAD' 
-                },
-                {
-                  key: 'estado',
-                  nombre: 'ESTADO',
-                  className: 'w-24 text-center',
-                  formateador: (estado) => (
-                    <span className={`inline-block px-2 py-1 rounded-full text-xs ${
-                      estado === "Activo" ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                    }`}>
-                      {estado}
-                    </span>
-                  )
-                }
-              ]}
-              acciones={[
-                {
-                  nombre: 'Editar',
-                  fn: handleActualizar,
-                  estilo: 'bg-blue-500 hover:bg-blue-600 text-white text-xs px-3 py-1 rounded'
-                },
-                {
-                  nombre: (docente) => docente.estado === "Activo" ? "Desactivar" : "Activar",
-                  fn: handleCambiarEstado,
-                  estilo: (docente) => 
-                    `text-xs px-3 py-1 rounded text-white ${
-                      docente.estado === "Activo" 
-                        ? 'bg-yellow-500 hover:bg-yellow-600' 
-                        : 'bg-green-500 hover:bg-green-600'
-                    }`
-                },
-                {
-                  nombre: 'Eliminar',
-                  fn: handleEliminar,
-                  estilo: 'bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1 rounded'
-                }
-              ]}
-            />
-          </div>
-
-          {/* Paginación */}
-          <div className="mt-4 flex justify-between items-center text-sm">
-            <p>Mostrando {docentesFiltrados.length} de {docentes.length} docentes</p>
-            <div className="flex gap-2">
-              <button className="px-3 py-1 border rounded">Anterior</button>
-              <span>Página 1 de 1</span>
-              <button className="px-3 py-1 border rounded">Siguiente</button>
-            </div>
-          </div>
-        </div>
+          <TablaDinamica
+            datos={Docente}
+            columnas={columnas}
+            acciones={acciones}
+          />
+        </main>
       </div>
     </div>
   );
