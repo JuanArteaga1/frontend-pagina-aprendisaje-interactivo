@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import imagenlogin from "../img/logou.png"; // Verifica que esta ruta sea correcta
+import imagenlogin from "../img/logou.png"; 
+import { Eye, EyeOff } from "lucide-react"; // Usa lucide-react para los íconos (instala con: npm install lucide-react)
 
 const Login = () => {
   const { register, handleSubmit } = useForm();
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePassword = () => setShowPassword((prev) => !prev);
 
   // Función que se ejecuta al enviar el formulario
   const onSubmit = (data) => {
@@ -14,14 +17,14 @@ const Login = () => {
   return (
     // Fondo gris claro, centrado vertical y horizontalmente
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      
+
       {/* Contenedor principal más ancho y alto */}
       <div className="w-full max-w-xl bg-white p-10 rounded-lg shadow-lg">
-        
+
         {/* Logo */}
-      <div className="flex justify-center mb-8">
-        <img src={imagenlogin} alt="Logo" className="w-40 md:w-48" />
-      </div>
+        <div className="flex justify-center mb-8">
+          <img src={imagenlogin} alt="Logo" className="w-40 md:w-48" />
+        </div>
 
         {/* Título */}
         <h2 className="text-2xl font-semibold text-center mb-6 text-gray-700">
@@ -30,7 +33,7 @@ const Login = () => {
 
         {/* Formulario */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          
+
           {/* Campo de usuario */}
           <input
             type="email"
@@ -40,17 +43,25 @@ const Login = () => {
           />
 
           {/* Campo de contraseña */}
-          <input
-            type="password"
-            placeholder="Contraseña"
-            className="w-full border border-gray-300 rounded-lg px-5 py-3 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            {...register("password", { required: true })}
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"} // Cambia entre texto y contrasena
+              placeholder="Contraseña"
+              className="w-full border border-gray-300 rounded-lg px-5 py-3 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              {...register("password", { required: true })}
+            />
+            <span
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500"
+              onClick={togglePassword}
+            >
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </span>
+          </div>
 
           {/* Botón */}
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-3 text-lg rounded-lg hover:bg-blue-700 transition-colors"
+            className="w-full bg-blue-600 text-white py-3 text-lg rounded-lg hover:bg-blue-700 transition-colores"
           >
             Acceder
           </button>
@@ -67,7 +78,7 @@ const Login = () => {
         <div className="border-t my-8"></div>
 
         {/* Login con Google */}
-        <button className="flex items-center justify-center gap-3 w-full border border-gray-300 py-3 rounded-lg hover:bg-gray-50 transition-colors">
+        <button className="flex items-center justify-center gap-3 w-full border border-gray-300 py-3 rounded-lg hover:bg-gray-50 transition-colores">
           <img
             src="https://img.icons8.com/color/24/000000/google-logo.png"
             alt="Google"

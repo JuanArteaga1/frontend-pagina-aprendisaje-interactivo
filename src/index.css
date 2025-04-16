@@ -3,128 +3,13 @@
 @import "slick-carousel/slick/slick-theme.css";
 
 
-
 body {
-  font-family: sans-serif, sans-serif;
+  font-family: sans-serif;
   background-color: #f8f9fa;
   margin: 0;
   padding: 0;
   overflow-x: hidden;
 }
-
-/* PODCAST  */
-.subtitulo-seccion {
-  text-align: left;
-  padding-left: 200px;
-  font-size: 24px;
-  font-weight: bold;
-  margin-top: 20px;
-  color: #333;
-  width: 100%;
-}
-.podcast-banner {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.podcast-banner img {
-  width: 80%;
-  border-radius: 20px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Contenedor de episodios */
-.episodios-container {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  flex-wrap: wrap;
-  margin-top: 30px;
-}
-
-
-.episodio-container {
-  max-width: 900px;
-  margin: auto;
-  padding: 20px;
-}
-
-.episodio-layout {
-  display: flex;
-  gap: 20px;
-  background: #ffffff;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  border-radius: 10px;
-}
-
-.episodio-left,
-.episodio-right {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-/* Línea divisoria */
-.episodio-layout::before {
-  content: "";
-  width: 2px;
-  background: rgba(0, 0, 0, 0.1);
-  position: absolute;
-  left: 50%;
-  height: 80%;
-  transform: translateX(-50%);
-}
-
-.episodio-left {
-  text-align: left;
-  padding-left: 15px;
-}
-
-.episodio-right {
-  text-align: left;
-  padding-right: 15px;
-}
-
-/* Estilos de texto */
-.episodio-titulo {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 15px;
-}
-
-.episodio-descripcion {
-  font-size: 16px;
-  color: #333;
-}
-
-.episodio-autor, .episodio-fecha {
-  font-size: 14px;
-  color: #666;
-}
-
-.episodio-img {
-  width: 100%;
-  max-width: 280px;
-  border-radius: 10px;
-  margin-bottom: 15px;
-}
-
-/* Botón Spotify */
-.spotify-link {
-  display: inline-block;
-  margin-top: 10px;
-  padding: 10px 15px;
-  background-color: #1DB954;
-  color: white;
-  text-decoration: none;
-  border-radius: 5px;
-  font-weight: bold;
-  align-self: flex-start;
-}
-
 
 /*Home + Carrusel*/
 .hero img {
@@ -133,21 +18,38 @@ body {
   height: 100%;
 }
 
-/* Estilos para los puntos de navegación */
+.slick-dots {
+  position: absolute !important;
+  bottom: 20px !important;
+  width: 100%;
+  display: flex !important;
+  justify-content: center;
+  z-index: 20;
+}
+
+.slick-dots li button:before {
+  display: none !important;
+}
+
 .slick-dots li button {
-  opacity: 0.5; /* Hace que los puntos inactivos sean más suaves */
+  width: 10px !important;
+  height: 10px !important;
+  border-radius: 50% !important;
+  background-color: rgba(255, 255, 255, 0.5) !important;
+  border: none !important;
+  outline: none !important;
+  content: "" !important;
 }
 
-/* Estilos para el punto activo */
 .slick-dots li.slick-active button {
-  opacity: 1; /* Asegura que el punto activo sea completamente visible */
+  background-color: rgba(255, 255, 255, 1) !important;
 }
 
-/* Categorías - Si deseas personalizar el tamaño de las imágenes */
+/* Categorías */
 .category-box img {
-  width: 100px; /* Ajusta según el tamaño deseado */
+  width: 100px;
   height: auto;
-  object-fit: contain; /* Asegura que la imagen no se deforme */
+  object-fit: contain; 
 }
 
 /* Información de la universidad */
@@ -162,34 +64,6 @@ body {
 
 .social-media a:hover {
   text-decoration: underline; /* Subraya los enlaces al pasar el ratón */
-}
-
-/* Ajuste para dispositivos móviles */
-@media (max-width: 768px) {
-  .category-box img {
-    width: 80px;
-  }
-
-  .about-us {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .about-us > div {
-    width: 100% !important;
-    padding: 0 !important;
-  }
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .fade-in-up {
@@ -226,36 +100,30 @@ body {
 }
 
 /*AQUI VAN LOS TITULOS E IMAGENES DE SIMULACIONES Y APLICACIONES MOVILES */
-
-/* Título de la sección */
 .imagen-seccion {
   position: relative; /* Necesario para posicionar el texto sobre la imagen */
-  width: 100%; /* Asegúrate de que el contenedor ocupe todo el ancho de la pantalla */
+  width: 100%;       /* Asegura que la imagen ocupe todo el ancho de la pantalla */
   overflow: hidden; /* Evita que se salgan elementos si la imagen es más grande */
 }
 
-/* Imagen */
 .imagen-seccion img {
-  width: 100%; /* Asegura que la imagen ocupe todo el ancho de la pantalla */
+  width: 100%; 
   height: auto; /* Mantiene la relación de aspecto */
   object-fit: cover; /* Asegura que la imagen cubra el área de la imagen sin distorsionarse */
 }
 
-/* Título sobre la imagen */
 .titulo-seccion {
-  position: absolute; /* Posiciona el título sobre la imagen */
+  position: absolute; 
   top: 50%; /* Ajusta el título verticalmente en el medio de la imagen */
   left: 50%; /* Ajusta el título horizontalmente al centro */
   transform: translate(-50%, -50%); /* Ajusta el texto para que esté centrado */
   font-size: 2rem; /* Ajusta el tamaño del texto */
   font-weight: bold;
-  color: white; /* Color blanco para el texto */
-  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); /* Sombra para mejorar la visibilidad */
-  text-align: center; /* Centrado */
+  color: white; 
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); 
+  text-align: center; 
   width: 100%; /* Asegura que el título se mantenga dentro de los límites del contenedor */
 }
-
-
 
 /* Estilo para el contenedor de las secciones para centrar otros elementos */
 .simulaciones, .aplicaciones-moviles {
@@ -276,17 +144,6 @@ body {
   width: 100%;
   object-fit: cover;
   border-radius: 10px;
-}
-
-/* Botón de ordenar */
-.ordenar-btn {
-  margin: 20px;
-  padding: 10px;
-  background-color: #f0d53d;
-  color: white;
-  border-radius: 10px;
-  cursor: pointer;
-  margin-left: -920px; /* Ajusta la posición */
 }
 
 /* Títulos de las categorías */
@@ -329,7 +186,6 @@ h2 {
   background-color: #ccc;
   border-radius: 4px;
 }
-
 
 /* Tarjetas */
 .card {
@@ -403,311 +259,8 @@ h2 {
   color: black;
 }
 
-/* === DETALLE DE LOS PROYECTOS === */
-.detalle-proyecto {
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  max-width: 1200px;
-  margin: 0 auto;
-}
 
-/* === Contenedor principal === */
-.detalle-contenedor {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-}
-
-/* === Bloques generales (cabecera, media e inferior) === */
-.detalle-header,
-.detalle-media,
-.detalle-inferior {
-  background-color: #f8f8f8;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* === Sección 1: Cabecera con imagen y botón === */
-.detalle-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.imagen-app img {
-  width: 150px;
-  border-radius: 10px;
-}
-
-.boton-descargar {
-  padding: 10px 20px;
-  background-color: #3C64C9;
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-  font-size: 16px;
-}
-
-.boton-descargar:hover {
-  background-color: #3052A3;
-}
-
-/* === Sección 2: Video e imágenes === */
-.detalle-media-carrusel {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  gap: 20px;
-  padding-bottom: 10px;
-  -webkit-overflow-scrolling: touch;
-}
-
-.media-item {
-  flex-shrink: 0;
-  scroll-snap-align: start;
-  width: 400px; /* mismo ancho para todo */
-  height: 225px; /* altura fija para igualar al video */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.media-item video,
-.media-item img {
-  width: 100%;
-  height: 100%;
-  border-radius: 10px;
-  object-fit: cover;
-}
-
-.detalle-media {
-  flex-shrink: 0;
-  display: flex;
-  gap: 15px;
-}
-
-.detalle-media video {
-  max-width: 400px;
-  height: auto;
-  border-radius: 10px;
-}
-
-/* Contenedor de imágenes alineadas en carrusel */
-.imagenes {
-  display: flex;
-  gap: 15px;
-  flex-shrink: 0;
-}
-
-.imagenes img {
-  width: 200px; /* Tamaño uniforme para las imágenes */
-  height: 150px; /* Altura uniforme */
-  border-radius: 10px;
-  border: 2px solid #ddd;
-  object-fit: cover; /* Esto asegura que las imágenes mantengan su proporción sin deformarse */
-  scroll-snap-align: start; /* Hace que cada imagen se alinee correctamente */
-}
-
-/* === Sección 3: Descripción y documentos === */
-.detalle-inferior {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 40px;
-}
-
-.descripcion {
-  width: 55%;
-}
-
-.documentos {
-  width: 40%;
-}
-
-.documentos a {
-  display: block;
-  margin: 5px 0;
-  color: #0000EE;
-  text-decoration: none;
-  font-size: 14px;
-}
-
-.documentos a:hover {
-  text-decoration: underline;
-}
-
-
-/* PAGINA INVESTIGACIONES - Contenedor principal */
-.contenedor-investigaciones {
-  display: flex;
-  gap: 20px;
-  padding: 20px;
-}
-
-/* Sidebar de categorías */
-.sidebar {
-  width: 250px;
-  background: #f8f9fa;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.sidebar h3 {
-  margin-bottom: 10px;
-  font-size: 1.2rem;
-}
-
-.sidebar ul {
-  list-style: none;
-  padding: 0;
-}
-
-.sidebar li {
-  padding: 10px;
-  font-weight: bold;
-  border-bottom: 1px solid #ddd;
-  cursor: pointer;
-}
-
-.sidebar li:hover {
-  background: #e9ecef;
-}
-
-/* Sección principal */
-.contenido {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Barra de búsqueda */
-.barra-busqueda {
-  width: 5%;
-  padding: 10px;
-  margin-bottom: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 0.9rem;
-}
-
-/* Contenedor de investigaciones */
-.lista-investigaciones {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  justify-content: space-between; /* Esto asegura que las tarjetas estén distribuidas */
-}
-
-.investigacion-container {
-  display: flex;
-  justify-content: center;
-  padding: 20px;
-}
-
-.investigacion-layout {
-  display: flex;
-  background: #fff;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  padding: 20px;
-  max-width: 800px;
-  width: 100%;
-}
-
-.investigacion-left, .investigacion-right {
-  flex: 1;
-  padding: 20px;
-}
-
-.investigacion-left {
-  text-align: left;
-}
-
-.investigacion-titulo {
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.investigacion-descripcion {
-  font-size: 16px;
-  margin-top: 10px;
-}
-
-.descargar-boton {
-  display: inline-block;
-  background-color: #007bff;
-  color: white;
-  padding: 10px 15px;
-  border-radius: 5px;
-  text-decoration: none;
-  margin-top: 15px;
-}
-
-.descargar-boton:hover {
-  background-color: #0056b3;
-}
-
-/* Línea separadora */
-.linea-separadora {
-  width: 2px;
-  background: rgba(0, 0, 0, 0.2);
-  margin: 0 20px;
-}
-
-/* Derecha */
-.investigacion-right p {
-  font-size: 16px;
-  margin: 10px 0;
-}
-
-.fuente-link {
-  display: inline-block;
-  color: #007bff;
-  text-decoration: none;
-  font-weight: bold;
-  margin-top: 10px;
-}
-
-.fuente-link:hover {
-  text-decoration: underline;
-}
-
-/* Tarjetas de investigaciones */
-.card-investigacion {
-  width: 250px;
-  background: white;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
-
-.card-investigacion h4 {
-  margin-bottom: 10px;
-}
-
-.card-investigacion p {
-  color: #555;
-}
-
-.card-investigacion button {
-  background: #007bff;
-  color: white;
-  padding: 8px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 10px;
-}
-
-.card-investigacion button:hover {
-  background: #0056b3;
-}
-
-/* Añadimos el ajuste para pantallas móviles */
+/* Ajuste para pantallas móviles */
 @media (max-width: 768px) {
   .contenedor-investigaciones {
     flex-direction: column;
@@ -727,5 +280,33 @@ h2 {
   /* También podemos ajustar las tarjetas para que no se estiren mucho en pantallas pequeñas */
   .card-investigacion {
     width: 100%; /* Hacemos que las tarjetas ocupen el 100% del espacio disponible */
+  }
+}
+
+/* Ajuste para dispositivos móviles */
+@media (max-width: 768px) {
+  .category-box img {
+    width: 80px;
+  }
+
+  .about-us {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .about-us > div {
+    width: 100% !important;
+    padding: 0 !important;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

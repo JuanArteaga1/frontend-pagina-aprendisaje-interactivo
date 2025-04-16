@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Navbar from "../components/Navbar";
 import MenuLateral from "../components/MenuAdmi_Doc";
 import { 
     FaFileUpload,
@@ -68,8 +67,8 @@ const SubirAPK = () => {
 
     return (
         <>
-            <Navbar loggedIn={true} />
-            <div className="flex h-screen bg-gray-50">
+            <div className="flex h-screen bg-gray-100">
+                {/* Menú Lateral */}
                 <MenuLateral rol="docente" />
                 
                 <div className="flex-1 p-4 overflow-auto">

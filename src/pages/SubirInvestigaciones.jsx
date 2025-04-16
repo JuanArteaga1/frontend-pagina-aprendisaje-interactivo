@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Navbar from "../components/Navbar";
 import subirInvestigacionesImg from "../img/Subir_Investigaciones.jpg";
 import MenuLateral from "../components/MenuAdmi_Doc";
 import {
@@ -45,11 +44,8 @@ const SubirInvestigaciones = () => {
 
   return (
     <>
-      {/* Barra superior */}
-      <Navbar loggedIn={true} />
-
-      {/* Layout con menú lateral y contenido */}
-      <div className="flex min-h-screen bg-gray-100">
+      <div className="flex h-screen bg-gray-100">
+        {/* Menú Lateral */}
         <MenuLateral rol="docente" />
 
         {/* Contenedor principal */}
