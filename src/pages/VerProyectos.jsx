@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Navbar from "../components/Navbar";
 import TablaDinamica from "../components/Tabla";
 import MenuAdministrador from "../components/MenuAdmi_Doc";
 import { Link } from 'react-router-dom';
@@ -80,17 +79,15 @@ const MirarProyectos = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
-      {/* Navbar Superior */}
-      <Navbar />
+    <div className="flex h-screen bg-gray-100">
+      {/* Menú Lateral */}
+      <div className="w-64 bg-gray-800 text-white">
+        <MenuAdministrador rol="admin" />
+      </div>
       
       {/* Contenido Principal */}
-      <div className="flex flex-1 pt-16">
-        {/* Menú Lateral */}
-        <MenuAdministrador rol="admin" />
-        
-        {/* Área de Contenido */}
-        <main className="flex-1 overflow-y-auto p-4 lg:p-8 ml-64">
+      <div className="flex-1 overflow-y-auto">
+        <div className="p-4 lg:p-8">
           {/* Encabezado */}
           <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
             <h1 className="text-2xl font-bold text-gray-800 mb-4 md:mb-0">Ver Proyectos</h1>
@@ -229,7 +226,7 @@ const MirarProyectos = () => {
               <button className="px-3 py-1 border rounded text-sm hover:bg-gray-100">Siguiente</button>
             </div>
           </div>
-        </main>
+        </div>
       </div>
     </div>
   );

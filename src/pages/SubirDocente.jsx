@@ -1,14 +1,9 @@
 import React, { useState } from "react";
-import Navbar from "../components/Navbar";
 import MenuLateral from "../components/MenuAdmi_Doc";
 import Alerta from "../components/AlertasDocente";
 import { FaUserGraduate, FaIdCard, FaEnvelope, FaLock, FaChalkboardTeacher, FaSave } from 'react-icons/fa'
 import { useForm } from "react-hook-form"
 import { UseDocente } from "../context/DocenteContext"
-
-
-
-
 
 const SubirDocente = () => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
@@ -17,9 +12,11 @@ const SubirDocente = () => {
 
     return (
         <>
-            <Navbar />
-            <div className="flex min-h-screen bg-gradient-to-br from-blue-50 to-gray-50">
-                <MenuLateral rol="admin" />
+            <div className="flex h-screen bg-gray-100">
+                {/* Menú Lateral (no modificado) */}
+                <div className="w-64 bg-gray-800 text-white">
+                    <MenuLateral rol="admin" />
+                </div>
                 {/* Contenido principal con mejor manejo del zoom */}
                 <div className="flex-1 p-4 md:p-6 overflow-auto">
                     {/* Tarjeta contenedora con mejor escalado */}
