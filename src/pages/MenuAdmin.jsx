@@ -1,28 +1,22 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import MenuDocente from '../components/MenuAdmi_Doc';
-import Navbar from '../components/Navbar';
 
 function MenuDocen() {
   const userRole = 'admin';
   
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100">
-      {/* Navbar fijo en la parte superior */}
-      <header className="fixed top-0 left-0 right-0 z-50">
-        <Navbar />
-      </header>
-      
-      {/* Contenedor principal con espacio para el navbar */}
-      <main className="flex flex-1 pt-20"> {/* Ajuste de padding-top para el navbar */}
-        {/* Menú lateral fijo */}
-        <aside className="fixed left-0 top-20 h-[calc(100vh-5rem)] w-64 bg-white shadow-md z-40">
-          <MenuDocente rol={userRole} />
-        </aside>
-        
-        {/* Contenido principal con margen para el menú lateral */}
-        <div className="ml-64 p-8 w-[calc(100%-16rem)]">
-          {/* Contenedor de bienvenida */}
+    <div className="flex h-screen bg-gray-100">
+      {/* Menú Lateral (no modificado) */}
+      <div className="w-64 bg-gray-800 text-white">
+        <MenuDocente rol={userRole} />
+      </div>
+
+      {/* Contenido Principal - Centrado */}
+      <div className="flex-1 overflow-y-auto ml-64">
+        <div className="max-w-6xl mx-auto px-8 py-8"> {/* Nuevo contenedor centrado */}
+          
+          {/* Contenedor de bienvenida (sin cambios) */}
           <section className="text-center mb-10">
             <div className="relative inline-block">
               <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent">
@@ -36,7 +30,7 @@ function MenuDocen() {
             </p>
           </section>
 
-          {/* Tarjetas de acceso rápido */}
+          {/* Tarjetas de acceso rápido (sin cambios) */}
           <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
             <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all">
               <div className="text-blue-500 text-3xl mb-3">📚</div>
@@ -59,7 +53,7 @@ function MenuDocen() {
 
           <Outlet />
         </div>
-      </main>
+      </div>
     </div>
   );
 }
