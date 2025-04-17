@@ -16,6 +16,7 @@ const SubirInvestigaciones = () => {
     descripcion: "",
     autores: "",
     fecha: "",
+    materia: "", // Nuevo campo
     imagen: null,
     archivo: null,
   });
@@ -113,6 +114,22 @@ const SubirInvestigaciones = () => {
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
                   />
                 </div>
+              </div>
+
+              {/* ✅ Materia */}
+              <div className="space-y-2">
+                <label className="block text-sm font-semibold text-gray-700">Materia</label>
+                <select
+                  name="materia"
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all appearance-none"
+                  >
+                  <option value="">Seleccionar materia</option>
+                  <option value="fisica">Física</option>
+                  <option value="ingenieria_civil">Ingeniería Civil</option>
+                  <option value="matematicas">Matemáticas</option>
+                </select>
               </div>
 
               {/* Archivos */}
