@@ -34,6 +34,7 @@ import InvestigacionDetalle from "./pages/InvestigacionDetalle";
 import QuienesSomos from "./pages/quienes-somos";
 import { DocenteProvider } from "./context/DocenteContext"
 import { ProyectosProvider } from "./context/ProyectoContext"
+import { PodcastProvider } from "./context/PodcastContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
@@ -66,7 +67,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
 
       <Route path="/subir-proyecto" element={<ProyectosProvider><SubirProyecto /></ProyectosProvider>} />
-      <Route path="subir-podcast" element={<SubirPodcast />} />
+      <Route path="subir-podcast" element={<PodcastProvider><SubirPodcast/></PodcastProvider>} />
       <Route path="misproyectos" element={<MisProyectos />} />
       <Route path="actualizar-proyectos" element={<ActualizarProyecto />} />
 

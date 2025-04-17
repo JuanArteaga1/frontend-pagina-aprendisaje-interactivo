@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import MenuLateral from "../components/MenuAdmi_Doc";
+import { useForm } from "react-hook-form"
+import { usePodcast } from "../context/PodcastContext";
 
 function SubirPodcast() {
+
   const [podcast, setPodcast] = useState({
     titulo: "",
     descripcion: "",
