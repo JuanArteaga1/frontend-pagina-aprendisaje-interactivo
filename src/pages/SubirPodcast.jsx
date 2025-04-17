@@ -11,6 +11,7 @@ function SubirPodcast() {
     autor: "",
     fecha: "",
     categoria: "",
+    materia: "",
   });
 
   const [archivos, setArchivos] = useState({
@@ -124,6 +125,21 @@ function SubirPodcast() {
                   </select>
                 </div>
               </div>
+
+              <div className="space-y-2">
+                <label className="block text-sm font-semibold text-gray-700">Materia</label>
+                <select
+                  name="materia"
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all appearance-none"
+                  >
+                  <option value="">Seleccionar materia</option>
+                  <option value="fisica">Física</option>
+                  <option value="ingenieria_civil">Ingeniería Civil</option>
+                  <option value="matematicas">Matemáticas</option>
+                  </select>
+                </div>
 
               {/* Sección de archivos */}
               <div className="space-y-6">

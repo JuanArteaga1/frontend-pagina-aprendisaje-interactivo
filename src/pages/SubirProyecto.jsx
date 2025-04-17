@@ -100,6 +100,22 @@ function SubirProyecto() {
                 </div>
               </div>
 
+              {/* 🔧 Campo Materia (nuevo y funcional) */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Materia</label>
+                  <select
+                    {...register('materia', { required: true })}
+                    name="materia"
+                    required
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    <option value="">Seleccionar materia</option>
+                    <option value="fisica">Física</option>
+                    <option value="ingenieria_civil">Ingeniería Civil</option>
+                    <option value="matematicas">Matemáticas</option>
+                </select>
+                {errors.materia && (<p className="text-red-500">Materia es requerida</p>)}
+              </div>
+
               <div className="space-y-4">
                 <h3 className="text-lg font-medium text-gray-900">Cargar Archivos</h3>
 
