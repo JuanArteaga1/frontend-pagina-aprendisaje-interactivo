@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
 import TablaDinamica from "../components/Tabla";
 import MenuAdministrador from "../components/MenuAdmi_Doc";
 import { Link } from 'react-router-dom';
@@ -10,8 +9,8 @@ const AdministrarDocente = () => {
   const [columnas, setColumnas] = useState([]);
   useEffect(() => {
     TraerDocentes()
-  }, [])
- // <- Asegúrate de que `docentes` ya tiene los datos
+  }, [])
+ // <- Asegúrate de que docentes ya tiene los datos
 
   useEffect(() => {
     setColumnas([
@@ -43,11 +42,11 @@ const AdministrarDocente = () => {
   ];
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
-      <Navbar />
-
-      <div className="flex flex-1 pt-16">
-        <MenuAdministrador rol="admin" />
+    <div className="flex h-screen bg-gray-100">
+        {/* Menú Lateral (no modificado) */}
+        <div className="fixed h-full w-64 bg-gray-800 text-white z-10">
+          <MenuAdministrador rol="admin" />
+        </div>
 
         <main className="flex-1 overflow-y-auto p-4 lg:p-8 ml-64">
           <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
@@ -69,7 +68,6 @@ const AdministrarDocente = () => {
           />
         </main>
       </div>
-    </div>
   );
 };
 
