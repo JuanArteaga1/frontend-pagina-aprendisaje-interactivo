@@ -13,16 +13,14 @@ import SubirInvestigaciones from "./pages/SubirInvestigaciones";
 import MenuAdmin from "./pages/MenuAdmin";
 import MenuDocen from "./pages/MenuDocen";
 import SubirDocente from "./pages/SubirDocente";
-
+import {LoginProvider} from "./context/LoginContext"
 import SubirProyecto from "./pages/SubirProyecto";
 import SubirPodcast from "./pages/SubirPodcast";
 import NuevaCategoria from "./pages/NuevaCategoria";
 import MisProyectos from "./pages/MisProyectos";
-
 import AdministrarDocentes from "./pages/AdministracionDocente";
 import MirarProyectos from "./pages/VerProyectos";
 import ProyectosPorAprobar from "./pages/ProyectosAprobar";
-
 import Fisica from "./pages/Fisica";
 import IngCivil from "./pages/IngCivil";
 import Matematicas from "./pages/Matematicas";
@@ -33,7 +31,8 @@ import AyudaT from "./pages/Ayuda";
 import InvestigacionDetalle from "./pages/InvestigacionDetalle";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <BrowserRouter>
+  <LoginProvider>
+    <BrowserRouter>
     <Routes>
 
       //rutas de estudiante y visualizacion
@@ -45,15 +44,12 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Route path="/investigaciones" element={<Investigaciones />} />
       <Route path="/ayuda" element={<AyudaT />} />
 
-
       //rutas de Administrador
       <Route path="/menuadministrador" element={<MenuAdmin />} />
       <Route path="/SubirCategoria" element={<NuevaCategoria />} />
       <Route path="/AdministrarDocente" element={<AdministrarDocentes />} />
-
       <Route path="/VerProyectos" element={<MirarProyectos />} />
       <Route path="/Aprobar" element={<ProyectosPorAprobar />} />
-
   
       //rutas de docentes
       <Route path="/menudocente" element={<MenuDocen />} />
@@ -62,7 +58,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Route path="subir-podcast" element={<SubirPodcast />}/>
       <Route path="misproyectos" element={<MisProyectos/>}/>
       <Route path="actualizar-proyectos" element={<ActualizarProyecto/>}/>
-
 
       //rutas de carga de elementos 
       <Route path="/subirsimulaciones" element={<Subirsimulaciones />} />
@@ -73,11 +68,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Route path="/Fisica" element={<Fisica />} />
       <Route path="/IngCivil" element={<IngCivil />} />
       <Route path="/Matematicas" element={<Matematicas />} />
-
       <Route path="/detalle/:proyecto" element={<DetalleProyecto />} />
       <Route path="/investigaciones/:id" element={<InvestigacionDetalle />} />
       <Route path="/episodio/:id" element={<Episodio />} />
 
     </Routes>
   </BrowserRouter>
+  </LoginProvider>
 );
