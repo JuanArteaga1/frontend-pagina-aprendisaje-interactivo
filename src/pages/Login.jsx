@@ -1,100 +1,89 @@
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import imagenlogin from "../img/logou.png"; 
-import { Eye, EyeOff } from "lucide-react"; // Usa lucide-react para los íconos (instala con: npm install lucide-react)
+import React, { useState, useEffect } from "react";
+import Navbar from "../components/Navbar";
+import imagenlogin from "../img/logou.png";
+import { useLogin } from "../context/LoginContext"
+import { useForm } from "react-hook-form"
+import { useNavigate } from "react-router-dom"
+
+import "./login.css";
 
 const Login = () => {
-  const { register, handleSubmit } = useForm();
-  const [showPassword, setShowPassword] = useState(false);
-  const togglePassword = () => setShowPassword((prev) => !prev);
+  const [loggedIn] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { signin, Usuario, isAutheticated, errors: LoginErrors } = useLogin()
+  console.log(LoginErrors)
+  const navigate = useNavigate()
 
-  // Función que se ejecuta al enviar el formulario
-  const onSubmit = (data) => {
-    console.log("Datos del formulario:", data);
-    // Aquí podrías conectar con tu backend
-  };
 
+  useEffect(() => {
+    if (isAutheticated && Usuario) {
+      if (Usuario.Rol === "Docente") {
+        navigate("/menudocente");
+      } else if (Usuario.Rol === "Administrador") {
+        navigate("/menuadministrador");
+      }
+    }
+  }, [isAutheticated, Usuario, navigate]);
+
+  const onSubmit = handleSubmit(async (values) => {
+    try {
+      signin(values)
+    } catch (error) {
+      console.error("Error al iniciar sesión:", error);
+    }
+  });
   return (
-    // Fondo gris claro, centrado vertical y horizontalmente
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-
-      {/* Contenedor principal más ancho y alto */}
-      <div className="w-full max-w-xl bg-white p-10 rounded-lg shadow-lg">
-
-        {/* Logo */}
-        <div className="flex justify-center mb-8">
-          <img src={imagenlogin} alt="Logo" className="w-40 md:w-48" />
-        </div>
-
-        {/* Título */}
-        <h2 className="text-2xl font-semibold text-center mb-6 text-gray-700">
-          Iniciar sesión
-        </h2>
-
-        {/* Formulario */}
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-
-          {/* Campo de usuario */}
-          <input
-            type="email"
-            placeholder="Nombre de usuario"
-            className="w-full border border-gray-300 rounded-lg px-5 py-3 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            {...register("email", { required: true })}
-          />
-
-          {/* Campo de contraseña */}
-          <div className="relative">
-            <input
-              type={showPassword ? "text" : "password"} // Cambia entre texto y contrasena
-              placeholder="Contraseña"
-              className="w-full border border-gray-300 rounded-lg px-5 py-3 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              {...register("password", { required: true })}
-            />
-            <span
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500"
-              onClick={togglePassword}
-            >
-              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-            </span>
+    <>
+      <Navbar loggedIn={loggedIn} />
+      
+      <div className="login-page">
+        <div className="login-container">
+        {
+        LoginErrors.map((error, i) => (
+          <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-blue-500 dark:text-red-50" role="alert">
+            {error}
           </div>
+        ))
+      }
+          <img src={imagenlogin} alt="Logo" className="login-logo" />
+          <h2 className="login-title">Iniciar Sesión</h2>
 
-          {/* Botón */}
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white py-3 text-lg rounded-lg hover:bg-blue-700 transition-colores"
-          >
-            Acceder
-          </button>
-        </form>
+          <form onSubmit={onSubmit} className="space-y-4 md:space-y-6">
+            <label className="login-label">Correo Electrónico:</label>
+            <input
+              type="email"
+              {...register('email', { required: true })}
+              className="login-input"
+              placeholder="ejemplo@correo.com"
+            />
+            {errors.email && (
+              <p className="text-red-500 text-sm">INGRESE CORREO</p>
+            )}
 
-        {/* Enlace de contraseña */}
-        <div className="text-right mt-3">
-          <a href="#" className="text-blue-600 text-sm hover:underline">
-            ¿Olvidó su contraseña?
-          </a>
-        </div>
+            <label className="login-label">Contraseña:</label>
+            <input
+              type="password"
+              {...register('contrasena', { required: true })}
+              className="login-input"
+              placeholder="********"
+            />
+            {errors.contrasena && (
+              <p className="text-red-500 text-sm">INGRESE CONTRASEÑA</p>
+            )}
 
-        {/* Línea divisora */}
-        <div className="border-t my-8"></div>
+            <button type="submit" className="login-button">
+              Acceder
+            </button>
+          </form>
+          
 
-        {/* Login con Google */}
-        <button className="flex items-center justify-center gap-3 w-full border border-gray-300 py-3 rounded-lg hover:bg-gray-50 transition-colores">
-          <img
-            src="https://img.icons8.com/color/24/000000/google-logo.png"
-            alt="Google"
-          />
-          <span className="text-base">Iniciar sesión con Google</span>
-        </button>
 
-        {/* Footer */}
-        <div className="flex justify-between items-center text-sm text-gray-600 mt-8">
-          <span>Español - Internacional (es)</span>
-          <button className="text-blue-600 hover:underline">
-            Aviso de Cookies
-          </button>
+          <a href="#" className="login-forgot">¿Recuperar contraseña?</a>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
