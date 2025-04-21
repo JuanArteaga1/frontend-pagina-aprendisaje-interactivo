@@ -5,7 +5,6 @@ import { useLogin } from "../context/LoginContext"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 
-import "./login.css";
 
 const Login = () => {
   const [loggedIn] = useState(false);
