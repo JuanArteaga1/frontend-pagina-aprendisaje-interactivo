@@ -1,36 +1,26 @@
 import React from "react";
 import Navbar from "../components/Navbar";
 import CategoriaProyectos from "../components/CategoriaProyectos";
-
-const simulacionesMatematicas = {
-  Matematicas: ["Simulación A", "Simulación B"]
-};
-
-const aplicacionesMatematicas = {
-  Matematicas: ["App 3", "App 4"]
-};
+import { proyectosSimulaciones } from "../pages/Simulaciones"; // Importa los proyectos de simulaciones
+import { proyectosAplicaciones } from "../pages/Appmovil"; // Importa los proyectos de aplicaciones
 
 const Matematicas = () => {
   return (
     <div>
       <Navbar />
       
-      {/* Sección de Simulaciones */}
+      {/* Sección de Simulaciones de Matemáticas */}
       <CategoriaProyectos 
         titulo="Simulaciones de Matemáticas" 
-        categoria="Matematicas" 
-        proyectos={simulacionesMatematicas} 
-        showImage={false} // Oculta la imagen
-        showButton={false} // Oculta el botón
+        categoria="Matemáticas" 
+        proyectos={proyectosSimulaciones} // Usamos los proyectos importados de Simulaciones
       />
 
-      {/* Sección de Aplicaciones Móviles */}
+      {/* Sección de Aplicaciones Móviles de Matemáticas */}
       <CategoriaProyectos 
         titulo="Aplicaciones Móviles de Matemáticas" 
-        categoria="Matematicas" 
-        proyectos={aplicacionesMatematicas} 
-        showImage={false} // Oculta la imagen
-        showButton={false} // Oculta el botón
+        categoria="Matemáticas" 
+        proyectos={proyectosAplicaciones} // Usamos los proyectos importados de Aplicaciones
       />
     </div>
   );

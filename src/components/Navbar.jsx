@@ -4,62 +4,140 @@ import { Search, User } from "lucide-react";
 
 const Navbar = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
     let timeoutId = null;
 
     const handleMouseEnter = () => {
-        clearTimeout(timeoutId); // Evita que se cierre inmediatamente
+        clearTimeout(timeoutId);
         setIsDropdownOpen(true);
     };
 
     const handleMouseLeave = () => {
         timeoutId = setTimeout(() => {
             setIsDropdownOpen(false);
-        }, 300); // Pequeño retraso para estabilidad
+        }, 300);
     };
 
     return (
-        <nav className="navbar">
+        <nav className="flex flex-wrap justify-between items-center p-4 md:p-6">
             {/* Logo */}
-            <div className="nav-left">
+            <div className="flex-shrink-0 mr-4">
                 <Link to="/">
                     <img
-                        src="/img/logo.png"
+                        src="/img/logos autonoma_2.png"
                         alt="Logo de Academia Ingeniería"
-                        className="logo"
+                        className="h-12 md:h-[70px] w-auto"
                     />
                 </Link>
             </div>
 
-            {/* Menú de Navegación */}
-            <div className="nav-container">
-                <ul className="nav-links">
-                    <li><Link to="/" className="hover-link font-semibold">Inicio</Link></li>
-                    <li><Link to="/simulaciones" className="hover-link font-semibold">Simulaciones</Link></li>
-                    <li><Link to="/appmovil" className="hover-link font-semibold">Aplicaciones Móviles</Link></li>
-                    <li><Link to="/investigaciones" className="hover-link font-semibold">Investigaciones</Link></li>
-                    <li><Link to="/podcast" className="hover-link font-semibold">Podcast</Link></li>
+            {/* Botón hamburguesa */}
+            <button
+                className="text-3xl text-[#3C64C9] md:hidden"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                aria-label="Abrir menú"
+            >
+                ☰
+            </button>
+
+            {/* Menú de navegación */}
+            <div
+                className={`${isMenuOpen ? "flex" : "hidden"
+                    } flex-col md:flex md:mx-auto bg-[#3C64C9] rounded-lg mt-4 md:mt-0 w-full md:w-auto px-6 py-4 md:px-40 md:py-5 items-center`}
+            >
+                <ul className="flex flex-col md:flex-row gap-5 md:gap-10 text-white font-medium text-[16px] capitalize w-full md:w-auto justify-center">
+                    <li>
+                        <Link
+                            className="hover:text-[#081e57]"
+                            onClick={() => setIsMenuOpen(false)}
+                        >
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            to="/simulaciones"
+                            className="hover:text-[#081e57]"
+                            onClick={() => setIsMenuOpen(false)}
+                        >
+                            Simulaciones
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            to="/appmovil"
+                            className="hover:text-[#081e57]"
+                            onClick={() => setIsMenuOpen(false)}
+                        >
+                            Aplicaciones Móviles
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            to="/investigaciones"
+                            className="hover:text-[#081e57]"
+                            onClick={() => setIsMenuOpen(false)}
+                        >
+                            Investigaciones
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            to="/podcast"
+                            className="hover:text-[#081e57]"
+                            onClick={() => setIsMenuOpen(false)}
+                        >
+                            Podcast
+                        </Link>
+                    </li>
                 </ul>
             </div>
 
-            {/* Iconos de búsqueda y usuario con Menú Desplegable */}
-            <div className="nav-icons">
-                <button aria-label="Buscar" className="icon-button">
-                    <Search className="icon hover:text-blue-300" />
+            {/* Iconos */}
+            <div className="flex gap-6 mt-4 md:mt-0 ml-auto items-center">
+                <button aria-label="Buscar" className="text-[#333] hover:text-blue-300">
+                    <Search className="w-[30px] h-[30px]" />
                 </button>
 
-                {/* Contenedor del menú desplegable */}
-                <div className="relative" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                    <button aria-label="Iniciar Sesión" className="icon-button">
-                        <User className="icon hover:text-blue-300" />
+                <div
+                    className="relative"
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
+                >
+                    <button
+                        aria-label="Iniciar Sesión"
+                        className="text-[#333] hover:text-blue-300"
+                    >
+                        <User className="w-[30px] h-[30px]" />
                     </button>
-                        {isDropdownOpen && (
-                    <div className="absolute right-0 top-full mt-2 w-40 bg-white border rounded-lg shadow-lg z-50">
-                        <ul className="py-2 text-gray-800">
-                        <li><Link to="/login" className="block px-4 py-2 hover:bg-gray-200">Iniciar sesión</Link></li>
-                        <li><Link to="/logout" className="block px-4 py-2 hover:bg-gray-200">Cerrar sesión</Link></li>
-                        <li><Link to="/ayuda" className="block px-4 py-2 hover:bg-gray-200">Ayuda</Link></li>
-                        </ul>
-                    </div>
+                    {isDropdownOpen && (
+                        <div className="absolute right-0 top-full mt-2 w-40 bg-white border rounded-lg shadow-lg z-50">
+                            <ul className="py-2 text-gray-800">
+                                <li>
+                                    <Link
+                                        to="/login"
+                                        className="block px-4 py-2 hover:bg-gray-200"
+                                    >
+                                        Iniciar sesión
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        to="/logout"
+                                        className="block px-4 py-2 hover:bg-gray-200"
+                                    >
+                                        Cerrar sesión
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        to="/ayuda"
+                                        className="block px-4 py-2 hover:bg-gray-200"
+                                    >
+                                        Ayuda
+                                    </Link>
+                                </li>
+                            </ul>
+                        </div>
                     )}
                 </div>
             </div>

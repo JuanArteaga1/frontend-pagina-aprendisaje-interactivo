@@ -1,14 +1,17 @@
 import React, { useState } from "react";
-import Navbar from "../components/Navbar";
 import MenuLateral from "../components/MenuAdmi_Doc";
+import { useForm } from "react-hook-form"
+import { usePodcast } from "../context/PodcastContext";
 
 function SubirPodcast() {
+
   const [podcast, setPodcast] = useState({
     titulo: "",
     descripcion: "",
     autor: "",
     fecha: "",
     categoria: "",
+    materia: "",
   });
 
   const [archivos, setArchivos] = useState({
@@ -38,12 +41,15 @@ function SubirPodcast() {
   };
 
   return (
-    <>
-      <Navbar loggedIn={true} />
-      <div className="flex h-screen bg-gradient-to-br from-gray-50 to-indigo-50">
+    <div className="flex h-screen bg-gray-100 overflow-hidden">
+      {/* Menú Lateral Fijo */}
+      <div className="fixed h-full w-64 bg-white shadow-lg z-10">
         <MenuLateral rol="docente" />
-        
-        <div className="flex-1 p-8 ml-64">
+      </div>
+
+      {/* Contenido Principal Desplazable */}
+      <div className="flex-1 ml-64 overflow-y-auto">
+        <div className="p-8">
           <div className="max-w-2xl mx-auto">
             <div className="mb-8 text-center">
               <h2 className="text-3xl font-bold text-gray-800 mb-2 bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-600">
@@ -51,7 +57,7 @@ function SubirPodcast() {
               </h2>
               <p className="text-gray-500">Comparte tu contenido auditivo con la comunidad</p>
             </div>
-            
+
             <form onSubmit={handleSubmit} className="space-y-6 bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
               {/* Sección de información básica */}
               <div className="space-y-6">
@@ -120,30 +126,38 @@ function SubirPodcast() {
                 </div>
               </div>
 
+              <div className="space-y-2">
+                <label className="block text-sm font-semibold text-gray-700">Materia</label>
+                <select
+                  name="materia"
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all appearance-none"
+                  >
+                  <option value="">Seleccionar materia</option>
+                  <option value="fisica">Física</option>
+                  <option value="ingenieria_civil">Ingeniería Civil</option>
+                  <option value="matematicas">Matemáticas</option>
+                  </select>
+                </div>
+
               {/* Sección de archivos */}
               <div className="space-y-6">
                 <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">Cargar Archivos</h3>
-                
+
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <label className="block text-sm font-semibold text-gray-700">Subir Audio</label>
-                    <label className="flex flex-col items-center justify-center border-2 border-dashed border-gray-200 rounded-xl p-6 cursor-pointer hover:border-indigo-500 bg-gray-50 hover:bg-indigo-50 transition-colors group">
-                      <input
-                        type="file"
-                        accept="audio/*"
-                        className="hidden"
-                        onChange={(e) => handleFileUpload(e, "audio")}
-                      />
-                      <div className="text-4xl mb-3 text-gray-400 group-hover:text-indigo-500">
-                        🎧
-                      </div>
-                      <p className="text-center text-sm text-gray-500">
-                        {archivos.audio 
-                          ? <span className="text-indigo-600 font-semibold">{archivos.audio.name}</span>
-                          : "Haz clic para subir el archivo de audio"}
-                      </p>
-                    </label>
+                    <label className="block text-sm font-semibold text-gray-700">Link del Audio</label>
+                    <input
+                      type="url"
+                      name="audioLink"
+                      onChange={(e) => setArchivos({ ...archivos, audio: e.target.value })}
+                      required
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all placeholder-gray-400"
+                      placeholder="https://ejemplo.com/audio.mp3"
+                    />
                   </div>
+
 
                   <div className="space-y-2">
                     <label className="block text-sm font-semibold text-gray-700">Subir Portada</label>
@@ -158,7 +172,7 @@ function SubirPodcast() {
                         🖼️
                       </div>
                       <p className="text-center text-sm text-gray-500">
-                        {archivos.portada 
+                        {archivos.portada
                           ? <span className="text-indigo-600 font-semibold">{archivos.portada.name}</span>
                           : "Haz clic para subir la imagen de portada"}
                       </p>
@@ -188,7 +202,7 @@ function SubirPodcast() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

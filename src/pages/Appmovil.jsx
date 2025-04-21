@@ -1,22 +1,60 @@
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "../components/Navbar";
-import ListaProyectos from "../components/ListaProyectos";
+import { useNavigate } from "react-router-dom";
+
+export const proyectosAplicaciones = {
+    Fisica: [
+        { nombre: "App 1", imagen: "/img/fotoapp.png" },
+        { nombre: "App 2", imagen: "/img/fotoapp.png" },
+    ],
+    Matemáticas: [
+        { nombre: "App A", imagen: "/img/fotoapp.png" },
+        { nombre: "App B", imagen: "/img/fotoapp.png" },
+    ],
+    "Ingeniería Civil": []
+};
+
 
 const AplicacionesMoviles = () => {
-    const proyectos = {
-        categoria1: ["App 1", "App 2"],
-        categoria2: ["App A", "App B"],
-    };
+    const navigate = useNavigate();
+    const [seccionActual, setSeccionActual] = useState("Aplicaciones Moviles");
 
     return (
         <div className="aplicaciones-moviles">
             <Navbar />
-            <h1 className="titulo-seccion">Aplicaciones Móviles</h1>
             <div className="imagen-seccion">
-                <img src="img/aplicacionesportada.png" alt="Imagen de aplicaciones móviles" />
+                <img src="img/aplicacionesportada.png" alt="" />
+                <h1 className="titulo-seccion">Ahora estás en: {seccionActual}</h1>
             </div>
-            <div className="ml-20">
-                <ListaProyectos proyectos={proyectos} />
+
+            <div className="contenido-proyectos">
+                {Object.entries(proyectosAplicaciones).map(([categoria, items]) => (
+                    <div key={categoria} className="categoria">
+                        <h2>{categoria}</h2>
+                        {items.length > 0 ? (
+                            <div className="cards-container"> {/* Usamos 'cards-container' aquí */}
+                                {items.map((app, i) => (
+                                    <div className="card" key={i}>
+                                        <div className="card-inner">
+                                            <div className="card-front">
+                                                <img src={app.imagen} alt={app.nombre} className="card-img" />
+                                            </div>
+                                            <div className="card-back">
+                                                <h3>{app.nombre}</h3>
+                                                <button onClick={() => navigate(`/detalle/${app.nombre}`)}>
+                                                    Ver más
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+
+                            </div>
+                        ) : (
+                            <p style={{ marginLeft: '10px' }}>No hay aplicaciones disponibles.</p>
+                        )}
+                    </div>
+                ))}
             </div>
         </div>
     );

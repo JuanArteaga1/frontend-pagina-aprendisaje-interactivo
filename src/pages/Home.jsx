@@ -1,13 +1,15 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar"; // Asegúrate de que esta ruta sea correcta.
-import Slider from "react-slick"; // Importa el Slider de react-slick
+import Navbar from "../components/Navbar";
+import Slider from "react-slick";
 import CategoryBox from "../components/CategoryBox";
+import { PrevArrow, NextArrow } from "../components/CustomArrows";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const Home = () => {
   const navigate = useNavigate();
 
-  // Configuración del carrusel
   const settings = {
     dots: true,
     infinite: true,
@@ -16,71 +18,86 @@ const Home = () => {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 4000,
+    prevArrow: <PrevArrow />,
+    nextArrow: <NextArrow />,
   };
 
   return (
-    <div>
+    <div className="w-full overflow-x-hidden">
       <Navbar />
 
-       {/* Carrusel de imágenes */}
-       <div className="hero w-full mt-4 relative max-h-[400px]">
-        <Slider {...settings} className="h-[400px]">
-          {/* Slide 1 */}
-          <div className="relative w-full max-h-[400px] -mt-4">
-            <img
-              src="/img/uni.jpg"
-              alt="Imagen 1"
-              className="w-full h-auto aspect-[16/9] object-cover"
-            />
-            <button
-              className="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-10 bg-yellow-500 text-white px-6 py-3 rounded-xl shadow-lg hover:bg-blue-700 transition font-bold cursor-pointer"
-              onClick={() => navigate("/simulaciones")}
-            >
-              Explora nuestras simulaciones
-            </button>
-          </div>
-
-          {/* Slide 2 */}
-          <div className="relative w-full max-h-[400px] -mt-4">
-            <img
-              src="/img/uni1.jpg"
-              alt="Imagen 2"
-              className="w-full h-auto aspect-[16/9] object-cover"
-            />
-            <button
-              className="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-10 bg-red-500 text-white px-6 py-3 rounded-xl shadow-lg hover:bg-blue-700 transition font-bold cursor-pointer"
-              onClick={() => navigate("/investigaciones")}
-            >
-              Consulta nuestra investigaciones
-            </button>
-          </div>
-
-          {/* Slide 3 */}
-          <div className="relative w-full max-h-[400px] -mt-4">
-            <img
-              src="/img/uni2.jpg"
-              alt="Imagen 3"
-              className="w-full h-auto aspect-[16/9] object-cover"
-            />
-            <button
-              className="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-10 bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg hover:bg-blue-700 transition font-bold cursor-pointer"
-              onClick={() => navigate("/podcast")}
-            >
-              Explora nuestro podcast
-            </button>
-          </div>
+      {/* Carrusel de imágenes */}
+      <div className="hero w-full mt-0 relative max-h-[600px] pb-8">
+        <Slider {...settings} className="h-full">
+          {[1, 2, 3].map((n) => (
+            <div key={n} className="relative w-full h-[300px] sm:h-[400px] md:h-[600px]">
+              <img
+                src={`/img/uni${n === 1 ? "" : n - 1}.jpg`}
+                alt={`Imagen ${n}`}
+                className="w-full h-full object-cover"
+              />
+              <button
+                className={`absolute bottom-10 left-1/2 transform -translate-x-1/2 z-10 text-white px-6 py-3 rounded-2xl border-2 border-[#3C64C9] shadow-lg transition font-bold cursor-pointer bg-[#3C64C9] hover:bg-[#2a4fa2]`}
+                onClick={() =>
+                  navigate(n === 1 ? "/simulaciones" : n === 2 ? "/investigaciones" : "/podcast")
+                }
+              >
+                {n === 1
+                  ? "Explora nuestras simulaciones"
+                  : n === 2
+                    ? "Consulta nuestras investigaciones"
+                    : "Explora nuestro podcast"}
+              </button>
+            </div>
+          ))}
         </Slider>
       </div>
 
+
       {/* Sección de categorías */}
-      <div className="categories flex justify-center gap-6 mt-10">
+      <div className="categories flex flex-wrap justify-evenly gap-4 mt-10 w-full px-4">
         <CategoryBox title="FÍSICA" image="/img/physics.png" path="/Fisica" />
         <CategoryBox title="ING CIVIL" image="/img/civil.png" path="/IngCivil" />
         <CategoryBox title="MATEMÁTICAS" image="/img/math.png" path="/Matematicas" />
       </div>
 
+      {/* Sección Quiénes somos - Versión Final */}
+      <div
+        className="w-screen relative left-1/2 right-1/2 -mx-[50vw] mt-20" // Añadido mt-20 para separación superior
+        style={{
+          opacity: 0,
+          transform: 'translateY(20px)',
+          animation: 'fadeInUp 1s forwards 0.3s'
+        }}
+      >
+        <div className="about-us flex flex-col md:flex-row justify-between items-center py-16 px-4 bg-black/25 backdrop-blur-sm min-h-[500px]">
+          <div className="text-left w-full md:w-2/3 mb-8 md:mb-0 md:pr-10 max-w-7xl mx-auto">
+            <h3 className="text-4xl font-semibold mb-8 text-white leading-tight">¿Quiénes somos?</h3>
+            <p className="mb-10 text-white text-xl leading-relaxed max-w-4xl">
+              Somos una universidad comprometida con la educación, la investigación y el desarrollo
+              de nuestra comunidad académica. Con una tradición de excelencia, buscamos transformar la
+              educación superior en Colombia.
+            </p>
+            <button
+              onClick={() => navigate("/quienes-somos")}
+              className="bg-transparent text-white px-10 py-5 rounded-full border-4 border-white/70 hover:bg-white/10 transition duration-300 font-bold shadow-md text-xl cursor-pointer hover:cursor-[url('cursor-link.png'),_pointer]"
+            >
+              Conoce más sobre nosotros
+            </button>
+          </div>
+          <div className="w-full md:w-1/3 h-full flex items-center max-w-2xl mx-auto">
+            <img
+              src="/img/imagen_uniautonoma.jpg"
+              alt="Quiénes somos"
+              className="w-full h-auto max-h-[400px] object-cover shadow-xl"
+            />
+          </div>
+        </div>
+      </div>
+
+
       {/* Información de la universidad */}
-      <div className="university-info text-center mt-10 p-6 bg-gray-100 rounded-lg">
+      <div className="university-info text-center mt-10 p-6 bg-[#3C64C9] text-white">
         <h3 className="text-xl font-bold mb-2">Información de la Universidad</h3>
         <p>Calle 5 No. 3-85 Popayán, Colombia</p>
         <p>PBX: (602) 8222295</p>
@@ -94,7 +111,7 @@ const Home = () => {
               href="https://www.facebook.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
+              className="text-white hover:underline"
             >
               Facebook
             </a>
@@ -102,7 +119,7 @@ const Home = () => {
               href="https://www.twitter.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
+              className="text-white hover:underline"
             >
               Twitter
             </a>
@@ -110,7 +127,7 @@ const Home = () => {
               href="https://www.instagram.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-pink-600 hover:underline"
+              className="text-white hover:underline"
             >
               Instagram
             </a>
@@ -122,4 +139,3 @@ const Home = () => {
 };
 
 export default Home;
-

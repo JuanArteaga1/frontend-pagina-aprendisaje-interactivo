@@ -1,194 +1,184 @@
 import React, { useState } from "react";
-import Navbar from "../components/Navbar";
-import "./SubirInvestigaciones.css";
-import subirInvestigacionesImg from "../img/Subir_Investigaciones.jpg"; // Importa la imagen correctamente
-import MenuLateral from "../components/MenuAdmi_Doc"
-import { 
-    FaFileUpload,  // Icono para subir archivos
-    FaFilePdf,     // Icono para archivos PDF
-    FaImage,       // Icono para imágenes
-    FaCalendarAlt, // Icono para calendario/fecha
-    FaUserEdit,    // Icono para edición de usuarios
-    FaPaperclip    // Icono de clip para adjuntar
-} from 'react-icons/fa';
-  
-// Componente principal para subir investigaciones
+import subirInvestigacionesImg from "../img/Subir_Investigaciones.jpg";
+import MenuLateral from "../components/MenuAdmi_Doc";
+import {
+  FaFileUpload,
+  FaFilePdf,
+  FaImage,
+  FaCalendarAlt,
+  FaUserEdit,
+  FaPaperclip,
+} from "react-icons/fa";
+
 const SubirInvestigaciones = () => {
-    // Estado para manejar los datos del formulario
-    const [formData, setFormData] = useState({
-        titulo: '',       // Título de la investigación
-        descripcion: '',  // Descripción detallada
-        autores: '',      // Nombres de los autores
-        fecha: '',        // Fecha de la investigación
-        imagen: null,     // Archivo de imagen
-        archivo: null     // Archivo PDF
-    });
+  const [formData, setFormData] = useState({
+    titulo: "",
+    descripcion: "",
+    autores: "",
+    fecha: "",
+    materia: "", // Nuevo campo
+    imagen: null,
+    archivo: null,
+  });
 
-    // Manejador para cambios en los campos de texto
-    const handleChange = (e) => {
-        // Extraer nombre y valor del campo modificado
-        const { name, value } = e.target;
-        // Actualizar el estado manteniendo los valores anteriores
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
-    };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
-    // Manejador para cambios en los campos de archivo
-    const handleFileChange = (e) => {
-        // Extraer nombre y archivos seleccionados
-        const { name, files } = e.target;
-        // Actualizar el estado con el primer archivo seleccionado
-        setFormData(prev => ({
-            ...prev,
-            [name]: files[0]
-        }));
-    };
+  const handleFileChange = (e) => {
+    const { name, files } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: files[0],
+    }));
+  };
 
-    // Manejador para el envío del formulario
-    const handleSubmit = (e) => {
-        e.preventDefault(); // Prevenir comportamiento por defecto
-        // Mostrar datos en consola (para desarrollo)
-        console.log('Datos de la investigación:', formData);
-        // Mostrar alerta de confirmación
-        alert('Investigación subida correctamente');
-        // Aquí normalmente se enviarían los datos al servidor
-    };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Datos de la investigación:", formData);
+    alert("Investigación subida correctamente");
+  };
 
-    // Renderizado del componente
-    return (
-        <>
-            {/* Barra de navegación superior */}
-            <Navbar loggedIn={true} />
-            
-            {/* Contenedor principal con diseño flex */}
-            <div className="flex h-screen bg-gray-50">
-                {/* Menú lateral para docentes */}
-                <MenuLateral rol="docente" />
-                
-                {/* Contenido principal del formulario */}
-                <div className="flex-1 p-6 overflow-auto">
-                    <div className="max-w-3xl mx-auto">
-                         {/* Contenedor del formulario */}
-                        <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
-                            {/* Título del formulario */}
-                            <h2 className="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">SUBIR INVESTIGACIÓN</h2>
-                            
-                            {/* Formulario principal */}
-                            <form onSubmit={handleSubmit} className="space-y-5">
-                                {/* Sección de información básica */}
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                    {/* Campo para el título */}
-                                    <div className="col-span-2">
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">Título:</label>
-                                        <input
-                                            type="text"
-                                            name="titulo"
-                                            value={formData.titulo}
-                                            onChange={handleChange}
-                                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200"
-                                            placeholder="Ingrese el título de la investigación"
-                                            required
-                                        />
-                                    </div>
-                                    
-                                    {/* Campo para la descripción */}
-                                    <div className="col-span-2">
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">Descripción:</label>
-                                        <textarea
-                                            name="descripcion"
-                                            value={formData.descripcion}
-                                            onChange={handleChange}
-                                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200"
-                                            rows="4"
-                                            placeholder="Descripción detallada de la investigación"
-                                            required
-                                        ></textarea>
-                                    </div>
-                                    
-                                    {/* Campo para los autores */}
-                                    <div className="relative">
-                                        <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
-                                            <FaUserEdit className="mr-2 text-blue-500" />
-                                            Autores:
-                                        </label>
-                                        <input
-                                            type="text"
-                                            name="autores"
-                                            value={formData.autores}
-                                            onChange={handleChange}
-                                            className="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200"
-                                            placeholder="Nombres de los autores"
-                                        />
-                                    </div>
-                                    
-                                    {/* Campo para la fecha */}
-                                    <div className="relative">
-                                        <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
-                                            <FaCalendarAlt className="mr-2 text-blue-500" />
-                                            Fecha:
-                                        </label>
-                                        <input
-                                            type="date"
-                                            name="fecha"
-                                            value={formData.fecha}
-                                            onChange={handleChange}
-                                            className="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200"
-                                        />
-                                    </div>
-                                </div>
-                                
-                                {/* Sección para subir archivos */}
-                                <div className="space-y-4">
-                                    <h3 className="text-sm font-medium text-gray-700">Subir archivos:</h3>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        {/* Área para subir imagen */}
-                                        <label className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-400 cursor-pointer">
-                                            <FaImage className="text-3xl text-blue-500 mb-2" />
-                                            <span className="font-medium">IMAGEN DE PORTADA</span>
-                                            <span className="text-xs text-gray-500 mt-1">(JPG, PNG)</span>
-                                            <input
-                                                type="file"
-                                                name="imagen"
-                                                className="hidden"
-                                                accept="image/*"
-                                                onChange={handleFileChange}
-                                            />
-                                        </label>
-                                        
-                                        {/* Área para subir PDF */}
-                                        <label className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-400 cursor-pointer">
-                                            <FaFilePdf className="text-3xl text-red-500 mb-2" />
-                                            <span className="font-medium">DOCUMENTO PDF</span>
-                                            <span className="text-xs text-gray-500 mt-1">(Artículo completo)</span>
-                                            <input
-                                                type="file"
-                                                name="archivo"
-                                                className="hidden"
-                                                accept=".pdf"
-                                                onChange={handleFileChange}
-                                            />
-                                        </label>
-                                    </div>
-                                </div>
-                                
-                                {/* Botón para enviar el formulario */}
-                                <div className="pt-4 flex justify-center">
-                                    <button
-                                        type="submit"
-                                        className="px-7 py-3 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition flex items-center"
-                                    >
-                                        <FaPaperclip className="mr-2" />
-                                        Subir Investigación
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+  return (
+    <>
+      <div className="flex h-screen bg-gray-100">
+        {/* Menú Lateral */}
+        <MenuLateral rol="docente" />
+
+        {/* Contenedor principal */}
+        <div className="flex-1 p-8">
+          <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-md p-8 border">
+            <h2 className="text-2xl font-bold text-gray-800 mb-6 border-b pb-2 text-center">
+              SUBIR INVESTIGACIÓN
+            </h2>
+
+            {/* Formulario */}
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Título */}
+              <div>
+                <label className="block mb-1 font-medium text-gray-700">Título:</label>
+                <input
+                  type="text"
+                  name="titulo"
+                  value={formData.titulo}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
+                  placeholder="Ingrese el título de la investigación"
+                  required
+                />
+              </div>
+
+              {/* Descripción */}
+              <div>
+                <label className="block mb-1 font-medium text-gray-700">Descripción:</label>
+                <textarea
+                  name="descripcion"
+                  value={formData.descripcion}
+                  onChange={handleChange}
+                  rows="4"
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
+                  placeholder="Descripción detallada de la investigación"
+                  required
+                ></textarea>
+              </div>
+
+              {/* Autores y Fecha */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="flex items-center gap-2 mb-1 text-gray-700 font-medium">
+                    <FaUserEdit className="text-blue-500" /> Autores:
+                  </label>
+                  <input
+                    type="text"
+                    name="autores"
+                    value={formData.autores}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
+                    placeholder="Nombres de los autores"
+                  />
                 </div>
-            </div>
-        </>
-    );
+
+                <div>
+                  <label className="flex items-center gap-2 mb-1 text-gray-700 font-medium">
+                    <FaCalendarAlt className="text-blue-500" /> Fecha:
+                  </label>
+                  <input
+                    type="date"
+                    name="fecha"
+                    value={formData.fecha}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
+                  />
+                </div>
+              </div>
+
+              {/* ✅ Materia */}
+              <div className="space-y-2">
+                <label className="block text-sm font-semibold text-gray-700">Materia</label>
+                <select
+                  name="materia"
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all appearance-none"
+                  >
+                  <option value="">Seleccionar materia</option>
+                  <option value="fisica">Física</option>
+                  <option value="ingenieria_civil">Ingeniería Civil</option>
+                  <option value="matematicas">Matemáticas</option>
+                </select>
+              </div>
+
+              {/* Archivos */}
+              <div>
+                <h3 className="text-gray-700 font-medium mb-3">Subir archivos:</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <label className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-400 cursor-pointer text-center">
+                    <FaImage className="text-4xl text-blue-500 mb-2" />
+                    <span className="font-medium">IMAGEN DE PORTADA</span>
+                    <span className="text-xs text-gray-500">(JPG, PNG)</span>
+                    <input
+                      type="file"
+                      name="imagen"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      className="hidden"
+                    />
+                  </label>
+
+                  <label className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-400 cursor-pointer text-center">
+                    <FaFilePdf className="text-4xl text-red-500 mb-2" />
+                    <span className="font-medium">DOCUMENTO PDF</span>
+                    <span className="text-xs text-gray-500">(Artículo completo)</span>
+                    <input
+                      type="file"
+                      name="archivo"
+                      accept=".pdf"
+                      onChange={handleFileChange}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+              </div>
+
+              {/* Botón */}
+              <div className="pt-4 flex justify-center">
+                <button
+                  type="submit"
+                  className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                >
+                  <FaPaperclip /> Subir Investigación
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </>
+  );
 };
+
 export default SubirInvestigaciones;

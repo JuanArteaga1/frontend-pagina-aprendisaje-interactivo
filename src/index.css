@@ -4,403 +4,70 @@
 
 
 body {
-  font-family: sans-serif, sans-serif;
+  font-family: sans-serif;
   background-color: #f8f9fa;
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
 }
-
-/* NAVBAR */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 30px;
-
-}
-
-/* Logo más grande */
-.logo {
-  height: 70px; 
-  width: auto;
-}
-
-.nav-container {
-  background-color: #3C64C9;
-  padding: 20px 160px;
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: 'Albert Sans', sans-serif;
-}
-
-/* Alinear enlaces al centro-derecha */
-.nav-links {
-  display: flex;
-  gap: 40px; /* Más espacio entre enlaces */
-  list-style: none;
-  padding: 0;
-  margin-left: auto; /* Empuja a la derecha */
-}
-
-/* Estilo de enlaces */
-.nav-links a {
-  text-decoration: none;
-  color: white;
-  font-weight: 500; /* Más grueso para destacar */
-  text-transform: capitalize; 
-  font-size: 16px;
-}
-
-/* Hover para enlaces */
-.hover-link:hover {
-  text-decoration: none;
-  color: #081e57; /* Color */
-  font-family: 'Albert Sans', sans-serif;
-}
-
-/* Iconos alineados a la derecha */
-.nav-icons {
-  display: flex;
-  gap: 40px;
-  margin-left: 60px;
-}
-
-/* Estilo para los botones de íconos */
-.icon-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-/* Tamaño de los íconos */
-.icon {
-  width: 30px;
-  height: 30px;
-  color: #333;
-}
-
-/* PERFIL */
-.profile-container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  position: relative;
-}
-
-.profile-image {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.profile-menu {
-  display: none;
-  position: absolute;
-  top: 50px;
-  right: 0;
-  background-color: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
-  width: 150px;
-}
-
-.profile-menu a {
-  display: block;
-  padding: 10px;
-  text-decoration: none;
-  color: #333;
-}
-
-.profile-menu a:hover {
-  background-color: #f1f1f1;
-}
-
-.show {
-  display: block;
-}
-
-/* PODCAST  */
-.subtitulo-seccion {
-  text-align: left;
-  padding-left: 200px;
-  font-size: 24px;
-  font-weight: bold;
-  margin-top: 20px;
-  color: #333;
-  width: 100%;
-}
-.podcast-banner {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.podcast-banner img {
-  width: 80%;
-  border-radius: 20px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Contenedor de episodios */
-.episodios-container {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  flex-wrap: wrap;
-  margin-top: 30px;
-}
-
-.episodio-container {
-  max-width: 900px;
-  margin: auto;
-  padding: 20px;
-}
-
-.episodio-layout {
-  display: flex;
-  gap: 20px;
-  background: #ffffff;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  border-radius: 10px;
-}
-
-.episodio-left,
-.episodio-right {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-/* Línea divisoria */
-.episodio-layout::before {
-  content: "";
-  width: 2px;
-  background: rgba(0, 0, 0, 0.1);
-  position: absolute;
-  left: 50%;
-  height: 80%;
-  transform: translateX(-50%);
-}
-
-.episodio-left {
-  text-align: left;
-  padding-left: 15px;
-}
-
-.episodio-right {
-  text-align: left;
-  padding-right: 15px;
-}
-
-/* Estilos de texto */
-.episodio-titulo {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 15px;
-}
-
-.episodio-descripcion {
-  font-size: 16px;
-  color: #333;
-}
-
-.episodio-autor, .episodio-fecha {
-  font-size: 14px;
-  color: #666;
-}
-
-.episodio-img {
-  width: 100%;
-  max-width: 280px;
-  border-radius: 10px;
-  margin-bottom: 15px;
-}
-
-/* Botón Spotify */
-.spotify-link {
-  display: inline-block;
-  margin-top: 10px;
-  padding: 10px 15px;
-  background-color: #1DB954;
-  color: white;
-  text-decoration: none;
-  border-radius: 5px;
-  font-weight: bold;
-  align-self: flex-start;
-}
-
-
 
 /*Home + Carrusel*/
-.hero {
-  position: relative;
-  width: 100%; /* Asegura que el carrusel ocupe todo el ancho de su contenedor */
-  overflow: hidden; /* Evita que las imágenes se salgan del contenedor */
-}
-
 .hero img {
-  width: 100%; /* Hace que las imágenes se ajusten al contenedor */
-  height: 100%; 
-  object-fit: cover; /* Hace que la imagen mantenga su aspecto pero se recorte si es necesario */
-}
-
-.hero-button {
-  position: absolute;
-  left: 250px; 
-  bottom: 50px; 
-  padding: 20px 45px;
-  background-color: #FFDB4A;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-  font-weight: 700;
-  font-size: 20px;
-}
-
-.hero-button:hover {
-  background-color: #0056b3;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
 }
 
 .slick-dots {
-  position: absolute;
-  top: 345px;
-  left: 50%;
-  transform: translateX(-50%); /* Centra los puntos en el carrusel */
-  display: flex;
+  position: absolute !important;
+  bottom: 20px !important;
+  width: 100%;
+  display: flex !important;
   justify-content: center;
-  gap: 10px; /* Espaciado entre los puntos */
+  z-index: 20;
 }
 
-/* Estilos para los puntos de navegación */
+.slick-dots li button:before {
+  display: none !important;
+}
+
 .slick-dots li button {
-  width: 20px; /* Aumenta el tamaño del botón */
-  height: 20px; /* Aumenta el tamaño del botón */
-  border-radius: 50%; /* Hace que los puntos sean circulares */
-  background-color: black; /* Fondo negro para todos los puntos inactivos */
-  border: none; /* Elimina cualquier borde predeterminado */
-  opacity: 0.5; /* Hace que los puntos inactivos sean más suaves */
+  width: 10px !important;
+  height: 10px !important;
+  border-radius: 50% !important;
+  background-color: rgba(255, 255, 255, 0.5) !important;
+  border: none !important;
+  outline: none !important;
+  content: "" !important;
 }
 
-/* Estilos para el punto activo */
 .slick-dots li.slick-active button {
-  background-color: white; /* Fondo blanco para el punto activo */
-  opacity: 1; /* Asegura que el punto activo sea completamente visible */
+  background-color: rgba(255, 255, 255, 1) !important;
 }
 
-
-/* CATEGORÍAS */
-.categories {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  margin-top: 20px;
-}
-
-.category {
-  width: 180px;
-  height: 180px;
-  background-color: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  cursor: pointer;
-  transition: transform 0.2s ease-in-out;
-}
-
+/* Categorías */
 .category-box img {
-  width: 100px; /* Ajusta según el tamaño deseado */
-  height: auto; /* Mantiene la proporción */
-  object-fit: contain; /* Asegura que la imagen no se deforme */
-}
-
-.category:hover {
-  transform: scale(1.05);
-  background-color: #e0f7fa;
-}
-
-.category img {
-  width: 80px; /* Ajusta según sea necesario */
+  width: 100px;
   height: auto;
-  object-fit: contain;
-  margin-bottom: 10px;
+  object-fit: contain; 
 }
 
+/* Información de la universidad */
 .university-info {
-  background-color: #3C64C9; /* Fondo  */
-  padding: 20px;
-  text-align: center;
-  margin-top: 50px;
   border-top: 2px solid #ccc; /* Línea superior para separar */
 }
 
-.university-info h3 {
-  font-size: 10px;
-  font-weight: bold;
-  color: #ffffff;
-}
-
-.university-info p {
-  font-size: 10px;
-  margin: 5px 0;
-  color: #ffffff;
-}
-
-.social-media {
-  margin-top: 15px;
-  color: #ffffff;
-}
-
-.social-media h4 {
-  font-size: 10px;
-  margin-bottom: 10px;
-}
-
+/* Social Media */
 .social-media a {
-  text-decoration: none;
-  font-size: 10px;
-  margin: 0 10px;
-  color: #ffffff; /* Color-enlaces */
+  text-decoration: none; /* Elimina subrayado */
 }
 
 .social-media a:hover {
   text-decoration: underline; /* Subraya los enlaces al pasar el ratón */
 }
 
-
-/* ESTILOS PARA EL FORMULARIO DE INICIO DE SESIÓN */
-.login-page {
-  display: flex;
-  height: 100vh; /* Ocupa toda la pantalla */
-}
-
-.login-container {
-  width: 50%; /* Ocupa la mitad izquierda */
-  max-width: none; /* Evita que se limite a 400px */
-  margin: auto;
-  padding: 100px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center; /* Centra el contenido verticalmente */
-
-}
-
-.login-image {
-  width: 50%; /* Ocupa la mitad derecha */
-  min-height: 100vh;
-  background: url("/logouniautonoma.png") no-repeat center center;
-  background-size: cover;
+.fade-in-up {
+  animation: fadeInUp 1s ease-out forwards;
 }
 
 .login-container h2 {
@@ -433,27 +100,29 @@ body {
 }
 
 /*AQUI VAN LOS TITULOS E IMAGENES DE SIMULACIONES Y APLICACIONES MOVILES */
-
-/* Título de la sección */
-.titulo-seccion {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin: 20px auto; /* Centrado controlado */
-  color: #333;
-  text-align: left;
-  width: 70%;
+.imagen-seccion {
+  position: relative; /* Necesario para posicionar el texto sobre la imagen */
+  width: 100%;       /* Asegura que la imagen ocupe todo el ancho de la pantalla */
+  overflow: hidden; /* Evita que se salgan elementos si la imagen es más grande */
 }
 
-/* Centrar la imagen */
 .imagen-seccion img {
-  width: 100%;
-  max-width: 970px;
-  height: auto;
-  margin-top: 20px;
-  border-radius: 10px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+  width: 100%; 
+  height: auto; /* Mantiene la relación de aspecto */
+  object-fit: cover; /* Asegura que la imagen cubra el área de la imagen sin distorsionarse */
+}
+
+.titulo-seccion {
+  position: absolute; 
+  top: 50%; /* Ajusta el título verticalmente en el medio de la imagen */
+  left: 50%; /* Ajusta el título horizontalmente al centro */
+  transform: translate(-50%, -50%); /* Ajusta el texto para que esté centrado */
+  font-size: 2rem; /* Ajusta el tamaño del texto */
+  font-weight: bold;
+  color: white; 
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); 
+  text-align: center; 
+  width: 100%; /* Asegura que el título se mantenga dentro de los límites del contenedor */
 }
 
 /* Estilo para el contenedor de las secciones para centrar otros elementos */
@@ -475,17 +144,6 @@ body {
   width: 100%;
   object-fit: cover;
   border-radius: 10px;
-}
-
-/* Botón de ordenar */
-.ordenar-btn {
-  margin: 20px;
-  padding: 10px;
-  background-color: #f0d53d;
-  color: white;
-  border-radius: 10px;
-  cursor: pointer;
-  margin-left: -920px; /* Ajusta la posición */
 }
 
 /* Títulos de las categorías */
@@ -514,54 +172,73 @@ h2 {
 .cards-container {
   display: flex;
   gap: 15px;
-  justify-content: center;
-  flex-wrap: wrap;
+  overflow-x: auto; /* Desplazamiento horizontal */
+  scroll-snap-type: x mandatory; /* Para alinear las tarjetas al hacer scroll */
+  padding: 20px;
+  -webkit-overflow-scrolling: touch; /* Suaviza en móviles */
+}
+
+.cards-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.cards-container::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 4px;
 }
 
 /* Tarjetas */
 .card {
-  width: 200px;
-  height: 250px;
+  width: 250px; /* o el tamaño que prefieras */
+  height: 200px;
   perspective: 1000px;
-  cursor: pointer;
+  flex-shrink: 0;
+  scroll-snap-align: start;
 }
 
 .card-inner {
   width: 100%;
   height: 100%;
-  transform-style: preserve-3d;
+  position: relative;
   transition: transform 0.6s;
+  transform-style: preserve-3d;
 }
 
 .card:hover .card-inner {
   transform: rotateY(180deg);
 }
 
-.card-front, .card-back {
+.card-front,
+.card-back {
   position: absolute;
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
-  border: 1px solid #ccc;
   border-radius: 10px;
+  overflow: hidden; /* IMPORTANTE para que nada se salga */
 }
 
 .card-front {
-  background: white;
+  background-color: #fff;
+}
+
+.card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Muy importante para que no se deforme */
+  display: block;
 }
 
 .card-back {
-  background: #3C64C9;
-  color: white;
-  text-align: center;
+  background-color: #3C64C9;
   transform: rotateY(180deg);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px;
+  border-radius: 10px;
 }
 
 .card-back h3 {
@@ -582,290 +259,54 @@ h2 {
   color: black;
 }
 
-/* === DETALLE DE LOS PROYECTOS === */
-.detalle-proyecto {
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  max-width: 1200px;
-  margin: 0 auto;
-}
 
-/* === Contenedor principal === */
-.detalle-contenedor {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-}
-
-/* === Bloques generales (cabecera, media e inferior) === */
-.detalle-header,
-.detalle-media,
-.detalle-inferior {
-  background-color: #f8f8f8; /* Fondo claro para diferenciarlos */
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* === Sección 1: Cabecera con imagen y botón === */
-.detalle-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.imagen-app img {
-  width: 150px;
-  border-radius: 10px;
-}
-
-.boton-descargar {
-  padding: 10px 20px;
-  background-color: #3C64C9;
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-  font-size: 16px;
-}
-
-.boton-descargar:hover {
-  background-color: #3052A3;
-}
-
-/* === Sección 2: Video e imágenes === */
-.detalle-media {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  width: 100%;
-}
-
-.detalle-media video {
-  max-width: 400px;
-  height: auto;
-  border-radius: 10px;
-}
-
-/* Contenedor de imágenes alineadas en fila */
-.imagenes {
-  display: flex;
-  gap: 15px;
-}
-
-.imagenes img {
-  width: 120px; /* Tamaño uniforme */
-  border-radius: 10px;
-  border: 2px solid #ddd;
-}
-
-/* === Sección 3: Descripción y documentos === */
-.detalle-inferior {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 40px;
-}
-
-.descripcion {
-  width: 55%;
-}
-
-.documentos {
-  width: 40%;
-}
-
-.documentos a {
-  display: block;
-  margin: 5px 0;
-  color: #0000EE;
-  text-decoration: none;
-  font-size: 14px;
-}
-
-.documentos a:hover {
-  text-decoration: underline;
-}
-
-
-/* PAGINA INVESTIGACIONES - Contenedor principal */
-.contenedor-investigaciones {
-  display: flex;
-  gap: 20px;
-  padding: 20px;
-}
-
-/* Sidebar de categorías */
-.sidebar {
-  width: 250px;
-  background: #f8f9fa;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.sidebar h3 {
-  margin-bottom: 10px;
-  font-size: 1.2rem;
-}
-
-.sidebar ul {
-  list-style: none;
-  padding: 0;
-}
-
-.sidebar li {
-  padding: 10px;
-  font-weight: bold;
-  border-bottom: 1px solid #ddd;
-  cursor: pointer;
-}
-
-.sidebar li:hover {
-  background: #e9ecef;
-}
-
-/* Sección principal */
-.contenido {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Barra de búsqueda */
-.barra-busqueda {
-  width: 5%;
-  padding: 10px;
-  margin-bottom: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 0.9rem;
-}
-
-/* Contenedor de investigaciones */
-.lista-investigaciones {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-}
-
-.investigacion-container {
-  display: flex;
-  justify-content: center;
-  padding: 20px;
-}
-
-.investigacion-layout {
-  display: flex;
-  background: #fff;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  padding: 20px;
-  max-width: 800px;
-  width: 100%;
-}
-
-.investigacion-left, .investigacion-right {
-  flex: 1;
-  padding: 20px;
-}
-
-.investigacion-left {
-  text-align: left;
-}
-
-.investigacion-titulo {
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.investigacion-descripcion {
-  font-size: 16px;
-  margin-top: 10px;
-}
-
-.descargar-boton {
-  display: inline-block;
-  background-color: #007bff;
-  color: white;
-  padding: 10px 15px;
-  border-radius: 5px;
-  text-decoration: none;
-  margin-top: 15px;
-}
-
-.descargar-boton:hover {
-  background-color: #0056b3;
-}
-
-/* Línea separadora */
-.linea-separadora {
-  width: 2px;
-  background: rgba(0, 0, 0, 0.2);
-  margin: 0 20px;
-}
-
-/* Derecha */
-.investigacion-right p {
-  font-size: 16px;
-  margin: 10px 0;
-}
-
-.fuente-link {
-  display: inline-block;
-  color: #007bff;
-  text-decoration: none;
-  font-weight: bold;
-  margin-top: 10px;
-}
-
-.fuente-link:hover {
-  text-decoration: underline;
-}
-
-/* Tarjetas de investigaciones */
-.card-investigacion {
-  width: 250px;
-  background: white;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
-
-.card-investigacion h4 {
-  margin-bottom: 10px;
-}
-
-.card-investigacion p {
-  color: #555;
-}
-
-.card-investigacion button {
-  background: #007bff;
-  color: white;
-  padding: 8px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 10px;
-}
-
-.card-investigacion button:hover {
-  background: #0056b3;
-}
-
-/* Responsive */
+/* Ajuste para pantallas móviles */
 @media (max-width: 768px) {
   .contenedor-investigaciones {
     flex-direction: column;
   }
-  
+
   .sidebar {
     width: 100%;
   }
-  
+
+  /* Establecemos el grid para la lista de investigaciones */
   .lista-investigaciones {
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Dos columnas */
+    gap: 15px;
+  }
+
+  /* También podemos ajustar las tarjetas para que no se estiren mucho en pantallas pequeñas */
+  .card-investigacion {
+    width: 100%; /* Hacemos que las tarjetas ocupen el 100% del espacio disponible */
+  }
+}
+
+/* Ajuste para dispositivos móviles */
+@media (max-width: 768px) {
+  .category-box img {
+    width: 80px;
+  }
+
+  .about-us {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .about-us > div {
+    width: 100% !important;
+    padding: 0 !important;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

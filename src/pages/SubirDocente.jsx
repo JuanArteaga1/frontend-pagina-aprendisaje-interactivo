@@ -1,33 +1,22 @@
 import React, { useState } from "react";
-import Navbar from "../components/Navbar";
 import MenuLateral from "../components/MenuAdmi_Doc";
+import Alerta from "../components/AlertasDocente";
 import { FaUserGraduate, FaIdCard, FaEnvelope, FaLock, FaChalkboardTeacher, FaSave } from 'react-icons/fa'
 import { useForm } from "react-hook-form"
-import { subirDocenteAPI } from "../api/SubirDocenteApi";
-
-
+import { UseDocente } from "../context/DocenteContext"
 
 const SubirDocente = () => {
-    const { register, handleSubmit } = useForm();
-  
-    const onSubmit = async (data) => {
-        try {
-            const response = await subirDocenteAPI(data);
-            
-        
-            // Guardar el token en localStorage
-            localStorage.setItem("token",response.data.token);
-            console.log(response.data.token)
-        
-          } catch (error) {
-            console.error("Error:", error);
-          }
-    };
+    const { register, handleSubmit, formState: { errors }, reset } = useForm();
+    const { sigout, Docente, errors: DocenteErrors, mensaje } = UseDocente()
+    const [registroExitoso, setRegistroExitoso] = useState(false);
+
     return (
         <>
-            <Navbar />
-            <div className="flex min-h-screen bg-gradient-to-br from-blue-50 to-gray-50">
-                <MenuLateral rol="admin" />
+            <div className="flex h-screen bg-gray-100">
+                {/* Menú Lateral (no modificado) */}
+                <div className="w-64 bg-gray-800 text-white">
+                    <MenuLateral rol="admin" />
+                </div>
                 {/* Contenido principal con mejor manejo del zoom */}
                 <div className="flex-1 p-4 md:p-6 overflow-auto">
                     {/* Tarjeta contenedora con mejor escalado */}
@@ -44,18 +33,21 @@ const SubirDocente = () => {
                             </p>
                         </div>
 
+                        {DocenteErrors.map((error, i) => (
+                            <Alerta key={i} tipo="error" mensaje={error.msg} />
+                        ))}
+                        {mensaje && (
+                            <Alerta tipo="exito" mensaje={mensaje} />
+                            
+                        )}
 
                         <form onSubmit={handleSubmit(async (values) => {
-                            // Agregar campos adicionales automáticamente
-                            const datosCompletos = {
-                                ...values,
-                                rol: "6618fa88a1c23d6abc123def", // puedes poner "admin" si deseas
-                                funcion: "6618fb99a1c23d6abc456def",
-                                estado: "activo"
-                            };
-                            console.log(values)
-                            const res = await subirDocenteAPI(values)
-                            console.log(res)
+                            const resultado = await sigout(values);
+                            if (resultado?.success) {
+                                setRegistroExitoso(true);
+                                 // ✅ Limpiar campos
+                            }
+
                         })}
                             className="space-y-4 md:space-y-6">
                             {/* Sección 1: Información personal */}
@@ -76,6 +68,7 @@ const SubirDocente = () => {
                                         className="w-full pl-9 md:pl-10 pr-3 py-2 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500"
                                         placeholder="Ingrese el nombre completo"
                                     />
+                                    {errors.Nombre && (<p className="text-red-500">Nombre es requerido</p>)}
                                 </div>
 
                                 {/* Identificación */}
@@ -91,6 +84,8 @@ const SubirDocente = () => {
                                         className="w-full pl-9 md:pl-10 pr-3 py-2 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500"
                                         placeholder="Ej: 1234567890"
                                     />
+                                    {errors.identificacion && (<p className="text-red-500">identificacion es requerido</p>)}
+
                                 </div>
                             </div>
 
@@ -114,6 +109,8 @@ const SubirDocente = () => {
                                             className="w-full pl-9 md:pl-10 pr-3 py-2 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500"
                                             placeholder="Ej: PROF-001"
                                         />
+                                        {errors.Codigo && (<p className="text-red-500">codigo es requerido</p>)}
+
                                     </div>
                                     {/* Correo institucional */}
                                     <div className="relative">
@@ -129,6 +126,8 @@ const SubirDocente = () => {
                                             required
                                             placeholder="ejemplo@institucion.edu"
                                         />
+                                        {errors.email && <p className="text-red-500">email es requerido</p>}
+
                                     </div>
                                 </div>
                             </div>
@@ -152,6 +151,8 @@ const SubirDocente = () => {
                                         required
                                         placeholder="••••••••"
                                     />
+                                    {errors.contrasena && (<p className="text-red-500">contraseña es requerido</p>)}
+
                                 </div>
                             </div>
                             <select {...register('rol', { required: true })}>
@@ -159,14 +160,20 @@ const SubirDocente = () => {
                                 <option value="Docente">Docente</option>
                                 <option value="Administrador">Administrador</option>
                             </select>
+                            {errors.rol && (<p className="text-red-500">selecciones una opcion</p>)}
+
 
                             <select {...register('estado', { required: true })}>
                                 <option value="">Selecciona un estado</option>
                                 <option value="activo">Activo</option>
                                 <option value="inactivo">Inactivo</option>
                             </select>
+                            {errors.estado && (<p className="text-red-500">selecciones una opcion</p>)}
+
 
                             <input {...register('funcion', { required: true })} placeholder="Función que cumple" />
+                            {errors.funcion && (<p className="text-red-500">funcion es requerido</p>)}
+
 
                             {/* Botones de acción */}
                             <div className="flex justify-between pt-6 md:pt-8 border-t border-gray-200">

@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import Navbar from "../components/Navbar";
-import "./SubirSimulaciones.css";
-import MenuLateral from "../components/MenuAdmi_Doc"
+import MenuLateral from "../components/MenuAdmi_Doc";
 import { 
     FaFileUpload,
     FaAndroid,        // Icono de Android para APK
@@ -17,6 +15,7 @@ const SubirAPK = () => {
         nombre: '',
         descripcion: '',
         autores: '',
+        materia: '',
         fecha: '',
         apk: null,          // Archivo APK principal
         requisitos: null,   // Documento de requisitos
@@ -29,7 +28,6 @@ const SubirAPK = () => {
     };
 
     const handleFileChange = (tipo, files) => {
-        // Validar tipos de archivo
         const validaciones = {
             apk: file => file.type === 'application/vnd.android.package-archive',
             requisitos: file => file.type === 'application/pdf',
@@ -70,8 +68,8 @@ const SubirAPK = () => {
 
     return (
         <>
-            <Navbar loggedIn={true} />
-            <div className="flex h-screen bg-gray-50">
+            <div className="flex h-screen bg-gray-100">
+                {/* Menú Lateral */}
                 <MenuLateral rol="docente" />
                 
                 <div className="flex-1 p-4 overflow-auto">
@@ -130,6 +128,22 @@ const SubirAPK = () => {
                                         className="w-full px-3 py-1 text-sm border border-gray-300 rounded mb-3"
                                         required
                                     />
+
+                                    <div>
+                                        <label className="block text-xs font-medium text-gray-600 mb-1">Materia:</label>
+                                        <select
+                                            name="materia"
+                                            value={formData.materia}
+                                            onChange={handleChange}
+                                            className="w-full px-3 py-1 text-sm border border-gray-300 rounded"
+                                            required
+                                            >
+                                            <option value="">Seleccionar materia</option>
+                                            <option value="fisica">Física</option>
+                                            <option value="ingenieria_civil">Ingeniería Civil</option>
+                                            <option value="matematicas">Matemáticas</option>
+                                            </select>
+                                    </div>
                                     
                                     <h3 className="text-sm font-medium text-gray-700 mb-2">Archivos requeridos:</h3>
                                     <div className="grid grid-cols-3 gap-2">

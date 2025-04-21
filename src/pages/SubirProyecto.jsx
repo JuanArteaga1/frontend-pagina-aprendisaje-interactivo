@@ -1,110 +1,81 @@
 import React, { useState } from "react";
-import Navbar from "../components/Navbar";
 import MenuLateral from "../components/MenuAdmi_Doc";
+import { useForm } from "react-hook-form"
+import { UseProyectos } from "../context/ProyectoContext"
 
 function SubirProyecto() {
-  const [proyecto, setProyecto] = useState({
-    nombre: "",
-    descripcion: "",
-    autores: "",
-    fecha: "",
-    categoria: "",
-  });
 
-  const [archivos, setArchivos] = useState({
-    apk: null,
-    documentos: null,
-    avance: null,
-    imagenes: [],
-  });
-
-  const handleChange = (e) => {
-    setProyecto({ ...proyecto, [e.target.name]: e.target.value });
-  };
-
-  const handleFileUpload = (e, tipo) => {
-    const files = e.target.files;
-    if (files.length > 0) {
-      if (tipo === "imagenes") {
-        setArchivos({
-          ...archivos,
-          imagenes: [...archivos.imagenes, files[0]],
-        });
-      } else {
-        setArchivos({
-          ...archivos,
-          [tipo]: files[0],
-        });
-      }
-    }
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (
-      !proyecto.nombre ||
-      !proyecto.descripcion ||
-      !proyecto.autores ||
-      !proyecto.fecha ||
-      !proyecto.categoria
-    ) {
-      alert("Por favor, complete todos los campos requeridos.");
-      return;
-    }
-    console.log("Proyecto enviado:", proyecto);
-    console.log("Archivos subidos:", archivos);
-  };
+    const { register, handleSubmit, formState: { errors }, reset } = useForm();
+    const { sigout, Proyectos, errors: ProyectosErrors, mensaje } = UseProyectos()
+    const [registroExitoso, setRegistroExitoso] = useState(false);
 
   return (
-    <>
-      <Navbar loggedIn={true} />
-      <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-gray-100">
+      {/* Menú Lateral */}
         <MenuLateral rol="docente" />
-        
-        <div className="flex-1 p-8 ml-64">
+
+        <main className="flex-1 p-8 overflow-y-auto">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-bold text-gray-800 mb-8">Subir Proyecto</h2>
             
-            <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-lg shadow-md">
+            {ProyectosErrors.map((error, i) => (
+                            <Alerta key={i} tipo="error" mensaje={error.msg} />
+                        ))}
+                        {mensaje && (
+                            <Alerta tipo="exito" mensaje={mensaje} />
+                            
+                        )}
+
+            <form onSubmit={handleSubmit(async (values) => {
+                            const resultado = await sigout(values);
+                            if (resultado?.success) {
+                              setRegistroExitoso(true);
+                               // ✅ Limpiar campos
+                          }
+                        })}
+            className="space-y-6 bg-white p-6 rounded-lg shadow-md">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Nombre del proyecto</label>
                   <input
+                  {...register('nombre_proyecto', { required: true })}
                     type="text"
-                    name="nombre"
-                    onChange={handleChange}
+                    name="nombre_proyecto"
                     required
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   />
+                  {errors.nombre_proyecto && (<p className="text-red-500">Nombre es requerido</p>)}
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Autores</label>
                   <input
+                  {...register('autores', { required: true })}
                     type="text"
                     name="autores"
-                    onChange={handleChange}
                     required
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   />
+                  {errors.autores && (<p className="text-red-500">Autor es requerido</p>)}
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Fecha de realización</label>
                   <input
+                  {...register('fechaPublicacion', { required: true })}
                     type="date"
-                    name="fecha"
-                    onChange={handleChange}
+                    name="fechaPublicacion"
                     required
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   />
+                  {errors.fechaPublicacion && (<p className="text-red-500">La fecha es requerida</p>)}
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
                   <select
-                    name="categoria"
-                    onChange={handleChange}
+                  {...register('categoriaId', { required: true })}
+                    name="categoriaId"
                     required
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   >
@@ -113,71 +84,60 @@ function SubirProyecto() {
                     <option value="hardware">Cálculo</option>
                     <option value="investigacion">Investigación</option>
                   </select>
+                  {errors.categoriaId && (<p className="text-red-500">Categoria es requerida</p>)}
                 </div>
 
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
                   <textarea
+                  {...register('descripcion', { required: true })}
                     name="descripcion"
-                    onChange={handleChange}
                     required
                     rows="4"
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   />
+                  {errors.descripcion && (<p className="text-red-500">Descripcion es requerida</p>)}
                 </div>
+              </div>
+
+              {/* 🔧 Campo Materia (nuevo y funcional) */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Materia</label>
+                  <select
+                    {...register('materia', { required: true })}
+                    name="materia"
+                    required
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    <option value="">Seleccionar materia</option>
+                    <option value="fisica">Física</option>
+                    <option value="ingenieria_civil">Ingeniería Civil</option>
+                    <option value="matematicas">Matemáticas</option>
+                </select>
+                {errors.materia && (<p className="text-red-500">Materia es requerida</p>)}
               </div>
 
               <div className="space-y-4">
                 <h3 className="text-lg font-medium text-gray-900">Cargar Archivos</h3>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   <label className="flex flex-col items-center justify-center h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
-                    <input
-                      type="file"
-                      onChange={(e) => handleFileUpload(e, "apk")}
-                      className="hidden"
-                    />
+                    <input type="file" className="hidden" />
                     <span className="text-3xl">🪷</span>
                     <span className="text-sm text-gray-600 mt-1">Subir imagen</span>
                   </label>
 
-
                   <label className="flex flex-col items-center justify-center h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
-                    <input
-                      type="file"
-                      onChange={(e) => handleFileUpload(e, "avance")}
-                      className="hidden"
-                    />
+                    <input type="file" className="hidden" />
                     <span className="text-3xl">📈</span>
                     <span className="text-sm text-gray-600 mt-1">Investigación</span>
                   </label>
 
                   <label className="flex flex-col items-center justify-center h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
-                    <input
-                      type="file"
-                      onChange={(e) => handleFileUpload(e, "imagenes")}
-                      className="hidden"
-                    />
+                    <input type="file"className="hidden" />
                     <span className="text-3xl">📄</span>
                     <span className="text-sm text-gray-600 mt-1">Artículo</span>
                   </label>
                 </div>
-
-                {archivos.imagenes.length > 0 && (
-                  <div className="mt-4">
-                    <h4 className="text-sm font-medium text-gray-700 mb-2">Vista previa de archivos:</h4>
-                    <div className="flex flex-wrap gap-4">
-                      {archivos.imagenes.map((file, index) => (
-                        <img
-                          key={index}
-                          src={URL.createObjectURL(file)}
-                          alt={`Imagen ${index + 1}`}
-                          className="max-w-xs h-32 object-cover rounded-lg shadow-sm"
-                        />
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
 
               <button
@@ -188,9 +148,8 @@ function SubirProyecto() {
               </button>
             </form>
           </div>
-        </div>
-      </div>
-    </>
+        </main>
+    </div>
   );
 }
 

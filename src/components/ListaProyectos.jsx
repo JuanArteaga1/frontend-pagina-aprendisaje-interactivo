@@ -10,10 +10,6 @@ const ListaProyectos = ({ proyectos }) => {
     return (
         <div className="contenido-proyectos">
             <div className="contenedor-ordenamiento-proyectos">
-                <div className="ordenamiento">
-                    <button className="ordenar-btn">Ordenar por: ▼</button>
-                </div>
-
                 <div className="categorias">
                     {Object.keys(proyectos).map((categoria) => (
                         <div className="categoria" key={categoria}>
