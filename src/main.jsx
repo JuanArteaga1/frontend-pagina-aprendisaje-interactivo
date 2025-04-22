@@ -73,8 +73,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
 
       //rutas de carga de elementos
-      <Route path="/subirsimulaciones" element={<InvestigacionProvider><SubirProyecto /></InvestigacionProvider>} />
-      <Route path="/SubirInvestigaciones" element={<SubirInvestigaciones />} />
+      <Route path="/subirsimulaciones" element={<Subirsimulaciones />} />
+      <Route path="/SubirInvestigaciones" element={<InvestigacionProvider><SubirInvestigaciones /></InvestigacionProvider>} />
       <Route path="/subirpodcast" element={<h1>podcast</h1>} />
 
       //Rutas de las categorias de HOME
