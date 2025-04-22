@@ -16,7 +16,7 @@ const MenuAdministrador = ({ rol }) => {
     ],
     docente: [
       { nombre: "Inicio", ruta: "/", icono: "🏠" },
-      { nombre: "Nuevo proyecto", ruta: "/subir-proyecto", icono: "➕" },
+      { nombre: "Subir proyectos", ruta: "/subir-proyecto", icono: "➕" },
       { nombre: "Investigaciones", ruta: "/SubirInvestigaciones", icono: "📝" },
       { nombre: "Podcasts", ruta: "/subir-podcast", icono: "🎙️" },
       { nombre: "Simulaciones", ruta: "/subirsimulaciones", icono: "🖥️" },

@@ -15,7 +15,7 @@ function MenuDocen() {
       {/* Contenido Principal */}
       <main className="flex-1 ml-64 p-8 overflow-y-auto">
         {/* Sección de Bienvenida */}
-        <div className="text-center mb-12">
+        <div className="text-center mt-24 mb-12">
           {/* Título principal con efecto de gradiente */}
           <div className="relative inline-block mb-6">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent">
