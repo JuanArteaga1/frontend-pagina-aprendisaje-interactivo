@@ -137,12 +137,12 @@ const SubirAPK = () => {
                                             onChange={handleChange}
                                             className="w-full px-3 py-1 text-sm border border-gray-300 rounded"
                                             required
-                                            >
+                                        >
                                             <option value="">Seleccionar materia</option>
                                             <option value="fisica">Física</option>
                                             <option value="ingenieria_civil">Ingeniería Civil</option>
                                             <option value="matematicas">Matemáticas</option>
-                                            </select>
+                                        </select>
                                     </div>
                                     
                                     <h3 className="text-sm font-medium text-gray-700 mb-2">Archivos requeridos:</h3>
@@ -152,6 +152,7 @@ const SubirAPK = () => {
                                             <FaAndroid className="text-green-500 text-xl mb-1" />
                                             <span className="text-xs text-center">APK Principal</span>
                                             <input 
+                                                name="apk"
                                                 type="file" 
                                                 className="hidden" 
                                                 accept=".apk"
@@ -176,6 +177,7 @@ const SubirAPK = () => {
                                             <FaFileCode className="text-blue-500 text-xl mb-1" />
                                             <span className="text-xs text-center">Requisitos (PDF)</span>
                                             <input 
+                                                name="requisitos"
                                                 type="file" 
                                                 className="hidden" 
                                                 accept=".pdf"
@@ -200,6 +202,7 @@ const SubirAPK = () => {
                                             <FaImage className="text-purple-500 text-xl mb-1" />
                                             <span className="text-xs text-center">Capturas</span>
                                             <input 
+                                                name="capturas"
                                                 type="file" 
                                                 className="hidden" 
                                                 accept="image/*"
@@ -257,4 +260,5 @@ const SubirAPK = () => {
         </>
     );
 };
+
 export default SubirAPK;
