@@ -1,53 +1,38 @@
-import React, { useState } from "react";
+import React from "react";
 import MenuLateral from "../components/MenuAdmi_Doc";
-import { useForm } from "react-hook-form"
+import { useForm } from "react-hook-form";
 import { usePodcast } from "../context/PodcastContext";
 
 function SubirPodcast() {
+  const { register, handleSubmit, watch, setValue } = useForm();
+  const { sigout } = usePodcast(); // Si tienes esta función en contexto
 
-  const [podcast, setPodcast] = useState({
-    titulo: "",
-    descripcion: "",
-    autor: "",
-    fecha: "",
-    categoria: "",
-    materia: "",
-  });
+  const portadaPreview = watch("portada")?.[0];
 
-  const [archivos, setArchivos] = useState({
-    audio: null,
-    portada: null,
-  });
+  const onSubmit = async (data) => {
+    const formData = new FormData();
 
-  const handleChange = (e) => {
-    setPodcast({ ...podcast, [e.target.name]: e.target.value });
-  };
+    // Agregar datos del formulario
+    formData.append("titulo", data.titulo);
+    formData.append("descripcion", data.descripcion);
+    formData.append("autores", data.autores); // cambiar "autor" → "autores"
+    formData.append("fechaPublicacion", data.fecha); // cambiar "fecha" → "fechaPublicacion"
+    formData.append("materia", data.materia);
+    formData.append("UrlAudio", data.audioLink); // cambiar "audioLink" → "UrlAudio"
+    formData.append("portada", data.portada[0]);
+    const respuesta = await sigout(formData)
 
-  const handleFileUpload = (e, tipo) => {
-    const file = e.target.files[0];
-    if (file) {
-      setArchivos({ ...archivos, [tipo]: file });
-    }
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!podcast.titulo || !podcast.descripcion || !podcast.autor || !podcast.fecha || !podcast.categoria) {
-      alert("Por favor, complete todos los campos requeridos.");
-      return;
-    }
-    console.log("Podcast enviado:", podcast);
-    console.log("Archivos subidos:", archivos);
+    // Enviar al contexto o API
+    console.log("Enviando podcast:", Object.fromEntries(formData));
+    // crearPodcast(formData); // Si ya tienes esta función
   };
 
   return (
     <div className="flex h-screen bg-gray-100 overflow-hidden">
-      {/* Menú Lateral Fijo */}
       <div className="fixed h-full w-64 bg-white shadow-lg z-10">
         <MenuLateral rol="docente" />
       </div>
 
-      {/* Contenido Principal Desplazable */}
       <div className="flex-1 ml-64 overflow-y-auto">
         <div className="p-8">
           <div className="max-w-2xl mx-auto">
@@ -58,28 +43,26 @@ function SubirPodcast() {
               <p className="text-gray-500">Comparte tu contenido auditivo con la comunidad</p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6 bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
-              {/* Sección de información básica */}
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="space-y-6 bg-white p-8 rounded-2xl shadow-xl border border-gray-100"
+            >
               <div className="space-y-6">
                 <div className="space-y-2">
                   <label className="block text-sm font-semibold text-gray-700">Título del Podcast</label>
                   <input
                     type="text"
-                    name="titulo"
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all placeholder-gray-400"
-                    placeholder="Ej: La revolución de la inteligencia artificial"
+                    {...register("titulo", { required: true })}
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
+                    placeholder="Ej: La revolución de la IA"
                   />
                 </div>
 
                 <div className="space-y-2">
                   <label className="block text-sm font-semibold text-gray-700">Descripción</label>
                   <textarea
-                    name="descripcion"
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 h-40 transition-all placeholder-gray-400"
+                    {...register("descripcion", { required: true })}
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl h-40"
                     placeholder="Describe el contenido de tu podcast..."
                   />
                 </div>
@@ -89,10 +72,8 @@ function SubirPodcast() {
                     <label className="block text-sm font-semibold text-gray-700">Autor</label>
                     <input
                       type="text"
-                      name="autor"
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all placeholder-gray-400"
+                      {...register("autores", { required: true })}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
                       placeholder="Nombre del autor"
                     />
                   </div>
@@ -101,10 +82,8 @@ function SubirPodcast() {
                     <label className="block text-sm font-semibold text-gray-700">Fecha de Publicación</label>
                     <input
                       type="date"
-                      name="fecha"
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all"
+                      {...register("fecha", { required: true })}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
                     />
                   </div>
                 </div>
@@ -112,10 +91,8 @@ function SubirPodcast() {
                 <div className="space-y-2">
                   <label className="block text-sm font-semibold text-gray-700">Categoría</label>
                   <select
-                    name="categoria"
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all appearance-none"
+                    {...register("categoria", { required: true })}
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
                   >
                     <option value="">Selecciona una categoría</option>
                     <option value="tecnologia">Tecnología</option>
@@ -124,40 +101,32 @@ function SubirPodcast() {
                     <option value="negocios">Negocios</option>
                   </select>
                 </div>
-              </div>
 
-              <div className="space-y-2">
-                <label className="block text-sm font-semibold text-gray-700">Materia</label>
-                <select
-                  name="materia"
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all appearance-none"
+                <div className="space-y-2">
+                  <label className="block text-sm font-semibold text-gray-700">Materia</label>
+                  <select
+                    {...register("materia", { required: true })}
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
                   >
-                  <option value="">Seleccionar materia</option>
-                  <option value="fisica">Física</option>
-                  <option value="ingenieria_civil">Ingeniería Civil</option>
-                  <option value="matematicas">Matemáticas</option>
+                    <option value="">Seleccionar materia</option>
+                    <option value="fisica">Física</option>
+                    <option value="ingenieria_civil">Ingeniería Civil</option>
+                    <option value="matematicas">Matemáticas</option>
                   </select>
                 </div>
 
-              {/* Sección de archivos */}
-              <div className="space-y-6">
-                <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">Cargar Archivos</h3>
+                <div className="space-y-6">
+                  <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">Cargar Archivos</h3>
 
-                <div className="space-y-4">
                   <div className="space-y-2">
                     <label className="block text-sm font-semibold text-gray-700">Link del Audio</label>
                     <input
                       type="url"
-                      name="audioLink"
-                      onChange={(e) => setArchivos({ ...archivos, audio: e.target.value })}
-                      required
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all placeholder-gray-400"
+                      {...register("audioLink", { required: true })}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
                       placeholder="https://ejemplo.com/audio.mp3"
                     />
                   </div>
-
 
                   <div className="space-y-2">
                     <label className="block text-sm font-semibold text-gray-700">Subir Portada</label>
@@ -165,25 +134,23 @@ function SubirPodcast() {
                       <input
                         type="file"
                         accept="image/*"
+                        {...register("portada", { required: true })}
                         className="hidden"
-                        onChange={(e) => handleFileUpload(e, "portada")}
                       />
-                      <div className="text-4xl mb-3 text-gray-400 group-hover:text-indigo-500">
-                        🖼️
-                      </div>
+                      <div className="text-4xl mb-3 text-gray-400 group-hover:text-indigo-500">🖼️</div>
                       <p className="text-center text-sm text-gray-500">
-                        {archivos.portada
-                          ? <span className="text-indigo-600 font-semibold">{archivos.portada.name}</span>
+                        {portadaPreview
+                          ? <span className="text-indigo-600 font-semibold">{portadaPreview.name}</span>
                           : "Haz clic para subir la imagen de portada"}
                       </p>
                     </label>
                   </div>
 
-                  {archivos.portada && (
+                  {portadaPreview && (
                     <div className="mt-4">
                       <h4 className="text-sm font-semibold text-gray-700 mb-2">Vista previa de la portada:</h4>
                       <img
-                        src={URL.createObjectURL(archivos.portada)}
+                        src={URL.createObjectURL(portadaPreview)}
                         alt="Portada"
                         className="max-w-xs rounded-xl shadow-md border-2 border-gray-100"
                       />
