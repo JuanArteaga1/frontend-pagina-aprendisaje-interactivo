@@ -4,7 +4,7 @@ import imagenlogin from "../img/logou.png";
 import { useLogin } from "../context/LoginContext"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
-
+import { Eye, EyeOff } from "lucide-react"; // Íconos para el campo de contraseña
 
 const Login = () => {
   const [loggedIn] = useState(false);
@@ -14,6 +14,8 @@ const Login = () => {
   const { signin, Usuario, isAutheticated, errors: LoginErrors } = useLogin()
   console.log(LoginErrors)
   const navigate = useNavigate()
+  const [showPassword, setShowPassword] = useState(false);
+
 
 
   useEffect(() => {
@@ -35,53 +37,85 @@ const Login = () => {
   });
   return (
     <>
-      <Navbar loggedIn={loggedIn} />
-      
-      <div className="login-page">
-        <div className="login-container">
-        {
-        LoginErrors.map((error, i) => (
-          <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-blue-500 dark:text-red-50" role="alert">
-            {error}
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="w-full max-w-md p-8 bg-white rounded shadow-md">
+
+          {LoginErrors.map((error, i) => (
+            <div key={i} className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50">
+              {error}
+            </div>
+          ))}
+
+          <div className="flex justify-center mb-6">
+            <img src={imagenlogin} alt="Logo" className="h-24" />
           </div>
-        ))
-      }
-          <img src={imagenlogin} alt="Logo" className="login-logo" />
-          <h2 className="login-title">Iniciar Sesión</h2>
 
-          <form onSubmit={onSubmit} className="space-y-4 md:space-y-6">
-            <label className="login-label">Correo Electrónico:</label>
-            <input
-              type="email"
-              {...register('email', { required: true })}
-              className="login-input"
-              placeholder="ejemplo@correo.com"
-            />
-            {errors.email && (
-              <p className="text-red-500 text-sm">INGRESE CORREO</p>
-            )}
+          <form onSubmit={onSubmit} className="space-y-4">
+            <div>
+              <input
+                type="email"
+                {...register('email', { required: true })}
+                className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="ejemplo@correo.com"
+              />
+              {errors.email && (
+                <p className="text-red-500 text-sm mt-1">INGRESE CORREO</p>
+              )}
+            </div>
 
-            <label className="login-label">Contraseña:</label>
-            <input
-              type="password"
-              {...register('contrasena', { required: true })}
-              className="login-input"
-              placeholder="********"
-            />
-            {errors.contrasena && (
-              <p className="text-red-500 text-sm">INGRESE CONTRASEÑA</p>
-            )}
+            <div>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  {...register('contrasena', { required: true })}
+                  className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="**********"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-2.5 text-gray-500"
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
+              {errors.contrasena && (
+                <p className="text-red-500 text-sm mt-1">INGRESE CONTRASEÑA</p>
+              )}
+            </div>
 
-            <button type="submit" className="login-button">
+
+            <button
+              type="submit"
+              className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-colors"
+            >
               Acceder
             </button>
           </form>
-          
 
+          <div className="mt-4 text-center">
+            <a href="#" className="text-blue-600 hover:underline text-sm">¿Olvidó su contraseña?</a>
+          </div>
 
-          <a href="#" className="login-forgot">¿Recuperar contraseña?</a>
+          <hr className="my-6 border-gray-300 opacity-90" />
+
+          <div className="text-center">
+            <p className="text-sm text-gray-600 mb-2">Identifíquese usando su cuenta en:</p>
+            <button
+              type="button"
+              className="flex items-center justify-center w-full px-4 py-2 border border-gray-300 rounded hover:bg-gray-100"
+            >
+              <img
+                src="https://www.svgrepo.com/show/475656/google-color.svg"
+                alt="Google"
+                className="w-5 h-5 mr-2"
+              />
+              Google
+            </button>
+          </div>
         </div>
       </div>
+
     </>
   );
 };
