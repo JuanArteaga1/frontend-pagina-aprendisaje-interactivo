@@ -27,6 +27,9 @@ function SubirProyecto() {
                         )}
 
             <form onSubmit={handleSubmit(async (values) => {
+                            const formData = new FormData()
+
+
                             const resultado = await sigout(values);
                             if (resultado?.success) {
                               setRegistroExitoso(true);
@@ -121,21 +124,52 @@ function SubirProyecto() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   <label className="flex flex-col items-center justify-center h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
-                    <input type="file" className="hidden" />
+                    <input 
+                      type="file" 
+                      className="hidden" 
+                      accept="image/*"
+                      {...register('urlArchivoapk', {
+                        requerido: 'imagen',
+                        validar: {
+                            tamaño: (archivos) => archivos[0]?.size <= MAX_SIZE || 'Audio supera los 10MB',
+                        },
+                        
+                    })}
+                    
+                      
+                      />
                     <span className="text-3xl">🪷</span>
-                    <span className="text-sm text-gray-600 mt-1">Subir imagen</span>
+                    <span className="text-sm text-gray-600 mt-1">Subir Img</span>
                   </label>
 
                   <label className="flex flex-col items-center justify-center h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
                     <input type="file" className="hidden" />
                     <span className="text-3xl">📈</span>
-                    <span className="text-sm text-gray-600 mt-1">Investigación</span>
+                    <span className="text-sm text-gray-600 mt-1">Subir apk</span>
                   </label>
 
                   <label className="flex flex-col items-center justify-center h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
-                    <input type="file"className="hidden" />
+                    <input type="file"className="hidden"
+                    Accept="image/*"
+                    {...register('urlDoc', {
+                      requerido: 'imagen',
+                      validar: {
+                          tamaño: (archivos) => archivos[0]?.size <= MAX_SIZE || 'Audio supera los 10MB',
+                      },
+                      
+                  })} /> 
+
+<                  input type="file"className="hidden"
+                    Accept="image/*"
+                    {...register('urlimg', {
+                      requerido: 'imagen',
+                      validar: {
+                          tamaño: (archivos) => archivos[0]?.size <= MAX_SIZE || 'Audio supera los 10MB',
+                      },
+                      
+                  })} /> 
                     <span className="text-3xl">📄</span>
-                    <span className="text-sm text-gray-600 mt-1">Artículo</span>
+                    <span className="text-sm text-gray-600 mt-1">Subir PDF</span>
                   </label>
                 </div>
               </div>
