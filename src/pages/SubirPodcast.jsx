@@ -37,10 +37,9 @@ function SubirPodcast() {
         <div className="p-8">
           <div className="max-w-2xl mx-auto">
             <div className="mb-8 text-center">
-              <h2 className="text-3xl font-bold text-gray-800 mb-2 bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-600">
+              <h2 className="text-3xl font-bold text-gray-800 mb-2">
                 Subir Nuevo Podcast
               </h2>
-              <p className="text-gray-500">Comparte tu contenido auditivo con la comunidad</p>
             </div>
 
             <form
@@ -49,7 +48,7 @@ function SubirPodcast() {
             >
               <div className="space-y-6">
                 <div className="space-y-2">
-                  <label className="block text-sm font-semibold text-gray-700">Título del Podcast</label>
+                  <label className="block text-3x1 font-semibold text-gray-800">Título del Podcast</label>
                   <input
                     type="text"
                     {...register("titulo", { required: true })}
@@ -59,7 +58,7 @@ function SubirPodcast() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="block text-sm font-semibold text-gray-700">Descripción</label>
+                  <label className="block text-3x1 font-semibold text-gray-800">Descripción</label>
                   <textarea
                     {...register("descripcion", { required: true })}
                     className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl h-40"
@@ -69,7 +68,7 @@ function SubirPodcast() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="block text-sm font-semibold text-gray-700">Autor</label>
+                    <label className="block text-3x1 font-semibold text-gray-800">Autor</label>
                     <input
                       type="text"
                       {...register("autores", { required: true })}
@@ -79,7 +78,7 @@ function SubirPodcast() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="block text-sm font-semibold text-gray-700">Fecha de Publicación</label>
+                    <label className="block text-3x1 font-semibold text-gray-800">Fecha de Publicación</label>
                     <input
                       type="date"
                       {...register("fecha", { required: true })}
@@ -89,7 +88,7 @@ function SubirPodcast() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="block text-sm font-semibold text-gray-700">Categoría</label>
+                  <label className="block text-3x1 font-semibold text-gray-800">Categoría</label>
                   <select
                     {...register("categoria", { required: true })}
                     className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
@@ -103,7 +102,7 @@ function SubirPodcast() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="block text-sm font-semibold text-gray-700">Materia</label>
+                  <label className="block text-3x1 font-semibold text-gray-800">Materia</label>
                   <select
                     {...register("materia", { required: true })}
                     className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
@@ -116,10 +115,10 @@ function SubirPodcast() {
                 </div>
 
                 <div className="space-y-6">
-                  <h3 className="text-lg font-semibold text-gray-800 border-b pb-2">Cargar Archivos</h3>
+                <h3 className="text-lg font-semibold text-gray-800 border-b border-gray-300 border-opacity-40 pb-2">Cargar Archivos</h3>
 
                   <div className="space-y-2">
-                    <label className="block text-sm font-semibold text-gray-700">Link del Audio</label>
+                    <label className="block text-3x1 font-semibold text-gray-800">Link del Audio</label>
                     <input
                       type="url"
                       {...register("audioLink", { required: true })}
@@ -129,7 +128,7 @@ function SubirPodcast() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="block text-sm font-semibold text-gray-700">Subir Portada</label>
+                    <label className="block text-3x1 font-semibold text-gray-800">Subir Portada</label>
                     <label className="flex flex-col items-center justify-center border-2 border-dashed border-gray-200 rounded-xl p-6 cursor-pointer hover:border-indigo-500 bg-gray-50 hover:bg-indigo-50 transition-colors group">
                       <input
                         type="file"
@@ -148,7 +147,7 @@ function SubirPodcast() {
 
                   {portadaPreview && (
                     <div className="mt-4">
-                      <h4 className="text-sm font-semibold text-gray-700 mb-2">Vista previa de la portada:</h4>
+                      <h4 className="text-sm font-semibold text-gray-800 mb-2">Vista previa de la portada:</h4>
                       <img
                         src={URL.createObjectURL(portadaPreview)}
                         alt="Portada"

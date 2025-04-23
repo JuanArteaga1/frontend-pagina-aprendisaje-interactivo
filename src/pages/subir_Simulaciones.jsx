@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import MenuLateral from "../components/MenuAdmi_Doc";
-import { 
+import {
     FaFileUpload,
     FaAndroid,        // Icono de Android para APK
     FaFileCode,       // Icono para archivos de código
@@ -35,7 +35,7 @@ const SubirAPK = () => {
         };
 
         const archivosValidos = Array.from(files).filter(validaciones[tipo]);
-        
+
         if (archivosValidos.length === 0) {
             alert(`Formato no válido para ${tipo}`);
             return;
@@ -71,152 +71,154 @@ const SubirAPK = () => {
             <div className="flex h-screen bg-gray-100">
                 {/* Menú Lateral */}
                 <MenuLateral rol="docente" />
-                
+
                 <div className="flex-1 p-4 overflow-auto">
-                    <div className="max-w-md mx-auto">
-                        <div className="bg-white p-3 rounded shadow mb-4">
-                            <h2 className="text-md font-semibold text-gray-800 mb-2">APLICACIONES ANDROID</h2>
-                            <h3 className="text-sm font-medium text-green-600 mb-3">SUBIR APK</h3>
-                            
-                            <form onSubmit={handleSubmit} className="space-y-3">
+                    <div className="max-w-xl mx-auto">
+                        {/* TÍTULO FUERA DEL CONTENEDOR */}
+                        <h2 className="text-3xl font-bold text-gray-800 mt-4 mb-4">Subir Aplicación</h2>
+
+                        <div className="bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
+                            {/*<h3 className="text-sm font-medium text-green-600 mb-3">Subir APK</h3>*/}
+
+                            <form onSubmit={handleSubmit} className="space-y-3 ">
                                 <div>
-                                    <label className="block text-xs font-medium text-gray-600 mb-1">Nombre del APK:</label>
+                                    <label className="block text-3x1 font-semibold text-gray-800 mb-1">Nombre del APK</label>
                                     <input
                                         type="text"
                                         name="nombre"
                                         value={formData.nombre}
                                         onChange={handleChange}
-                                        className="w-full px-3 py-1 text-sm border border-gray-300 rounded"
+                                        className="w-full px-4 py-2 text-medium border-2 border-gray-200 rounded-xl"
                                         placeholder="Ej: MiAplicación v1.0"
                                         required
                                     />
                                 </div>
-                                
+
                                 <div>
-                                    <label className="block text-xs font-medium text-gray-600 mb-1">Descripción técnica:</label>
+                                    <label className="block text-3x1 font-semibold text-gray-800 mb-1">Descripción técnica</label>
                                     <textarea
                                         name="descripcion"
                                         value={formData.descripcion}
                                         onChange={handleChange}
-                                        className="w-full px-3 py-1 text-sm border border-gray-300 rounded"
+                                        className="w-full px-4 py-2 text-medium border-2 border-gray-200 rounded-xl"
                                         rows="2"
                                         placeholder="Especificaciones técnicas requeridas"
                                         required
                                     ></textarea>
                                 </div>
-                                
+
                                 <div>
-                                    <label className="block text-xs font-medium text-gray-600 mb-1">Desarrolladores:</label>
+                                    <label className="block text-3x1 font-semibold text-gray-800 mb-1">Desarrolladores</label>
                                     <input
                                         type="text"
                                         name="autores"
                                         value={formData.autores}
                                         onChange={handleChange}
-                                        className="w-full px-3 py-1 text-sm border border-gray-300 rounded"
+                                        className="w-full  px-4 py-2 text-medium border-2 border-gray-200 rounded-xl"
                                         placeholder="Equipo de desarrollo"
                                         required
                                     />
                                 </div>
 
-                                <div className="bg-white p-3 rounded shadow mb-4">
-                                    <h3 className="text-sm font-medium text-gray-700 mb-2">Fecha de compilación:</h3>
-                                    <input
-                                        type="date"
-                                        name="fecha"
-                                        value={formData.fecha}
-                                        onChange={handleChange}
-                                        className="w-full px-3 py-1 text-sm border border-gray-300 rounded mb-3"
-                                        required
-                                    />
 
-                                    <div>
-                                        <label className="block text-xs font-medium text-gray-600 mb-1">Materia:</label>
-                                        <select
-                                            name="materia"
-                                            value={formData.materia}
-                                            onChange={handleChange}
-                                            className="w-full px-3 py-1 text-sm border border-gray-300 rounded"
-                                            required
-                                        >
-                                            <option value="">Seleccionar materia</option>
-                                            <option value="fisica">Física</option>
-                                            <option value="ingenieria_civil">Ingeniería Civil</option>
-                                            <option value="matematicas">Matemáticas</option>
-                                        </select>
-                                    </div>
-                                    
-                                    <h3 className="text-sm font-medium text-gray-700 mb-2">Archivos requeridos:</h3>
-                                    <div className="grid grid-cols-3 gap-2">
-                                        {/* APK Principal */}
-                                        <label className="flex flex-col items-center p-2 border border-gray-300 rounded cursor-pointer hover:bg-gray-50">
-                                            <FaAndroid className="text-green-500 text-xl mb-1" />
-                                            <span className="text-xs text-center">APK Principal</span>
-                                            <input 
-                                                name="apk"
-                                                type="file" 
-                                                className="hidden" 
-                                                accept=".apk"
-                                                onChange={(e) => handleFileChange('apk', e.target.files)}
-                                            />
-                                            {formData.apk && (
-                                                <div className="text-xs mt-1 text-green-600">
-                                                    {formData.apk.name}
-                                                    <button 
-                                                        type="button" 
-                                                        onClick={() => removeFile('apk')}
-                                                        className="ml-1 text-red-500"
-                                                    >
-                                                        ×
-                                                    </button>
-                                                </div>
-                                            )}
-                                        </label>
-                                        
-                                        {/* Requisitos */}
-                                        <label className="flex flex-col items-center p-2 border border-gray-300 rounded cursor-pointer hover:bg-gray-50">
-                                            <FaFileCode className="text-blue-500 text-xl mb-1" />
-                                            <span className="text-xs text-center">Requisitos (PDF)</span>
-                                            <input 
-                                                name="requisitos"
-                                                type="file" 
-                                                className="hidden" 
-                                                accept=".pdf"
-                                                onChange={(e) => handleFileChange('requisitos', e.target.files)}
-                                            />
-                                            {formData.requisitos && (
-                                                <div className="text-xs mt-1 text-blue-600">
-                                                    {formData.requisitos.name}
-                                                    <button 
-                                                        type="button" 
-                                                        onClick={() => removeFile('requisitos')}
-                                                        className="ml-1 text-red-500"
-                                                    >
-                                                        ×
-                                                    </button>
-                                                </div>
-                                            )}
-                                        </label>
-                                        
-                                        {/* Capturas */}
-                                        <label className="flex flex-col items-center p-2 border border-gray-300 rounded cursor-pointer hover:bg-gray-50">
-                                            <FaImage className="text-purple-500 text-xl mb-1" />
-                                            <span className="text-xs text-center">Capturas</span>
-                                            <input 
-                                                name="capturas"
-                                                type="file" 
-                                                className="hidden" 
-                                                accept="image/*"
-                                                multiple
-                                                onChange={(e) => handleFileChange('capturas', e.target.files)}
-                                            />
-                                            {formData.capturas.length > 0 && (
-                                                <div className="text-xs mt-1 text-purple-600">
-                                                    {formData.capturas.length} imágenes
-                                                </div>
-                                            )}
-                                        </label>
-                                    </div>
+                                <h3 className="text-3x1 font-semibold text-gray-800 mb-2">Fecha de compilación</h3>
+                                <input
+                                    type="date"
+                                    name="fecha"
+                                    value={formData.fecha}
+                                    onChange={handleChange}
+                                    className="w-full px-4 py-2 text-medium border-2 border-gray-200 rounded-xl"
+                                    required
+                                />
+
+                                <div>
+                                    <label className="block text-3x1 font-semibold text-gray-800 mb-1">Materia</label>
+                                    <select
+                                        name="materia"
+                                        value={formData.materia}
+                                        onChange={handleChange}
+                                        className="w-full px-4 py-2 text-medium border-2 border-gray-200 rounded-xl"
+                                        required
+                                    >
+                                        <option value="">Seleccionar materia</option>
+                                        <option value="fisica">Física</option>
+                                        <option value="ingenieria_civil">Ingeniería Civil</option>
+                                        <option value="matematicas">Matemáticas</option>
+                                    </select>
                                 </div>
+
+                                <h3 className="text-3x1 font-semibold text-gray-800 mb-2">Archivos requeridos</h3>
+                                <div className="grid grid-cols-3 gap-2">
+                                    {/* APK Principal */}
+                                    <label className="flex flex-col items-center p-2 border-2 border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50">
+                                        <FaAndroid className="text-green-500 text-xl mb-1" />
+                                        <span className="text-3x1 text-center">APK Principal</span>
+                                        <input
+                                            name="apk"
+                                            type="file"
+                                            className="hidden"
+                                            accept=".apk"
+                                            onChange={(e) => handleFileChange('apk', e.target.files)}
+                                        />
+                                        {formData.apk && (
+                                            <div className="text-3x1 mt-1 text-green-600">
+                                                {formData.apk.name}
+                                                <button
+                                                    type="button"
+                                                    onClick={() => removeFile('apk')}
+                                                    className="ml-1 text-red-500"
+                                                >
+                                                    ×
+                                                </button>
+                                            </div>
+                                        )}
+                                    </label>
+
+                                    {/* Requisitos */}
+                                    <label className="flex flex-col items-center p-2 border border-gray-300 rounded cursor-pointer hover:bg-gray-50">
+                                        <FaFileCode className="text-blue-500 text-xl mb-1" />
+                                        <span className="text-3x1 text-center">Requisitos (PDF)</span>
+                                        <input
+                                            name="requisitos"
+                                            type="file"
+                                            className="hidden"
+                                            accept=".pdf"
+                                            onChange={(e) => handleFileChange('requisitos', e.target.files)}
+                                        />
+                                        {formData.requisitos && (
+                                            <div className="text-xs mt-1 text-blue-600">
+                                                {formData.requisitos.name}
+                                                <button
+                                                    type="button"
+                                                    onClick={() => removeFile('requisitos')}
+                                                    className="ml-1 text-red-500"
+                                                >
+                                                    ×
+                                                </button>
+                                            </div>
+                                        )}
+                                    </label>
+
+                                    {/* Capturas */}
+                                    <label className="flex flex-col items-center p-2 border border-gray-300 rounded cursor-pointer hover:bg-gray-50">
+                                        <FaImage className="text-purple-500 text-xl mb-1" />
+                                        <span className="text-3x1 text-center">Capturas</span>
+                                        <input
+                                            name="capturas"
+                                            type="file"
+                                            className="hidden"
+                                            accept="image/*"
+                                            multiple
+                                            onChange={(e) => handleFileChange('capturas', e.target.files)}
+                                        />
+                                        {formData.capturas.length > 0 && (
+                                            <div className="text-xs mt-1 text-purple-600">
+                                                {formData.capturas.length} imágenes
+                                            </div>
+                                        )}
+                                    </label>
+                                </div>
+
 
                                 {/* Vista previa de capturas */}
                                 {formData.capturas.length > 0 && (
@@ -243,15 +245,15 @@ const SubirAPK = () => {
                                     </div>
                                 )}
 
-                                <div className="bg-white p-3 rounded shadow flex justify-between items-center">
-                                    <button 
-                                        type="submit" 
-                                        className="px-6 py-3 text-sm text-white bg-blue-500 rounded flex items-center hover:bg-blue-600 transition-colors"
-                                    >
-                                        <FaUpload className="mr-1" />
-                                        Subir APK
-                                    </button>
-                                </div>
+
+                                <button
+                                    type="submit"
+                                    className="px-6 py-3 font-semibold text-sm text-white bg-blue-500 rounded flex items-center hover:bg-blue-600 transition-colors"
+                                >
+                                    <FaUpload className="mr-1" />
+                                    Subir APK
+                                </button>
+
                             </form>
                         </div>
                     </div>
