@@ -7,7 +7,7 @@ import { UseDocente } from "../context/DocenteContext"
 
 const SubirDocente = () => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
-    const { sigout, Docente, errors: DocenteErrors, mensaje } = UseDocente()
+    const { sigout, errors: DocenteErrors, mensaje } = UseDocente()
     const [registroExitoso, setRegistroExitoso] = useState(false);
 
     return (
@@ -45,7 +45,6 @@ const SubirDocente = () => {
                             const resultado = await sigout(values);
                             if (resultado?.success) {
                                 setRegistroExitoso(true);
-                                 // ✅ Limpiar campos
                             }
 
                         })}
