@@ -20,7 +20,6 @@ export const DocenteProvider = ({ children }) => {
         
         try {
             const Docentes = await GetAllDocentes()
-            console.log(Docentes)
             SetDocente(Docentes)
         } catch (error) {
             console.log(error)
