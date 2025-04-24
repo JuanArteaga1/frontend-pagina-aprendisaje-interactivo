@@ -20,6 +20,7 @@ function SubirPodcast() {
     formData.append("materia", data.materia);
     formData.append("UrlAudio", data.audioLink); // cambiar "audioLink" → "UrlAudio"
     formData.append("portada", data.portada[0]);
+    formData.append("seccion", "podcast");
     const respuesta = await sigout(formData)
     console.log(respuesta?.success)
     if (respuesta?.success) {
