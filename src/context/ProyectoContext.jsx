@@ -20,7 +20,7 @@ export const ProyectosProvider = ({ children }) => {
             const response = await subirProyectosAPI(data);
             SetProyectos(response.data);
     
-            if (response.status === 200) {
+            if (response.status >= 200 && response.status <= 399) {
                 setMensaje("¡Proyecto registrado correctamente!"); // <-- Mensaje de éxito
                 setErrors([]); // Limpiar errores anteriores
             }

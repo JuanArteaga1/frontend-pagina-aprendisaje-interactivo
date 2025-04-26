@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import MenuLateral from "../components/MenuAdmi_Doc";
 import { useForm } from "react-hook-form"
 import { UseProyectos } from "../context/ProyectoContext"
+import Alerta from "../components/AlertasDocente";
 
 function SubirProyecto() {
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
   const { sigout, Proyectos, errors: ProyectosErrors, mensaje } = UseProyectos()
   const [registroExitoso, setRegistroExitoso] = useState(false);
+  const MAX_SIZE = 10 * 1024 * 1024; // 10MB
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -26,11 +28,23 @@ function SubirProyecto() {
 
           )}
 
-          <form onSubmit={handleSubmit(async (values) => {
+          <form onSubmit={handleSubmit(async (data) => {
+            console.log(data)
             const formData = new FormData()
+            formData.append("nombre_proyecto", data.nombre_proyecto);
+            formData.append("autores", data.autores); // cambiar "autor" → "autores"
+            formData.append("fechaPublicacion", data.fechaPublicacion); // cambiar "fecha" → "fechaPublicacion"
+            formData.append("descripcion", data.descripcion);
+            formData.append("materia", data.materia);
+            formData.append("categoriaId", data.categoriaId);
+            formData.append("urlArchivoapk", data.urlArchivoapk[0]); // cambiar "audioLink" → "UrlAudio"
+            formData.append("portada", data.portada[0]);
+            formData.append("urlDoc", data.urlDoc[0]);
 
 
-            const resultado = await sigout(values);
+            formData.append("seccion", "Proyectos");
+
+            const resultado = await sigout(formData);
             if (resultado?.success) {
               setRegistroExitoso(true);
               // ✅ Limpiar campos
@@ -127,47 +141,53 @@ function SubirProyecto() {
                   <input
                     type="file"
                     className="hidden"
-                    accept="image/*"
+                    accept=".mp3,audio/*"
                     {...register('urlArchivoapk', {
-                      requerido: 'imagen',
+                      required: 'Se requiere una imagen',
                       validar: {
                         tamaño: (archivos) => archivos[0]?.size <= MAX_SIZE || 'Audio supera los 10MB',
                       },
 
                     })}
-
-
                   />
+                  {errors.urlArchivoapk && (<p className="text-red-500">apk es requerida</p>)}
                   <span className="text-3xl">🪷</span>
-                  <span className="text-sm text-gray-600 mt-1">Subir Img</span>
+                  <span className="text-sm text-gray-600 mt-1">Subir APK</span>
                 </label>
+
+
 
                 <label className="flex flex-col items-center justify-center h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
-                  <input type="file" className="hidden" />
-                  <span className="text-3xl">📈</span>
-                  <span className="text-sm text-gray-600 mt-1">Subir apk</span>
-                </label>
+                  <input
+                    type="file"
+                    className="hidden"
+                    accept="image/*"
+                    {...register('portada', {
+                      required: 'Se requiere una imagen',
+                      validate: {
+                        tamaño: (archivos) =>
+                          archivos[0]?.size <= MAX_SIZE || 'La imagen supera los 10MB',
+                      },
+                    })}
+                  />
+                  {errors.portada && (<p className="text-red-500">Imagen es requerida</p>)}
 
+
+                  <span className="text-3xl">📈</span>
+                  <span className="text-sm text-gray-600 mt-1">Subir IMG</span>
+                </label>
                 <label className="flex flex-col items-center justify-center h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
                   <input type="file" className="hidden"
-                    Accept="image/*"
+                    accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
                     {...register('urlDoc', {
-                      requerido: 'imagen',
+                      required: 'Se requiere una Documento',
                       validar: {
                         tamaño: (archivos) => archivos[0]?.size <= MAX_SIZE || 'Audio supera los 10MB',
                       },
 
                     })} />
+                  {errors.urlDoc && (<p className="text-red-500">Documento es requerida</p>)}
 
-                  <                  input type="file" className="hidden"
-                    Accept="image/*"
-                    {...register('urlimg', {
-                      requerido: 'imagen',
-                      validar: {
-                        tamaño: (archivos) => archivos[0]?.size <= MAX_SIZE || 'Audio supera los 10MB',
-                      },
-
-                    })} />
                   <span className="text-3xl">📄</span>
                   <span className="text-sm text-gray-600 mt-1">Subir PDF</span>
                 </label>
