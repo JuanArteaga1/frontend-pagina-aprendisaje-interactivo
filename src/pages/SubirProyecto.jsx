@@ -97,9 +97,9 @@ function SubirProyecto() {
                   className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
                 >
                   <option value="">Seleccionar categoría</option>
-                  <option value="software">Física</option>
-                  <option value="hardware">Cálculo</option>
-                  <option value="investigacion">Investigación</option>
+                  <option value="software">software</option>
+                  <option value="hardware">hardware</option>
+                  <option value="investigacion">investigacion</option>
                 </select>
                 {errors.categoriaId && (<p className="text-red-500">Categoria es requerida</p>)}
               </div>
@@ -126,9 +126,9 @@ function SubirProyecto() {
                 required
                 className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-2">
                 <option value="">Seleccionar materia</option>
-                <option value="fisica">Física</option>
-                <option value="ingenieria_civil">Ingeniería Civil</option>
-                <option value="matematicas">Matemáticas</option>
+                <option value="Fisica">Fisica</option>
+                <option value="ingenieria civil">Ingeniería Civil</option>
+                <option value="Matematicas">Matematicas</option>
               </select>
               {errors.materia && (<p className="text-red-500">Materia es requerida</p>)}
             </div>
