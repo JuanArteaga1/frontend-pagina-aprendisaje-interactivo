@@ -20,7 +20,7 @@ export const InvestigacionProvider = ({ children }) => {
             const response = await subirInvestigacionAPI(data);
             SetInvestigacion(response.data);
     
-            if (response.status === 200) {
+            if (response.status >= 200 && response.status <= 399) {
                 setMensaje("¡Investigacion registrada correctamente!"); // <-- Mensaje de éxito
                 setErrors([]); // Limpiar errores anteriores
             }

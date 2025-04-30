@@ -35,6 +35,10 @@ import { ProyectosProvider } from "./context/ProyectoContext"
 import { PodcastProvider } from "./context/PodcastContext";
 import { InvestigacionProvider } from "./context/InvestigacionContext";
 import { CategoriaProvider } from "./context/CategoriaContext";
+
+import { SimulacionesProvider } from "./context/SimulacionesContex";
+
+master
 ReactDOM.createRoot(document.getElementById("root")).render(
   <LoginProvider>
     <BrowserRouter>
@@ -69,8 +73,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Route path="subir-podcast" element={<PodcastProvider><SubirPodcast/></PodcastProvider>} />
       <Route path="misproyectos" element={<MisProyectos />} />
       <Route path="actualizar-proyectos" element={<ActualizarProyecto />} />
-      <Route path="/subirsimulaciones" element={<Subirsimulaciones />} />
+        <Route path="/subirsimulaciones" element={<SimulacionesProvider><Subirsimulaciones /></SimulacionesProvider>} />
       <Route path="/SubirInvestigaciones" element={<InvestigacionProvider><SubirInvestigaciones /></InvestigacionProvider>} />
+
       <Route path="/subirpodcast" element={<h1>podcast</h1>} />
 
       //Rutas de las categorias de HOME

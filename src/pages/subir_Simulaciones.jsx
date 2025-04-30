@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 import MenuLateral from "../components/MenuAdmi_Doc";
+import { useForm } from "react-hook-form"
+import { UseSimulaciones } from "../context/SimulacionesContex";
+import { SimulacionesProvider } from "../context/SimulacionesContex";
+
 import {
     FaFileUpload,
     FaAndroid,        // Icono de Android para APK
@@ -11,60 +15,11 @@ import {
 } from 'react-icons/fa';
 
 const SubirAPK = () => {
-    const [formData, setFormData] = useState({
-        nombre: '',
-        descripcion: '',
-        autores: '',
-        materia: '',
-        fecha: '',
-        apk: null,          // Archivo APK principal
-        requisitos: null,   // Documento de requisitos
-        capturas: []        // Capturas de pantalla
-    });
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
-    };
+    const{ register, handleSubmit, formState: { errors}, reset } =  useForm();
+    const{sigout, Simulaciones, errors: SimulacionesErrors, mensaje} = UseSimulaciones()
 
-    const handleFileChange = (tipo, files) => {
-        const validaciones = {
-            apk: file => file.type === 'application/vnd.android.package-archive',
-            requisitos: file => file.type === 'application/pdf',
-            capturas: file => file.type.startsWith('image/')
-        };
-
-        const archivosValidos = Array.from(files).filter(validaciones[tipo]);
-
-        if (archivosValidos.length === 0) {
-            alert(`Formato no válido para ${tipo}`);
-            return;
-        }
-
-        setFormData(prev => ({
-            ...prev,
-            [tipo]: tipo === 'capturas' ? [...prev[tipo], ...archivosValidos] : archivosValidos[0]
-        }));
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (!formData.apk) {
-            alert("Debe subir un archivo APK");
-            return;
-        }
-        console.log('Datos del APK:', formData);
-        alert('APK enviado exitosamente');
-    };
-
-    const removeFile = (tipo, index) => {
-        setFormData(prev => {
-            if (tipo === 'capturas') {
-                return { ...prev, capturas: prev.capturas.filter((_, i) => i !== index) };
-            }
-            return { ...prev, [tipo]: null };
-        });
-    };
+    
 
     return (
         <>
@@ -80,71 +35,108 @@ const SubirAPK = () => {
                         <div className="bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
                             {/*<h3 className="text-sm font-medium text-green-600 mb-3">Subir APK</h3>*/}
 
-                            <form onSubmit={handleSubmit} className="space-y-3 ">
+                            <form  onSubmit={handleSubmit(async (data) => {
+                                const formData = new FormData()
+                                console.log(data)
+                                formData.append("nombre_proyecto", data.nombre_proyecto);
+                                formData.append("descripcion", data.descripcion);
+                                formData.append("autores", data.autores);
+                                formData.append("fechaPublicacion", data.fechaPublicacion);
+                                formData.append("materia", data.meteria);
+                                formData.append("categoriaId", data.categoriaId);
+                                formData.append("urlArchivoapk", data.urlArchivoapk);
+                                formData.append("urlDoc", data.urlDoc);
+                                formData.append("portada", data.portada);
+                                formData.append("seccion","simulaciones");
+                                console.log(formData);
+
+                                const resultado = await sigout(formData);
+                                
+
+
+                            })} className="space-y-3 ">
                                 <div>
                                     <label className="block text-3x1 font-semibold text-gray-800 mb-1">Nombre del APK</label>
                                     <input
+                                    {...register ( 'nombre_proyecto', { })}
                                         type="text"
-                                        name="nombre"
-                                        value={formData.nombre}
-                                        onChange={handleChange}
+                                        name="nombre_proyecto"
                                         className="w-full px-4 py-2 text-medium border-2 border-gray-200 rounded-xl"
                                         placeholder="Ej: MiAplicación v1.0"
                                         required
                                     />
+                                    {errors.nombre_proyecto && (<p className="text-red-500">El nombre es requerido</p>)}
                                 </div>
 
                                 <div>
                                     <label className="block text-3x1 font-semibold text-gray-800 mb-1">Descripción técnica</label>
                                     <textarea
+                                    {... register ( 'descripcion' , { required : true })}
                                         name="descripcion"
-                                        value={formData.descripcion}
-                                        onChange={handleChange}
                                         className="w-full px-4 py-2 text-medium border-2 border-gray-200 rounded-xl"
                                         rows="2"
                                         placeholder="Especificaciones técnicas requeridas"
                                         required
                                     ></textarea>
+                                    {errors.descripcion && (<p className="text-red-500">La descripcion es requerida</p>)}
                                 </div>
 
                                 <div>
                                     <label className="block text-3x1 font-semibold text-gray-800 mb-1">Desarrolladores</label>
                                     <input
+                                    {...register ('autores', { required: true })}
                                         type="text"
                                         name="autores"
-                                        value={formData.autores}
-                                        onChange={handleChange}
                                         className="w-full  px-4 py-2 text-medium border-2 border-gray-200 rounded-xl"
                                         placeholder="Equipo de desarrollo"
                                         required
                                     />
+                                    {errors.autores && (<p className="text-red-500">El autor es requerida</p>)}
                                 </div>
 
 
                                 <h3 className="text-3x1 font-semibold text-gray-800 mb-2">Fecha de compilación</h3>
                                 <input
+                                {... register ('fechaPublicacion' , { required : true })}
                                     type="date"
-                                    name="fecha"
-                                    value={formData.fecha}
-                                    onChange={handleChange}
+                                    name="fechaPublicacion"
                                     className="w-full px-4 py-2 text-medium border-2 border-gray-200 rounded-xl"
                                     required
                                 />
+                                {errors.fechaPublicacion && (<p className="text-red-500">La fecha es requerida</p>)}
 
                                 <div>
                                     <label className="block text-3x1 font-semibold text-gray-800 mb-1">Materia</label>
                                     <select
+                                    {... register ( 'materia' , { required : true })}
                                         name="materia"
-                                        value={formData.materia}
-                                        onChange={handleChange}
                                         className="w-full px-4 py-2 text-medium border-2 border-gray-200 rounded-xl"
                                         required
                                     >
+
                                         <option value="">Seleccionar materia</option>
                                         <option value="fisica">Física</option>
                                         <option value="ingenieria_civil">Ingeniería Civil</option>
                                         <option value="matematicas">Matemáticas</option>
                                     </select>
+                                    {errors.materia && (<p className="text-red-500">La materia es requerida</p>)}
+                                </div>
+
+                                <div>
+                                    <label className="block text-3x1 font-semibold text-gray-800 mb-1">Categoria</label>
+                                    <select
+                                    {... register ( 'categoriaId' , { required : true })}
+                                        name="categoriaId"
+                                        className="w-full px-4 py-2 text-medium border-2 border-gray-200 rounded-xl"
+                                        required
+                                    >
+
+                                        <option value="">Seleccionar categoria</option>
+                                        <option value="software">software</option>
+                                        <option value="hardware">hardware</option>
+                                        <option value="investigacion">investigacion</option>
+                                    </select>
+                                    {errors.categoriaId && (<p className="text-red-500">La categoria es requerida</p>)}
                                 </div>
 
                                 <h3 className="text-3x1 font-semibold text-gray-800 mb-2">Archivos requeridos</h3>
@@ -154,24 +146,13 @@ const SubirAPK = () => {
                                         <FaAndroid className="text-green-500 text-xl mb-1" />
                                         <span className="text-3x1 text-center">APK Principal</span>
                                         <input
-                                            name="apk"
+                                        {... register ('urlArchivoapk' , { required : true })}
+                                            name="urlArchivoapk"
                                             type="file"
                                             className="hidden"
-                                            accept=".apk"
-                                            onChange={(e) => handleFileChange('apk', e.target.files)}
+                                            accept="image/*"
                                         />
-                                        {formData.apk && (
-                                            <div className="text-3x1 mt-1 text-green-600">
-                                                {formData.apk.name}
-                                                <button
-                                                    type="button"
-                                                    onClick={() => removeFile('apk')}
-                                                    className="ml-1 text-red-500"
-                                                >
-                                                    ×
-                                                </button>
-                                            </div>
-                                        )}
+                                        {errors.urlArchivoapk && (<p className="text-red-500">La apk es requerida</p>)}
                                     </label>
 
                                     {/* Requisitos */}
@@ -179,24 +160,14 @@ const SubirAPK = () => {
                                         <FaFileCode className="text-blue-500 text-xl mb-1" />
                                         <span className="text-3x1 text-center">Requisitos (PDF)</span>
                                         <input
-                                            name="requisitos"
+                                        {... register ('urlDoc' , { required : true }) }
+                                            name="urlDoc"
                                             type="file"
                                             className="hidden"
                                             accept=".pdf"
-                                            onChange={(e) => handleFileChange('requisitos', e.target.files)}
+                                            
                                         />
-                                        {formData.requisitos && (
-                                            <div className="text-xs mt-1 text-blue-600">
-                                                {formData.requisitos.name}
-                                                <button
-                                                    type="button"
-                                                    onClick={() => removeFile('requisitos')}
-                                                    className="ml-1 text-red-500"
-                                                >
-                                                    ×
-                                                </button>
-                                            </div>
-                                        )}
+                                        {errors.urlDoc && (<p className="text-red-500">El documento es requerido</p>)}
                                     </label>
 
                                     {/* Capturas */}
@@ -204,46 +175,21 @@ const SubirAPK = () => {
                                         <FaImage className="text-purple-500 text-xl mb-1" />
                                         <span className="text-3x1 text-center">Capturas</span>
                                         <input
-                                            name="capturas"
+                                        {... register ('portada' , {required : true })}
+                                            name="portada"
                                             type="file"
                                             className="hidden"
                                             accept="image/*"
                                             multiple
-                                            onChange={(e) => handleFileChange('capturas', e.target.files)}
                                         />
-                                        {formData.capturas.length > 0 && (
-                                            <div className="text-xs mt-1 text-purple-600">
-                                                {formData.capturas.length} imágenes
-                                            </div>
-                                        )}
+                                        {errors.portada && (<p className="text-red-500">La imagen es requerida</p>)}
+
                                     </label>
                                 </div>
 
 
                                 {/* Vista previa de capturas */}
-                                {formData.capturas.length > 0 && (
-                                    <div className="mt-4">
-                                        <h4 className="text-xs font-medium text-gray-600 mb-2">Vista previa de capturas:</h4>
-                                        <div className="flex flex-wrap gap-2">
-                                            {formData.capturas.map((file, index) => (
-                                                <div key={index} className="relative">
-                                                    <img
-                                                        src={URL.createObjectURL(file)}
-                                                        alt={`Captura ${index + 1}`}
-                                                        className="w-16 h-16 object-cover rounded border"
-                                                    />
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => removeFile('capturas', index)}
-                                                        className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full text-xs w-4 h-4 flex items-center justify-center"
-                                                    >
-                                                        ×
-                                                    </button>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
+                                
 
 
                                 <button

@@ -1,7 +1,9 @@
-import React from "react";
+import React,{ useState } from "react";
 import subirInvestigacionesImg from "../img/Subir_Investigaciones.jpg";
 import MenuLateral from "../components/MenuAdmi_Doc";
 import { useForm } from "react-hook-form";
+import Alerta from "../components/AlertasDocente";
+
 import {
   FaFileUpload,
   FaFilePdf,
@@ -12,13 +14,15 @@ import {
   FaLink,
 } from "react-icons/fa";
 
+import { UseInvestigacion } from "../context/InvestigacionContext";
+
 const SubirInvestigaciones = () => {
   const { register, handleSubmit, setValue, formState: { errors } } = useForm();
+  const { sigout, errors: InvestigacionErrors, mensaje } = UseInvestigacion()
+    const [registroExitoso, setRegistroExitoso] = useState(false);
+  
+  const MAX_SIZE = 10 * 1024 * 1024; // 10MB
 
-  const onSubmit = (data) => {
-    console.log("Datos de la investigación:", data);
-    alert("Investigación subida correctamente");
-  };
 
   const handleFileChange = (e, name) => {
     const file = e.target.files[0];
@@ -44,7 +48,36 @@ const SubirInvestigaciones = () => {
         <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-md p-8 border border-gray-200">
 
           {/* Formulario */}
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          {InvestigacionErrors.map((error, i) => (
+            <Alerta key={i} tipo="error" mensaje={error.msg} />
+          ))}
+          {mensaje && (
+            <Alerta tipo="exito" mensaje={mensaje} />
+
+          )}
+          <form onSubmit={handleSubmit(async (data) => {
+            console.log(data)
+            const formData = new FormData()
+            formData.append("titulo", data.titulo);
+            formData.append("descripcion", data.descripcion);
+            formData.append("autores", data.autores);
+            formData.append("fechaPublicacion", data.fecha);
+            formData.append("materia", data.materia);
+            formData.append("urlArticulo", data.UrlArticulo);
+            formData.append("urlDoi", data.UrlDoi);
+            formData.append("portada", data.portada[0]);
+            formData.append("urlDoc", data.urlDoc[0]);
+            formData.append("seccion", "Investigacion");
+            console.log(formData)
+            const resultado = await sigout(formData);
+            if (resultado?.success) {
+              setRegistroExitoso(true);
+              // ✅ Limpiar campos
+            }
+
+
+
+          })} className="space-y-6">
 
             {/* Título */}
             <div>
@@ -102,9 +135,9 @@ const SubirInvestigaciones = () => {
                 className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500"
               >
                 <option value="">Seleccionar materia</option>
-                <option value="fisica">Física</option>
-                <option value="ingenieria_civil">Ingeniería Civil</option>
-                <option value="matematicas">Matemáticas</option>
+                <option value="Fisica">Fisica</option>
+                <option value="ingenieria civil">Ingeniería Civil</option>
+                <option value="Matematicas">Matematicas</option>
               </select>
               {errors.materia && <p className="text-red-500 text-sm">{errors.materia.message}</p>}
             </div>
@@ -149,7 +182,14 @@ const SubirInvestigaciones = () => {
                     type="file"
                     accept="image/*"
                     className="hidden"
-                    onChange={(e) => handleFileChange(e, "imagen")}
+                    {...register('portada', {
+                      required: 'Se requiere una imagen',
+                      validate: {
+                        tamaño: (archivos) =>
+                          archivos[0]?.size <= MAX_SIZE || 'La imagen supera los 10MB',
+                      },
+                    })}
+
                   />
                 </label>
 
@@ -161,7 +201,13 @@ const SubirInvestigaciones = () => {
                     type="file"
                     accept=".pdf"
                     className="hidden"
-                    onChange={(e) => handleFileChange(e, "archivo")}
+                    {...register('urlDoc', {
+                      required: 'Se requiere una Documento',
+                      validar: {
+                        tamaño: (archivos) => archivos[0]?.size <= MAX_SIZE || 'Audio supera los 10MB',
+                      },
+
+                    })}
                   />
                 </label>
               </div>
