@@ -14,11 +14,8 @@ import {
 
 const SubirInvestigaciones = () => {
   const { register, handleSubmit, setValue, formState: { errors } } = useForm();
+  const MAX_SIZE = 10 * 1024 * 1024; // 10MB
 
-  const onSubmit = (data) => {
-    console.log("Datos de la investigación:", data);
-    alert("Investigación subida correctamente");
-  };
 
   const handleFileChange = (e, name) => {
     const file = e.target.files[0];
@@ -44,7 +41,26 @@ const SubirInvestigaciones = () => {
         <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-md p-8 border border-gray-200">
 
           {/* Formulario */}
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={handleSubmit(async(data) =>{
+            console.log(data)
+            const formData = new FormData()
+            formData.append("titulo", data.titulo);
+            formData.append("descripcion", data.descripcion);
+            formData.append("autores", data.autores);
+            formData.append("fecha", data.fecha);
+            formData.append("materia", data.materia);
+            formData.append("UrlArticulo", data.UrlArticulo);
+            formData.append("UrlDoi", data.UrlDoi);
+            formData.append("UrlDoi", data.UrlDoi);
+            formData.append("portada", data.portada[0]);
+            formData.append("urlDoc", data.urlDoc[0]);
+            formData.append("seccion", "Proyectos");
+            console.log(formData)
+
+            
+            
+
+          })} className="space-y-6">
 
             {/* Título */}
             <div>
@@ -149,7 +165,14 @@ const SubirInvestigaciones = () => {
                     type="file"
                     accept="image/*"
                     className="hidden"
-                    onChange={(e) => handleFileChange(e, "imagen")}
+                    {...register('portada', {
+                      required: 'Se requiere una imagen',
+                      validate: {
+                        tamaño: (archivos) =>
+                          archivos[0]?.size <= MAX_SIZE || 'La imagen supera los 10MB',
+                      },
+                    })}
+                    
                   />
                 </label>
 
@@ -161,7 +184,13 @@ const SubirInvestigaciones = () => {
                     type="file"
                     accept=".pdf"
                     className="hidden"
-                    onChange={(e) => handleFileChange(e, "archivo")}
+                    {...register('urlDoc', {
+                      required: 'Se requiere una Documento',
+                      validar: {
+                        tamaño: (archivos) => archivos[0]?.size <= MAX_SIZE || 'Audio supera los 10MB',
+                      },
+
+                    })}
                   />
                 </label>
               </div>
