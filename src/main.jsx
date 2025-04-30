@@ -34,12 +34,16 @@ import { DocenteProvider } from "./context/DocenteContext"
 import { ProyectosProvider } from "./context/ProyectoContext"
 import { PodcastProvider } from "./context/PodcastContext";
 import { InvestigacionProvider } from "./context/InvestigacionContext";
+import { CategoriaProvider } from "./context/CategoriaContext";
+
 import { SimulacionesProvider } from "./context/SimulacionesContex";
 
+master
 ReactDOM.createRoot(document.getElementById("root")).render(
   <LoginProvider>
     <BrowserRouter>
     <Routes>
+      
     <Route path="/SubirDocente" element={ <DocenteProvider>  <SubirDocente/> </DocenteProvider> }/>
     <Route path="/AdministrarDocente" element={<DocenteProvider> <AdministrarDocentes/> </DocenteProvider>} />
 
@@ -55,7 +59,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
       //rutas de Administrador
       <Route path="/menuadministrador" element={<MenuAdmin />} />
-      <Route path="/SubirCategoria" element={<NuevaCategoria />} />
+      <Route path="/SubirCategoria" element={<CategoriaProvider>  <NuevaCategoria/> </CategoriaProvider>} />
       <Route path="/AdministrarDocente" element={<AdministrarDocentes />} />
       <Route path="/VerProyectos" element={<MirarProyectos />} />
       <Route path="/Aprobar" element={<ProyectosPorAprobar />} />
