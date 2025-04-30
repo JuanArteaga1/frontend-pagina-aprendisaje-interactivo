@@ -16,10 +16,10 @@ import {
 
 const SubirAPK = () => {
 
-    const{ register, handleSubmit, formState: { errors}, reset } =  useForm();
-    const{sigout, Simulaciones, errors: SimulacionesErrors, mensaje} = UseSimulaciones()
+    const { register, handleSubmit, formState: { errors }, reset } = useForm();
+    const { sigout, Simulaciones, errors: SimulacionesErrors, mensaje } = UseSimulaciones()
 
-    
+
 
     return (
         <>
@@ -35,30 +35,47 @@ const SubirAPK = () => {
                         <div className="bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
                             {/*<h3 className="text-sm font-medium text-green-600 mb-3">Subir APK</h3>*/}
 
-                            <form  onSubmit={handleSubmit(async (data) => {
-                                const formData = new FormData()
-                                console.log(data)
+                            <form onSubmit={handleSubmit(async (data) => {
+                                const formData = new FormData();
+
+                                // Agregar los datos del formulario (campos de texto)
                                 formData.append("nombre_proyecto", data.nombre_proyecto);
                                 formData.append("descripcion", data.descripcion);
                                 formData.append("autores", data.autores);
                                 formData.append("fechaPublicacion", data.fechaPublicacion);
-                                formData.append("materia", data.meteria);
+                                formData.append("materia", data.materia);
                                 formData.append("categoriaId", data.categoriaId);
-                                formData.append("urlArchivoapk", data.urlArchivoapk);
-                                formData.append("urlDoc", data.urlDoc);
-                                formData.append("portada", data.portada);
-                                formData.append("seccion","simulaciones");
-                                console.log(formData);
 
-                                const resultado = await sigout(formData);
-                                
+                                // Asegúrate de que estos campos sean de tipo 'file'
+                                if (data.urlArchivoapk && data.urlArchivoapk[0]) {
+                                    formData.append("urlArchivoapk", data.urlArchivoapk[0]); // Para archivos APK
+                                }
+                                if (data.urlDoc && data.urlDoc[0]) {
+                                    formData.append("urlDoc", data.urlDoc[0]); // Para documentos
+                                }
+                                if (data.portada && data.portada[0]) {
+                                    formData.append("portada", data.portada[0]); // Para la imagen de portada
+                                }
 
+                                formData.append("seccion", "simulaciones"); // Establece la sección
 
-                            })} className="space-y-3 ">
+                                try {
+                                    // Enviar el formData usando axios
+                                    const resultado = await axios.post(`${Api}/Simulaciones`, formData, {
+                                        headers: {
+                                            'Content-Type': 'multipart/form-data',
+                                        },
+                                    });
+                                    console.log("Simulación subida correctamente:", resultado);
+                                } catch (error) {
+                                    console.error("Error al subir la simulación:", error);
+                                    alert("Hubo un error al subir la simulación. Intenta de nuevo.");
+                                }
+                            })} className="space-y-3">
                                 <div>
                                     <label className="block text-3x1 font-semibold text-gray-800 mb-1">Nombre del APK</label>
                                     <input
-                                    {...register ( 'nombre_proyecto', { })}
+                                        {...register('nombre_proyecto', {})}
                                         type="text"
                                         name="nombre_proyecto"
                                         className="w-full px-4 py-2 text-medium border-2 border-gray-200 rounded-xl"
@@ -71,7 +88,7 @@ const SubirAPK = () => {
                                 <div>
                                     <label className="block text-3x1 font-semibold text-gray-800 mb-1">Descripción técnica</label>
                                     <textarea
-                                    {... register ( 'descripcion' , { required : true })}
+                                        {...register('descripcion', { required: true })}
                                         name="descripcion"
                                         className="w-full px-4 py-2 text-medium border-2 border-gray-200 rounded-xl"
                                         rows="2"
@@ -84,7 +101,7 @@ const SubirAPK = () => {
                                 <div>
                                     <label className="block text-3x1 font-semibold text-gray-800 mb-1">Desarrolladores</label>
                                     <input
-                                    {...register ('autores', { required: true })}
+                                        {...register('autores', { required: true })}
                                         type="text"
                                         name="autores"
                                         className="w-full  px-4 py-2 text-medium border-2 border-gray-200 rounded-xl"
@@ -97,7 +114,7 @@ const SubirAPK = () => {
 
                                 <h3 className="text-3x1 font-semibold text-gray-800 mb-2">Fecha de compilación</h3>
                                 <input
-                                {... register ('fechaPublicacion' , { required : true })}
+                                    {...register('fechaPublicacion', { required: true })}
                                     type="date"
                                     name="fechaPublicacion"
                                     className="w-full px-4 py-2 text-medium border-2 border-gray-200 rounded-xl"
@@ -108,7 +125,7 @@ const SubirAPK = () => {
                                 <div>
                                     <label className="block text-3x1 font-semibold text-gray-800 mb-1">Materia</label>
                                     <select
-                                    {... register ( 'materia' , { required : true })}
+                                        {...register('materia', { required: true })}
                                         name="materia"
                                         className="w-full px-4 py-2 text-medium border-2 border-gray-200 rounded-xl"
                                         required
@@ -125,7 +142,7 @@ const SubirAPK = () => {
                                 <div>
                                     <label className="block text-3x1 font-semibold text-gray-800 mb-1">Categoria</label>
                                     <select
-                                    {... register ( 'categoriaId' , { required : true })}
+                                        {...register('categoriaId', { required: true })}
                                         name="categoriaId"
                                         className="w-full px-4 py-2 text-medium border-2 border-gray-200 rounded-xl"
                                         required
@@ -146,7 +163,7 @@ const SubirAPK = () => {
                                         <FaAndroid className="text-green-500 text-xl mb-1" />
                                         <span className="text-3x1 text-center">APK Principal</span>
                                         <input
-                                        {... register ('urlArchivoapk' , { required : true })}
+                                            {...register('urlArchivoapk', { required: true })}
                                             name="urlArchivoapk"
                                             type="file"
                                             className="hidden"
@@ -160,12 +177,12 @@ const SubirAPK = () => {
                                         <FaFileCode className="text-blue-500 text-xl mb-1" />
                                         <span className="text-3x1 text-center">Requisitos (PDF)</span>
                                         <input
-                                        {... register ('urlDoc' , { required : true }) }
+                                            {...register('urlDoc', { required: true })}
                                             name="urlDoc"
                                             type="file"
                                             className="hidden"
                                             accept=".pdf"
-                                            
+
                                         />
                                         {errors.urlDoc && (<p className="text-red-500">El documento es requerido</p>)}
                                     </label>
@@ -175,7 +192,7 @@ const SubirAPK = () => {
                                         <FaImage className="text-purple-500 text-xl mb-1" />
                                         <span className="text-3x1 text-center">Capturas</span>
                                         <input
-                                        {... register ('portada' , {required : true })}
+                                            {...register('portada', { required: true })}
                                             name="portada"
                                             type="file"
                                             className="hidden"
@@ -189,7 +206,7 @@ const SubirAPK = () => {
 
 
                                 {/* Vista previa de capturas */}
-                                
+
 
 
                                 <button
