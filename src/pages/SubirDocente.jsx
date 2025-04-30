@@ -43,6 +43,7 @@ const SubirDocente = () => {
 
                         <form onSubmit={handleSubmit(async (values) => {
                             const resultado = await sigout(values);
+                            console.log(values)
                             if (resultado?.success) {
                                 setRegistroExitoso(true);
                             }

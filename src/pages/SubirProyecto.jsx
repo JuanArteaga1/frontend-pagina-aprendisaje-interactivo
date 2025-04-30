@@ -29,7 +29,6 @@ function SubirProyecto() {
           )}
 
           <form onSubmit={handleSubmit(async (data) => {
-            console.log(data)
             const formData = new FormData()
             formData.append("nombre_proyecto", data.nombre_proyecto);
             formData.append("autores", data.autores); // cambiar "autor" → "autores"
@@ -40,9 +39,8 @@ function SubirProyecto() {
             formData.append("urlArchivoapk", data.urlArchivoapk[0]); // cambiar "audioLink" → "UrlAudio"
             formData.append("portada", data.portada[0]);
             formData.append("urlDoc", data.urlDoc[0]);
-
-
             formData.append("seccion", "Proyectos");
+            console.log(formData)
 
             const resultado = await sigout(formData);
             if (resultado?.success) {
