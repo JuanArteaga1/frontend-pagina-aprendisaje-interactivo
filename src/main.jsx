@@ -69,8 +69,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Route path="subir-podcast" element={<PodcastProvider><SubirPodcast/></PodcastProvider>} />
       <Route path="misproyectos" element={<MisProyectos />} />
       <Route path="actualizar-proyectos" element={<ActualizarProyecto />} />
-      <Route path="/subirsimulaciones" element={<SimulacionesProvider><Subirsimulaciones /></SimulacionesProvider>} />
+        <Route path="/subirsimulaciones" element={<SimulacionesProvider><Subirsimulaciones /></SimulacionesProvider>} />
       <Route path="/SubirInvestigaciones" element={<InvestigacionProvider><SubirInvestigaciones /></InvestigacionProvider>} />
+
       <Route path="/subirpodcast" element={<h1>podcast</h1>} />
 
       //Rutas de las categorias de HOME
