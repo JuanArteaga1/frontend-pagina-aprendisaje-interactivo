@@ -3,6 +3,8 @@ import MenuLateral from "../components/MenuAdmi_Doc";
 import { useForm } from "react-hook-form"
 import { UseSimulaciones } from "../context/SimulacionesContex";
 import { SimulacionesProvider } from "../context/SimulacionesContex";
+import Alerta from "../components/AlertasDocente";
+
 
 import {
     FaFileUpload,
@@ -18,6 +20,8 @@ const SubirAPK = () => {
 
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const { sigout, Simulaciones, errors: SimulacionesErrors, mensaje } = UseSimulaciones()
+    const [setRegistroExitoso] = useState(false);
+
 
 
 
@@ -34,7 +38,13 @@ const SubirAPK = () => {
 
                         <div className="bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
                             {/*<h3 className="text-sm font-medium text-green-600 mb-3">Subir APK</h3>*/}
+                            {SimulacionesErrors.map((error, i) => (
+                                <Alerta key={i} tipo="error" mensaje={error.msg} />
+                            ))}
+                            {mensaje && (
+                                <Alerta tipo="exito" mensaje={mensaje} />
 
+                            )}
                             <form onSubmit={handleSubmit(async (data) => {
                                 const formData = new FormData();
 
@@ -58,19 +68,12 @@ const SubirAPK = () => {
                                 }
 
                                 formData.append("seccion", "simulaciones"); // Establece la sección
-
-                                try {
-                                    // Enviar el formData usando axios
-                                    const resultado = await axios.post(`${Api}/Simulaciones`, formData, {
-                                        headers: {
-                                            'Content-Type': 'multipart/form-data',
-                                        },
-                                    });
-                                    console.log("Simulación subida correctamente:", resultado);
-                                } catch (error) {
-                                    console.error("Error al subir la simulación:", error);
-                                    alert("Hubo un error al subir la simulación. Intenta de nuevo.");
+                                const resultado = await sigout(formData);
+                                if (resultado?.success) {
+                                    setRegistroExitoso(true);
                                 }
+                            
+
                             })} className="space-y-3">
                                 <div>
                                     <label className="block text-3x1 font-semibold text-gray-800 mb-1">Nombre del APK</label>
@@ -132,9 +135,9 @@ const SubirAPK = () => {
                                     >
 
                                         <option value="">Seleccionar materia</option>
-                                        <option value="fisica">Física</option>
-                                        <option value="ingenieria_civil">Ingeniería Civil</option>
-                                        <option value="matematicas">Matemáticas</option>
+                                        <option value="Fisica">Fisica</option>
+                                        <option value="ingenieria civil">Ingeniería Civil</option>
+                                        <option value="Matematicas">Matematicas</option>
                                     </select>
                                     {errors.materia && (<p className="text-red-500">La materia es requerida</p>)}
                                 </div>

@@ -17,7 +17,6 @@ export const DocenteProvider = ({ children }) => {
     const [mensaje, setMensaje] = useState(null); 
     
     const TraerDocentes = async() =>{
-        
         try {
             const Docentes = await GetAllDocentes()
             SetDocente(Docentes)
