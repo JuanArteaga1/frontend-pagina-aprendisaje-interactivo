@@ -28,17 +28,13 @@ export const PodcastProvider = ({ children }) => {
     const sigout = async (data) => {
         try {
             const response = await subirPodcastAPI(data);
-            console.log(response.status)
             SetPodcast(response.data);
-            console.log("entro")
             if (response.status >= 200 && response.status <= 399) {
-                console.log("entro")
                 setMensaje("¡Podcast registrado correctamente!");
                 setErrors([]); // Limpiar errores anteriores
             }
     
         } catch (error) {
-            console.log("entro 2")
             if (error.response && error.response.data && error.response.data.errors) {
                 setErrors(error.response.data.errors);
             } else if (error.response && error.response.data && error.response.data.msg) {

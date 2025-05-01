@@ -18,21 +18,24 @@ export const useLogin = () => {
 // Crear el proveedor del contexto
 export const LoginProvider = ({ children }) => {
     const [Usuario, setUsuario] = useState(null);
-    const [isAutheticated,setIsAutheticated] = useState(false)
-    const [errors ,setErrors] = useState([])
+    const [isAutheticated, setIsAutheticated] = useState(false)
+    const [errors, setErrors] = useState([])
+    const [mensaje, setMensaje] = useState(null);
     const signin = async (values) => {
         try {
-            const res = await LoginUsuario(values);
-            setUsuario(res.data);
+            const response = await LoginUsuario(values)
+            console.log("aqui")
+            setUsuario(response.data);
             setIsAutheticated(true)
         } catch (error) {
-            console.log(error.response)
-            setErrors(error.response.data)
+            setMensaje(null); // Ocultar mensaje anterior de éxito si hay error
+            const errores = error.response?.data?.errors || [{ message: "Error desconocido" }];
+            setErrors(errores);
         }
     };
 
     return (
-        <LoginContext.Provider value={{ signin, Usuario,isAutheticated,errors}}>
+        <LoginContext.Provider value={{ signin, Usuario, isAutheticated, errors }}>
             {children}
         </LoginContext.Provider>
     );

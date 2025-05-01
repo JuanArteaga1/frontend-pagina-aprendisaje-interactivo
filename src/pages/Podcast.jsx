@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { usePodcast } from "../context/PodcastContext";
 
+
 const Podcast = () => {
   const [seccionActual, setSeccionActual] = useState("Podcasts");
   const { TraerPodcast, Podcast } = usePodcast();
@@ -34,7 +35,6 @@ const Podcast = () => {
         {Podcast?.data.map((ep) => {
           const rutaLimpia = ep.ArchivoImagen.replace(/\\/g, "/");
           const imagenURL = `http://localhost:3000/${rutaLimpia}`;
-          console.log(imagenURL)
 
           return (
             <div key={ep._id} className="card">

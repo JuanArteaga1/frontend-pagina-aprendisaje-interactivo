@@ -35,7 +35,7 @@ import { ProyectosProvider } from "./context/ProyectoContext"
 import { PodcastProvider } from "./context/PodcastContext";
 import { InvestigacionProvider } from "./context/InvestigacionContext";
 import { CategoriaProvider } from "./context/CategoriaContext";
-
+import { TraerProyectosProvider } from "./context/TraerProyectos";
 import { SimulacionesProvider } from "./context/SimulacionesContex";
 
 
@@ -61,7 +61,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Route path="/menuadministrador" element={<MenuAdmin />} />
       <Route path="/SubirCategoria" element={<CategoriaProvider>  <NuevaCategoria/> </CategoriaProvider>} />
       <Route path="/AdministrarDocente" element={<AdministrarDocentes />} />
-      <Route path="/VerProyectos" element={<MirarProyectos />} />
+      <Route path="/VerProyectos" element={<TraerProyectosProvider><MirarProyectos/></TraerProyectosProvider>} />
       <Route path="/Aprobar" element={<ProyectosPorAprobar />} />
 
       <Route path="/VerProyectos" element={<MirarProyectos />} />

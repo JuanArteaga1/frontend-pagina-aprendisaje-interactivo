@@ -14,7 +14,7 @@ function SubirPodcast() {
     const formData = new FormData();
     // Agregar datos del formulario
     console.log(data)
-    formData.append("titulo", data.titulo);
+    formData.append("nombre_proyecto", data.nombre_proyecto);
     formData.append("descripcion", data.descripcion);
     formData.append("autores", data.autores); // cambiar "autor" → "autores"
     formData.append("fechaPublicacion", data.fecha); // cambiar "fecha" → "fechaPublicacion"
@@ -64,7 +64,7 @@ function SubirPodcast() {
                   <label className="block text-3x1 font-semibold text-gray-800">Título del Podcast</label>
                   <input
                     type="text"
-                    {...register("titulo", { required: true })}
+                    {...register("nombre_proyecto", { required: true })}
                     className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
                     placeholder="Ej: La revolución de la IA"
                   />
