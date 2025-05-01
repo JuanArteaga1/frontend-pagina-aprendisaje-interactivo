@@ -38,7 +38,7 @@ import { CategoriaProvider } from "./context/CategoriaContext";
 
 import { SimulacionesProvider } from "./context/SimulacionesContex";
 
-master
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <LoginProvider>
     <BrowserRouter>
@@ -51,7 +51,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/simulaciones" element={<Simulaciones />} />
-      <Route path="/podcast" element={<Podcast />} />
+      <Route path="/podcast" element={<PodcastProvider><Podcast /></PodcastProvider>} />
       <Route path="/appmovil" element={<Appmovil />} />
       <Route path="/investigaciones" element={<Investigaciones />} />
       <Route path="/ayuda" element={<AyudaT />} />

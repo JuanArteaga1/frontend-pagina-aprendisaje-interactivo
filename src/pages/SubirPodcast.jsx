@@ -13,6 +13,7 @@ function SubirPodcast() {
   const onSubmit = async (data) => {
     const formData = new FormData();
     // Agregar datos del formulario
+    console.log(data)
     formData.append("titulo", data.titulo);
     formData.append("descripcion", data.descripcion);
     formData.append("autores", data.autores); // cambiar "autor" → "autores"

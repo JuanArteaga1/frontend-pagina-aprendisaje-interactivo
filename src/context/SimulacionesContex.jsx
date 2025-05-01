@@ -1,5 +1,6 @@
 import { Children, createContext, useEffect, useState, useContext } from "react";
 import { subirSimulacionesAPI } from "../api/AdmiSimulaciones";
+import { GetAllPodcast } from "../api/AdmiPodcast";
 
 export const SimulacionesContext = createContext();
 
@@ -14,13 +15,15 @@ export const UseSimulaciones = () => {
 export const SimulacionesProvider = ({ children }) => {
     const [Simulaciones, SetSimulaciones] = useState(null);
     const [errors,setErrors ] = useState([])
-    const [mensaje, setMensaje] = useState(null); // <-- mensaje de éxito
+    const [mensaje, setMensaje] = useState(null);
+    
+    
     const sigout = async (data) => {
         try {
             const response = await subirSimulacionesAPI(data);
             SetSimulaciones(response.data);
     
-            if (response.status === 200) {
+            if (response.status >= 200 && response.status <= 399) {
                 setMensaje("¡Proyecto registrado correctamente!"); // <-- Mensaje de éxito
                 setErrors([]); // Limpiar errores anteriores
             }

@@ -1,5 +1,5 @@
 import { Children, createContext, useEffect, useState, useContext } from "react";
-import { subirPodcastAPI } from "../api/AdmiPodcast";
+import { GetAllPodcast, subirPodcastAPI } from "../api/AdmiPodcast";
 
 export const PodcastContext = createContext();
 
@@ -14,7 +14,17 @@ export const usePodcast = () => {
 export const PodcastProvider = ({ children }) => {
     const [Podcast, SetPodcast] = useState(null);
     const [errors,setErrors ] = useState([])
-    const [mensaje, setMensaje] = useState(null); // <-- mensaje de éxito
+    const [mensaje, setMensaje] = useState(null);
+    const TraerPodcast = async() =>{
+                try {
+                    const podcast = await GetAllPodcast()
+                    console.log(podcast)
+                    SetPodcast(podcast)
+                } catch (error) {
+                    console.log(error)
+                    
+                }
+             } // <-- mensaje de éxito
     const sigout = async (data) => {
         try {
             const response = await subirPodcastAPI(data);
@@ -42,7 +52,7 @@ export const PodcastProvider = ({ children }) => {
     };
 
     return (
-        <PodcastContext.Provider value={{ sigout, Podcast,errors,mensaje, setMensaje }}>
+        <PodcastContext.Provider value={{ sigout, Podcast,errors,mensaje, setMensaje,SetPodcast,TraerPodcast}}>
             {children}
         </PodcastContext.Provider>
     );
