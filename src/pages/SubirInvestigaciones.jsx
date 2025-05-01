@@ -58,7 +58,7 @@ const SubirInvestigaciones = () => {
           <form onSubmit={handleSubmit(async (data) => {
             console.log(data)
             const formData = new FormData()
-            formData.append("titulo", data.titulo);
+            formData.append("nombre_proyecto", data.nombre_proyecto);
             formData.append("descripcion", data.descripcion);
             formData.append("autores", data.autores);
             formData.append("fechaPublicacion", data.fecha);
@@ -83,7 +83,7 @@ const SubirInvestigaciones = () => {
             <div>
               <label className="block mb-1 font-semibold text-gray-800">Título</label>
               <input
-                {...register("titulo", { required: "El título es obligatorio" })}
+                {...register("nombre_proyecto", { required: "El título es obligatorio" })}
                 className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
                 placeholder="Ingrese el título de la investigación"
               />

@@ -5,6 +5,8 @@ import { useLogin } from "../context/LoginContext"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 import { Eye, EyeOff } from "lucide-react"; // Íconos para el campo de contraseña
+import Alerta from "../components/AlertasDocente";
+
 
 const Login = () => {
   const [loggedIn] = useState(false);
@@ -39,12 +41,10 @@ const Login = () => {
     <>
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <div className="w-full max-w-md p-8 bg-white rounded shadow-md">
-
           {LoginErrors.map((error, i) => (
-            <div key={i} className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50">
-              {error}
-            </div>
+            <Alerta key={i} tipo="error" mensaje={error.msg} />
           ))}
+          
 
           <div className="flex justify-center mb-6">
             <img src={imagenlogin} alt="Logo" className="h-24" />
