@@ -2,7 +2,7 @@ import React from "react";
 import Navbar from "../components/Navbar";
 import CategoriaProyectos from "../components/CategoriaProyectos";
 import { proyectosSimulaciones } from "../pages/Simulaciones"; 
-import { proyectosAplicaciones } from "../pages/Appmovil"; 
+
 
 const Fisica = () => {
     return (

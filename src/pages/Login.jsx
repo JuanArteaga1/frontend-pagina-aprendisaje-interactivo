@@ -9,9 +9,6 @@ import Alerta from "../components/AlertasDocente";
 
 
 const Login = () => {
-  const [loggedIn] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const { register, handleSubmit, formState: { errors } } = useForm();
   const { signin, Usuario, isAutheticated, errors: LoginErrors } = useLogin()
   console.log(LoginErrors)
