@@ -3,11 +3,14 @@ import MenuLateral from "../components/MenuAdmi_Doc";
 import { useForm } from "react-hook-form"
 import { UseProyectos } from "../context/ProyectoContext"
 import Alerta from "../components/AlertasDocente";
+import { useLogin } from "../context/LoginContext"
+
 
 function SubirProyecto() {
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
   const { sigout, Proyectos, errors: ProyectosErrors, mensaje } = UseProyectos()
+  const { Usuario, setUsuario } = useLogin()
   const [registroExitoso, setRegistroExitoso] = useState(false);
   const MAX_SIZE = 10 * 1024 * 1024; // 10MB
 
@@ -39,6 +42,7 @@ function SubirProyecto() {
             formData.append("urlArchivoapk", data.urlArchivoapk[0]); // cambiar "audioLink" → "UrlAudio"
             formData.append("portada", data.portada[0]);
             formData.append("urlDoc", data.urlDoc[0]);
+            formData.append("Usuario", Usuario.Id)
             formData.append("seccion", "Proyectos");
             console.log(formData)
 

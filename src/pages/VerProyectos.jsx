@@ -17,7 +17,6 @@ const MirarProyectos = () => {
     setColumnas([
       { key: "proyecto", nombre: "Tipo" },
       { key: "nombre_proyecto", nombre: "Nombre del Proyecto" },
-      { key: "descripcion", nombre: "Descripción" },
       { key: "autores", nombre: "Autores o Código" },
       { key: "fechaPublicacion", nombre: "Fecha de Publicación" }
     ]);

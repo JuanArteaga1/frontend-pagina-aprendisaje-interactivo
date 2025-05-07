@@ -63,15 +63,12 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Route path="/AdministrarDocente" element={<AdministrarDocentes />} />
       <Route path="/VerProyectos" element={<TraerProyectosProvider><MirarProyectos/></TraerProyectosProvider>} />
       <Route path="/Aprobar" element={<ProyectosPorAprobar />} />
-
-      <Route path="/VerProyectos" element={<MirarProyectos />} />
       <Route path="/Aprobar" element={<ProyectosPorAprobar />} />
-
       //rutas de docentes
       <Route path="/menudocente" element={<MenuDocen />} />
       <Route path="/subir-proyecto" element={<ProyectosProvider><SubirProyecto /></ProyectosProvider>} />
       <Route path="subir-podcast" element={<PodcastProvider><SubirPodcast/></PodcastProvider>} />
-      <Route path="misproyectos" element={<MisProyectos />} />
+      <Route path="misproyectos" element={<TraerProyectosProvider><MisProyectos/></TraerProyectosProvider>} />
       <Route path="actualizar-proyectos" element={<ActualizarProyecto />} />
         <Route path="/subirsimulaciones" element={<SimulacionesProvider><Subirsimulaciones /></SimulacionesProvider>} />
       <Route path="/SubirInvestigaciones" element={<InvestigacionProvider><SubirInvestigaciones /></InvestigacionProvider>} />

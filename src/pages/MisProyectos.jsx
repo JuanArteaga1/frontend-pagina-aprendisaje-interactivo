@@ -1,92 +1,111 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TablaDinamica from "../components/Tabla";
 import MenuAdministrador from "../components/MenuAdmi_Doc";
+import { useLogin } from "../context/LoginContext"
+import { UseTraerProyectos } from "../context/TraerProyectos";
+
+
 
 const MisProyectos = () => {
   const navigate = useNavigate();
-  
-  // Datos de ejemplo
-  const [proyectos, setProyectos] = useState([
-    { id: 1, nombre: "Proyecto 1", descripcion: "Descripción del proyecto 1" },
-    { id: 2, nombre: "Proyecto 2", descripcion: "Descripción del proyecto 2" },
-    { id: 3, nombre: "Proyecto 3", descripcion: "Descripción del proyecto 3" }
-  ]);
+  const { Usuario } = useLogin()
+  const [columnas, setColumnas] = useState([]);
+  const { traerProyectoId, TraerProyectosId } = UseTraerProyectos();
+  const [proyectosUnificados, setProyectosUnificados] = useState({ data: [] });
 
-  // Función para actualizar un proyecto
-  const handleActualizar = () => {
-    navigate(`/actualizar-proyectos`);
-  };
 
-  // Función para eliminar un proyecto
-  const handleEliminar = (proyecto) => {
-    if (window.confirm(`¿Eliminar el proyecto "${proyecto.nombre}"?`)) {
-      setProyectos(proyectos.filter(p => p.id !== proyecto.id));
-      alert(`Proyecto "${proyecto.nombre}" eliminado`);
+  useEffect(() => {
+    TraerProyectosId(Usuario.Id); // Llamada inicial para traer los datos
+  }, []);
+
+
+  useEffect(() => {
+    setColumnas([
+      { key: "proyecto", nombre: "Tipo" },
+      { key: "nombre_proyecto", nombre: "Nombre del Proyecto" },
+      { key: "autores", nombre: "Autores o Código" },
+      { key: "fechaPublicacion", nombre: "Fecha de Publicación" }
+    ]);
+  }, []);
+  // Opcional: Acciones
+  const acciones = [
+    {
+      nombre: "Editar",
+      fn: (fila) => {
+        console.log("Editar:", fila);
+        // Puedes redirigir o abrir modal aquí
+      },
+      estilo: "bg-yellow-500 text-white hover:bg-yellow-600"
+    },
+    {
+      nombre: "Eliminar",
+      fn: (fila) => {
+        console.log("Eliminar:", fila);
+      },
+      estilo: "bg-red-500 text-white hover:bg-red-600"
     }
-  };
+  ];
+  useEffect(() => {
+    console.log("entro")
+    console.log(traerProyectoId?.data)
+    if (traerProyectoId?.data) {
+      const {
+        investigacion = [],
+        podtcas = [],
+        proyectos = [],
+        simulaciones = []
+      } = traerProyectoId.data;
+      console.log("entro 2")
+      const todos = [
+        ...investigacion.map(p => ({ ...p, proyecto: "Investigación" })),
+        ...podtcas.map(p => ({ ...p, proyecto: "Podcast" })),
+        ...proyectos.map(p => ({ ...p, proyecto: "Proyecto" })),
+        ...simulaciones.map(p => ({ ...p, proyecto: "Simulación" }))
+      ];
+
+      console.log(todos);
+      setProyectosUnificados({ data: todos });
+
+    }
+  }, [traerProyectoId]);
+
+
+
 
   return (
     <div className="flex h-screen bg-gray-100">
-        {/* Menú Lateral */}
-        <MenuAdministrador rol="docente" />
+      {/* Menú Lateral */}
+      <MenuAdministrador rol="docente" />
 
-        {/* Área de Contenido */}
-        <main className="flex-1 p-8 overflow-y-auto">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">
-            Mis Proyectos
-          </h1>
+      {/* Área de Contenido */}
+      <main className="flex-1 p-8 overflow-y-auto">
+        <h1 className="text-2xl font-bold text-gray-800 mb-4">
+          Mis Proyectos
+        </h1>
 
-          {/* Contenedor de la Tabla */}
-          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-            <TablaDinamica
-              datos={proyectos}
-              columnas={[
-                {
-                  key: "id",
-                  nombre: "#",
-                  className: "w-12 text-center text-sm"
-                },
-                {
-                  key: "nombre",
-                  nombre: "NOMBRE PROYECTO",
-                  className: "text-sm"
-                },
-                {
-                  key: "descripcion",
-                  nombre: "DESCRIPCIÓN",
-                  className: "text-sm"
-                }
-              ]}
-              acciones={[
-                {
-                  nombre: "Actualizar",
-                  fn: handleActualizar,
-                  estilo: "bg-blue-500 hover:bg-blue-600 text-white text-xs px-3 py-1"
-                },
-                {
-                  nombre: "Eliminar",
-                  fn: handleEliminar,
-                  estilo: "bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1"
-                }
-              ]}
-            />
+        {/* Contenedor de la Tabla */}
+        <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+          <TablaDinamica
+            datos={proyectosUnificados}
+            columnas={columnas}
+            acciones={acciones}
+          />
+        </div>
+
+        {/* Pie de tabla */}
+        <div className="mt-4 text-sm text-gray-600 flex justify-between items-center">
+          <div className="flex items-center space-x-2">
+            <button className="px-3 py-1 border rounded text-sm hover:bg-gray-100">
+              Anterior
+            </button>
+            <span className="text-sm">Página 1 de 1</span>
+            <button className="px-3 py-1 border rounded text-sm hover:bg-gray-100">
+              Siguiente
+            </button>
           </div>
-
-          {/* Pie de tabla */}
-          <div className="mt-4 text-sm text-gray-600 flex justify-between items-center">
-            <p>Mostrando {proyectos.length} proyectos</p>
-            <div className="flex items-center space-x-2">
-              <button className="px-3 py-1 border rounded text-sm hover:bg-gray-100">
-                Anterior
-              </button>
-              <span className="text-sm">Página 1 de 1</span>
-              <button className="px-3 py-1 border rounded text-sm hover:bg-gray-100">
-                Siguiente
-              </button>
-            </div>
-          </div>
-        </main>
+        </div>
+      </main>
     </div>
   );
 };

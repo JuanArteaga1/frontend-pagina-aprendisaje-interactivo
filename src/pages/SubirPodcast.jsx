@@ -1,14 +1,18 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import MenuLateral from "../components/MenuAdmi_Doc";
 import { useForm } from "react-hook-form";
 import { usePodcast } from "../context/PodcastContext";
 import Alerta from "../components/AlertasDocente";
+import { useLogin } from "../context/LoginContext"
+
 
 function SubirPodcast() {
-  const { register, handleSubmit, watch,formState: { errors } } = useForm();
-  const { sigout,errors:PodcastErros,mensaje } = usePodcast(); // Si tienes esta función en contexto
+  const { register, handleSubmit, watch, formState: { errors } } = useForm();
+  const { sigout, errors: PodcastErros, mensaje } = usePodcast(); // Si tienes esta función en contexto
   const portadaPreview = watch("portada")?.[0];
   const [setRegistroExitoso] = useState(false);
+  const { Usuario, setUsuario } = useLogin()
+
 
   const onSubmit = async (data) => {
     const formData = new FormData();
@@ -21,12 +25,13 @@ function SubirPodcast() {
     formData.append("materia", data.materia);
     formData.append("UrlAudio", data.audioLink); // cambiar "audioLink" → "UrlAudio"
     formData.append("portada", data.portada[0]);
+    formData.append("Usuario", Usuario.Id)
     formData.append("seccion", "Podcast");
     const respuesta = await sigout(formData)
     console.log(respuesta?.success)
     if (respuesta?.success) {
       setRegistroExitoso(true);
-  }
+    }
 
     // Enviar al contexto o API
     console.log("Enviando podcast:", Object.fromEntries(formData));
@@ -48,13 +53,13 @@ function SubirPodcast() {
               </h2>
             </div>
             {PodcastErros.map((error, i) => (
-                            
-                            <Alerta key={i} tipo="error" mensaje={error.msg} />
-                        ))}
-                        {mensaje && (
-                            <Alerta tipo="exito" mensaje={mensaje} />
-                            
-                        )}
+
+              <Alerta key={i} tipo="error" mensaje={error.msg} />
+            ))}
+            {mensaje && (
+              <Alerta tipo="exito" mensaje={mensaje} />
+
+            )}
             <form
               onSubmit={handleSubmit(onSubmit)}
               className="space-y-6 bg-white p-8 rounded-2xl shadow-xl border border-gray-100"
@@ -91,7 +96,7 @@ function SubirPodcast() {
                       className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
                       placeholder="Nombre del autor"
                     />
-                  {errors.autores && (<p className="text-red-500">los autores son requerido</p>)}
+                    {errors.autores && (<p className="text-red-500">los autores son requerido</p>)}
                   </div>
 
                   <div className="space-y-2">
@@ -101,7 +106,7 @@ function SubirPodcast() {
                       {...register("fecha", { required: true })}
                       className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
                     />
-                  {errors.fecha && (<p className="text-red-500">la fecha es requerido</p>)}
+                    {errors.fecha && (<p className="text-red-500">la fecha es requerido</p>)}
                   </div>
                 </div>
 
@@ -137,7 +142,7 @@ function SubirPodcast() {
                 </div>
 
                 <div className="space-y-6">
-                <h3 className="text-lg font-semibold text-gray-800 border-b border-gray-300 border-opacity-40 pb-2">Cargar Archivos</h3>
+                  <h3 className="text-lg font-semibold text-gray-800 border-b border-gray-300 border-opacity-40 pb-2">Cargar Archivos</h3>
 
                   <div className="space-y-2">
                     <label className="block text-3x1 font-semibold text-gray-800">Link del Audio</label>
@@ -147,7 +152,7 @@ function SubirPodcast() {
                       className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
                       placeholder="https://ejemplo.com/audio.mp3"
                     />
-                  {errors.audioLink && (<p className="text-red-500">el link del audio es requerido</p>)}
+                    {errors.audioLink && (<p className="text-red-500">el link del audio es requerido</p>)}
 
                   </div>
 
@@ -160,7 +165,7 @@ function SubirPodcast() {
                         {...register("portada", { required: true })}
                         className="hidden"
                       />
-                  {errors.portada && (<p className="text-red-500">portada es requerida</p>)}
+                      {errors.portada && (<p className="text-red-500">portada es requerida</p>)}
 
                       <div className="text-4xl mb-3 text-gray-400 group-hover:text-indigo-500">🖼️</div>
                       <p className="text-center text-sm text-gray-500">
