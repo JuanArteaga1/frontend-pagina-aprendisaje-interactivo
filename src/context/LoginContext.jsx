@@ -24,7 +24,7 @@ export const LoginProvider = ({ children }) => {
     const signin = async (values) => {
         try {
             const response = await LoginUsuario(values)
-            console.log("aqui")
+            console.log(response.data)
             setUsuario(response.data);
             setIsAutheticated(true)
         } catch (error) {
@@ -35,7 +35,7 @@ export const LoginProvider = ({ children }) => {
     };
 
     return (
-        <LoginContext.Provider value={{ signin, Usuario, isAutheticated, errors }}>
+        <LoginContext.Provider value={{ signin, Usuario,setUsuario, isAutheticated, errors }}>
             {children}
         </LoginContext.Provider>
     );

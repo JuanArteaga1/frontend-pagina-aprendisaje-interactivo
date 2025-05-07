@@ -1,8 +1,10 @@
-import React,{ useState } from "react";
+import React, { useState } from "react";
 import subirInvestigacionesImg from "../img/Subir_Investigaciones.jpg";
 import MenuLateral from "../components/MenuAdmi_Doc";
 import { useForm } from "react-hook-form";
 import Alerta from "../components/AlertasDocente";
+import { useLogin } from "../context/LoginContext"
+
 
 import {
   FaFileUpload,
@@ -19,8 +21,10 @@ import { UseInvestigacion } from "../context/InvestigacionContext";
 const SubirInvestigaciones = () => {
   const { register, handleSubmit, setValue, formState: { errors } } = useForm();
   const { sigout, errors: InvestigacionErrors, mensaje } = UseInvestigacion()
-    const [registroExitoso, setRegistroExitoso] = useState(false);
-  
+  const [registroExitoso, setRegistroExitoso] = useState(false);
+  const { Usuario, setUsuario } = useLogin()
+
+
   const MAX_SIZE = 10 * 1024 * 1024; // 10MB
 
 
@@ -67,6 +71,7 @@ const SubirInvestigaciones = () => {
             formData.append("urlDoi", data.UrlDoi);
             formData.append("portada", data.portada[0]);
             formData.append("urlDoc", data.urlDoc[0]);
+            formData.append("Usuario", Usuario.Id)
             formData.append("seccion", "Investigacion");
             console.log(formData)
             const resultado = await sigout(formData);

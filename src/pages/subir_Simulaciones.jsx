@@ -4,6 +4,8 @@ import { useForm } from "react-hook-form"
 import { UseSimulaciones } from "../context/SimulacionesContex";
 import { SimulacionesProvider } from "../context/SimulacionesContex";
 import Alerta from "../components/AlertasDocente";
+import { useLogin } from "../context/LoginContext"
+
 
 
 import {
@@ -20,6 +22,7 @@ const SubirAPK = () => {
 
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const { sigout, Simulaciones, errors: SimulacionesErrors, mensaje } = UseSimulaciones()
+    const { Usuario } = useLogin()
     const [setRegistroExitoso] = useState(false);
 
 
@@ -54,6 +57,7 @@ const SubirAPK = () => {
                                 formData.append("autores", data.autores);
                                 formData.append("fechaPublicacion", data.fechaPublicacion);
                                 formData.append("materia", data.materia);
+                                formData.append("Usuario", Usuario.Id)
                                 formData.append("categoriaId", data.categoriaId);
 
                                 // Asegúrate de que estos campos sean de tipo 'file'
@@ -72,7 +76,7 @@ const SubirAPK = () => {
                                 if (resultado?.success) {
                                     setRegistroExitoso(true);
                                 }
-                            
+
 
                             })} className="space-y-3">
                                 <div>
