@@ -1,9 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { useLogin } from "../context/LoginContext";
 
 const MenuAdministrador = ({ rol }) => {
   const navigate = useNavigate();
+  const { signout } = useLogin(); 
+  
+  const handleCerrarSesion = () => {
+    signout();
+    navigate("/"); 
+  };
   
   const opcionesMenu = {
     admin: [
@@ -61,7 +68,7 @@ const MenuAdministrador = ({ rol }) => {
       <div className="p-4 border-t border-gray-700 bg-gray-900">
         <button 
           className="w-full py-2.5 px-4 bg-blue-600 hover:bg-red-600 rounded-lg transition-all duration-200 flex items-center justify-center font-medium shadow-md hover:shadow-lg"
-          onClick={() => navigate("/")}
+          onClick={handleCerrarSesion}
         >
           <span className="mr-2 text-lg">🚪</span>
           Cerrar sesión
