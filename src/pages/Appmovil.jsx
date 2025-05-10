@@ -1,63 +1,93 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
-
-export const proyectosAplicaciones = {
-    Fisica: [
-        { nombre: "App 1", imagen: "/img/fotoapp.png" },
-        { nombre: "App 2", imagen: "/img/fotoapp.png" },
-    ],
-    Matemáticas: [
-        { nombre: "App A", imagen: "/img/fotoapp.png" },
-        { nombre: "App B", imagen: "/img/fotoapp.png" },
-    ],
-    "Ingeniería Civil": []
-};
-
+import { useProyectos } from "../context/ProyectoContext";
 
 const AplicacionesMoviles = () => {
-    const navigate = useNavigate();
-    const [seccionActual, setSeccionActual] = useState("Aplicaciones Moviles");
+  const navigate = useNavigate(); // Hook para redireccionar entre rutas
+  const { Proyectos, TraerProyectos } = useProyectos(); // Obtener datos del contexto de proyectos
+  const [seccionActual, setSeccionActual] = useState("Aplicaciones Moviles"); // Estado para mostrar la sección actual
 
-    return (
-        <div className="aplicaciones-moviles">
-            <Navbar />
-            <div className="imagen-seccion">
-                <img src="img/aplicacionesportada.png" alt="" />
-                <h1 className="titulo-seccion">Ahora estás en: {seccionActual}</h1>
-            </div>
+  useEffect(() => {
+    // Al cargar el componente, se traen los proyectos disponibles
+    TraerProyectos();
+  }, []);
 
-            <div className="contenido-proyectos">
-                {Object.entries(proyectosAplicaciones).map(([categoria, items]) => (
-                    <div key={categoria} className="categoria">
-                        <h2>{categoria}</h2>
-                        {items.length > 0 ? (
-                            <div className="cards-container"> {/* Usamos 'cards-container' aquí */}
-                                {items.map((app, i) => (
-                                    <div className="card" key={i}>
-                                        <div className="card-inner">
-                                            <div className="card-front">
-                                                <img src={app.imagen} alt={app.nombre} className="card-img" />
-                                            </div>
-                                            <div className="card-back">
-                                                <h3>{app.nombre}</h3>
-                                                <button onClick={() => navigate(`/detalle/${app.nombre}`)}>
-                                                    Ver más
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
+  console.log(Proyectos); // Mostrar los proyectos en consola para depuración
 
-                            </div>
-                        ) : (
-                            <p style={{ marginLeft: '10px' }}>No hay aplicaciones disponibles.</p>
-                        )}
-                    </div>
-                ))}
-            </div>
-        </div>
+  // Memorizar el listado de proyectos ordenado por fecha (más recientes primero)
+  const proyectosOrdenados = useMemo(() => {
+    return [...Proyectos].sort(
+      (a, b) => new Date(b.fechaPublicacion) - new Date(a.fechaPublicacion)
     );
+  }, [Proyectos]);
+
+  // Agrupar los proyectos por materia (o categoría), usando los proyectos ya ordenados
+  const proyectosAgrupados = proyectosOrdenados.reduce((acc, proyecto) => {
+    const categoria = proyecto.materia?.nombre || "Sin categoría"; // Si no hay materia, usar "Sin categoría"
+    if (!acc[categoria]) acc[categoria] = []; // Si no existe aún el grupo, crearlo
+    acc[categoria].push(proyecto); // Agregar el proyecto a su grupo correspondiente
+    return acc;
+  }, {});
+
+  return (
+    <div className="aplicaciones-moviles">
+      {/* Navbar de la aplicación */}
+      <Navbar />
+
+      {/* Sección de portada */}
+      <div className="imagen-seccion">
+        <img src="img/aplicacionesportada.png" alt="" />
+        <h1 className="titulo-seccion">Ahora estás en: {seccionActual}</h1>
+      </div>
+
+      {/* Contenedor principal de proyectos agrupados por categoría */}
+      <div className="contenido-proyectos">
+        {Object.entries(proyectosAgrupados).map(([categoria, items]) => (
+          <div key={categoria} className="categoria">
+            <h2>{categoria}</h2>
+            {items.length > 0 ? (
+              <div className="cards-container">
+                {/* Mostrar cada proyecto como una tarjeta */}
+                {items.map((app, i) => {
+                  // Limpiar la ruta de la imagen (reemplazar \ por /)
+                  const rutaLimpia = app.urlimg?.replace(/\\/g, "/");
+                  // Construir la URL completa de la imagen
+                  const imagenURL = `http://localhost:3000/uploads/${rutaLimpia?.split("uploads/")[1]}`;
+
+                  return (
+                    <div key={i} className="card">
+                      <div className="card-inner">
+                        {/* Parte frontal de la tarjeta: imagen */}
+                        <div className="card-front">
+                          <img
+                            src={imagenURL}
+                            alt={app.nombre_proyecto}
+                            className="card-img"
+                          />
+                        </div>
+                        {/* Parte trasera de la tarjeta: información y botón */}
+                        <div className="card-back">
+                          <h3>{app.nombre_proyecto}</h3>
+                          <p>{app.descripcion || "Sin descripción."}</p>
+                          <button onClick={() => navigate(`/detalle/${app._id}`)}>
+                            Ver más
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              // Mensaje si no hay proyectos en esta categoría
+              <p style={{ marginLeft: "10px" }}>No hay aplicaciones disponibles.</p>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export default AplicacionesMoviles;
