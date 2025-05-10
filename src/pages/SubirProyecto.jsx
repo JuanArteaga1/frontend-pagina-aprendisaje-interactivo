@@ -147,7 +147,7 @@ function SubirProyecto() {
                     {...register('urlArchivoapk', {
                       required: 'Se requiere una imagen',
                       validar: {
-                        tamaño: (archivos) => archivos[0]?.size <= MAX_SIZE || 'Audio supera los 10MB',
+                        tamaño: (archivos) => archivos[0]?.size <= MAX_SIZE || 'El archivo supera los 10MB',
                       },
 
                     })}
@@ -156,8 +156,6 @@ function SubirProyecto() {
                   <span className="text-3xl">🪷</span>
                   <span className="text-sm text-gray-600 mt-1">Subir APK</span>
                 </label>
-
-
 
                 <label className="flex flex-col items-center justify-center h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
                   <input

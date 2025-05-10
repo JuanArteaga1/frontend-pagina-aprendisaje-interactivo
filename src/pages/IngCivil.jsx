@@ -1,26 +1,35 @@
 import React from "react";
-import Navbar from "../components/Navbar";
-import CategoriaProyectos from "../components/CategoriaProyectos";
-import { proyectosSimulaciones } from "../pages/Simulaciones"; // Importa los proyectos de simulaciones
-import { proyectosAplicaciones } from "../pages/Appmovil"; // Importa los proyectos de aplicaciones
+import Navbar from "../components/Navbar"; // Componente de navegación superior
+import CategoriaProyectos from "../components/CategoriaProyectos"; // Componente que muestra proyectos por categoría
+import { useProyectos } from "../context/ProyectoContext"; // Hook para acceder al contexto de proyectos
 
 const IngCivil = () => {
+  // Obtener todos los proyectos desde el contexto
+  const { proyectos } = useProyectos();
+
+  // Filtrar los proyectos que son de tipo "Aplicacion Movil"
+  const proyectosAplicaciones = (proyectos || []).filter(p => p.tipo === "Aplicacion Movil");
+
+  // Filtrar los proyectos que son de tipo "Simulacion"
+  const proyectosSimulaciones = (proyectos || []).filter(p => p.tipo === "Simulacion");
+
   return (
     <div>
+      {/* Barra de navegación */}
       <Navbar />
-      
+
       {/* Sección de Simulaciones de Ingeniería Civil */}
-      <CategoriaProyectos 
-        titulo="Simulaciones de Ingeniería Civil" 
-        categoria="Ingeniería Civil" 
-        proyectos={proyectosSimulaciones} // Usamos los proyectos importados de Simulaciones
+      <CategoriaProyectos
+        titulo="Simulaciones de Ingeniería Civil"
+        categoria="Ingeniería Civil"
+        proyectos={proyectosSimulaciones} // Pasamos solo los proyectos filtrados como simulaciones
       />
 
       {/* Sección de Aplicaciones Móviles de Ingeniería Civil */}
-      <CategoriaProyectos 
-        titulo="Aplicaciones Móviles de Ingeniería Civil" 
-        categoria="Ingeniería Civil" 
-        proyectos={proyectosAplicaciones} // Usamos los proyectos importados de Aplicaciones
+      <CategoriaProyectos
+        titulo="Aplicaciones Móviles de Ingeniería Civil"
+        categoria="Ingeniería Civil"
+        proyectos={proyectosAplicaciones} // Pasamos solo los proyectos filtrados como aplicaciones móviles
       />
     </div>
   );
