@@ -61,4 +61,3 @@ const AplicacionesMoviles = () => {
 };
 
 export default AplicacionesMoviles;
-
