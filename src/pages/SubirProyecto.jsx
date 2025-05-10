@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import MenuLateral from "../components/MenuAdmi_Doc";
 import { useForm } from "react-hook-form"
-import { UseProyectos } from "../context/ProyectoContext"
+import { useProyectos } from "../context/ProyectoContext"
 import Alerta from "../components/AlertasDocente";
 import { useLogin } from "../context/LoginContext"
 
@@ -9,7 +9,7 @@ import { useLogin } from "../context/LoginContext"
 function SubirProyecto() {
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
-  const { sigout, Proyectos, errors: ProyectosErrors, mensaje } = UseProyectos()
+  const { sigout, Proyectos, errors: ProyectosErrors, mensaje } = useProyectos()
   const { Usuario, setUsuario } = useLogin()
   const [registroExitoso, setRegistroExitoso] = useState(false);
   const MAX_SIZE = 10 * 1024 * 1024; // 10MB

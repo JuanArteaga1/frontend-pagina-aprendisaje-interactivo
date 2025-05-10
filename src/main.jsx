@@ -5,7 +5,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Simulaciones from "./pages/Simulaciones";
 import Podcast from "./pages/Podcast";
-import Appmovil from "./pages/appmovil";
+import Appmovil from "./pages/Appmovil"
 import Investigaciones from "./pages/investigaciones";
 import Subirsimulaciones from "./pages/subir_Simulaciones";
 import "./index.css";
@@ -39,6 +39,7 @@ import { TraerProyectosProvider } from "./context/TraerProyectos";
 import { SimulacionesProvider } from "./context/SimulacionesContex";
 import ProtectedRote from "./ProtectedRoute";
 
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <LoginProvider>
     <BrowserRouter>
@@ -60,6 +61,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Route path="/detalle/:proyecto" element={<DetalleProyecto />} />
       <Route path="/investigaciones/:id" element={<InvestigacionDetalle />} />
       <Route path="/episodio/:id" element={<Episodio />} />
+  
 
       //Rutas con autenticacion
       <Route element={<ProtectedRote/>}>
