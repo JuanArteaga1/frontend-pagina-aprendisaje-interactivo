@@ -53,10 +53,10 @@ const InvestigacionDetalle = () => {
           {/* Columna Derecha */}
           <div className="investigacion-right flex-1 p-5">
             <p className="text-base mb-2">
-              <strong>Autor(es):</strong> {investigacion.autor}
+              <strong>Autor(es):</strong> {investigacion.autores}
             </p>
             <p className="text-base mb-4">
-              <strong>Fecha de publicación:</strong> {investigacion.fecha}
+              <strong>Fecha de publicación:</strong> {investigacion.fechaPublicacion}
             </p>
             {investigacion.fuente && (
               <a
