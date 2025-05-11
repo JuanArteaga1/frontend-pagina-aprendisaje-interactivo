@@ -1,105 +1,187 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import { useInvestigacion } from "../context/InvestigacionContext";
 
 const Investigaciones = () => {
+  const navigate = useNavigate();
+  const { investigaciones, traerInvestigaciones } = useInvestigacion();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(null);
-  const navigate = useNavigate();
 
-  const investigaciones = [
-    {
-      id: 1,
-      titulo: "Avances en IA",
-      categoria: "Tecnología",
-      descripcion: "Exploramos los avances más recientes en inteligencia artificial.",
-      autor: "Dr. Juan Pérez",
-      fecha: "10 de abril de 2024",
-      documento: "/docs/ia.pdf",
-      enlace: "https://ejemplo.com/ia",
-    },
-    {
-      id: 2,
-      titulo: "Descubrimientos médicos",
-      categoria: "Medicina",
-      descripcion: "Nuevas técnicas médicas revolucionarias en el tratamiento del cáncer.",
-      autor: "Dra. Ana Gómez",
-      fecha: "15 de mayo de 2024",
-      documento: "/docs/medicina.pdf",
-      enlace: "https://ejemplo.com/medicina",
-    },
-    {
-      id: 3,
-      titulo: "Evolución de la historia",
-      categoria: "Historia",
-      descripcion: "Un análisis de cómo los eventos han dado forma al mundo moderno.",
-      autor: "Prof. Carlos López",
-      fecha: "20 de junio de 2024",
-      documento: "/docs/historia.pdf",
-      enlace: "https://ejemplo.com/historia",
-    },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        await traerInvestigaciones();
+        setError(null);
+      } catch (err) {
+        console.error("Error al obtener investigaciones:", err);
+        setError("No se pudieron cargar las investigaciones");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const conteoCategorias = investigaciones.reduce((acc, inv) => {
-    acc[inv.categoria] = (acc[inv.categoria] || 0) + 1;
-    return acc;
-  }, {});
+    fetchData();
+  }, []); // Eliminé traerInvestigaciones de las dependencias
+
+  const investigacionesOrdenadas = useMemo(() => {
+    return [...(investigaciones || [])].sort(
+      (a, b) => new Date(b.fecha) - new Date(a.fecha)
+    );
+  }, [investigaciones]);
+
+  const investigacionesAgrupadas = useMemo(() => {
+    return investigacionesOrdenadas.reduce((acc, inv) => {
+      const materia = inv.materia?.nombre || "Sin materia";
+      if (!acc[materia]) acc[materia] = [];
+      acc[materia].push(inv);
+      return acc;
+    }, {});
+  }, [investigacionesOrdenadas]);
+
+  const conteoCategorias = useMemo(() => {
+    return investigacionesOrdenadas.reduce((acc, inv) => {
+      const materia = inv.materia?.nombre || "Sin materia";
+      acc[materia] = (acc[materia] || 0) + 1;
+      return acc;
+    }, {});
+  }, [investigacionesOrdenadas]);
 
   const categorias = Object.keys(conteoCategorias);
 
+  const normalizePath = (path) => {
+    return path?.replace(/\\/g, "/");
+  };
+
+  if (loading) {
+    return (
+      <div className="investigaciones-page">
+        <Navbar />
+        <div className="loading">Cargando investigaciones...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="investigaciones-page">
+        <Navbar />
+        <div className="error">{error}</div>
+      </div>
+    );
+  }
+
   return (
-    <div>
+    <div className="investigaciones-page bg-gray-50 min-h-screen">
       <Navbar />
 
-      <div className="flex gap-6 p-6">
+      <div className="flex gap-6 p-6 max-w-7xl mx-auto">
         {/* Sidebar de categorías */}
-        <aside className="w-64 bg-gray-100 p-4 rounded-lg shadow-md">
-          <h3 className="text-xl font-semibold mb-3">Categorías</h3>
-          <ul>
+        <aside className="w-64 bg-white p-4 rounded-lg shadow-sm border border-gray-200 sticky top-6 h-fit">
+          <h3 className="text-lg font-semibold mb-4 text-gray-800">Categorías</h3>
+          <ul className="space-y-2">
             {categorias.map((cat, index) => (
               <li
                 key={index}
                 onClick={() =>
                   setCategoriaSeleccionada(categoriaSeleccionada === cat ? null : cat)
                 }
-                className={`p-2 cursor-pointer ${categoriaSeleccionada === cat ? 'font-bold' : 'font-normal'} hover:bg-gray-200`}
+                className={`p-2 cursor-pointer rounded-md text-sm ${
+                  categoriaSeleccionada === cat 
+                    ? "bg-blue-100 text-blue-700 font-medium" 
+                    : "text-gray-600 hover:bg-gray-100"
+                }`}
               >
-                {`> ${cat} (${conteoCategorias[cat]})`}
+                {`${cat} (${conteoCategorias[cat]})`}
               </li>
             ))}
           </ul>
         </aside>
 
-        {/* Sección principal con barra de búsqueda y lista de investigaciones */}
+        {/* Sección principal */}
         <main className="flex-1">
-          <input
-            type="text"
-            placeholder="Buscar investigación..."
-            className="w-1/4 p-2 mb-6 border border-gray-300 rounded-lg text-sm"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+          {/* Barra de búsqueda */}
+          <div className="mb-6 flex justify-between items-center">
+            <input
+              type="text"
+              placeholder="Buscar investigación..."
+              className="w-64 p-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
 
-          {/* Lista de investigaciones filtradas */}
-          <div className="flex flex-wrap gap-6">
-            {investigaciones
-              .filter(
-                (inv) =>
-                  (categoriaSeleccionada === null || inv.categoria === categoriaSeleccionada) &&
-                  inv.titulo.toLowerCase().includes(searchTerm.toLowerCase())
-              )
-              .map((inv) => (
-                <div className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 p-4 bg-white rounded-lg shadow-md" key={inv.id}>
-                  <h4 className="font-semibold text-lg">{inv.titulo}</h4>
-                  <p className="text-sm text-gray-500">{inv.categoria}</p>
-                  <button
-                    onClick={() => navigate(`/investigaciones/${inv.id}`)}
-                    className="mt-3 w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-400 cursor-pointer"
-                  >
-                    📖 Ver Detalles
-                  </button>
+          {/* Lista de investigaciones */}
+          <div className="space-y-8">
+            {Object.entries(investigacionesAgrupadas).map(([materia, items]) => (
+              (categoriaSeleccionada === null || categoriaSeleccionada === materia) && (
+                <div key={materia} className="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+                  <h2 className="text-xl font-semibold mb-4 text-gray-800">{materia}</h2>
+                  
+                  {items.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {items
+                        .filter((inv) =>
+                          inv.nombre_proyecto.toLowerCase().includes(searchTerm.toLowerCase())
+                        )
+                        .map((inv) => {
+                          const rutaImagen = normalizePath(inv.urlimg) || "";
+                          const urlImagen = rutaImagen
+                            ? `http://localhost:3000/uploads/${rutaImagen.split("uploads/").pop()}`
+                            : "img/placeholder.jpg";
+
+                          const rutaPDF = normalizePath(inv.urlDoc) || "";
+                          const urlPDF = rutaPDF
+                            ? `http://localhost:3000/uploads/${rutaPDF.split("uploads/").pop()}`
+                            : "#";
+
+                          return (
+                            <div key={inv._id} className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
+                              <div className="h-48 overflow-hidden">
+                                <img
+                                  src={urlImagen}
+                                  alt={inv.nombre_proyecto}
+                                  className="w-full h-full object-cover"
+                                  onError={(e) => {
+                                    e.target.src = "img/placeholder.jpg";
+                                  }}
+                                />
+                              </div>
+                              <div className="p-4">
+                                <h3 className="font-medium text-gray-900 mb-2">{inv.nombre_proyecto}</h3>
+                                <p className="text-sm text-gray-600 mb-3 line-clamp-2">{inv.descripcion}</p>
+                                <div className="flex justify-between items-center">
+                                  <button
+                                    onClick={() => navigate(`/investigaciones/${inv._id}`)}
+                                    className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+                                  >
+                                    Ver detalles
+                                  </button>
+                                  {rutaPDF && (
+                                    <a 
+                                      href={urlPDF} 
+                                      download 
+                                      className="text-sm bg-blue-50 text-blue-600 px-3 py-1 rounded hover:bg-blue-100"
+                                    >
+                                      Descargar PDF
+                                    </a>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                    </div>
+                  ) : (
+                    <p className="text-gray-500 text-sm">No hay investigaciones disponibles en esta categoría.</p>
+                  )}
                 </div>
-              ))}
+              )
+            ))}
           </div>
         </main>
       </div>
