@@ -59,7 +59,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/IngCivil" element={<ProyectosProvider><IngCivil /></ProyectosProvider>} />
         <Route path="/Matematicas" element={<ProyectosProvider><Matematicas /></ProyectosProvider>} />
         <Route path="/detalle/:id" element={<ProyectosProvider><DetalleProyecto /></ProyectosProvider>} />
-        <Route path="/investigaciones/:id" element={<InvestigacionDetalle />} />
+        <Route path="/investigaciones/:id" element={<TraerProyectosProvider><InvestigacionDetalle /></TraerProyectosProvider>} />
+
         <Route path="/episodio/:id" element={<Episodio />} />
 
 
