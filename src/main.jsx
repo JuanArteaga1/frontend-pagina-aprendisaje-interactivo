@@ -6,7 +6,7 @@ import Login from "./pages/Login";
 import Simulaciones from "./pages/Simulaciones";
 import Podcast from "./pages/Podcast";
 import Appmovil from "./pages/Appmovil"
-import Investigaciones from "./pages/investigaciones";
+import Investigaciones from "./pages/Investigaciones";
 import Subirsimulaciones from "./pages/subir_Simulaciones";
 import "./index.css";
 import SubirInvestigaciones from "./pages/SubirInvestigaciones";
@@ -51,7 +51,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/simulaciones" element={<Simulaciones />} />
         <Route path="/podcast" element={<PodcastProvider><Podcast /></PodcastProvider>} />
         <Route path="/appmovil" element={<ProyectosProvider><Appmovil /></ProyectosProvider>} />
-        <Route path="/investigaciones" element={<Investigaciones />} />
+        <Route path="/investigaciones" element={<InvestigacionProvider><Investigaciones /></InvestigacionProvider>} />
         <Route path="/ayuda" element={<AyudaT />} />
         <Route path="/quienes-somos" element={<QuienesSomos />} />
       //Rutas de las categorias de HOME

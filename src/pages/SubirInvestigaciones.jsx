@@ -16,11 +16,11 @@ import {
   FaLink,
 } from "react-icons/fa";
 
-import { UseInvestigacion } from "../context/InvestigacionContext";
+import { useInvestigacion } from "../context/InvestigacionContext";
 
 const SubirInvestigaciones = () => {
   const { register, handleSubmit, setValue, formState: { errors } } = useForm();
-  const { sigout, errors: InvestigacionErrors, mensaje } = UseInvestigacion()
+  const { sigout, errors: InvestigacionErrors, mensaje } = useInvestigacion()
   const [registroExitoso, setRegistroExitoso] = useState(false);
   const { Usuario, setUsuario } = useLogin()
 
