@@ -39,7 +39,7 @@ const MisProyectos = () => {
         } else if (fila.proyecto === "Investigación") {
           navigate(`/editar-investigacion/${fila._id}`, { state: { investigacion: fila } });
         } else if (fila.proyecto === "Simulación") {
-          navigate(`/editar-simulacion/${fila._id}`, { state: { proyecto: fila } });
+          navigate(`/editar-simulacion/${fila._id}`, { state: { simulacion: fila } });
         }
       },
       mostrar: (fila) =>
