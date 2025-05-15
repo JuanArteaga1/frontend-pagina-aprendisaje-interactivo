@@ -80,13 +80,11 @@ function EditarInvestigacion() {
         <div className="flex h-screen bg-gray-100">
             {/* Menú Lateral */}
             <MenuLateral rol="docente" />
-            <main className="flex-1 p-8 overflow-y-auto">
+            <main className="flex-1 w-full p-8 overflow-y-auto">
                 {/* Contenido principal */}
                 <div className="max-w-4xl mx-auto">
-                    <h2 className="text-3xl font-bold text-gray-800 mb-8">Editar Investigacion</h2>
-
-                    {/* Contenedor del formulario */}
-                    <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-md p-8 border border-gray-200">
+                    <h2 className="text-3xl font-bold text-gray-800 mt-4 mb-4">Editar Investigación</h2>
+                    <div className="bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
 
                         {/* Formulario */}
 
