@@ -68,8 +68,10 @@ const AplicacionesMoviles = () => {
                         </div>
                         {/* Parte trasera de la tarjeta: información y botón */}
                         <div className="card-back">
-                          <h3>{app.nombre_proyecto}</h3>
+                          <h3><strong>{app.nombre_proyecto}</strong></h3>
                           <p>{app.descripcion || "Sin descripción."}</p>
+                          <p><strong>Materia:</strong> {app.materia?.nombre || "Sin materia"}</p>
+                          <p><strong>Autor:</strong> {app.autores || "No hay autor"}</p>
                           <button onClick={() => navigate(`/detalle/${app._id}`)}>
                             Ver más
                           </button>

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Search, User } from "lucide-react";
+import Swal from 'sweetalert2';
+
 
 const Navbar = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -121,13 +123,30 @@ const Navbar = () => {
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link
-                                        to="/logout"
-                                        className="block px-4 py-2 hover:bg-gray-200"
+                                    <button
+                                        onClick={() => {
+                                            Swal.fire({
+                                                title: '¿Cerrar sesión?',
+                                                text: '¿Estás segur@ de que quieres cerrar sesión?',
+                                                icon: 'warning',
+                                                showCancelButton: true,
+                                                confirmButtonColor: '#d33',
+                                                cancelButtonColor: '#3085d6',
+                                                confirmButtonText: 'Sí, cerrar sesión',
+                                                cancelButtonText: 'Cancelar'
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    localStorage.clear(); // limpia almacenamiento
+                                                    window.location.href = "/"; // redirige al inicio
+                                                }
+                                            });
+                                        }}
+                                        className="block w-full text-left px-4 py-2 hover:bg-gray-200"
                                     >
                                         Cerrar sesión
-                                    </Link>
+                                    </button>
                                 </li>
+
                                 <li>
                                     <Link
                                         to="/ayuda"

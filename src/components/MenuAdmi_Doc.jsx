@@ -2,15 +2,30 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useLogin } from "../context/LoginContext";
+import Swal from 'sweetalert2';
+
 
 const MenuAdministrador = ({ rol }) => {
   const navigate = useNavigate();
   const { signout } = useLogin(); 
   
   const handleCerrarSesion = () => {
-    signout();
-    navigate("/"); 
-  };
+  Swal.fire({
+    title: '¿Cerrar sesión?',
+    text: "¿Estás segur@ de que quieres cerrar sesión?",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Sí, cerrar sesión',
+    cancelButtonText: 'Cancelar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      signout();
+      navigate('/');
+    }
+  });
+};
   
   const opcionesMenu = {
     admin: [
