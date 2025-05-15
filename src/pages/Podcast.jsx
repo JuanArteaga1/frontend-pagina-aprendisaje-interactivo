@@ -46,8 +46,10 @@ const Podcast = () => {
 
                 {/* Lado trasero */}
                 <div className="card-back">
-                  <h3>{ep.titulo}</h3>
+                  <h3>{ep.nombre_proyecto}</h3>
                   <p>{ep.descripcion}</p>
+                  <p>{ep.materia}</p>
+                  <p>{ep.autores}</p>
                   <a
                     href={ep.UrlAudio}
                     target="_blank"

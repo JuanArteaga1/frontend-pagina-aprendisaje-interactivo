@@ -189,8 +189,8 @@ h2 {
 
 /* Tarjetas */
 .card {
-  width: 250px; /* o el tamaño que prefieras */
-  height: 200px;
+  width: 300px;
+  height: 250px;
   perspective: 1000px;
   flex-shrink: 0;
   scroll-snap-align: start;
@@ -216,6 +216,13 @@ h2 {
   backface-visibility: hidden;
   border-radius: 10px;
   overflow: hidden; /* IMPORTANTE para que nada se salga */
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+.card-back::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
 }
 
 .card-front {
@@ -234,11 +241,12 @@ h2 {
   transform: rotateY(180deg);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  align-items: center; 
+  justify-content: flex-start; 
   gap: 10px;
   padding: 15px;
   border-radius: 10px;
+  overflow-y: auto;
 }
 
 .card-back h3 {
