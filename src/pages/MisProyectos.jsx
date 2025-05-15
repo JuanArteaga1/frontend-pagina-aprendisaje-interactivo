@@ -35,7 +35,7 @@ const MisProyectos = () => {
         if (fila.proyecto === "Proyecto") {
           navigate(`/editar-proyecto/${fila._id}`, { state: { proyecto: fila } });
         } else if (fila.proyecto === "Podcast") {
-          navigate(`/editar-podcast/${fila._id}`, { state: { proyecto: fila } });
+          navigate(`/editar-podcast/${fila._id}`, { state: { podcast: fila } });
         } else if (fila.proyecto === "Investigación") {
           navigate(`/editar-investigacion/${fila._id}`, { state: { proyecto: fila } });
         } else if (fila.proyecto === "Simulación") {
