@@ -40,6 +40,7 @@ import { SimulacionesProvider } from "./context/SimulacionesContex";
 import ProtectedRote from "./ProtectedRoute";
 
 import EditarProyecto from "./pages/EditarProyecto";
+import EditarPodcast from "./pages/EditarPodcast";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <LoginProvider>
@@ -85,6 +86,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
         //Ruta para editar proyecto
         <Route path="/editar-proyecto/:id" element={<ProyectosProvider><EditarProyecto /></ProyectosProvider>} />
+        <Route path="/editar-podcast/:id" element={<PodcastProvider><EditarPodcast /></PodcastProvider>} />
 
         </Route>
 
