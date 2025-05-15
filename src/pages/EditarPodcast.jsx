@@ -159,7 +159,7 @@ function EditarPodcast() {
                                         <option value="ingenieria_civil">Ingeniería Civil</option>
                                         <option value="matematicas">Matemáticas</option>
                                     </select>
-                                    {errors.materia && (<p className="text-red-500">la materia es requerido</p>)}
+                                    {errors.materia && (<p className="text-red-500">La materia es requerida</p>)}
 
                                 </div>
 
