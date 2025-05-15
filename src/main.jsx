@@ -39,6 +39,7 @@ import { TraerProyectosProvider } from "./context/TraerProyectos";
 import { SimulacionesProvider } from "./context/SimulacionesContex";
 import ProtectedRote from "./ProtectedRoute";
 
+import EditarProyecto from "./pages/EditarProyecto";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <LoginProvider>
@@ -81,6 +82,10 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/SubirInvestigaciones" element={<InvestigacionProvider><SubirInvestigaciones /></InvestigacionProvider>} />
           <Route path="/SubirDocente" element={<DocenteProvider>  <SubirDocente /> </DocenteProvider>} />
           <Route path="subir-podcast" element={<PodcastProvider><SubirPodcast /></PodcastProvider>} />
+
+        //Ruta para editar proyecto
+        <Route path="/editar-proyecto/:id" element={<ProyectosProvider><EditarProyecto /></ProyectosProvider>} />
+
         </Route>
 
       </Routes>
