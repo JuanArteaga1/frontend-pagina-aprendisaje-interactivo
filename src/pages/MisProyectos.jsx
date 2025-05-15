@@ -6,7 +6,6 @@ import { useLogin } from "../context/LoginContext"
 import { UseTraerProyectos } from "../context/TraerProyectos";
 
 
-
 const MisProyectos = () => {
   const navigate = useNavigate();
   const { Usuario } = useLogin()
@@ -33,9 +32,18 @@ const MisProyectos = () => {
     {
       nombre: "Editar",
       fn: (fila) => {
-        console.log("Editar:", fila);
-        // Puedes redirigir o abrir modal aquí
+        if (fila.proyecto === "Proyecto") {
+          navigate(`/editar-proyecto/${fila._id}`, { state: { proyecto: fila } });
+        } else if (fila.proyecto === "Podcast") {
+          navigate(`/editar-podcast/${fila._id}`, { state: { proyecto: fila } });
+        } else if (fila.proyecto === "Investigación") {
+          navigate(`/editar-investigacion/${fila._id}`, { state: { proyecto: fila } });
+        } else if (fila.proyecto === "Simulación") {
+          navigate(`/editar-simulacion/${fila._id}`, { state: { proyecto: fila } });
+        }
       },
+      mostrar: (fila) =>
+        ["Proyecto", "Podcast", "Investigación", "Simulación"].includes(fila.proyecto),
       estilo: "bg-yellow-500 text-white hover:bg-yellow-600"
     },
     {
