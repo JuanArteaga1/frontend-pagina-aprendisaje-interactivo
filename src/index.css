@@ -101,6 +101,8 @@ body {
 
 /*AQUI VAN LOS TITULOS E IMAGENES DE SIMULACIONES Y APLICACIONES MOVILES */
 .imagen-seccion {
+  width: 970px;
+  height: 350px;
   position: relative; /* Necesario para posicionar el texto sobre la imagen */
   width: 100%;       /* Asegura que la imagen ocupe todo el ancho de la pantalla */
   overflow: hidden; /* Evita que se salgan elementos si la imagen es más grande */
@@ -108,8 +110,9 @@ body {
 
 .imagen-seccion img {
   width: 100%; 
-  height: auto; /* Mantiene la relación de aspecto */
+  height: 350px; /* Mantiene la relación de aspecto */
   object-fit: cover; /* Asegura que la imagen cubra el área de la imagen sin distorsionarse */
+  object-position: center 30%;
 }
 
 .titulo-seccion {
@@ -305,6 +308,13 @@ h2 {
   .about-us > div {
     width: 100% !important;
     padding: 0 !important;
+  }
+  .imagen-seccion {
+    height: 250px;
+  }
+
+  .imagen-seccion img {
+    height: 250px;
   }
 }
 
