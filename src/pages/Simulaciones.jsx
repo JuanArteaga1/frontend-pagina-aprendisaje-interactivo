@@ -34,7 +34,7 @@ const Simulaciones = () => {
         <div className="simulaciones">
             <Navbar />
             <div className="imagen-seccion">
-                <img src="img/simulacionesportada.png" alt="Imagen de simulaciones" />
+                <img src="img/portada-simulaciones.jpg" alt="Imagen de podcast" />
                 <h1 className="titulo-seccion">Ahora estás en: {seccionActual}</h1>
             </div>
 
