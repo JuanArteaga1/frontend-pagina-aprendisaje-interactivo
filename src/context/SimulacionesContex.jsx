@@ -1,5 +1,5 @@
 import { Children, createContext, useEffect, useState, useContext } from "react";
-import { subirSimulacionesAPI } from "../api/AdmiSimulaciones";
+import { subirSimulacionesAPI,GetAllSimulaciones,PutSimulaciones } from "../api/AdmiSimulaciones";
 import { GetAllPodcast } from "../api/AdmiPodcast";
 
 export const SimulacionesContext = createContext();
@@ -16,6 +16,21 @@ export const SimulacionesProvider = ({ children }) => {
     const [Simulaciones, SetSimulaciones] = useState(null);
     const [errors,setErrors ] = useState([])
     const [mensaje, setMensaje] = useState(null);
+
+
+    const ActualizarSimulaciones = async (Id, data) => {
+        try {
+          const response = await PutSimulaciones(Id, data);
+          SetSimulaciones(response);
+    
+          return { success: true, data: response };
+        } catch (error) {
+          setMensaje(null);
+          setErrors(error.response?.data?.errors || [{ msg: "Error desconocido" }]);
+    
+          return { success: false, error: error.response?.data?.errors };
+        }
+      };
     
     
     const sigout = async (data) => {
@@ -36,7 +51,7 @@ export const SimulacionesProvider = ({ children }) => {
     };
 
     return (
-        <SimulacionesContext.Provider value={{ sigout, Simulaciones,errors,mensaje, setMensaje }}>
+        <SimulacionesContext.Provider value={{ sigout, Simulaciones,errors,mensaje, setMensaje,ActualizarSimulaciones }}>
             {children}
         </SimulacionesContext.Provider>
     );

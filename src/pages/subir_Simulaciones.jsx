@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import MenuLateral from "../components/MenuAdmi_Doc";
 import { useForm } from "react-hook-form"
 import { UseSimulaciones } from "../context/SimulacionesContex";
-import { SimulacionesProvider } from "../context/SimulacionesContex";
 import Alerta from "../components/AlertasDocente";
 import { useLogin } from "../context/LoginContext"
+import { UseCategoria } from "../context/CategoriaContext"
+
 
 
 
@@ -21,9 +22,15 @@ import {
 const SubirAPK = () => {
 
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
-    const { sigout, Simulaciones, errors: SimulacionesErrors, mensaje } = UseSimulaciones()
+    const { sigout, errors: SimulacionesErrors, mensaje } = UseSimulaciones()
     const { Usuario } = useLogin()
     const [setRegistroExitoso] = useState(false);
+    const { TraerCategoria, Categoria } = UseCategoria()
+    useEffect(() => {
+        TraerCategoria();
+        console.log(Categoria) // Llamada inicial para traer los datos
+    }, []);
+
 
 
 
@@ -147,20 +154,23 @@ const SubirAPK = () => {
                                 </div>
 
                                 <div>
-                                    <label className="block text-3x1 font-semibold text-gray-800 mb-1">Categoria</label>
+                                    <label className="block text-base font-semibold text-gray-800 mb-1">Categoría</label>
                                     <select
                                         {...register('categoriaId', { required: true })}
                                         name="categoriaId"
-                                        className="w-full px-4 py-2 text-medium border-2 border-gray-200 rounded-xl"
                                         required
+                                        className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
                                     >
-
-                                        <option value="">Seleccionar categoria</option>
-                                        <option value="software">software</option>
-                                        <option value="hardware">hardware</option>
-                                        <option value="investigacion">investigacion</option>
+                                        <option value="">Seleccionar categoría</option>
+                                        {Categoria && Categoria.map((categoria) => (
+                                            <option key={categoria.id} value={categoria.id}>
+                                                {categoria.Nombre_Categoria}
+                                            </option>
+                                        ))}
                                     </select>
-                                    {errors.categoriaId && (<p className="text-red-500">La categoria es requerida</p>)}
+                                    {errors.categoriaId && (
+                                        <p className="text-red-500">Categoria es requerida</p>
+                                    )}
                                 </div>
 
                                 <h3 className="text-3x1 font-semibold text-gray-800 mb-2">Archivos requeridos</h3>

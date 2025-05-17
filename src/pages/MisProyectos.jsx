@@ -4,6 +4,8 @@ import TablaDinamica from "../components/Tabla";
 import MenuAdministrador from "../components/MenuAdmi_Doc";
 import { useLogin } from "../context/LoginContext"
 import { UseTraerProyectos } from "../context/TraerProyectos";
+import { useLocation } from "react-router-dom";
+
 
 
 const MisProyectos = () => {
@@ -12,11 +14,29 @@ const MisProyectos = () => {
   const [columnas, setColumnas] = useState([]);
   const { traerProyectoId, TraerProyectosId } = UseTraerProyectos();
   const [proyectosUnificados, setProyectosUnificados] = useState({ data: [] });
+  const [mensaje, setMensaje] = useState(null); // Nuevo estado para mensajes
+  const [tipoMensaje, setTipoMensaje] = useState("success"); // 'success' o 'error'
+  const location = useLocation();
+
 
 
   useEffect(() => {
     TraerProyectosId(Usuario.Id); // Llamada inicial para traer los datos
   }, []);
+  useEffect(() => {
+  if (location.state?.mensaje) {
+    setMensaje(location.state.mensaje);
+    setTipoMensaje(location.state.tipo || "success");
+
+    // Limpia el mensaje después de unos segundos
+    setTimeout(() => {
+      setMensaje(null);
+      navigate(location.pathname, { replace: true });
+    }, 3000);
+  }
+}, [location.state]);
+
+
 
 
   useEffect(() => {
@@ -55,7 +75,6 @@ const MisProyectos = () => {
     }
   ];
   useEffect(() => {
-    console.log("entro")
     console.log(traerProyectoId?.data)
     if (traerProyectoId?.data) {
       const {
@@ -87,12 +106,18 @@ const MisProyectos = () => {
       <MenuAdministrador rol="docente" />
 
       {/* Área de Contenido */}
+      
       <main className="flex-1 p-8 overflow-y-auto">
         <h1 className="text-2xl font-bold text-gray-800 mb-4">
           Mis Proyectos
         </h1>
 
         {/* Contenedor de la Tabla */}
+        {mensaje && (
+            <div className={`mb-4 p-2 rounded ${tipoMensaje === "success" ? "bg-green-200 text-green-800" : "bg-red-200 text-red-800"}`}>
+              {mensaje}
+            </div>
+          )}
         <div className="bg-white rounded-lg shadow-sm overflow-hidden">
           <TablaDinamica
             datos={proyectosUnificados}
@@ -103,6 +128,7 @@ const MisProyectos = () => {
 
         {/* Pie de tabla */}
         <div className="mt-4 text-sm text-gray-600 flex justify-between items-center">
+          
           <div className="flex items-center space-x-2">
             <button className="px-3 py-1 border rounded text-sm hover:bg-gray-100">
               Anterior

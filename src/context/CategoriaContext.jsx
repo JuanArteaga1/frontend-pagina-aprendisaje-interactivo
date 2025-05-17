@@ -1,5 +1,6 @@
 import { Children, createContext, useEffect, useState, useContext } from "react";
 import { subirCategoriaAPI,GetAllCategoria } from "../api/AdmiCategoria";
+import { Settings } from "lucide-react";
 
 export const CategoriaContext = createContext();
 
@@ -19,8 +20,8 @@ export const CategoriaProvider = ({ children }) => {
     const TraerCategoria = async() =>{
         
         try {
-            const Categoria = await GetAllDocentes()
-            SetCategoria(Categoria)
+            const Categoria = await GetAllCategoria()
+            SetCategoria(Categoria.data)
         } catch (error) {
             console.log(error)
             
@@ -44,7 +45,7 @@ export const CategoriaProvider = ({ children }) => {
     };
 
     return (
-        <CategoriaContext.Provider value={{ sigout, Categoria,errors,mensaje, setMensaje,SetCategoria,TraerCategoria }}>
+        <CategoriaContext.Provider value={{ sigout,Categoria,TraerCategoria,errors, mensaje, setMensaje,}}>
             {children}
         </CategoriaContext.Provider>
     );

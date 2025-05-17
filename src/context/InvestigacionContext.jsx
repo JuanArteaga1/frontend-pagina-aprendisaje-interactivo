@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import { GetAllInvestigacion, subirInvestigacionAPI } from "../api/AdmiInvestigacion";
+import { GetAllInvestigacion, subirInvestigacionAPI, PutInvestigacion } from "../api/AdmiInvestigacion";
 
 const InvestigacionContext = createContext();
 
@@ -16,6 +16,23 @@ export const InvestigacionProvider = ({ children }) => {
   const [errors, setErrors] = useState([]);
   const [mensaje, setMensaje] = useState(null);
 
+
+
+
+  const ActualizarInvestigaciones = async (Id, data) => {
+    try {
+      const response = await PutInvestigacion(Id, data);
+      setInvestigaciones(response);
+
+      return { success: true, data: response };
+    } catch (error) {
+      setMensaje(null);
+      setErrors(error.response?.data?.errors || [{ msg: "Error desconocido" }]);
+
+      return { success: false, error: error.response?.data?.errors };
+    }
+  };
+
   const traerInvestigaciones = async () => {
     try {
       const response = await GetAllInvestigacion();
@@ -29,7 +46,7 @@ export const InvestigacionProvider = ({ children }) => {
   const sigout = async (data) => {
     try {
       const response = await subirInvestigacionAPI(data);
-      setInvestigaciones((prev) => [...prev, response.data]);
+      setInvestigaciones(response.data);
 
       if (response.status >= 200 && response.status <= 399) {
         setMensaje("¡Investigación registrada correctamente!");
@@ -50,6 +67,7 @@ export const InvestigacionProvider = ({ children }) => {
         mensaje,
         setMensaje,
         errors,
+        ActualizarInvestigaciones
       }}
     >
       {children}

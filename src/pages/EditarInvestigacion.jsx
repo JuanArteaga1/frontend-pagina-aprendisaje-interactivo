@@ -22,15 +22,17 @@ function EditarInvestigacion() {
     const investigacion = location.state?.investigacion;
     const { register, handleSubmit, setValue, formState: { errors } } = useForm();
     const [investigacionActual, setInvestigacionActual] = useState(null);
+    const { ActualizarInvestigaciones, errors: InvestigacionErrors, } = useInvestigacion()
+    const { Usuario, setUsuario } = useLogin()
+    const MAX_SIZE = 10 * 1024 * 1024; // 10MB
+
     const { id } = useParams();
 
 
     useEffect(() => {
         if (investigacion) {
             setInvestigacionActual(investigacion);
-
             const fechaFormateada = new Date(investigacion.fechaPublicacion).toISOString().split("T")[0];
-
             setValue("nombre_proyecto", investigacion.nombre_proyecto);
             setValue("descripcion", investigacion.descripcion);
             setValue("autores", investigacion.autores);
@@ -43,30 +45,34 @@ function EditarInvestigacion() {
 
     const onSubmit = async (data) => {
         try {
+            console.log(data)
             const formData = new FormData();
             formData.append("nombre_proyecto", data.nombre_proyecto);
             formData.append("descripcion", data.descripcion);
             formData.append("autores", data.autores);
             formData.append("fechaPublicacion", data.fechaPublicacion);
             formData.append("materia", data.materia);
+            formData.append("portada", data.portada[0]);
             formData.append("urlArticulo", data.urlArticulo);
             formData.append("urlDoi", data.urlDoi);
-
-            if (data.archivo && data.archivo[0]) {
-                formData.append("archivo", data.archivo[0]);
+            formData.append("urlDoc", data.urlDoc[0]);
+            formData.append("Usuario", Usuario.Id)
+            formData.append("seccion", "Investigacion");
+            const respuesta = await ActualizarInvestigaciones(id, formData)
+            if (respuesta?.success) {
+                navigate("/misproyectos", {
+                    state: {
+                        mensaje: "Investigación actualizada correctamente",
+                        tipo: "success"
+                    }
+                });
             }
 
-            await axios.put(`http://localhost:3001/api/investigaciones/${investigacion._id}`, formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            });
 
-            alert("Investigación actualizada con éxito");
-            navigate("/misproyectos");
+
+
+
         } catch (error) {
-            console.error("Error al actualizar la investigación:", error);
-            alert("Hubo un error al actualizar la investigación");
         }
     };
 
@@ -74,7 +80,6 @@ function EditarInvestigacion() {
         navigate("/misproyectos");
     };
 
-    if (!investigacionActual) return <p className="p-8">Cargando datos de la investigación...</p>;
 
     return (
         <div className="flex h-screen bg-gray-100">
@@ -87,6 +92,10 @@ function EditarInvestigacion() {
                     <div className="bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
 
                         {/* Formulario */}
+                        {InvestigacionErrors.map((error, i) => (
+                            <Alerta key={i} tipo="error" mensaje={error.msg} />
+                        ))}
+
 
                         <form onSubmit={handleSubmit(onSubmit)} className="formulario">
 
@@ -146,9 +155,9 @@ function EditarInvestigacion() {
                                     className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500"
                                 >
                                     <option value="">Seleccionar materia</option>
-                                    <option value="fisica">Fisica</option>
-                                    <option value="ingenieria_civil">Ingeniería Civil</option>
-                                    <option value="matematicas">Matematicas</option>
+                                    <option value="Fisica">Fisica</option>
+                                    <option value="ingenieria civil">Ingeniería Civil</option>
+                                    <option value="Matematicas">Matematicas</option>
                                 </select>
                                 {errors.materia && <p className="text-red-500 text-sm">{errors.materia.message}</p>}
                             </div>
@@ -185,6 +194,8 @@ function EditarInvestigacion() {
                             <div>
                                 <h3 className="text-gray-800 font-semibold mb-3">Subir archivos</h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                                    {/* Imagen de portada */}
                                     <label className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-400 cursor-pointer text-center">
                                         <FaImage className="text-4xl text-blue-500 mb-2" />
                                         <span className="font-medium">Imagen de la portada</span>
@@ -196,14 +207,15 @@ function EditarInvestigacion() {
                                             {...register('portada', {
                                                 required: 'Se requiere una imagen',
                                                 validate: {
-                                                    tamaño: (archivos) =>
-                                                        archivos[0]?.size <= MAX_SIZE || 'La imagen supera los 10MB',
+                                                    tamaño: archivos =>
+                                                        archivos && archivos[0]?.size <= MAX_SIZE || 'La imagen supera los 10MB',
                                                 },
                                             })}
-
                                         />
+                                        {errors.portada && <p className="text-red-500 text-sm">{errors.portada.message}</p>}
                                     </label>
 
+                                    {/* Documento PDF */}
                                     <label className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-400 cursor-pointer text-center">
                                         <FaFilePdf className="text-4xl text-red-500 mb-2" />
                                         <span className="font-medium">Documento PDF</span>
@@ -213,16 +225,19 @@ function EditarInvestigacion() {
                                             accept=".pdf"
                                             className="hidden"
                                             {...register('urlDoc', {
-                                                required: 'Se requiere una Documento',
-                                                validar: {
-                                                    tamaño: (archivos) => archivos[0]?.size <= MAX_SIZE || 'Audio supera los 10MB',
+                                                required: 'Se requiere un documento',
+                                                validate: {
+                                                    tamaño: archivos =>
+                                                        archivos && archivos[0]?.size <= MAX_SIZE || 'El documento supera los 10MB',
                                                 },
-
                                             })}
                                         />
+                                        {errors.urlDoc && <p className="text-red-500 text-sm">{errors.urlDoc.message}</p>}
                                     </label>
+
                                 </div>
                             </div>
+
 
                             <div className="flex justify-end gap-4 pt-6">
                                 <button

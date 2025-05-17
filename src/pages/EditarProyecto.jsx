@@ -1,42 +1,57 @@
-import { useLocation, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MenuLateral from "../components/MenuAdmi_Doc";
 import { useProyectos } from "../context/ProyectoContext"
 import { useForm } from "react-hook-form";
+import { UseCategoria } from "../context/CategoriaContext"
+import { useLogin } from "../context/LoginContext";
+import Alerta from "../components/AlertasDocente";
+
+
+
 
 // Tamaño máximo permitido para archivos: 10 megabytes
 const MAX_SIZE = 10 * 1024 * 1024; // 10MB
 
 function EditarProyecto() {
-    // Obtiene el estado de navegación, donde se espera que venga el proyecto a editar
     const location = useLocation();
-
-    // Hook de navegación para redireccionar al usuario después de editar
     const navigate = useNavigate();
-
-    // Extrae el objeto del proyecto desde la navegación (viene desde otra vista)
     const proyecto = location.state?.proyecto;
-
-    // Obtiene funciones y datos del contexto de proyectos (incluye errores y mensajes)
-    const { sigout, Proyectos, errors: ProyectosErrors, mensaje } = useProyectos();
-
-    // Hook de react-hook-form para manejar el formulario y sus validaciones
+    const { errors: ProyectosErrors, mensaje, ActualizarProyectos } = useProyectos();
     const { register, handleSubmit, formState: { errors } } = useForm();
+    const { TraerCategoria, Categoria } = UseCategoria()
+    const { Usuario } = useLogin();
+    const { id } = useParams();
+    useEffect(() => {
+        TraerCategoria();
+        console.log(Categoria)
+    }, []);
 
-    // Función que se ejecuta al enviar el formulario
+
     const onSubmit = async (data) => {
         try {
-            // Envía una petición PUT al backend para actualizar el proyecto existente
-            await axios.put(`http://localhost:3001/api/proyectos/${proyecto._id}`, {
-                nombre: data.nombre_proyecto,       // Nuevo nombre del proyecto
-                descripcion: data.descripcion,      // Nueva descripción
-                url: data.urlArchivoapk             // URL del archivo APK (si se actualiza)
-            });
-
-            // Muestra un mensaje de éxito y redirige a la vista de "Mis Proyectos"
-            alert("Proyecto actualizado con éxito");
-            navigate("/misproyectos");
+            const formData = new FormData()
+            formData.append("nombre_proyecto", data.nombre_proyecto);
+            formData.append("autores", data.autores); // cambiar "autor" → "autores"
+            formData.append("fechaPublicacion", data.fechaPublicacion); // cambiar "fecha" → "fechaPublicacion"
+            formData.append("descripcion", data.descripcion);
+            formData.append("materia", data.materia);
+            formData.append("categoriaId", data.categoriaId);
+            formData.append("urlArchivoapk", data.urlArchivoapk[0]); // cambiar "audioLink" → "UrlAudio"
+            formData.append("portada", data.portada[0]);
+            formData.append("urlDoc", data.urlDoc[0]);
+            formData.append("Usuario", Usuario.Id)
+            formData.append("seccion", "Proyectos");
+            const respuesta = await ActualizarProyectos(id, formData)
+            if (respuesta?.success) {
+                navigate("/misproyectos", {
+                    state: {
+                        mensaje: "Podcast actualizado correctamente",
+                        tipo: "success"
+                    }
+                });
+            }
         } catch (error) {
             // Muestra un error en consola y alerta si la actualización falla
             console.error("Error al actualizar el proyecto:", error);
@@ -60,16 +75,14 @@ function EditarProyecto() {
             <main className="flex-1 p-8 overflow-y-auto">
                 <div className="max-w-4xl mx-auto">
                     <div className="mb-8 text-center">
-                            <h2 className="text-3xl font-bold text-gray-800 mb-2">Editar Proyecto</h2>
-                        </div>
+                        <h2 className="text-3xl font-bold text-gray-800 mb-2">Editar Proyecto</h2>
+                    </div>
 
 
                     {ProyectosErrors.map((error, i) => (
-                        <p key={i} className="text-red-500">{error.msg}</p>
+                        <Alerta key={i} tipo="error" mensaje={error.msg} />
                     ))}
-                    {mensaje && (
-                        <p className="text-green-500">{mensaje}</p>
-                    )}
+
                     <div className="bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
                         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -105,19 +118,25 @@ function EditarProyecto() {
                                 </div>
 
                                 <div>
-                                    <label className="block font-semibold text-gray-800 mb-1">Categoría</label>
+                                    <label className="block text-base font-semibold text-gray-800 mb-1">Categoría</label>
                                     <select
-                                        defaultValue={proyecto.categoriaId || ""}
                                         {...register('categoriaId', { required: true })}
-                                        className="mt-1 block w-full border-2 border-gray-200 rounded-md px-4 py-2"
+                                        name="categoriaId"
+                                        required
+                                        className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
                                     >
                                         <option value="">Seleccionar categoría</option>
-                                        <option value="software">Software</option>
-                                        <option value="hardware">Hardware</option>
-                                        <option value="investigacion">Investigación</option>
+                                        {Categoria && Categoria.map((categoria) => (
+                                            <option key={categoria.id} value={categoria.id}>
+                                                {categoria.Nombre_Categoria}
+                                            </option>
+                                        ))}
                                     </select>
-                                    {errors.categoriaId && <p className="text-red-500">Categoría es requerida</p>}
+                                    {errors.categoriaId && (
+                                        <p className="text-red-500">Categoria es requerida</p>
+                                    )}
                                 </div>
+
 
                                 <div className="md:col-span-2">
                                     <label className="block font-semibold text-gray-800 mb-1">Descripción</label>

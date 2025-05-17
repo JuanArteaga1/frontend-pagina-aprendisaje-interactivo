@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { Outlet } from 'react-router-dom';
 import { BrowserRouter, Routes, Route, Router } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -38,11 +39,11 @@ import { CategoriaProvider } from "./context/CategoriaContext";
 import { TraerProyectosProvider } from "./context/TraerProyectos";
 import { SimulacionesProvider } from "./context/SimulacionesContex";
 import ProtectedRote from "./ProtectedRoute";
-
 import EditarProyecto from "./pages/EditarProyecto";
 import EditarPodcast from "./pages/EditarPodcast";
 import EditarInvestigacion from "./pages/EditarInvestigacion";
 import EditarSimulaciones from "./pages/EditarSimulaciones";
+
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <LoginProvider>
@@ -77,21 +78,22 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/Aprobar" element={<ProyectosPorAprobar />} />
           <Route path="/AdministrarDocente" element={<DocenteProvider> <AdministrarDocentes /> </DocenteProvider>} />
       //rutas de docentes
-          <Route path="/menudocente" element={<MenuDocen />} />
-          <Route path="/subir-proyecto" element={<ProyectosProvider><SubirProyecto /></ProyectosProvider>} />
-          <Route path="misproyectos" element={<TraerProyectosProvider><MisProyectos /></TraerProyectosProvider>} />
-          <Route path="actualizar-proyectos" element={<ActualizarProyecto />} />
-          <Route path="/subirsimulaciones" element={<SimulacionesProvider><Subirsimulaciones /></SimulacionesProvider>} />
-          <Route path="/SubirInvestigaciones" element={<InvestigacionProvider><SubirInvestigaciones /></InvestigacionProvider>} />
-          <Route path="/SubirDocente" element={<DocenteProvider>  <SubirDocente /> </DocenteProvider>} />
-          <Route path="subir-podcast" element={<PodcastProvider><SubirPodcast /></PodcastProvider>} />
+          <Route element={<> <CategoriaProvider><Outlet /></CategoriaProvider></>}>
+            <Route path="/menudocente" element={<MenuDocen />} />
+            <Route path="/subir-proyecto" element={<ProyectosProvider><SubirProyecto /></ProyectosProvider>} />
+            <Route path="/misproyectos" element={<TraerProyectosProvider><MisProyectos /></TraerProyectosProvider>} />
+            <Route path="/actualizar-proyectos" element={<ActualizarProyecto />} />
+            <Route path="/subirsimulaciones" element={<SimulacionesProvider><Subirsimulaciones /></SimulacionesProvider>} />
+            <Route path="/SubirInvestigaciones" element={<InvestigacionProvider><SubirInvestigaciones /></InvestigacionProvider>} />
+            <Route path="/SubirDocente" element={<DocenteProvider><SubirDocente /></DocenteProvider>} />
+            <Route path="/subir-podcast" element={<PodcastProvider><SubirPodcast /></PodcastProvider>} />
 
-        //Ruta para editar proyecto
-        <Route path="/editar-proyecto/:id" element={<ProyectosProvider><EditarProyecto /></ProyectosProvider>} />
-        <Route path="/editar-podcast/:id" element={<PodcastProvider><EditarPodcast /></PodcastProvider>} />
-        <Route path="/editar-investigacion/:id" element={<InvestigacionProvider><EditarInvestigacion /></InvestigacionProvider>} />
-        <Route path="/editar-simulacion/:id" element={<SimulacionesProvider><EditarSimulaciones /></SimulacionesProvider>} />
-
+     //Ruta para editar proyecto
+            <Route path="/editar-proyecto/:id" element={<ProyectosProvider><EditarProyecto /></ProyectosProvider>} />
+            <Route path="/editar-podcast/:id" element={<PodcastProvider><EditarPodcast /></PodcastProvider>} />
+            <Route path="/editar-investigacion/:id" element={<InvestigacionProvider><EditarInvestigacion /></InvestigacionProvider>} />
+            <Route path="/editar-simulacion/:id" element={<SimulacionesProvider><EditarSimulaciones /></SimulacionesProvider>} />
+          </Route>
         </Route>
 
       </Routes>
