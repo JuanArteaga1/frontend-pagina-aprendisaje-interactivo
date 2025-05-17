@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MenuLateral from "../components/MenuAdmi_Doc";
 import { useForm } from "react-hook-form"
 import { useProyectos } from "../context/ProyectoContext"
+import { UseCategoria } from "../context/CategoriaContext"
 import Alerta from "../components/AlertasDocente";
 import { useLogin } from "../context/LoginContext"
 
@@ -10,9 +11,15 @@ function SubirProyecto() {
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
   const { sigout, Proyectos, errors: ProyectosErrors, mensaje } = useProyectos()
+  const { TraerCategoria, Categoria } = UseCategoria()
   const { Usuario, setUsuario } = useLogin()
   const [registroExitoso, setRegistroExitoso] = useState(false);
   const MAX_SIZE = 10 * 1024 * 1024; // 10MB
+
+  useEffect(() => {
+    TraerCategoria();
+    console.log(Categoria) // Llamada inicial para traer los datos
+  }, []);
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -99,11 +106,15 @@ function SubirProyecto() {
                   className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
                 >
                   <option value="">Seleccionar categoría</option>
-                  <option value="software">software</option>
-                  <option value="hardware">hardware</option>
-                  <option value="investigacion">investigacion</option>
+                  {Categoria && Categoria.map((categoria) => (
+                    <option key={categoria.id} value={categoria.id}>
+                      {categoria.Nombre_Categoria}
+                    </option>
+                  ))}
                 </select>
-                {errors.categoriaId && (<p className="text-red-500">Categoria es requerida</p>)}
+                {errors.categoriaId && (
+                  <p className="text-red-500">Categoria es requerida</p>
+                )}
               </div>
 
               <div className="md:col-span-2">

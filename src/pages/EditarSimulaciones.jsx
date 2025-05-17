@@ -3,8 +3,11 @@ import MenuLateral from "../components/MenuAdmi_Doc";
 import { useForm } from "react-hook-form";
 import { useLogin } from "../context/LoginContext";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
+import { UseSimulaciones } from "../context/SimulacionesContex";
 import axios from "axios";
 import Alerta from "../components/AlertasDocente";
+import { UseCategoria } from "../context/CategoriaContext"
+
 import {
     FaAndroid,
     FaFileCode,
@@ -17,9 +20,17 @@ function EditarSimulaciones() {
     const navigate = useNavigate();
     const simulacion = location.state?.simulacion;
     const { Usuario } = useLogin();
+    const { errors: SimulacionesErrors, mensaje,ActualizarSimulaciones } = UseSimulaciones()
     const { register, handleSubmit, setValue, formState: { errors } } = useForm();
     const [simulacionActual, setSimulacionActual] = useState(null);
     const { id } = useParams();
+    const { TraerCategoria, Categoria } = UseCategoria()
+
+    useEffect(() => {
+        TraerCategoria();
+        console.log(Categoria)
+    }, []);
+
 
     useEffect(() => {
         if (simulacion) {
@@ -46,19 +57,22 @@ function EditarSimulaciones() {
             formData.append("materia", data.materia);
             formData.append("categoriaId", data.categoriaId);
             formData.append("Usuario", Usuario.Id);
+            formData.append("seccion", "simulaciones"); // Establece la sección
 
             if (data.urlArchivoapk?.[0]) formData.append("urlArchivoapk", data.urlArchivoapk[0]);
             if (data.urlDoc?.[0]) formData.append("urlDoc", data.urlDoc[0]);
             if (data.portada?.[0]) formData.append("portada", data.portada[0]);
+            const respuesta = await ActualizarSimulaciones(id,formData)
+            if (respuesta?.success) {
+                navigate("/misproyectos", {
+                    state: {
+                        mensaje: "Podcast actualizado correctamente",
+                        tipo: "success"
+                    }
+                });
+            }
 
-            await axios.put(`http://localhost:3001/api/simulaciones/${simulacion._id}`, formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            });
-
-            alert("Simulación actualizada con éxito");
-            navigate("/misproyectos");
+            
         } catch (error) {
             console.error("Error al actualizar la simulación:", error);
             alert("Hubo un error al actualizar la simulación");
@@ -78,6 +92,10 @@ function EditarSimulaciones() {
                 <div className="max-w-xl mx-auto">
                     <h2 className="text-3xl font-bold text-gray-800 mt-4 mb-4">Editar Simulación</h2>
                     <div className="bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
+                        {SimulacionesErrors.map((error, i) => (
+                        <Alerta key={i} tipo="error" mensaje={error.msg} />
+                    ))}
+
 
                         <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
                             <div>
@@ -148,21 +166,25 @@ function EditarSimulaciones() {
                             </div>
 
                             <div>
-                                <label className="block text-3x1 font-semibold text-gray-800 mb-1">Categoria</label>
+                                <label className="block text-base font-semibold text-gray-800 mb-1">Categoría</label>
                                 <select
                                     {...register('categoriaId', { required: true })}
                                     name="categoriaId"
-                                    className="w-full px-4 py-2 text-medium border-2 border-gray-200 rounded-xl"
                                     required
+                                    className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
                                 >
-
-                                    <option value="">Seleccionar categoria</option>
-                                    <option value="software">software</option>
-                                    <option value="hardware">hardware</option>
-                                    <option value="investigacion">investigacion</option>
+                                    <option value="">Seleccionar categoría</option>
+                                    {Categoria && Categoria.map((categoria) => (
+                                        <option key={categoria.id} value={categoria.id}>
+                                            {categoria.Nombre_Categoria}
+                                        </option>
+                                    ))}
                                 </select>
-                                {errors.categoriaId && (<p className="text-red-500">La categoria es requerida</p>)}
+                                {errors.categoriaId && (
+                                    <p className="text-red-500">Categoria es requerida</p>
+                                )}
                             </div>
+
 
                             <h3 className="text-3x1 font-semibold text-gray-800 mb-2">Archivos requeridos</h3>
                             <div className="grid grid-cols-3 gap-2">

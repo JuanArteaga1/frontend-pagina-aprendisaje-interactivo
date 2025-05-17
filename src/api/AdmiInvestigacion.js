@@ -6,5 +6,5 @@ export const subirInvestigacionAPI = Investigacion => axios.post(`${Api}/Investi
 
 export const GetAllInvestigacion = () => axios.get(`${Api}/Investigacion`)
 export const GetIdInvestigacion = (id) => axios.get(`${Api}/Investigacion/${id}`)
-export const PutInvestigacion = () => axios.put(`${Api}/Investigacion`)
+export const PutInvestigacion = (id,Investigacion) => axios.put(`${Api}/Investigacion/${id}`,Investigacion)
 export const DeleteInvestigacion = () => axios.delete(`${Api}/Investigacion`)

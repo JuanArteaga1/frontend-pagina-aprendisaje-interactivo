@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import subirInvestigacionesImg from "../img/Subir_Investigaciones.jpg";
 import MenuLateral from "../components/MenuAdmi_Doc";
 import { useForm } from "react-hook-form";
@@ -23,9 +23,9 @@ const SubirInvestigaciones = () => {
   const { sigout, errors: InvestigacionErrors, mensaje } = useInvestigacion()
   const [registroExitoso, setRegistroExitoso] = useState(false);
   const { Usuario, setUsuario } = useLogin()
-
-
   const MAX_SIZE = 10 * 1024 * 1024; // 10MB
+
+
 
 
   const handleFileChange = (e, name) => {
@@ -60,7 +60,6 @@ const SubirInvestigaciones = () => {
 
           )}
           <form onSubmit={handleSubmit(async (data) => {
-            console.log(data)
             const formData = new FormData()
             formData.append("nombre_proyecto", data.nombre_proyecto);
             formData.append("descripcion", data.descripcion);

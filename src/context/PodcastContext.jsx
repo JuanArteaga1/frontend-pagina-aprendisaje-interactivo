@@ -1,5 +1,5 @@
 import { Children, createContext, useEffect, useState, useContext } from "react";
-import { GetAllPodcast, subirPodcastAPI } from "../api/AdmiPodcast";
+import { GetAllPodcast, subirPodcastAPI, PutPodcast } from "../api/AdmiPodcast";
 
 export const PodcastContext = createContext();
 
@@ -13,18 +13,32 @@ export const usePodcast = () => {
 
 export const PodcastProvider = ({ children }) => {
     const [Podcast, SetPodcast] = useState(null);
-    const [errors,setErrors ] = useState([])
+    const [errors, setErrors] = useState([])
     const [mensaje, setMensaje] = useState(null);
-    const TraerPodcast = async() =>{
-                try {
-                    const podcast = await GetAllPodcast()
-                    console.log(podcast)
-                    SetPodcast(podcast)
-                } catch (error) {
-                    console.log(error)
-                    
-                }
-             } // <-- mensaje de éxito
+    const TraerPodcast = async () => {
+        try {
+            const podcast = await GetAllPodcast()
+            console.log(podcast)
+            SetPodcast(podcast)
+        } catch (error) {
+            console.log(error)
+
+        }
+    } // <-- mensaje de éxito
+
+    const ActualizarPodcast = async (Id, data) => {
+        try {
+            const response = await PutPodcast(Id, data);
+            SetPodcast(response);
+
+            return { success: true, data: response };
+        } catch (error) {
+            setMensaje(null);
+            setErrors(error.response?.data?.errors || [{ msg: "Error desconocido" }]);
+
+            return { success: false, error: error.response?.data?.errors };
+        }
+    };
     const sigout = async (data) => {
         try {
             const response = await subirPodcastAPI(data);
@@ -33,7 +47,7 @@ export const PodcastProvider = ({ children }) => {
                 setMensaje("¡Podcast registrado correctamente!");
                 setErrors([]); // Limpiar errores anteriores
             }
-    
+
         } catch (error) {
             if (error.response && error.response.data && error.response.data.errors) {
                 setErrors(error.response.data.errors);
@@ -48,7 +62,7 @@ export const PodcastProvider = ({ children }) => {
     };
 
     return (
-        <PodcastContext.Provider value={{ sigout, Podcast,errors,mensaje, setMensaje,SetPodcast,TraerPodcast}}>
+        <PodcastContext.Provider value={{ sigout, Podcast, errors, mensaje, setMensaje, SetPodcast, TraerPodcast, ActualizarPodcast }}>
             {children}
         </PodcastContext.Provider>
     );

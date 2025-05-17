@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MenuLateral from "../components/MenuAdmi_Doc";
 import { useForm } from "react-hook-form";
 import { usePodcast } from "../context/PodcastContext";
+import { UseCategoria } from "../context/CategoriaContext"
+
 import Alerta from "../components/AlertasDocente";
 import { useLogin } from "../context/LoginContext"
 
@@ -10,14 +12,18 @@ function SubirPodcast() {
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
   const { sigout, errors: PodcastErros, mensaje } = usePodcast(); // Si tienes esta función en contexto
   const portadaPreview = watch("portada")?.[0];
+  const { TraerCategoria, Categoria } = UseCategoria()
   const [setRegistroExitoso] = useState(false);
   const { Usuario, setUsuario } = useLogin()
-
+    useEffect(() => {
+      TraerCategoria();
+      console.log(Categoria) // Llamada inicial para traer los datos
+    }, []);
+  
 
   const onSubmit = async (data) => {
     const formData = new FormData();
     // Agregar datos del formulario
-    console.log(data)
     formData.append("nombre_proyecto", data.nombre_proyecto);
     formData.append("descripcion", data.descripcion);
     formData.append("autores", data.autores); // cambiar "autor" → "autores"
@@ -110,21 +116,25 @@ function SubirPodcast() {
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="block text-3x1 font-semibold text-gray-800">Categoría</label>
-                  <select
-                    {...register("categoria", { required: true })}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
-                  >
-                    <option value="">Selecciona una categoría</option>
-                    <option value="tecnologia">Tecnología</option>
-                    <option value="educacion">Educación</option>
-                    <option value="entretenimiento">Entretenimiento</option>
-                    <option value="negocios">Negocios</option>
-                  </select>
-                  {errors.categoria && (<p className="text-red-500">la categoria es requerido</p>)}
-
-                </div>
+                <div>
+                <label className="block text-base font-semibold text-gray-800 mb-1">Categoría</label>
+                <select
+                  {...register('categoriaId', { required: true })}
+                  name="categoriaId"
+                  required
+                  className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
+                >
+                  <option value="">Seleccionar categoría</option>
+                  {Categoria && Categoria.map((categoria) => (
+                    <option key={categoria.id}>
+                      {categoria.Nombre_Categoria}
+                    </option>
+                  ))}
+                </select>
+                {errors.categoriaId && (
+                  <p className="text-red-500">Categoria es requerida</p>
+                )}
+              </div>
 
                 <div className="space-y-2">
                   <label className="block text-3x1 font-semibold text-gray-800">Materia</label>

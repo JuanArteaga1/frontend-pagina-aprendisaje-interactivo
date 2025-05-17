@@ -6,5 +6,5 @@ export const subirSimulacionesAPI = Simulaciones => axios.post(`${Api}/Simulacio
 
 export const GetAllSimulaciones = () => axios.get(`${Api}/Simulaciones`)
 export const GetIdSimulaciones = (id) => axios.get(`${Api}/Simulaciones/${id}`)
-export const PutSimulaciones = () => axios.put(`${Api}/Simulaciones`)
+export const PutSimulaciones = (id,Simulaciones) => axios.put(`${Api}/Simulaciones/${id}`,Simulaciones)
 export const DeleteSimulaciones = () => axios.delete(`${Api}/Simulaciones`)

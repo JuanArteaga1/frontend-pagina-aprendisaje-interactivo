@@ -6,27 +6,30 @@ import Alerta from "../components/AlertasDocente";
 import { useLogin } from "../context/LoginContext";
 import { useParams } from "react-router-dom";
 import { useLocation, useNavigate } from "react-router-dom";
+import { UseCategoria } from "../context/CategoriaContext"
+
 
 
 function EditarPodcast() {
     const location = useLocation();
     const navigate = useNavigate();
     const podcast = location.state?.podcast;
-    const { sigout, errors: PodcastErros, mensaje } = usePodcast();
-
+    const { errors: PodcastErros, ActualizarPodcast } = usePodcast();
     const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm();
-
     const portadaPreview = watch("portada")?.[0];
     const [podcastActual, setPodcastActual] = useState(null);
     const { Usuario } = useLogin();
+    const { TraerCategoria, Categoria, } = UseCategoria()
+    const { id } = useParams();
+    useEffect(() => {
+        TraerCategoria();
+        console.log(Categoria) // Llamada inicial para traer los datos
+    }, []);
 
     useEffect(() => {
         if (podcast) {
             setPodcastActual(podcast);
-
             const fechaFormateada = new Date(podcast.fechaPublicacion).toISOString().split("T")[0];
-
-
             setValue("nombre_proyecto", podcast.nombre_proyecto);
             setValue("descripcion", podcast.descripcion);
             setValue("audioLink", podcast.UrlAudio); // Esto depende si usas link o archivo directamente
@@ -40,20 +43,28 @@ function EditarPodcast() {
 
     const onSubmit = async (data) => {
         try {
+            console.log(data)
             const formData = new FormData();
             formData.append("nombre_proyecto", data.nombre_proyecto);
             formData.append("descripcion", data.descripcion);
-            formData.append("UrlAudio", data.UrlAudio);
-            formData.append("audio", data.audio[0]); // si se actualiza el archivo de audio
+            formData.append("autores", data.autores);
+            formData.append("fechaPublicacion", data.fecha);
+            formData.append("materia", data.materia);
+            formData.append("UrlAudio", data.audioLink);
+            formData.append("portada", data.portada[0]);
+            formData.append("Usuario", Usuario.Id)
+            formData.append("seccion", "Podcast");
 
-            await axios.put(`http://localhost:3001/api/podcast/${podcast._id}`, formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            });
+            const respuesta = await ActualizarPodcast(id, formData)
+            if (respuesta?.success) {
+                navigate("/misproyectos", {
+                    state: {
+                        mensaje: "Podcast actualizado correctamente",
+                        tipo: "success"
+                    }
+                });
+            }
 
-            alert("Podcast actualizado con éxito");
-            navigate("/misproyectos");
         } catch (error) {
             console.error("Error al actualizar el podcast:", error);
             alert("Hubo un error al actualizar el podcast");
@@ -80,7 +91,7 @@ function EditarPodcast() {
                         {PodcastErros.map((error, i) => (
                             <Alerta key={i} tipo="error" mensaje={error.msg} />
                         ))}
-                        {mensaje && <Alerta tipo="exito" mensaje={mensaje} />}
+
 
                         <form
                             onSubmit={handleSubmit(onSubmit)}
@@ -125,27 +136,31 @@ function EditarPodcast() {
                                         <label className="block text-3x1 font-semibold text-gray-800">Fecha de Publicación</label>
                                         <input
                                             type="date"
-                                            {...register("fechaPublicacion", { required: true })}
+                                            {...register("fecha", { required: true })}
                                             className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
                                         />
                                         {errors.fecha && (<p className="text-red-500">la fecha es requerido</p>)}
                                     </div>
                                 </div>
 
-                                <div className="space-y-2">
-                                    <label className="block text-3x1 font-semibold text-gray-800">Categoría</label>
+                                <div>
+                                    <label className="block text-base font-semibold text-gray-800 mb-1">Categoría</label>
                                     <select
-                                        {...register("categoria", { required: true })}
-                                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
+                                        {...register('categoriaId', { required: true })}
+                                        name="categoriaId"
+                                        required
+                                        className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
                                     >
-                                        <option value="">Selecciona una categoría</option>
-                                        <option value="tecnologia">Tecnología</option>
-                                        <option value="educacion">Educación</option>
-                                        <option value="entretenimiento">Entretenimiento</option>
-                                        <option value="negocios">Negocios</option>
+                                        <option value="">Seleccionar categoría</option>
+                                        {Categoria && Categoria.map((categoria) => (
+                                            <option key={categoria.id} value={categoria.id}>
+                                                {categoria.Nombre_Categoria}
+                                            </option>
+                                        ))}
                                     </select>
-                                    {errors.categoria && (<p className="text-red-500">la categoria es requerido</p>)}
-
+                                    {errors.categoriaId && (
+                                        <p className="text-red-500">Categoria es requerida</p>
+                                    )}
                                 </div>
 
                                 <div className="space-y-2">
