@@ -3,14 +3,19 @@ import TablaDinamica from "../components/Tabla";
 import MenuAdministrador from "../components/MenuAdmi_Doc";
 import { Link } from 'react-router-dom';
 import { UseDocente } from "../context/DocenteContext";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2';
 
 const AdministrarDocente = () => {
   const { Docente, TraerDocentes } = UseDocente();
   const [columnas, setColumnas] = useState([]);
+  const navigate = useNavigate();
+  const {EliminarDocentes } = UseDocente();
+
   useEffect(() => {
     TraerDocentes()
   }, [])
- // <- Asegúrate de que docentes ya tiene los datos
+  // <- Asegúrate de que docentes ya tiene los datos
 
   useEffect(() => {
     setColumnas([
@@ -27,15 +32,34 @@ const AdministrarDocente = () => {
     {
       nombre: "Editar",
       fn: (fila) => {
-        console.log("Editar:", fila);
-        // Puedes redirigir o abrir modal aquí
+        navigate(`/editar-docente/${fila._id}`, { state: { docente: fila } });
       },
       estilo: "bg-yellow-500 text-white hover:bg-yellow-600"
     },
     {
       nombre: "Eliminar",
       fn: (fila) => {
-        console.log("Eliminar:", fila);
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: `Esta acción eliminará al docente "${fila.NombreCompleto}"`,
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: 'Sí, eliminar',
+          cancelButtonText: 'Cancelar'
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            try {
+              await EliminarDocentes(fila._id);
+              Swal.fire('¡Eliminado!', 'El docente ha sido eliminado.', 'success');
+              // Puedes actualizar tu tabla si es necesario aquí
+            } catch (error) {
+              console.error(error);
+              Swal.fire('Error', 'Hubo un problema al eliminar el docente.', 'error');
+            }
+          }
+        });
       },
       estilo: "bg-red-500 text-white hover:bg-red-600"
     }
@@ -43,31 +67,31 @@ const AdministrarDocente = () => {
 
   return (
     <div className="flex h-screen bg-gray-100">
-        {/* Menú Lateral (no modificado) */}
-        <div className="fixed h-full w-64 bg-gray-800 text-white z-10">
-          <MenuAdministrador rol="admin" />
+      {/* Menú Lateral (no modificado) */}
+      <div className="fixed h-full w-64 bg-gray-800 text-white z-10">
+        <MenuAdministrador rol="admin" />
+      </div>
+
+      <main className="flex-1 overflow-y-auto p-4 lg:p-8 ml-64">
+        <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
+          <h1 className="text-2xl font-bold text-gray-800 mb-4 md:mb-0">Administrar Docentes</h1>
+          <div className="flex space-x-4">
+            <Link
+              to="/SubirDocente"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors text-sm"
+            >
+              + Nuevo Docente
+            </Link>
+          </div>
         </div>
 
-        <main className="flex-1 overflow-y-auto p-4 lg:p-8 ml-64">
-          <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
-            <h1 className="text-2xl font-bold text-gray-800 mb-4 md:mb-0">Administrar Docentes</h1>
-            <div className="flex space-x-4">
-              <Link
-                to="/SubirDocente"
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors text-sm"
-              >
-                + Nuevo Docente
-              </Link>
-            </div>
-          </div>
-
-          <TablaDinamica
-            datos={Docente}
-            columnas={columnas}
-            acciones={acciones}
-          />
-        </main>
-      </div>
+        <TablaDinamica
+          datos={Docente}
+          columnas={columnas}
+          acciones={acciones}
+        />
+      </main>
+    </div>
   );
 };
 
