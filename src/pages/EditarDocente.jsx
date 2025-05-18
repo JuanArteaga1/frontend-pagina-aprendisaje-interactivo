@@ -1,14 +1,40 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import MenuLateral from "../components/MenuAdmi_Doc";
 import Alerta from "../components/AlertasDocente";
 import { FaUserGraduate, FaIdCard, FaEnvelope, FaLock, FaChalkboardTeacher, FaSave } from 'react-icons/fa'
-import { useForm } from "react-hook-form"
-import { UseDocente } from "../context/DocenteContext"
+import { useForm } from "react-hook-form";
+import { UseDocente } from "../context/DocenteContext";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 
-const SubirDocente = () => {
-    const { register, handleSubmit, formState: { errors }, reset } = useForm();
-    const { sigout, errors: DocenteErrors = [], mensaje } = UseDocente();
-    const [registroExitoso, setRegistroExitoso] = useState(false);
+const EditarDocente = () => {
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm();
+    const { getDocenteById, updateDocente, errors: DocenteErrors, mensaje } = UseDocente();
+    const { id } = useParams(); // Obtiene el ID desde la URL
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const cargarDocente = async () => {
+            const data = await getDocenteById(id);
+            if (data) {
+                setValue("Nombre", data.NombreCompleto); // Este sí está bien
+                setValue("identificacion", data.NumeroIdentificacion); // <-- CORREGIDO
+                setValue("Codigo", data.Codigo); // Verifica si este campo existe
+                setValue("email", data.email);
+                setValue("rol", data.rol);
+                setValue("estado", data.estado);
+                setValue("funcion", data.funcion);
+            }
+        };
+        cargarDocente();
+    }, [id, getDocenteById, setValue]);
+
+
+    const onSubmit = async (values) => {
+        const result = await updateDocente(id, values);
+        if (result?.success) {
+            navigate("/admin/docentes"); // Redirige si es exitoso
+        }
+    };
 
     return (
         <>
@@ -25,7 +51,7 @@ const SubirDocente = () => {
                         <div className="mb-6 md:mb-8">
                             <div className="flex items-center mb-2">
                                 <FaChalkboardTeacher className="text-blue-600 text-2xl md:text-3xl mr-3 flex-shrink-0" />
-                                <h2 className="text-xl md:text-2xl font-bold text-gray-800">REGISTRO DE DOCENTE</h2>
+                                <h2 className="text-xl md:text-2xl font-bold text-gray-800"> EDICION DE DOCENTE</h2>
                             </div>
                             <p className="text-green-500 text-xs md:text-sm flex items-center ml-9 md:ml-10">
                                 <span className="w-2 h-2 bg-green-500 rounded-full mr-2 flex-shrink-0"></span>
@@ -38,18 +64,11 @@ const SubirDocente = () => {
                         ))}
                         {mensaje && (
                             <Alerta tipo="exito" mensaje={mensaje} />
-                            
+
                         )}
 
-                        <form onSubmit={handleSubmit(async (values) => {
-                            const resultado = await sigout(values);
-                            console.log(values)
-                            if (resultado?.success) {
-                                setRegistroExitoso(true);
-                            }
+                        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 md:space-y-6">
 
-                        })}
-                            className="space-y-4 md:space-y-6">
                             {/* Sección 1: Información personal */}
                             <div className="space-y-4 md:space-y-5">
                                 <h3 className="text-base md:text-lg font-semibold text-gray-700 border-b pb-2">
@@ -176,13 +195,20 @@ const SubirDocente = () => {
 
 
                             {/* Botones de acción */}
-                            <div className="flex justify-between pt-6 md:pt-8 border-t border-gray-200">
+                            <div className="flex justify-end gap-4 mt-6">
+                                <button
+                                    type="button"
+                                    onClick={() => navigate("/AdministrarDocente")}
+                                    className="bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-lg transition duration-200"
+                                >
+                                    Cancelar
+                                </button>
                                 <button
                                     type="submit"
-                                    className="px-4 md:px-6 py-2 text-xs md:text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition flex items-center"
+                                    className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg flex items-center gap-2 transition duration-200"
                                 >
-                                    <FaSave className="mr-2 flex-shrink-0" />
-                                    Registrar Docente
+                                    <FaSave />
+                                    Guardar cambios
                                 </button>
                             </div>
 
@@ -193,4 +219,5 @@ const SubirDocente = () => {
         </>
     );
 };
-export default SubirDocente;
+
+export default EditarDocente;

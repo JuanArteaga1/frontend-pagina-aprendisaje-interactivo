@@ -1,5 +1,5 @@
 import { Children, createContext, useEffect, useState, useContext } from "react";
-import { subirDocenteAPI,GetAllDocentes } from "../api/AdmimnistrarDocente";
+import { subirDocenteAPI,GetAllDocentes, GetIdDocentes, DeleteDocentes } from "../api/AdmimnistrarDocente";
 
 export const DocenteContext = createContext();
 
@@ -24,8 +24,19 @@ export const DocenteProvider = ({ children }) => {
             console.log(error)
             
         }
-
     }
+
+    const EliminarDocentes = async (id) => {
+              try {
+                await DeleteDocentes(id);
+                await TraerDocentes();
+                return { success: true };
+              } catch (error) {
+                console.log("Error al eliminar el docente:", error);
+                return { success: false, error };
+              }
+            };
+
     const sigout = async (data) => {
         try {
             const response = await subirDocenteAPI(data);
@@ -44,7 +55,7 @@ export const DocenteProvider = ({ children }) => {
     };
 
     return (
-        <DocenteContext.Provider value={{ sigout, Docente,errors,mensaje, setMensaje,SetDocente,TraerDocentes }}>
+        <DocenteContext.Provider value={{ sigout, Docente,errors,mensaje, setMensaje,SetDocente,TraerDocentes, EliminarDocentes }}>
             {children}
         </DocenteContext.Provider>
     );

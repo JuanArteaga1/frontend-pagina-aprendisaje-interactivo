@@ -23,10 +23,10 @@ const MisProyectos = () => {
   const [tipoMensaje, setTipoMensaje] = useState("success"); // 'success' o 'error'
   const location = useLocation();
 
-  const {EliminarProyectos } = useProyectos();
-  const {EliminarPodcast, TraerPodcastId } = usePodcast();
-  const {EliminarInvestigacion } = useInvestigacion();
-  const {EliminarSimulaciones } = UseSimulaciones();
+  const { EliminarProyectos } = useProyectos();
+  const { EliminarPodcast, TraerPodcastId } = usePodcast();
+  const { EliminarInvestigacion } = useInvestigacion();
+  const { EliminarSimulaciones } = UseSimulaciones();
 
 
 
@@ -87,24 +87,39 @@ const MisProyectos = () => {
 
         if (!isConfirmed) return;
 
-        if (fila.proyecto === "Proyecto") {
-          await EliminarProyectos(fila._id);
-          await TraerProyectosId(Usuario.Id); 
-        } else if (fila.proyecto === "Podcast") {
-          await EliminarPodcast(fila._id);
-          await TraerProyectosId(Usuario.Id);
-        } else if (fila.proyecto === "Investigación") {
-          await EliminarInvestigacion(fila._id);
-          await TraerProyectosId(Usuario.Id);
-        } else if (fila.proyecto === "Simulación") {
-          await EliminarSimulaciones(fila._id);
-          await TraerProyectosId(Usuario.Id);
+        try {
+          if (fila.proyecto === "Proyecto") {
+            await EliminarProyectos(fila._id);
+          } else if (fila.proyecto === "Podcast") {
+            await EliminarPodcast(fila._id);
+          } else if (fila.proyecto === "Investigación") {
+            await EliminarInvestigacion(fila._id);
+          } else if (fila.proyecto === "Simulación") {
+            await EliminarSimulaciones(fila._id);
+          }
+
+          await TraerProyectosId(Usuario.Id); // Refrescar lista
+
+          // Mostrar mensaje de éxito
+          Swal.fire(
+            '¡Eliminado!',
+            `El ${fila.proyecto.toLowerCase()} fue eliminado correctamente.`,
+            'success'
+          );
+        } catch (error) {
+          console.error(error);
+          Swal.fire(
+            'Error',
+            `Hubo un problema al eliminar el ${fila.proyecto.toLowerCase()}.`,
+            'error'
+          );
         }
       },
       mostrar: (fila) =>
         ["Proyecto", "Podcast", "Investigación", "Simulación"].includes(fila.proyecto),
       estilo: "bg-red-500 text-white hover:bg-red-600"
     }
+
 
   ];
   useEffect(() => {
