@@ -1,64 +1,72 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
-
-export const proyectosSimulaciones = {
-    Fisica: [
-        { nombre: "Simulación 1", imagen: "/img/fotoapp.png" },
-        { nombre: "Simulación 2", imagen: "/img/fotoapp.png" },
-        { nombre: "Simulación 3", imagen: "/img/fotoapp.png" },
-        { nombre: "Simulación 4", imagen: "/img/fotoapp.png" },
-        { nombre: "Simulación 1", imagen: "/img/fotoapp.png" },
-        { nombre: "Simulación 2", imagen: "/img/fotoapp.png" },
-        { nombre: "Simulación 3", imagen: "/img/fotoapp.png" },
-        { nombre: "Simulación 4", imagen: "/img/fotoapp.png" }
-    ],
-    Matemáticas: [
-        { nombre: "Simulación A", imagen: "/img/fotoapp.png" },
-        { nombre: "Simulación B", imagen: "/img/fotoapp.png" },
-        { nombre: "Simulación C", imagen: "/img/fotoapp.png" }
-    ],
-    "Ingeniería Civil": []
-};
+import { UseSimulaciones } from "../context/SimulacionesContex";
 
 const Simulaciones = () => {
     const [seccionActual] = useState("Simulaciones");
     const navigate = useNavigate();
+    const { Simulaciones, TraerSimulaciones } = UseSimulaciones();
 
-    const irADetalle = (proyecto) => {
-        const nombreCodificado = encodeURIComponent(proyecto);
-        navigate(`/detalle/${nombreCodificado}`);
-    };
+    useEffect(() => {
+        TraerSimulaciones();
+    }, []);
+
+    // Filtrar solo los proyectos que pertenezcan a la sección "Simulaciones"
+    const simulacionesOrdenadas = useMemo(() => {
+        return [...Simulaciones].sort(
+            (a, b) => new Date(b.fechaPublicacion) - new Date(a.fechaPublicacion)
+        );
+    }, [Simulaciones]);
+
+
+    // Ordenar por fecha y agrupar por materia
+    const simulacionesAgrupadas = simulacionesOrdenadas
+        .sort((a, b) => new Date(b.fechaPublicacion) - new Date(a.fechaPublicacion))
+        .reduce((acc, simulaciones) => {
+            const categoria = simulaciones.materia?.nombre || "Sin categoría";
+            if (!acc[categoria]) acc[categoria] = [];
+            acc[categoria].push(simulaciones);
+            return acc;
+        }, {});
 
     return (
         <div className="simulaciones">
             <Navbar />
             <div className="imagen-seccion">
-                <img src="img/portada-simulaciones.jpg" alt="Imagen de podcast" />
+                <img src="img/portada-simulaciones.jpg" alt="Imagen de simulaciones" />
                 <h1 className="titulo-seccion">Ahora estás en: {seccionActual}</h1>
             </div>
 
             <div className="contenido-proyectos">
-                {Object.entries(proyectosSimulaciones).map(([categoria, items]) => (
+                {Object.entries(simulacionesAgrupadas).map(([categoria, items]) => (
                     <div key={categoria} className="categoria">
                         <h2>{categoria}</h2>
                         {items.length > 0 ? (
                             <div className="cards-container">
-                                {items.map((proyecto, i) => (
-                                    <div className="card" key={i}>
-                                        <div className="card-inner">
-                                            <div className="card-front">
-                                                <img src={proyecto.imagen} className="card-img" />
-                                            </div>
-                                            <div className="card-back">
-                                                <h3>{proyecto.nombre}</h3>
-                                                <button onClick={() => irADetalle(proyecto.nombre)}>
-                                                    Ver más
-                                                </button>
+                                {items.map((simulacion, i) => {
+                                    const rutaLimpia = simulacion.urlimg?.replace(/\\/g, "/");
+                                    const imagenURL = `http://localhost:3000/uploads/${rutaLimpia?.split("uploads/")[1]}`;
+
+                                    return (
+                                        <div className="card" key={i}>
+                                            <div className="card-inner">
+                                                <div className="card-front">
+                                                    <img src={imagenURL} alt={simulacion.nombre_proyecto} className="card-img" />
+                                                </div>
+                                                <div className="card-back">
+                                                    <h3><strong>{simulacion.nombre_proyecto}</strong></h3>
+                                                    <p>{simulacion.descripcion || "Sin descripción."}</p>
+                                                    <p><strong>Autor:</strong> {simulacion.autores || "No hay autor"}</p>
+                                                    <button onClick={() => navigate(`/detalle-simulacion/${simulacion._id}`)}>
+                                                        Ver más
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
+
                             </div>
                         ) : (
                             <p style={{ marginLeft: '10px' }}>No hay simulaciones disponibles.</p>
@@ -71,4 +79,3 @@ const Simulaciones = () => {
 };
 
 export default Simulaciones;
-

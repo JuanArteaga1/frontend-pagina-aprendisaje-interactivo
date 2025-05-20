@@ -26,6 +26,7 @@ import Fisica from "./pages/Fisica";
 import IngCivil from "./pages/IngCivil";
 import Matematicas from "./pages/Matematicas";
 import DetalleProyecto from "./pages/DetalleProyecto";
+import DetalleSimulacion from "./pages/DetalleSimulacion";
 import ActualizarProyecto from "./pages/ActualizarProyectos";
 import Episodio from "./pages/Episodio";
 import AyudaT from "./pages/Ayuda";
@@ -54,7 +55,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         //rutas de estudiante y visualizacion
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/simulaciones" element={<Simulaciones />} />
+        <Route path="/simulaciones" element={<SimulacionesProvider><Simulaciones /></SimulacionesProvider>} />
         <Route path="/podcast" element={<PodcastProvider><Podcast /></PodcastProvider>} />
         <Route path="/appmovil" element={<ProyectosProvider><Appmovil /></ProyectosProvider>} />
         <Route path="/investigaciones" element={<InvestigacionProvider><Investigaciones /></InvestigacionProvider>} />
@@ -65,6 +66,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/IngCivil" element={<ProyectosProvider><IngCivil /></ProyectosProvider>} />
         <Route path="/Matematicas" element={<ProyectosProvider><Matematicas /></ProyectosProvider>} />
         <Route path="/detalle/:id" element={<ProyectosProvider><DetalleProyecto /></ProyectosProvider>} />
+        <Route path="/detalle-simulacion/:id" element={<SimulacionesProvider><DetalleSimulacion /></SimulacionesProvider>} />
         <Route path="/investigaciones/:id" element={<TraerProyectosProvider><InvestigacionDetalle /></TraerProyectosProvider>} />
 
         <Route path="/episodio/:id" element={<Episodio />} />
