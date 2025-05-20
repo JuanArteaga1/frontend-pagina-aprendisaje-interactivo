@@ -6,6 +6,14 @@ import Alerta from "../components/AlertasDocente";
 import { useLogin } from "../context/LoginContext"
 import { UseCategoria } from "../context/CategoriaContext"
 
+import {
+    Image,
+    Upload,
+    FileUp,
+    UploadIcon,
+} from "lucide-react";
+
+
 
 
 
@@ -177,7 +185,7 @@ const SubirAPK = () => {
                                 <div className="grid grid-cols-3 gap-2">
                                     {/* APK Principal */}
                                     <label className="flex flex-col items-center p-2 border-2 border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50">
-                                        <FaAndroid className="text-green-500 text-xl mb-1" />
+                                        <UploadIcon className="w-5 h-5 text-black" />
                                         <span className="text-3x1 text-center">APK Principal</span>
                                         <input
                                             {...register('urlArchivoapk', { required: true })}
@@ -191,7 +199,7 @@ const SubirAPK = () => {
 
                                     {/* Requisitos */}
                                     <label className="flex flex-col items-center p-2 border border-gray-300 rounded cursor-pointer hover:bg-gray-50">
-                                        <FaFileCode className="text-blue-500 text-xl mb-1" />
+                                        <FileUp className="w-5 h-5 text-black" />
                                         <span className="text-3x1 text-center">Requisitos (PDF)</span>
                                         <input
                                             {...register('urlDoc', { required: true })}
@@ -206,7 +214,7 @@ const SubirAPK = () => {
 
                                     {/* Capturas */}
                                     <label className="flex flex-col items-center p-2 border border-gray-300 rounded cursor-pointer hover:bg-gray-50">
-                                        <FaImage className="text-purple-500 text-xl mb-1" />
+                                        <Image className="w-5 h-5 text-black" />
                                         <span className="text-3x1 text-center">Capturas</span>
                                         <input
                                             {...register('portada', { required: true })}
@@ -226,13 +234,14 @@ const SubirAPK = () => {
 
 
 
-                                <button
-                                    type="submit"
-                                    className="px-6 py-3 font-semibold text-sm text-white bg-blue-500 rounded flex items-center hover:bg-blue-600 transition-colors"
-                                >
-                                    <FaUpload className="mr-1" />
-                                    Subir APK
-                                </button>
+                                <div className="flex justify-center pt-4">
+                                    <button
+                                        type="submit"
+                                        className="w-50 bg-gradient-to-br from-indigo-600 to-blue-600 text-white py-4 px-6 rounded-xl font-semibold hover:from-indigo-700 hover:to-blue-700 focus:outline-none focus:ring-4 focus:ring-indigo-200 transition-all transform hover:scale-[1.01] shadow-lg hover:shadow-indigo-200/50"
+                                    >
+                                        Subir APK
+                                    </button>
+                                </div>
 
                             </form>
                         </div>

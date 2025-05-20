@@ -6,6 +6,7 @@ import Alerta from "../components/AlertasDocente";
 import { useLogin } from "../context/LoginContext";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { ImageIcon, UploadIcon } from 'lucide-react';
 import {
     FaFileUpload,
     FaFilePdf,
@@ -126,7 +127,7 @@ function EditarInvestigacion() {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label className="flex items-center gap-2 mb-1 text-gray-800 font-semibold">
-                                        <FaUserEdit className="text-blue-500" /> Autores
+                                        Autores
                                     </label>
                                     <input
                                         {...register("autores")}
@@ -137,7 +138,7 @@ function EditarInvestigacion() {
 
                                 <div>
                                     <label className="flex items-center gap-2 mb-1 text-gray-800 font-semibold">
-                                        <FaCalendarAlt className="text-blue-500" /> Fecha
+                                        Fecha
                                     </label>
                                     <input
                                         type="date"
@@ -165,7 +166,7 @@ function EditarInvestigacion() {
                             {/* URL Artículo */}
                             <div>
                                 <label className="flex items-center gap-2 mb-1 text-gray-800 font-semibold">
-                                    <FaLink className="text-green-500" /> URL del Artículo
+                                    URL del Artículo
                                 </label>
                                 <input
                                     type="url"
@@ -179,7 +180,7 @@ function EditarInvestigacion() {
                             {/* URL DOI */}
                             <div>
                                 <label className="flex items-center gap-2 mb-1 text-gray-800 font-semibold">
-                                    <FaLink className="text-green-500" /> URL DOI
+                                    URL DOI
                                 </label>
                                 <input
                                     type="url"
@@ -197,7 +198,7 @@ function EditarInvestigacion() {
 
                                     {/* Imagen de portada */}
                                     <label className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-400 cursor-pointer text-center">
-                                        <FaImage className="text-4xl text-blue-500 mb-2" />
+                                        <ImageIcon className="w-10 h-10 text-black " />
                                         <span className="font-medium">Imagen de la portada</span>
                                         <span className="text-xs text-gray-500">(JPG, PNG)</span>
                                         <input
@@ -217,7 +218,7 @@ function EditarInvestigacion() {
 
                                     {/* Documento PDF */}
                                     <label className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-400 cursor-pointer text-center">
-                                        <FaFilePdf className="text-4xl text-red-500 mb-2" />
+                                        <UploadIcon className="w-10 h-10 text-black" />
                                         <span className="font-medium">Documento PDF</span>
                                         <span className="text-xs text-gray-500">(Artículo completo)</span>
                                         <input
