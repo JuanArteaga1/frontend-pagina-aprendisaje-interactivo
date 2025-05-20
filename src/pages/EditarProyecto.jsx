@@ -7,6 +7,12 @@ import { useForm } from "react-hook-form";
 import { UseCategoria } from "../context/CategoriaContext"
 import { useLogin } from "../context/LoginContext";
 import Alerta from "../components/AlertasDocente";
+import {
+  Image,
+  Upload,
+  FileUp,
+} from "lucide-react";
+
 
 
 
@@ -179,7 +185,7 @@ function EditarProyecto() {
                                                 }
                                             })}
                                         />
-                                        <span className="text-3xl">🪷</span>
+                                        <Upload className="w-5 h-5 text-black" />
                                         <span className="text-sm text-gray-600 mt-1">Subir APK</span>
                                         {errors.urlArchivoapk && <p className="text-red-500">{errors.urlArchivoapk.message}</p>}
                                     </label>
@@ -195,7 +201,7 @@ function EditarProyecto() {
                                                 }
                                             })}
                                         />
-                                        <span className="text-3xl">📈</span>
+                                        <Image className="w-5 h-5 text-black" />
                                         <span className="text-sm text-gray-600 mt-1">Subir IMG</span>
                                         {errors.portada && <p className="text-red-500">{errors.portada.message}</p>}
                                     </label>
@@ -211,7 +217,7 @@ function EditarProyecto() {
                                                 }
                                             })}
                                         />
-                                        <span className="text-3xl">📄</span>
+                                        <FileUp className="w-5 h-5 text-black" />
                                         <span className="text-sm text-gray-600 mt-1">Subir PDF</span>
                                         {errors.urlDoc && <p className="text-red-500">{errors.urlDoc.message}</p>}
                                     </label>

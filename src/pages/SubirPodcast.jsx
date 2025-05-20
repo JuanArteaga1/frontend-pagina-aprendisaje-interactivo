@@ -7,6 +7,8 @@ import { UseCategoria } from "../context/CategoriaContext"
 import Alerta from "../components/AlertasDocente";
 import { useLogin } from "../context/LoginContext"
 
+import { ImageIcon } from 'lucide-react';
+
 
 function SubirPodcast() {
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
@@ -15,11 +17,11 @@ function SubirPodcast() {
   const { TraerCategoria, Categoria } = UseCategoria()
   const [setRegistroExitoso] = useState(false);
   const { Usuario, setUsuario } = useLogin()
-    useEffect(() => {
-      TraerCategoria();
-      console.log(Categoria) // Llamada inicial para traer los datos
-    }, []);
-  
+  useEffect(() => {
+    TraerCategoria();
+    console.log(Categoria) // Llamada inicial para traer los datos
+  }, []);
+
 
   const onSubmit = async (data) => {
     const formData = new FormData();
@@ -102,7 +104,7 @@ function SubirPodcast() {
                       className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
                       placeholder="Nombre del autor"
                     />
-                    {errors.autores && (<p className="text-red-500">los autores son requerido</p>)}
+                    {errors.autores && (<p className="text-red-500">Los autores son requeridos</p>)}
                   </div>
 
                   <div className="space-y-2">
@@ -112,29 +114,29 @@ function SubirPodcast() {
                       {...register("fecha", { required: true })}
                       className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
                     />
-                    {errors.fecha && (<p className="text-red-500">la fecha es requerido</p>)}
+                    {errors.fecha && (<p className="text-red-500">La fecha es requerida</p>)}
                   </div>
                 </div>
 
                 <div>
-                <label className="block text-base font-semibold text-gray-800 mb-1">Categoría</label>
-                <select
-                  {...register('categoriaId', { required: true })}
-                  name="categoriaId"
-                  required
-                  className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
-                >
-                  <option value="">Seleccionar categoría</option>
-                  {Categoria && Categoria.map((categoria) => (
-                    <option key={categoria.id}>
-                      {categoria.Nombre_Categoria}
-                    </option>
-                  ))}
-                </select>
-                {errors.categoriaId && (
-                  <p className="text-red-500">Categoria es requerida</p>
-                )}
-              </div>
+                  <label className="block text-base font-semibold text-gray-800 mb-1">Categoría</label>
+                  <select
+                    {...register('categoriaId', { required: true })}
+                    name="categoriaId"
+                    required
+                    className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
+                  >
+                    <option value="">Seleccionar categoría</option>
+                    {Categoria && Categoria.map((categoria) => (
+                      <option key={categoria.id}>
+                        {categoria.Nombre_Categoria}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.categoriaId && (
+                    <p className="text-red-500">La categoria es requerida</p>
+                  )}
+                </div>
 
                 <div className="space-y-2">
                   <label className="block text-3x1 font-semibold text-gray-800">Materia</label>
@@ -147,7 +149,7 @@ function SubirPodcast() {
                     <option value="ingenieria_civil">Ingeniería Civil</option>
                     <option value="matematicas">Matemáticas</option>
                   </select>
-                  {errors.materia && (<p className="text-red-500">la materia es requerido</p>)}
+                  {errors.materia && (<p className="text-red-500">La materia es requerida</p>)}
 
                 </div>
 
@@ -162,7 +164,7 @@ function SubirPodcast() {
                       className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
                       placeholder="https://ejemplo.com/audio.mp3"
                     />
-                    {errors.audioLink && (<p className="text-red-500">el link del audio es requerido</p>)}
+                    {errors.audioLink && (<p className="text-red-500">El link del audio es requerido</p>)}
 
                   </div>
 
@@ -175,9 +177,9 @@ function SubirPodcast() {
                         {...register("portada", { required: true })}
                         className="hidden"
                       />
-                      {errors.portada && (<p className="text-red-500">portada es requerida</p>)}
+                      {errors.portada && (<p className="text-red-500">La portada es requerida</p>)}
 
-                      <div className="text-4xl mb-3 text-gray-400 group-hover:text-indigo-500">🖼️</div>
+                      <ImageIcon className="w-10 h-10 text-black opacity-50" />
                       <p className="text-center text-sm text-gray-500">
                         {portadaPreview
                           ? <span className="text-indigo-600 font-semibold">{portadaPreview.name}</span>
@@ -199,12 +201,14 @@ function SubirPodcast() {
                 </div>
               </div>
 
-              <button
-                type="submit"
-                className="w-full bg-gradient-to-br from-indigo-600 to-blue-600 text-white py-4 px-6 rounded-xl font-semibold hover:from-indigo-700 hover:to-blue-700 focus:outline-none focus:ring-4 focus:ring-indigo-200 transition-all transform hover:scale-[1.01] shadow-lg hover:shadow-indigo-200/50"
-              >
-                Publicar Podcast
-              </button>
+              <div className="flex justify-center pt-4">
+                <button
+                  type="submit"
+                  className="w-50 bg-gradient-to-br from-indigo-600 to-blue-600 text-white py-4 px-6 rounded-xl font-semibold hover:from-indigo-700 hover:to-blue-700 focus:outline-none focus:ring-4 focus:ring-indigo-200 transition-all transform hover:scale-[1.01] shadow-lg hover:shadow-indigo-200/50"
+                >
+                  Subir podcast
+                </button>
+              </div>
             </form>
           </div>
         </div>

@@ -23,7 +23,7 @@ const TablaDinamica = ({ datos, columnas, acciones }) => {
                 </th>
               ))}
               {acciones && acciones.length > 0 && (
-                <th className="text-left p-3 border-b">ACCIONES</th>
+                <th className="text-left p-3 border-b">Acciones</th>
               )}
             </tr>
           </thead>

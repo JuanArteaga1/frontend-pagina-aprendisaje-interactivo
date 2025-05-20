@@ -3,6 +3,17 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useLogin } from "../context/LoginContext";
 import Swal from 'sweetalert2';
+import {
+  Home,
+  Upload,
+  FilePlus,
+  FileText,
+  Mic,
+  Monitor,
+  Folder,
+  LogOut,
+} from "lucide-react";
+
 
 
 const MenuAdministrador = ({ rol }) => {
@@ -29,7 +40,7 @@ const MenuAdministrador = ({ rol }) => {
   
   const opcionesMenu = {
     admin: [
-      { nombre: "Inicio", ruta: "/", icono: "🏠" },
+      { nombre: "Inicio", ruta: "/", icono: <Home className="w-5 h-5" /> },
       { nombre: "Administrar docentes", ruta: "/AdministrarDocente", icono: "👨‍🏫" },
       { nombre: "Registrar docente", ruta: "/SubirDocente", icono: "➕" },
       { nombre: "Proyectos", ruta: "/VerProyectos", icono: "✅" },
@@ -37,12 +48,12 @@ const MenuAdministrador = ({ rol }) => {
       { nombre: "Gestión de categorías", ruta: "/SubirCategoria", icono: "⚙" },
     ],
     docente: [
-      { nombre: "Inicio", ruta: "/", icono: "🏠" },
-      { nombre: "Subir proyectos", ruta: "/subir-proyecto", icono: "➕" },
-      { nombre: "Investigaciones", ruta: "/SubirInvestigaciones", icono: "📝" },
-      { nombre: "Podcasts", ruta: "/subir-podcast", icono: "🎙️" },
-      { nombre: "Simulaciones", ruta: "/subirsimulaciones", icono: "🖥️" },
-      { nombre: "Mis proyectos", ruta: "/misproyectos", icono: "📂" }
+      { nombre: "Inicio", ruta: "/", icono: <Home className="w-5 h-5" />},
+      { nombre: "Subir proyectos", ruta: "/subir-proyecto", icono: <Upload className="w-5 h-5" /> },
+      { nombre: "Investigaciones", ruta: "/SubirInvestigaciones", icono: <FileText className="w-5 h-5" />  },
+      { nombre: "Podcasts", ruta: "/subir-podcast", icono: <Mic className="w-5 h-5" />},
+      { nombre: "Simulaciones", ruta: "/subirsimulaciones", icono: <Monitor className="w-5 h-5" />},
+      { nombre: "Mis proyectos", ruta: "/misproyectos", icono: <Folder className="w-5 h-5" /> }
     ]
   };
 
@@ -82,10 +93,10 @@ const MenuAdministrador = ({ rol }) => {
       {/* Botón de cierre de sesión mejorado */}
       <div className="p-4 border-t border-gray-700 bg-gray-900">
         <button 
-          className="w-full py-2.5 px-4 bg-blue-600 hover:bg-red-600 rounded-lg transition-all duration-200 flex items-center justify-center font-medium shadow-md hover:shadow-lg"
+          className="gap-2 w-full py-2.5 px-4 bg-blue-600 hover:bg-red-600 rounded-lg transition-all duration-200 flex items-center justify-center font-medium shadow-md hover:shadow-lg"
           onClick={handleCerrarSesion}
         >
-          <span className="mr-2 text-lg">🚪</span>
+          <LogOut className="w-5 h-5 text-white" />
           Cerrar sesión
         </button>
       </div>

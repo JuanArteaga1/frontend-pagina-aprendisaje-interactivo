@@ -9,6 +9,16 @@ import Alerta from "../components/AlertasDocente";
 import { UseCategoria } from "../context/CategoriaContext"
 
 import {
+    Image,
+    Upload,
+    FileUp,
+    UploadIcon,
+} from "lucide-react";
+
+
+
+
+import {
     FaAndroid,
     FaFileCode,
     FaImage,
@@ -190,7 +200,7 @@ function EditarSimulaciones() {
                             <div className="grid grid-cols-3 gap-2">
                                 {/* APK Principal */}
                                 <label className="flex flex-col items-center p-2 border-2 border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50">
-                                    <FaAndroid className="text-green-500 text-xl mb-1" />
+                                    <UploadIcon className="w-5 h-5 text-black" />
                                     <span className="text-3x1 text-center">APK Principal</span>
                                     <input
                                         {...register('urlArchivoapk', { required: true })}
@@ -204,7 +214,7 @@ function EditarSimulaciones() {
 
                                 {/* Requisitos */}
                                 <label className="flex flex-col items-center p-2 border border-gray-300 rounded cursor-pointer hover:bg-gray-50">
-                                    <FaFileCode className="text-blue-500 text-xl mb-1" />
+                                    <FileUp className="w-5 h-5 text-black" />
                                     <span className="text-3x1 text-center">Requisitos (PDF)</span>
                                     <input
                                         {...register('urlDoc', { required: true })}
@@ -219,7 +229,7 @@ function EditarSimulaciones() {
 
                                 {/* Capturas */}
                                 <label className="flex flex-col items-center p-2 border border-gray-300 rounded cursor-pointer hover:bg-gray-50">
-                                    <FaImage className="text-purple-500 text-xl mb-1" />
+                                    <Image className="w-5 h-5 text-black" />
                                     <span className="text-3x1 text-center">Capturas</span>
                                     <input
                                         {...register('portada', { required: true })}

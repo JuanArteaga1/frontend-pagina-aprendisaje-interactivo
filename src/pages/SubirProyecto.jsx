@@ -5,6 +5,12 @@ import { useProyectos } from "../context/ProyectoContext"
 import { UseCategoria } from "../context/CategoriaContext"
 import Alerta from "../components/AlertasDocente";
 import { useLogin } from "../context/LoginContext"
+import {
+  Image,
+  Upload,
+  FileUp,
+} from "lucide-react";
+
 
 
 function SubirProyecto() {
@@ -149,68 +155,72 @@ function SubirProyecto() {
             <div className="space-y-4">
               <h3 className="text-base font-semibold text-gray-800">Cargar Archivos</h3>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <label className="flex flex-col items-center justify-center h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
-                  <input
-                    type="file"
-                    className="hidden"
-                    accept=".mp3,audio/*"
-                    {...register('urlArchivoapk', {
-                      required: 'Se requiere una imagen',
-                      validar: {
-                        tamaño: (archivos) => archivos[0]?.size <= MAX_SIZE || 'El archivo supera los 10MB',
-                      },
+              <div className="flex justify-center">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-fit">
+                  <label className="flex flex-col items-center justify-center h-50 w-50 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
+                    <input
+                      type="file"
+                      className="hidden"
+                      accept=".mp3,audio/*"
+                      {...register('urlArchivoapk', {
+                        required: 'Se requiere una imagen',
+                        validar: {
+                          tamaño: (archivos) => archivos[0]?.size <= MAX_SIZE || 'El archivo supera los 10MB',
+                        },
 
-                    })}
-                  />
-                  {errors.urlArchivoapk && (<p className="text-red-500">apk es requerida</p>)}
-                  <span className="text-3xl">🪷</span>
-                  <span className="text-sm text-gray-600 mt-1">Subir APK</span>
-                </label>
+                      })}
+                    />
+                    {errors.urlArchivoapk && (<p className="text-red-500">La APK es requerida</p>)}
+                    <Upload className="w-5 h-5 text-black" />
+                    <span className="text-sm text-gray-600 mt-1">Subir APK</span>
+                  </label>
 
-                <label className="flex flex-col items-center justify-center h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
-                  <input
-                    type="file"
-                    className="hidden"
-                    accept="image/*"
-                    {...register('portada', {
-                      required: 'Se requiere una imagen',
-                      validate: {
-                        tamaño: (archivos) =>
-                          archivos[0]?.size <= MAX_SIZE || 'La imagen supera los 10MB',
-                      },
-                    })}
-                  />
-                  {errors.portada && (<p className="text-red-500">Imagen es requerida</p>)}
+                  <label className="flex flex-col items-center justify-center h-50 w-50 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
+                    <input
+                      type="file"
+                      className="hidden"
+                      accept="image/*"
+                      {...register('portada', {
+                        required: 'Se requiere una imagen',
+                        validate: {
+                          tamaño: (archivos) =>
+                            archivos[0]?.size <= MAX_SIZE || 'La imagen supera los 10MB',
+                        },
+                      })}
+                    />
+                    {errors.portada && (<p className="text-red-500">Imagen es requerida</p>)}
 
 
-                  <span className="text-3xl">📈</span>
-                  <span className="text-sm text-gray-600 mt-1">Subir IMG</span>
-                </label>
-                <label className="flex flex-col items-center justify-center h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
-                  <input type="file" className="hidden"
-                    accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
-                    {...register('urlDoc', {
-                      required: 'Se requiere una Documento',
-                      validar: {
-                        tamaño: (archivos) => archivos[0]?.size <= MAX_SIZE || 'Audio supera los 10MB',
-                      },
+                    <Image className="w-5 h-5 text-black" />
+                    <span className="text-sm text-gray-600 mt-1">Subir IMG</span>
+                  </label>
+                  <label className="flex flex-col items-center justify-center h-50 w-50 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
+                    <input type="file" className="hidden"
+                      accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
+                      {...register('urlDoc', {
+                        required: 'Se requiere una Documento',
+                        validar: {
+                          tamaño: (archivos) => archivos[0]?.size <= MAX_SIZE || 'Audio supera los 10MB',
+                        },
 
-                    })} />
-                  {errors.urlDoc && (<p className="text-red-500">Documento es requerida</p>)}
+                      })} />
+                    {errors.urlDoc && (<p className="text-red-500">Documento es requerida</p>)}
 
-                  <span className="text-3xl">📄</span>
-                  <span className="text-sm text-gray-600 mt-1">Subir PDF</span>
-                </label>
+                    <FileUp className="w-5 h-5 text-black" />
+                    <span className="text-sm text-gray-600 mt-1">Subir PDF</span>
+                  </label>
+                </div>
               </div>
             </div>
 
-            <button
-              type="submit"
-              className="w-full font-semibold  bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
-            >
-              Publicar Proyecto
-            </button>
+            <div className="flex justify-center pt-4">
+              <button
+                type="submit"
+                className="w-50 bg-gradient-to-br from-indigo-600 to-blue-600 text-white py-4 px-6 rounded-xl font-semibold hover:from-indigo-700 hover:to-blue-700 focus:outline-none focus:ring-4 focus:ring-indigo-200 transition-all transform hover:scale-[1.01] shadow-lg hover:shadow-indigo-200/50"
+              >
+                Subir proyecto
+              </button>
+            </div>
           </form>
         </div>
       </main>
