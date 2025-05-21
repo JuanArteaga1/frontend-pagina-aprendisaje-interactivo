@@ -1,5 +1,5 @@
 import { Children, createContext, useEffect, useState, useContext } from "react";
-import { GetAllProyectos, GetIdProyectos } from "../api/AdminTraerProyectos"; // Funciones para obtener proyectos desde la API
+import { GetAllProyectos, GetIdProyectos, DeleteProyectos } from "../api/AdminTraerProyectos"; // Funciones para obtener proyectos desde la API
 
 // Creamos el contexto que compartirá los datos relacionados con los proyectos
 export const TraerProyectosContext = createContext();
@@ -7,7 +7,7 @@ export const TraerProyectosContext = createContext();
 // Hook personalizado para consumir el contexto de proyectos
 export const UseTraerProyectos = () => {
     const context = useContext(TraerProyectosContext);
-    
+
     // Asegura que este hook se use dentro del proveedor correspondiente
     if (!context) {
         throw new Error("Debe estar dentro de un provider");
@@ -37,12 +37,16 @@ export const TraerProyectosProvider = ({ children }) => {
     const TraerProyectosId = async (Id) => {
         try {
             const traerProyectoId = await GetIdProyectos(Id); // Llamada a la API por ID
-            console.log(traerProyectoId); // Mostrar en consola para depuración
             SettraerProyectoId(traerProyectoId); // Guardar el resultado en el estado
         } catch (error) {
             console.log(error); // Mostrar errores en consola
         }
     };
+    const EliminarProyectos = async (fila, proyectos) => {
+        const response = await DeleteProyectos(fila, proyectos)
+        SetTraerProyectos(response);
+        return { success: true, data: response };
+    }
 
     // Proveer todos los estados y funciones a los componentes hijos que usen este contexto
     return (
@@ -55,7 +59,8 @@ export const TraerProyectosProvider = ({ children }) => {
                 SetTraerProyectos,
                 TraerProyectosT,
                 TraerProyectosId,
-                traerProyectoId
+                traerProyectoId,
+                EliminarProyectos
             }}
         >
             {children}
