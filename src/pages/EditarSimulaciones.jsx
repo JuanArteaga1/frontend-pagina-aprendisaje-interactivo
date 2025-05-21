@@ -14,10 +14,6 @@ import {
     FileUp,
     UploadIcon,
 } from "lucide-react";
-
-
-
-
 import {
     FaAndroid,
     FaFileCode,

@@ -27,7 +27,7 @@ export const TraerProyectosProvider = ({ children }) => {
         try {
             const TraerProyectos = await GetAllProyectos(); // Llamada a la API
             console.log("Respuesta GetAllProyectos:", TraerProyectos); // Mostrar en consola para depuración
-            SetTraerProyectos(TraerProyectos.data); // Guardar los datos en el estado
+            SetTraerProyectos(TraerProyectos); // Guardar los datos en el estado
         } catch (error) {
             console.log(error); // Mostrar errores en consola
         }
@@ -60,7 +60,7 @@ export const TraerProyectosProvider = ({ children }) => {
                 TraerProyectosT,
                 TraerProyectosId,
                 traerProyectoId,
-                EliminarProyectos
+                
             }}
         >
             {children}
