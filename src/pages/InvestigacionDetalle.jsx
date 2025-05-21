@@ -2,29 +2,33 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { UseTraerProyectos } from "../context/TraerProyectos";
+import { useInvestigacion } from "../context/InvestigacionContext";
+
 
 const InvestigacionDetalle = () => {
   const { id } = useParams();
-  const { TraerProyectos, TraerProyectosT } = UseTraerProyectos();
+  const { investigaciones, traerInvestigaciones } = useInvestigacion();
+
 
   useEffect(() => {
-    if (!TraerProyectos?.investigacion?.some(i => i._id === id)) {
-      TraerProyectosT();
+    if (!investigaciones.some(i => i._id === id)) {
+      traerInvestigaciones();
     }
-  }, [id, TraerProyectos, TraerProyectosT]);
+  }, [id, investigaciones, traerInvestigaciones]);
 
-  if (!TraerProyectos || !TraerProyectos.investigacion) {
-    return (
-      <>
-        <Navbar />
-        <div className="p-5 max-w-6xl mx-auto">
-          <h2 className="text-xl font-bold">Cargando investigación...</h2>
-        </div>
-      </>
-    );
-  }
+  const investigacion = investigaciones.find((inv) => inv._id === id);
 
-  const investigacion = TraerProyectos.investigacion.find((inv) => inv._id === id);
+if (!investigacion) {
+  return (
+    <>
+      <Navbar />
+      <div className="p-5 max-w-6xl mx-auto">
+        <h2 className="text-xl font-bold">Cargando investigación...</h2>
+      </div>
+    </>
+  );
+}
+
 
   if (!investigacion) {
     return (
@@ -67,23 +71,23 @@ const InvestigacionDetalle = () => {
 
 
 
-           {/* {investigacion.archivo && ( */}
+            {/* {investigacion.archivo && ( */}
 
-              <button
-                onClick={() => {
-                  const link = document.createElement("a");
-                  link.href = archivoURL;
-                  link.download = investigacion.nombre_proyecto + ".pdf";
-                  document.body.appendChild(link);
-                  link.click();
-                  document.body.removeChild(link);
-                }}
-                className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-500"
-              >
-                Descargar
-              </button>
+            <button
+              onClick={() => {
+                const link = document.createElement("a");
+                link.href = archivoURL;
+                link.download = investigacion.nombre_proyecto + ".pdf";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+              }}
+              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-500"
+            >
+              Descargar
+            </button>
             {/* )} */}
-            
+
           </div>
 
           {/* Descripción y datos */}
