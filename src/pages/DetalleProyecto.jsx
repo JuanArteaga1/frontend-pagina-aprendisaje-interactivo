@@ -6,7 +6,7 @@ import { useProyectos } from "../context/ProyectoContext"; // Hook personalizado
 const DetalleProyecto = () => {
     const { id } = useParams(); // Obtener el ID del proyecto desde la URL
     const { Proyectos, TraerProyectos } = useProyectos(); // Obtener lista de proyectos y función para traerlos
-
+    
     useEffect(() => {
         // Si el proyecto no está en el estado, se vuelve a cargar
         const proyectoExiste = Proyectos.some(p => p._id === id);

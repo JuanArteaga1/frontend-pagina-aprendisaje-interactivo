@@ -1,44 +1,65 @@
 import React, { useEffect } from "react";
-import Navbar from "../components/Navbar"; // Componente de navegación superior
-import CategoriaProyectos from "../components/CategoriaProyectos"; // Componente reutilizable para mostrar categorías de proyectos
-import { useProyectos } from "../context/ProyectoContext"; // Hook del contexto para acceder y traer proyectos
+import Navbar from "../components/Navbar";
+import CategoriaProyectos from "../components/CategoriaProyectos";
+import { useProyectos } from "../context/ProyectoContext";
+import { UseSimulaciones } from "../context/SimulacionesContex";
+import { useMemo } from "react";
+
 
 const Fisica = () => {
-    const { Proyectos, TraerProyectos } = useProyectos(); // Obtenemos los proyectos y la función para traerlos
+    const { Proyectos, TraerProyectos } = useProyectos();
+    const { Simulaciones, TraerSimulaciones } = UseSimulaciones();
 
     useEffect(() => {
-        // Al montar el componente, se llama a la función para obtener los proyectos
         TraerProyectos();
+        TraerSimulaciones();
     }, []);
 
-    // Filtrar los proyectos que son simulaciones y pertenecen a la categoría Física
-    const simulacionesFisica = Proyectos.filter(
-        p => p.tipo === "Simulación" && p.categoria === "Fisica"
-    );
+    // Obtener simulaciones cuya materia es Física
+    const simulacionesFisica = Simulaciones
+        .filter(sim => sim.materia?.nombre === "Fisica")
+        .map(sim => ({
+            nombre: sim.nombre_proyecto,
+            imagen: `http://localhost:3000/uploads/${sim.urlimg?.replace(/\\/g, "/").split("uploads/")[1]}`,
+            tipo: "Simulación",
+            categoria: "Fisica",
+            autores: sim.autores,
+            descripcion: sim.descripcion,
+            _id: sim._id
+        }));
 
-    // Filtrar los proyectos que son aplicaciones y pertenecen a la categoría Física
-    const aplicacionesFisica = Proyectos.filter(
-        p => p.tipo === "Aplicación" && p.categoria === "Fisica"
-    );
-
+    // 📱 Aplicaciones con categoría Física
+    const aplicacionesFisica = Proyectos
+        .filter(app => app.materia?.nombre === "Fisica")
+        .map(app => ({
+            nombre: app.nombre_proyecto,
+            imagen: `http://localhost:3000/uploads/${app.urlimg?.replace(/\\/g, "/").split("uploads/")[1]}`,
+            tipo: "Aplicación",
+            categoria: "Fisica",
+            autores: app.autores,
+            descripcion: app.descripcion,
+            _id: app._id
+        }));
+    
     return (
         <div>
-            {/* Barra de navegación */}
             <Navbar />
 
-            {/* Sección de simulaciones relacionadas con Física */}
-            <CategoriaProyectos
-                titulo="Simulaciones de Física"
-                categoria="Fisica"
-                proyectos={simulacionesFisica}
-            />
+            <div className="contenido-proyectos">
+                <CategoriaProyectos
+                    titulo="Simulaciones de Física"
+                    categoria="Fisica"
+                    proyectos={simulacionesFisica}
+                />
 
-            {/* Sección de aplicaciones relacionadas con Física */}
-            <CategoriaProyectos
-                titulo="Aplicaciones de Física"
-                categoria="Fisica"
-                proyectos={aplicacionesFisica}
-            />
+
+                <CategoriaProyectos
+                    titulo="Aplicaciones de Física"
+                    categoria="Fisica"
+                    proyectos={aplicacionesFisica}
+                />
+                
+            </div>
         </div>
     );
 };
