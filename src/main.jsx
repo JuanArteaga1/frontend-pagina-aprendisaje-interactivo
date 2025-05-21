@@ -62,9 +62,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/ayuda" element={<AyudaT />} />
         <Route path="/quienes-somos" element={<QuienesSomos />} />
       //Rutas de las categorias de HOME
-        <Route path="/Fisica" element={<ProyectosProvider><Fisica /></ProyectosProvider>} />
-        <Route path="/IngCivil" element={<ProyectosProvider><IngCivil /></ProyectosProvider>} />
-        <Route path="/Matematicas" element={<ProyectosProvider><Matematicas /></ProyectosProvider>} />
+        <Route path="/Fisica" element={<SimulacionesProvider> <ProyectosProvider><Fisica /></ProyectosProvider> </SimulacionesProvider>} />
+        <Route path="/IngCivil" element={<SimulacionesProvider> <ProyectosProvider><IngCivil /></ProyectosProvider> </SimulacionesProvider>} />
+        <Route path="/Matematicas" element={<SimulacionesProvider> <ProyectosProvider><Matematicas /></ProyectosProvider> </SimulacionesProvider>} />
         <Route path="/detalle/:id" element={<ProyectosProvider><DetalleProyecto /></ProyectosProvider>} />
         <Route path="/detalle-simulacion/:id" element={<SimulacionesProvider><DetalleSimulacion /></SimulacionesProvider>} />
         <Route path="/investigaciones/:id" element={<TraerProyectosProvider><InvestigacionDetalle /></TraerProyectosProvider>} />

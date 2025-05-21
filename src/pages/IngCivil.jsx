@@ -1,36 +1,64 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "../components/Navbar"; // Componente de navegación superior
 import CategoriaProyectos from "../components/CategoriaProyectos"; // Componente que muestra proyectos por categoría
 import { useProyectos } from "../context/ProyectoContext"; // Hook para acceder al contexto de proyectos
+import { UseSimulaciones } from "../context/SimulacionesContex";
 
 const IngCivil = () => {
   // Obtener todos los proyectos desde el contexto
-  const { proyectos } = useProyectos();
+  const { Proyectos, TraerProyectos } = useProyectos();
+  const { Simulaciones, TraerSimulaciones } = UseSimulaciones();
 
-  // Filtrar los proyectos que son de tipo "Aplicacion Movil"
-  const proyectosAplicaciones = (proyectos || []).filter(p => p.tipo === "Aplicacion Movil");
+  useEffect(() => {
+    TraerProyectos();
+    TraerSimulaciones();
+  }, []);
 
-  // Filtrar los proyectos que son de tipo "Simulacion"
-  const proyectosSimulaciones = (proyectos || []).filter(p => p.tipo === "Simulacion");
+
+  // Obtener simulaciones cuya materia es Ing Civil
+  const simulacionesIngCivil = Simulaciones
+    .filter(sim => sim.materia?.nombre === "ingenieria civil")
+    .map(sim => ({
+      nombre: sim.nombre_proyecto,
+      imagen: `http://localhost:3000/uploads/${sim.urlimg?.replace(/\\/g, "/").split("uploads/")[1]}`,
+      tipo: "Simulación",
+      categoria: "ingenieria civil",
+      autores: sim.autores,
+      descripcion: sim.descripcion,
+      _id: sim._id
+    }));
+
+  const aplicacionesIngCivil = Proyectos
+    .filter(app => app.materia?.nombre === "ingenieria civil")
+    .map(app => ({
+      nombre: app.nombre_proyecto,
+      imagen: `http://localhost:3000/uploads/${app.urlimg?.replace(/\\/g, "/").split("uploads/")[1]}`,
+      tipo: "Aplicación",
+      categoria: "ingenieria civil",
+      autores: app.autores,
+      descripcion: app.descripcion,
+      _id: app._id
+    }));
 
   return (
     <div>
-      {/* Barra de navegación */}
       <Navbar />
 
-      {/* Sección de Simulaciones de Ingeniería Civil */}
-      <CategoriaProyectos
-        titulo="Simulaciones de Ingeniería Civil"
-        categoria="Ingeniería Civil"
-        proyectos={proyectosSimulaciones} // Pasamos solo los proyectos filtrados como simulaciones
-      />
+      <div className="contenido-proyectos">
+        <CategoriaProyectos
+          titulo="Simulaciones de Ing Civil"
+          categoria="ingenieria civil"
+          proyectos={simulacionesIngCivil}
+        />
 
-      {/* Sección de Aplicaciones Móviles de Ingeniería Civil */}
-      <CategoriaProyectos
-        titulo="Aplicaciones Móviles de Ingeniería Civil"
-        categoria="Ingeniería Civil"
-        proyectos={proyectosAplicaciones} // Pasamos solo los proyectos filtrados como aplicaciones móviles
-      />
+
+        <CategoriaProyectos
+          titulo="Aplicaciones de Ing Civil"
+          categoria="ingenieria civil"
+          proyectos={aplicacionesIngCivil}
+        />
+
+      </div>
     </div>
   );
 };
