@@ -108,7 +108,7 @@ const Home = () => {
           <h4 className="font-semibold mb-2">Síguenos en:</h4>
           <div className="flex justify-center space-x-4">
             <a
-              href="https://www.facebook.com"
+              href="https://www.facebook.com/uniautonomadc/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-white hover:underline"
@@ -116,7 +116,7 @@ const Home = () => {
               Facebook
             </a>
             <a
-              href="https://www.twitter.com"
+              href="https://x.com/uniautonomadc"
               target="_blank"
               rel="noopener noreferrer"
               className="text-white hover:underline"
@@ -124,7 +124,7 @@ const Home = () => {
               Twitter
             </a>
             <a
-              href="https://www.instagram.com"
+              href="https://www.instagram.com/uniautonomadelcauca/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-white hover:underline"

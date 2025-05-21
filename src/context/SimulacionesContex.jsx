@@ -1,5 +1,5 @@
 import { Children, createContext, useEffect, useState, useContext } from "react";
-import { subirSimulacionesAPI, GetAllSimulaciones, PutSimulaciones, DeleteSimulaciones } from "../api/AdmiSimulaciones";
+import { subirSimulacionesAPI,GetAllSimulaciones,PutSimulaciones, GetIdSimulaciones, DeleteSimulaciones } from "../api/AdmiSimulaciones";
 import { GetAllPodcast } from "../api/AdmiPodcast";
 
 export const SimulacionesContext = createContext();
@@ -15,6 +15,9 @@ export const UseSimulaciones = () => {
 export const SimulacionesProvider = ({ children }) => {
     const [Simulaciones, SetSimulaciones] = useState(null);
     const [errors, setErrors] = useState([])
+    const [Simulaciones, SetSimulaciones] = useState([]);
+    const [errors,setErrors ] = useState([])
+
     const [mensaje, setMensaje] = useState(null);
     const ActualizarSimulaciones = async (Id, data) => {
         try {
@@ -28,7 +31,31 @@ export const SimulacionesProvider = ({ children }) => {
 
             return { success: false, error: error.response?.data?.errors };
         }
+
     };
+
+      };
+    
+      const EliminarSimulaciones = async (id) => {
+          try {
+            await DeleteSimulaciones(id);
+            await TraerSimulaciones();
+            return { success: true };
+          } catch (error) {
+            console.log("Error al eliminar el proyecto:", error);
+            return { success: false, error };
+          }
+        };
+    
+        const TraerSimulaciones = async () => {
+            try {
+              const response = await GetAllSimulaciones();
+              console.log(response.data)
+              SetSimulaciones(response.data);
+            } catch (error) {
+              console.error("Error al traer simulaciones:", error);
+            }
+          };
 
 
     const sigout = async (data) => {
@@ -50,6 +77,7 @@ export const SimulacionesProvider = ({ children }) => {
 
     return (
         <SimulacionesContext.Provider value={{ sigout, Simulaciones, errors, mensaje, setMensaje,ActualizarSimulaciones }}>
+        <SimulacionesContext.Provider value={{ sigout, Simulaciones,errors,mensaje, setMensaje,ActualizarSimulaciones, EliminarSimulaciones, TraerSimulaciones }}>
             {children}
         </SimulacionesContext.Provider>
     );

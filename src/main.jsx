@@ -26,6 +26,7 @@ import Fisica from "./pages/Fisica";
 import IngCivil from "./pages/IngCivil";
 import Matematicas from "./pages/Matematicas";
 import DetalleProyecto from "./pages/DetalleProyecto";
+import DetalleSimulacion from "./pages/DetalleSimulacion";
 import ActualizarProyecto from "./pages/ActualizarProyectos";
 import Episodio from "./pages/Episodio";
 import AyudaT from "./pages/Ayuda";
@@ -43,6 +44,7 @@ import EditarProyecto from "./pages/EditarProyecto";
 import EditarPodcast from "./pages/EditarPodcast";
 import EditarInvestigacion from "./pages/EditarInvestigacion";
 import EditarSimulaciones from "./pages/EditarSimulaciones";
+import EditarDocente from "./pages/EditarDocente";
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -53,17 +55,18 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         //rutas de estudiante y visualizacion
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/simulaciones" element={<Simulaciones />} />
+        <Route path="/simulaciones" element={<SimulacionesProvider><Simulaciones /></SimulacionesProvider>} />
         <Route path="/podcast" element={<PodcastProvider><Podcast /></PodcastProvider>} />
         <Route path="/appmovil" element={<ProyectosProvider><Appmovil /></ProyectosProvider>} />
         <Route path="/investigaciones" element={<InvestigacionProvider><Investigaciones /></InvestigacionProvider>} />
         <Route path="/ayuda" element={<AyudaT />} />
         <Route path="/quienes-somos" element={<QuienesSomos />} />
       //Rutas de las categorias de HOME
-        <Route path="/Fisica" element={<ProyectosProvider><Fisica /></ProyectosProvider>} />
-        <Route path="/IngCivil" element={<ProyectosProvider><IngCivil /></ProyectosProvider>} />
-        <Route path="/Matematicas" element={<ProyectosProvider><Matematicas /></ProyectosProvider>} />
+        <Route path="/Fisica" element={<SimulacionesProvider> <ProyectosProvider><Fisica /></ProyectosProvider> </SimulacionesProvider>} />
+        <Route path="/IngCivil" element={<SimulacionesProvider> <ProyectosProvider><IngCivil /></ProyectosProvider> </SimulacionesProvider>} />
+        <Route path="/Matematicas" element={<SimulacionesProvider> <ProyectosProvider><Matematicas /></ProyectosProvider> </SimulacionesProvider>} />
         <Route path="/detalle/:id" element={<ProyectosProvider><DetalleProyecto /></ProyectosProvider>} />
+        <Route path="/detalle-simulacion/:id" element={<SimulacionesProvider><DetalleSimulacion /></SimulacionesProvider>} />
         <Route path="/investigaciones/:id" element={<TraerProyectosProvider><InvestigacionDetalle /></TraerProyectosProvider>} />
 
         <Route path="/episodio/:id" element={<Episodio />} />
@@ -82,6 +85,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route path="/menudocente" element={<MenuDocen />} />
             <Route path="/subir-proyecto" element={<ProyectosProvider><SubirProyecto /></ProyectosProvider>} />
             <Route path="/misproyectos" element={<TraerProyectosProvider><MisProyectos/></TraerProyectosProvider>} />
+
             <Route path="/actualizar-proyectos" element={<ActualizarProyecto />} />
             <Route path="/subirsimulaciones" element={<SimulacionesProvider><Subirsimulaciones /></SimulacionesProvider>} />
             <Route path="/SubirInvestigaciones" element={<InvestigacionProvider><SubirInvestigaciones /></InvestigacionProvider>} />
@@ -93,6 +97,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route path="/editar-podcast/:id" element={<PodcastProvider><EditarPodcast /></PodcastProvider>} />
             <Route path="/editar-investigacion/:id" element={<InvestigacionProvider><EditarInvestigacion /></InvestigacionProvider>} />
             <Route path="/editar-simulacion/:id" element={<SimulacionesProvider><EditarSimulaciones /></SimulacionesProvider>} />
+
+            <Route path="/editar-docente/:id" element={<DocenteProvider><EditarDocente /></DocenteProvider>} />
+
           </Route>
         </Route>
 

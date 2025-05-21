@@ -4,9 +4,14 @@ import TablaDinamica from "../components/Tabla";
 import MenuAdministrador from "../components/MenuAdmi_Doc";
 import { useLogin } from "../context/LoginContext"
 import { UseTraerProyectos } from "../context/TraerProyectos";
+
 import { useLocation } from "react-router-dom";
+import Swal from 'sweetalert2';
 
-
+import { useProyectos } from "../context/ProyectoContext";
+import { usePodcast } from "../context/PodcastContext";
+import { useInvestigacion } from "../context/InvestigacionContext";
+import { UseSimulaciones } from "../context/SimulacionesContex";
 
 const MisProyectos = () => {
   const navigate = useNavigate();
@@ -18,26 +23,28 @@ const MisProyectos = () => {
   const [tipoMensaje, setTipoMensaje] = useState("success"); // 'success' o 'error'
   const location = useLocation();
 
+  const { EliminarProyectos } = useProyectos();
+  const { EliminarPodcast, TraerPodcastId } = usePodcast();
+  const { EliminarInvestigacion } = useInvestigacion();
+  const { EliminarSimulaciones } = UseSimulaciones();
+
 
 
   useEffect(() => {
     TraerProyectosId(Usuario.Id); // Llamada inicial para traer los datos
   }, []);
   useEffect(() => {
-  if (location.state?.mensaje) {
-    setMensaje(location.state.mensaje);
-    setTipoMensaje(location.state.tipo || "success");
+    if (location.state?.mensaje) {
+      setMensaje(location.state.mensaje);
+      setTipoMensaje(location.state.tipo || "success");
 
-    // Limpia el mensaje después de unos segundos
-    setTimeout(() => {
-      setMensaje(null);
-      navigate(location.pathname, { replace: true });
-    }, 3000);
-  }
-}, [location.state]);
-
-
-
+      // Limpia el mensaje después de unos segundos
+      setTimeout(() => {
+        setMensaje(null);
+        navigate(location.pathname, { replace: true });
+      }, 3000);
+    }
+  }, [location.state]);
 
   useEffect(() => {
     setColumnas([
@@ -47,7 +54,7 @@ const MisProyectos = () => {
       { key: "fechaPublicacion", nombre: "Fecha de Publicación" }
     ]);
   }, []);
-  // Opcional: Acciones
+  //Acciones
   const acciones = [
     {
       nombre: "Editar",
@@ -82,7 +89,52 @@ const MisProyectos = () => {
 
       }
       
+      fn: async (fila) => {
+        const { isConfirmed } = await Swal.fire({
+          title: "¿Estás segura?",
+          text: `Esto eliminará permanentemente el ${fila.proyecto.toLowerCase()}`,
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Sí, eliminar",
+          cancelButtonText: "Cancelar"
+        });
+
+        if (!isConfirmed) return;
+
+        try {
+          if (fila.proyecto === "Proyecto") {
+            await EliminarProyectos(fila._id);
+          } else if (fila.proyecto === "Podcast") {
+            await EliminarPodcast(fila._id);
+          } else if (fila.proyecto === "Investigación") {
+            await EliminarInvestigacion(fila._id);
+          } else if (fila.proyecto === "Simulación") {
+            await EliminarSimulaciones(fila._id);
+          }
+
+          await TraerProyectosId(Usuario.Id); // Refrescar lista
+
+          // Mostrar mensaje de éxito
+          Swal.fire(
+            '¡Eliminado!',
+            `El ${fila.proyecto.toLowerCase()} fue eliminado correctamente.`,
+            'success'
+          );
+        } catch (error) {
+          console.error(error);
+          Swal.fire(
+            'Error',
+            `Hubo un problema al eliminar el ${fila.proyecto.toLowerCase()}.`,
+            'error'
+          );
+        }
+      },
+      mostrar: (fila) =>
+        ["Proyecto", "Podcast", "Investigación", "Simulación"].includes(fila.proyecto),
+      estilo: "bg-red-500 text-white hover:bg-red-600"
     }
+
+
   ];
   useEffect(() => {
     console.log(traerProyectoId?.data)
@@ -116,7 +168,7 @@ const MisProyectos = () => {
       <MenuAdministrador rol="docente" />
 
       {/* Área de Contenido */}
-      
+
       <main className="flex-1 p-8 overflow-y-auto">
         <h1 className="text-2xl font-bold text-gray-800 mb-4">
           Mis Proyectos
@@ -124,10 +176,10 @@ const MisProyectos = () => {
 
         {/* Contenedor de la Tabla */}
         {mensaje && (
-            <div className={`mb-4 p-2 rounded ${tipoMensaje === "success" ? "bg-green-200 text-green-800" : "bg-red-200 text-red-800"}`}>
-              {mensaje}
-            </div>
-          )}
+          <div className={`mb-4 p-2 rounded ${tipoMensaje === "success" ? "bg-green-200 text-green-800" : "bg-red-200 text-red-800"}`}>
+            {mensaje}
+          </div>
+        )}
         <div className="bg-white rounded-lg shadow-sm overflow-hidden">
           <TablaDinamica
             datos={proyectosUnificados}
@@ -138,7 +190,7 @@ const MisProyectos = () => {
 
         {/* Pie de tabla */}
         <div className="mt-4 text-sm text-gray-600 flex justify-between items-center">
-          
+
           <div className="flex items-center space-x-2">
             <button className="px-3 py-1 border rounded text-sm hover:bg-gray-100">
               Anterior

@@ -5,16 +5,7 @@ import { useForm } from "react-hook-form";
 import Alerta from "../components/AlertasDocente";
 import { useLogin } from "../context/LoginContext"
 
-
-import {
-  FaFileUpload,
-  FaFilePdf,
-  FaImage,
-  FaCalendarAlt,
-  FaUserEdit,
-  FaPaperclip,
-  FaLink,
-} from "react-icons/fa";
+import { ImageIcon, UploadIcon } from 'lucide-react';
 
 import { useInvestigacion } from "../context/InvestigacionContext";
 
@@ -110,7 +101,7 @@ const SubirInvestigaciones = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="flex items-center gap-2 mb-1 text-gray-800 font-semibold">
-                  <FaUserEdit className="text-blue-500" /> Autores
+                   Autores
                 </label>
                 <input
                   {...register("autores")}
@@ -121,7 +112,7 @@ const SubirInvestigaciones = () => {
 
               <div>
                 <label className="flex items-center gap-2 mb-1 text-gray-800 font-semibold">
-                  <FaCalendarAlt className="text-blue-500" /> Fecha
+                   Fecha
                 </label>
                 <input
                   type="date"
@@ -149,7 +140,7 @@ const SubirInvestigaciones = () => {
             {/* URL Artículo */}
             <div>
               <label className="flex items-center gap-2 mb-1 text-gray-800 font-semibold">
-                <FaLink className="text-green-500" /> URL del Artículo
+                 URL del Artículo
               </label>
               <input
                 type="url"
@@ -163,7 +154,7 @@ const SubirInvestigaciones = () => {
             {/* URL DOI */}
             <div>
               <label className="flex items-center gap-2 mb-1 text-gray-800 font-semibold">
-                <FaLink className="text-green-500" /> URL DOI
+                 URL DOI
               </label>
               <input
                 type="url"
@@ -179,7 +170,7 @@ const SubirInvestigaciones = () => {
               <h3 className="text-gray-800 font-semibold mb-3">Subir archivos</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <label className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-400 cursor-pointer text-center">
-                  <FaImage className="text-4xl text-blue-500 mb-2" />
+                  <ImageIcon className="w-10 h-10 text-black opacity-50" />
                   <span className="font-medium">Imagen de la portada</span>
                   <span className="text-xs text-gray-500">(JPG, PNG)</span>
                   <input
@@ -198,7 +189,7 @@ const SubirInvestigaciones = () => {
                 </label>
 
                 <label className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-400 cursor-pointer text-center">
-                  <FaFilePdf className="text-4xl text-red-500 mb-2" />
+                  <UploadIcon className="w-10 h-10 text-black opacity-50" />
                   <span className="font-medium">Documento PDF</span>
                   <span className="text-xs text-gray-500">(Artículo completo)</span>
                   <input
@@ -221,9 +212,9 @@ const SubirInvestigaciones = () => {
             <div className="pt-4 flex justify-center">
               <button
                 type="submit"
-                className="flex items-center font-semibold gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                className="w-50 bg-gradient-to-br from-indigo-600 to-blue-600 text-white py-4 px-6 rounded-xl font-semibold hover:from-indigo-700 hover:to-blue-700 focus:outline-none focus:ring-4 focus:ring-indigo-200 transition-all transform hover:scale-[1.01] shadow-lg hover:shadow-indigo-200/50"
               >
-                <FaPaperclip /> Subir Investigación
+                Subir investigación
               </button>
             </div>
 

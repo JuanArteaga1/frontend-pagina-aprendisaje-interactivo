@@ -7,7 +7,7 @@ import { useLogin } from "../context/LoginContext";
 import { useParams } from "react-router-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 import { UseCategoria } from "../context/CategoriaContext"
-
+import { ImageIcon } from 'lucide-react';
 
 
 function EditarPodcast() {
@@ -189,7 +189,7 @@ function EditarPodcast() {
                                             className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
                                             placeholder="https://ejemplo.com/audio.mp3"
                                         />
-                                        {errors.audioLink && (<p className="text-red-500">el link del audio es requerido</p>)}
+                                        {errors.audioLink && (<p className="text-red-500">El link del audio es requerido</p>)}
 
                                     </div>
 
@@ -202,9 +202,9 @@ function EditarPodcast() {
                                                 {...register("portada", { required: true })}
                                                 className="hidden"
                                             />
-                                            {errors.portada && (<p className="text-red-500">portada es requerida</p>)}
+                                            {errors.portada && (<p className="text-red-500">La portada es requerida</p>)}
 
-                                            <div className="text-4xl mb-3 text-gray-400 group-hover:text-indigo-500">🖼️</div>
+                                            <ImageIcon className="w-10 h-10 text-black " />
                                             <p className="text-center text-sm text-gray-500">
                                                 {portadaPreview
                                                     ? <span className="text-indigo-600 font-semibold">{portadaPreview.name}</span>

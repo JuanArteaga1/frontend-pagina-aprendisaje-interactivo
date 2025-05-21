@@ -1,5 +1,5 @@
 import { Children, createContext, useEffect, useState, useContext } from "react";
-import { GetAllPodcast, subirPodcastAPI, PutPodcast } from "../api/AdmiPodcast";
+import { GetAllPodcast, subirPodcastAPI, PutPodcast, DeletePodcast, GetIdPodcast } from "../api/AdmiPodcast";
 
 export const PodcastContext = createContext();
 
@@ -15,6 +15,8 @@ export const PodcastProvider = ({ children }) => {
     const [Podcast, SetPodcast] = useState(null);
     const [errors, setErrors] = useState([])
     const [mensaje, setMensaje] = useState(null);
+    const [traerProyectoId, SettraerProyectoId] = useState(null);
+
     const TraerPodcast = async () => {
         try {
             const podcast = await GetAllPodcast()
@@ -39,6 +41,29 @@ export const PodcastProvider = ({ children }) => {
             return { success: false, error: error.response?.data?.errors };
         }
     };
+
+    const EliminarPodcast = async (id) => {
+        try {
+            await DeletePodcast(id);
+            await TraerPodcast();
+            return { success: true };
+        } catch (error) {
+            console.log("Error al eliminar el podcast:", error);
+            return { success: false, error };
+        }
+    };
+
+    const TraerPodcastId = async (Id) => {
+        try {
+            const response = await GetIdPodcast(Id); // Llamada a la API por ID
+            console.log(response.data); // Mostrar en consola para depuración
+            SettraerProyectoId(response.data); // Guardar el resultado en el estado
+        } catch (error) {
+            console.log(error); // Mostrar errores en consola
+        }
+    };
+    
+
     const sigout = async (data) => {
         try {
             const response = await subirPodcastAPI(data);
@@ -62,7 +87,7 @@ export const PodcastProvider = ({ children }) => {
     };
 
     return (
-        <PodcastContext.Provider value={{ sigout, Podcast, errors, mensaje, setMensaje, SetPodcast, TraerPodcast, ActualizarPodcast }}>
+        <PodcastContext.Provider value={{ sigout, Podcast, errors, mensaje, setMensaje, SetPodcast, TraerPodcast, ActualizarPodcast, EliminarPodcast, TraerPodcastId}}>
             {children}
         </PodcastContext.Provider>
     );

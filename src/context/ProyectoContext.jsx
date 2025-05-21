@@ -1,6 +1,6 @@
 // Importación de funciones necesarias de React y del archivo de la API
 import { Children, createContext, useEffect, useState, useContext } from "react";
-import { GetAllProyectos, subirProyectosAPI,PutProyectos } from "../api/AdmiProyecto";
+import { GetAllProyectos, subirProyectosAPI, PutProyectos, DeleteProyectos, GetIdProyectos } from "../api/AdmiProyecto";
 
 // Crear el contexto que se usará para compartir datos entre componentes
 export const ProyectoContext = createContext();
@@ -20,6 +20,8 @@ export const ProyectosProvider = ({ children }) => {
     const [Proyectos, SetProyectos] = useState([]); // Lista de proyectos
     const [errors, setErrors] = useState([]); // Errores devueltos por la API
     const [mensaje, setMensaje] = useState(null); // Mensaje de éxito
+    const [traerProyectoId, SettraerProyectoId] = useState(null);
+
 
     // Función para obtener todos los proyectos desde la API
     const TraerProyectos = async () => {
@@ -31,18 +33,40 @@ export const ProyectosProvider = ({ children }) => {
         }
     };
     const ActualizarProyectos = async (Id, data) => {
-            try {
-                const response = await PutProyectos(Id,data);
-                SetProyectos(response);
-                console.log(response)
-                return { success: true, data: response };
-            } catch (error) {
-                setMensaje(null);
-                setErrors(error.response?.data?.errors || [{ msg: "Error desconocido" }]);
-    
-                return { success: false, error: error.response?.data?.errors };
-            }
-        };
+        try {
+            const response = await PutProyectos(Id, data);
+            SetProyectos(response);
+            console.log(response)
+            return { success: true, data: response };
+        } catch (error) {
+            setMensaje(null);
+            setErrors(error.response?.data?.errors || [{ msg: "Error desconocido" }]);
+
+            return { success: false, error: error.response?.data?.errors };
+        }
+    };
+    const EliminarProyectos = async (id) => {
+        try {
+            await DeleteProyectos(id);
+            // Opcional: volver a cargar la lista actualizada
+            await TraerProyectos();
+            return { success: true };
+        } catch (error) {
+            console.log("Error al eliminar el proyecto:", error);
+            return { success: false, error };
+        }
+    };
+
+    const TraerProyectoId = async (Id) => {
+    try {
+        const response = await GetIdProyectos(Id); // Llamada a la API por ID
+        console.log(response.data); // Mostrar en consola para depuración
+        SettraerProyectoId(response.data); // Guardar el resultado en el estado
+    } catch (error) {
+        console.log(error); // Mostrar errores en consola
+    }
+};
+
 
     // Función para subir o registrar un nuevo proyecto a través de la API
     const sigout = async (data) => {
@@ -63,7 +87,7 @@ export const ProyectosProvider = ({ children }) => {
 
     // Proveer los valores a los componentes hijos que estén dentro del contexto
     return (
-        <ProyectoContext.Provider value={{ sigout, Proyectos, errors, mensaje, setMensaje, TraerProyectos,ActualizarProyectos }}>
+        <ProyectoContext.Provider value={{ sigout, Proyectos, errors, mensaje, setMensaje, TraerProyectos, TraerProyectoId, ActualizarProyectos, EliminarProyectos }}>
             {children}
         </ProyectoContext.Provider>
     );

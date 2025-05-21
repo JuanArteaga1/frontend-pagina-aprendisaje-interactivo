@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import { GetAllInvestigacion, subirInvestigacionAPI, PutInvestigacion } from "../api/AdmiInvestigacion";
+import { GetAllInvestigacion, subirInvestigacionAPI, PutInvestigacion, GetIdInvestigacion, DeleteInvestigacion } from "../api/AdmiInvestigacion";
 
 const InvestigacionContext = createContext();
 
@@ -15,7 +15,7 @@ export const InvestigacionProvider = ({ children }) => {
   const [investigaciones, setInvestigaciones] = useState([]);
   const [errors, setErrors] = useState([]);
   const [mensaje, setMensaje] = useState(null);
-
+  const [traerProyectoId, SettraerProyectoId] = useState(null);
 
 
 
@@ -30,6 +30,18 @@ export const InvestigacionProvider = ({ children }) => {
       setErrors(error.response?.data?.errors || [{ msg: "Error desconocido" }]);
 
       return { success: false, error: error.response?.data?.errors };
+    }
+  };
+
+  const EliminarInvestigacion = async (id) => {
+    try {
+      await DeleteInvestigacion(id);
+      // Opcional: volver a cargar la lista actualizada
+      await traerInvestigaciones();
+      return { success: true };
+    } catch (error) {
+      console.log("Error al eliminar el proyecto:", error);
+      return { success: false, error };
     }
   };
 
@@ -67,7 +79,8 @@ export const InvestigacionProvider = ({ children }) => {
         mensaje,
         setMensaje,
         errors,
-        ActualizarInvestigaciones
+        ActualizarInvestigaciones,
+        EliminarInvestigacion
       }}
     >
       {children}
