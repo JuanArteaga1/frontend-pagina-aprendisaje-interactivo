@@ -13,7 +13,7 @@ export const UseSimulaciones = () => {
 };
 
 export const SimulacionesProvider = ({ children }) => {
-    const [Simulaciones, SetSimulaciones] = useState(null);
+    const [Simulaciones, SetSimulaciones] = useState([]);
     const [errors, setErrors] = useState([])
 
 
