@@ -77,14 +77,37 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       //rutas de Administrador
           <Route path="/menuadministrador" element={<MenuAdmin />} />
           <Route path="/SubirCategoria" element={<CategoriaProvider>  <NuevaCategoria /> </CategoriaProvider>} />
-          <Route path="/VerProyectos" element={<TraerProyectosProvider><MirarProyectos /></TraerProyectosProvider>} />
+
+          <Route path="/VerProyectos" element={
+            <ProyectosProvider>
+              <PodcastProvider>
+                <InvestigacionProvider>
+                  <SimulacionesProvider>
+                    <TraerProyectosProvider><MirarProyectos /></TraerProyectosProvider>
+                  </SimulacionesProvider>
+                </InvestigacionProvider>
+              </PodcastProvider>
+            </ProyectosProvider>
+          } />
           <Route path="/Aprobar" element={<ProyectosPorAprobar />} />
           <Route path="/AdministrarDocente" element={<DocenteProvider> <AdministrarDocentes /> </DocenteProvider>} />
       //rutas de docentes
           <Route element={<> <CategoriaProvider><Outlet /></CategoriaProvider></>}>
             <Route path="/menudocente" element={<MenuDocen />} />
             <Route path="/subir-proyecto" element={<ProyectosProvider><SubirProyecto /></ProyectosProvider>} />
-            <Route path="/misproyectos" element={<TraerProyectosProvider><MisProyectos/></TraerProyectosProvider>} />
+            <Route path="/misproyectos" element={
+              <SimulacionesProvider>
+                <InvestigacionProvider>
+                  <PodcastProvider>
+                    <ProyectosProvider>
+                      <TraerProyectosProvider>
+                        <MisProyectos />
+                      </TraerProyectosProvider>
+                    </ProyectosProvider>
+                  </PodcastProvider>
+                </InvestigacionProvider>
+              </SimulacionesProvider>
+            } />
 
             <Route path="/actualizar-proyectos" element={<ActualizarProyecto />} />
             <Route path="/subirsimulaciones" element={<SimulacionesProvider><Subirsimulaciones /></SimulacionesProvider>} />
