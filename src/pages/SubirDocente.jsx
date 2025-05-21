@@ -24,13 +24,8 @@ const SubirDocente = () => {
                         {/* Encabezado escalable */}
                         <div className="mb-6 md:mb-8">
                             <div className="flex items-center mb-2">
-                                <FaChalkboardTeacher className="text-blue-600 text-2xl md:text-3xl mr-3 flex-shrink-0" />
-                                <h2 className="text-xl md:text-2xl font-bold text-gray-800">REGISTRO DE DOCENTE</h2>
+                                <h2 className="text-xl md:text-2xl font-bold text-gray-800">Registro de docente</h2>
                             </div>
-                            <p className="text-green-500 text-xs md:text-sm flex items-center ml-9 md:ml-10">
-                                <span className="w-2 h-2 bg-green-500 rounded-full mr-2 flex-shrink-0"></span>
-                                Acceso completo
-                            </p>
                         </div>
 
                         {DocenteErrors.map((error, i) => (
@@ -59,7 +54,6 @@ const SubirDocente = () => {
                                 {/* Nombre completo */}
                                 <div className="relative">
                                     <label className="block text-xs md:text-sm font-medium text-gray-700 mb-1 flex items-center">
-                                        <FaUserGraduate className="mr-2 text-blue-500 flex-shrink-0" />
                                         Nombre completo
                                     </label>
                                     <input
@@ -68,14 +62,12 @@ const SubirDocente = () => {
                                         className="w-full pl-9 md:pl-10 pr-3 py-2 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500"
                                         placeholder="Ingrese el nombre completo"
                                     />
-                                    {errors.Nombre && (<p className="text-red-500">Nombre es requerido</p>)}
+                                    {errors.Nombre && (<p className="text-red-500">El nombre es requerido</p>)}
                                 </div>
 
                                 {/* Identificación */}
                                 <div className="relative">
-                                    <label className="block text-xs md:text-sm font-medium text-gray-700 mb-1 flex items-center">
-                                        <FaIdCard className="mr-2 text-blue-500 flex-shrink-0" />
-                                        Número de identificación
+                                    <label className="block text-xs md:text-sm font-medium text-gray-700 mb-1 flex items-center">                                        Número de identificación
                                     </label>
                                     <input
                                         type="text"
@@ -84,7 +76,7 @@ const SubirDocente = () => {
                                         className="w-full pl-9 md:pl-10 pr-3 py-2 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500"
                                         placeholder="Ej: 1234567890"
                                     />
-                                    {errors.identificacion && (<p className="text-red-500">identificacion es requerido</p>)}
+                                    {errors.identificacion && (<p className="text-red-500">El numero de identificacion es requerido</p>)}
 
                                 </div>
                             </div>
@@ -99,7 +91,6 @@ const SubirDocente = () => {
                                     {/* Código del docente */}
                                     <div className="relative">
                                         <label className="block text-xs md:text-sm font-medium text-gray-700 mb-1 flex items-center">
-                                            <FaIdCard className="mr-2 text-blue-500 flex-shrink-0" />
                                             Código del docente
                                         </label>
                                         <input
@@ -109,13 +100,12 @@ const SubirDocente = () => {
                                             className="w-full pl-9 md:pl-10 pr-3 py-2 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500"
                                             placeholder="Ej: PROF-001"
                                         />
-                                        {errors.Codigo && (<p className="text-red-500">codigo es requerido</p>)}
+                                        {errors.Codigo && (<p className="text-red-500">El codigo es requerido</p>)}
 
                                     </div>
                                     {/* Correo institucional */}
                                     <div className="relative">
                                         <label className="block text-xs md:text-sm font-medium text-gray-700 mb-1 flex items-center">
-                                            <FaEnvelope className="mr-2 text-blue-500 flex-shrink-0" />
                                             Correo institucional
                                         </label>
                                         <input
@@ -126,7 +116,7 @@ const SubirDocente = () => {
                                             required
                                             placeholder="ejemplo@institucion.edu"
                                         />
-                                        {errors.email && <p className="text-red-500">email es requerido</p>}
+                                        {errors.email && <p className="text-red-500">El E-mail es requerido</p>}
 
                                     </div>
                                 </div>
@@ -140,7 +130,6 @@ const SubirDocente = () => {
 
                                 <div className="relative">
                                     <label className="block text-xs md:text-sm font-medium text-gray-700 mb-1 flex items-center">
-                                        <FaLock className="mr-2 text-blue-500 flex-shrink-0" />
                                         Contraseña
                                     </label>
                                     <input
@@ -151,7 +140,7 @@ const SubirDocente = () => {
                                         required
                                         placeholder="••••••••"
                                     />
-                                    {errors.contrasena && (<p className="text-red-500">contraseña es requerido</p>)}
+                                    {errors.contrasena && (<p className="text-red-500">La contraseña es requerida</p>)}
 
                                 </div>
                             </div>
@@ -160,7 +149,7 @@ const SubirDocente = () => {
                                 <option value="Docente">Docente</option>
                                 <option value="Administrador">Administrador</option>
                             </select>
-                            {errors.rol && (<p className="text-red-500">selecciones una opcion</p>)}
+                            {errors.rol && (<p className="text-red-500">Debes seleccionar una opción</p>)}
 
 
                             <select {...register('estado', { required: true })}>
@@ -168,11 +157,11 @@ const SubirDocente = () => {
                                 <option value="activo">Activo</option>
                                 <option value="inactivo">Inactivo</option>
                             </select>
-                            {errors.estado && (<p className="text-red-500">selecciones una opcion</p>)}
+                            {errors.estado && (<p className="text-red-500">Debes seleccionar una opción</p>)}
 
 
                             <input {...register('funcion', { required: true })} placeholder="Función que cumple" />
-                            {errors.funcion && (<p className="text-red-500">funcion es requerido</p>)}
+                            {errors.funcion && (<p className="text-red-500">La funcion es requerida</p>)}
 
 
                             {/* Botones de acción */}
@@ -181,7 +170,6 @@ const SubirDocente = () => {
                                     type="submit"
                                     className="px-4 md:px-6 py-2 text-xs md:text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition flex items-center"
                                 >
-                                    <FaSave className="mr-2 flex-shrink-0" />
                                     Registrar Docente
                                 </button>
                             </div>
