@@ -17,7 +17,7 @@ const MisProyectos = () => {
   const navigate = useNavigate();
   const { Usuario } = useLogin()
   const [columnas, setColumnas] = useState([]);
-  const { traerProyectoId, TraerProyectosId } = UseTraerProyectos();
+  const { traerProyectoId, TraerProyectosId,EliminarProyectos } = UseTraerProyectos();
   const [proyectosUnificados, setProyectosUnificados] = useState({ data: [] });
   const [mensaje, setMensaje] = useState(null); // Nuevo estado para mensajes
   const [tipoMensaje, setTipoMensaje] = useState("success"); // 'success' o 'error'
@@ -75,6 +75,20 @@ const MisProyectos = () => {
     },
     {
       nombre: "Eliminar",
+      fn:async (fila) =>{
+        const respuesta = await EliminarProyectos(fila._id,fila)
+        if (respuesta?.success) {
+                navigate("/misproyectos", {
+                    state: {
+                        mensaje: "Eliminado correctamente",
+                        tipo: "success"
+                    }
+                });
+                TraerProyectosId(Usuario.Id)
+            }
+
+      }
+      
       fn: async (fila) => {
         const { isConfirmed } = await Swal.fire({
           title: "¿Estás segura?",

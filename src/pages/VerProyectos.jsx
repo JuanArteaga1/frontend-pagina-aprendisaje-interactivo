@@ -23,6 +23,7 @@ const MirarProyectos = () => {
   }, []);
 
   useEffect(() => {
+
     TraerProyectosT(); // Llama al método para cargar los datos
   }, []);
   
