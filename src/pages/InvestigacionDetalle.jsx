@@ -42,12 +42,12 @@ const InvestigacionDetalle = () => {
   }
 
   // Construcción de URLs si es necesario
-  const archivoURL = investigacion.archivo?.replace(/\\/g, "/");
+
   const fuenteURL = investigacion.urlArticulo;
   const imagenURL = investigacion.urlimg
     ? `http://localhost:3000/uploads/${investigacion.urlimg.replace(/\\/g, "/").split("uploads/").pop()}`
     : "img/placeholder.jpg";
-  const docURL = investigacion.urlDoc
+  const archivoURL = investigacion.urlDoc?.replace(/\\/g, "/")
     ? `http://localhost:3000/uploads/${investigacion.urlDoc.replace(/\\/g, "/").split("uploads/").pop()}`
     : null;
 
@@ -76,8 +76,7 @@ const InvestigacionDetalle = () => {
             <button
               onClick={() => {
                 const link = document.createElement("a");
-                link.href = archivoURL;
-                link.download = investigacion.nombre_proyecto + ".pdf";
+                link.download = archivoURL + ".pdf";
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
