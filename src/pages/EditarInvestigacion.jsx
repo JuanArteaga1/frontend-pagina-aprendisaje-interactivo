@@ -27,13 +27,22 @@ function EditarInvestigacion() {
     const { Usuario, setUsuario } = useLogin()
     const MAX_SIZE = 10 * 1024 * 1024; // 10MB
 
+    const [fechaFormateada, setFechaFormateada] = useState("");
+
     const { id } = useParams();
 
 
     useEffect(() => {
         if (investigacion) {
             setInvestigacionActual(investigacion);
-            const fechaFormateada = new Date(investigacion.fechaPublicacion).toISOString().split("T")[0];
+
+            if (investigacion.fechaPublicacion) {
+                const fecha = new Date(investigacion.fechaPublicacion);
+                if (!isNaN(fecha.getTime())) {
+                    setFechaFormateada(fecha.toISOString().slice(0, 16));
+                }
+            }
+
             setValue("nombre_proyecto", investigacion.nombre_proyecto);
             setValue("descripcion", investigacion.descripcion);
             setValue("autores", investigacion.autores);
@@ -141,8 +150,13 @@ function EditarInvestigacion() {
                                         Fecha
                                     </label>
                                     <input
-                                        type="date"
                                         {...register("fechaPublicacion")}
+                                        type="datetime-local"
+                                        value={fechaFormateada}
+                                        onChange={(e) => {
+                                            setFechaFormateada(e.target.value); // actualiza el input
+                                            setValue("fechaPublicacion", e.target.value); // también actualiza el form
+                                        }}
                                         className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
                                     />
                                 </div>

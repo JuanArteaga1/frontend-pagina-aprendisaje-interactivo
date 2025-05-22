@@ -116,7 +116,7 @@ function EditarProyecto() {
                                     <label className="block font-semibold text-gray-800 mb-1">Fecha de realización</label>
                                     <input
                                         defaultValue={proyecto.fechaPublicacion?.substring(0, 10)}
-                                        type="date"
+                                        type="datetime-local"
                                         {...register('fechaPublicacion', { required: true })}
                                         className="mt-1 block w-full border-2 border-gray-200 rounded-md px-4 py-2"
                                     />

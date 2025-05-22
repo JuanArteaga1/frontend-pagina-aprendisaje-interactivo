@@ -110,7 +110,7 @@ function SubirPodcast() {
                   <div className="space-y-2">
                     <label className="block text-3x1 font-semibold text-gray-800">Fecha de Publicación</label>
                     <input
-                      type="date"
+                      type="datetime-local"
                       {...register("fecha", { required: true })}
                       className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
                     />
