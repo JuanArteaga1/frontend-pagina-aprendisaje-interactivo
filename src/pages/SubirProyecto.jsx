@@ -97,7 +97,7 @@ function SubirProyecto() {
                 <label className="block text-base font-semibold text-gray-800 mb-1">Fecha de realización</label>
                 <input
                   {...register('fechaPublicacion', { required: true })}
-                  type="date"
+                  type="datetime-local"
                   name="fechaPublicacion"
                   required
                   className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-2"

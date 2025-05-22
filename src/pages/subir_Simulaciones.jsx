@@ -137,7 +137,7 @@ const SubirAPK = () => {
                                 <h3 className="text-3x1 font-semibold text-gray-800 mb-2">Fecha de compilación</h3>
                                 <input
                                     {...register('fechaPublicacion', { required: true })}
-                                    type="date"
+                                    type="datetime-local"
                                     name="fechaPublicacion"
                                     className="w-full px-4 py-2 text-medium border-2 border-gray-200 rounded-xl"
                                     required

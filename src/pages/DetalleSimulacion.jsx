@@ -103,7 +103,17 @@ const DetalleSimulacion = () => {
                             <h3 className="text-lg font-semibold mb-2">Sobre esta aplicación:</h3>
                             <p className="text-base">{simulacion.descripcion}</p>
                             <p className="mt-2"><strong>Autores:</strong> {simulacion.autores.join(', ')}</p>
-                            <p className="mt-2"><strong>Fecha de creación:</strong> {simulacion.fechaPublicacion}</p>
+                            <p className="mt-2">
+                                <strong>Fecha de creación:</strong>{" "}
+                                {new Date(simulacion.fechaPublicacion).toLocaleString('es-CO', {
+                                    dateStyle: 'long',
+                                    timeStyle: 'short',
+                                    hour12: true,
+                                    timeZone: 'America/Bogota'
+                                })}
+                            </p>
+
+
                         </div>
                         <div className="w-1/3">
                             <h3 className="text-lg font-semibold mb-2">Documentación:</h3>
