@@ -18,16 +18,16 @@ const InvestigacionDetalle = () => {
 
   const investigacion = investigaciones.find((inv) => inv._id === id);
 
-if (!investigacion) {
-  return (
-    <>
-      <Navbar />
-      <div className="p-5 max-w-6xl mx-auto">
-        <h2 className="text-xl font-bold">Cargando investigación...</h2>
-      </div>
-    </>
-  );
-}
+  if (!investigacion) {
+    return (
+      <>
+        <Navbar />
+        <div className="p-5 max-w-6xl mx-auto">
+          <h2 className="text-xl font-bold">Cargando investigación...</h2>
+        </div>
+      </>
+    );
+  }
 
 
   if (!investigacion) {
@@ -96,7 +96,15 @@ if (!investigacion) {
               <div className="w-2/3">
                 <h3 className="text-lg font-semibold mb-2">Resumen:</h3>
                 <p className="text-base">{investigacion.descripcion}</p>
-                <p className="mt-2 text-sm text-gray-700"><strong>Fecha de publicación:</strong> {investigacion.fechaPublicacion}</p>
+                <p className="mt-2">
+                  <strong>Fecha de publicación:</strong>{" "}
+                  {new Date(investigacion.fechaPublicacion).toLocaleString('es-CO', {
+                    dateStyle: 'long',
+                    timeStyle: 'short',
+                    hour12: true,
+                    timeZone: 'America/Bogota'
+                  })}
+                </p>
               </div>
               <div className="w-1/3">
                 <h3 className="text-lg font-semibold mb-2">Fuente:</h3>

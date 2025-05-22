@@ -6,7 +6,7 @@ import { useProyectos } from "../context/ProyectoContext"; // Hook personalizado
 const DetalleProyecto = () => {
     const { id } = useParams(); // Obtener el ID del proyecto desde la URL
     const { Proyectos, TraerProyectos } = useProyectos(); // Obtener lista de proyectos y función para traerlos
-    
+
     useEffect(() => {
         // Si el proyecto no está en el estado, se vuelve a cargar
         const proyectoExiste = Proyectos.some(p => p._id === id);
@@ -112,7 +112,17 @@ const DetalleProyecto = () => {
                             <h3 className="text-lg font-semibold mb-2">Sobre esta aplicación:</h3>
                             <p className="text-base">{proyecto.descripcion}</p>
                             <p className="mt-2"><strong>Autores:</strong> {proyecto.autores.join(', ')}</p>
-                            <p className="mt-2"><strong>Fecha de creación:</strong> {proyecto.fechaPublicacion}</p>
+                            <p className="mt-2">
+                                <strong>Fecha de creación:</strong>{" "}
+                                {new Date(proyecto.fechaPublicacion).toLocaleString('es-CO', {
+                                    dateStyle: 'long',
+                                    timeStyle: 'short',
+                                    hour12: true,
+                                    timeZone: 'America/Bogota'
+                                })}
+                            </p>
+
+
                         </div>
                         <div className="w-1/3">
                             <h3 className="text-lg font-semibold mb-2">Documentación:</h3>

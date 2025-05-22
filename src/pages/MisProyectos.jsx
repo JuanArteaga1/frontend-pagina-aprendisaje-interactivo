@@ -127,10 +127,47 @@ const MisProyectos = () => {
       } = traerProyectoId.data;
 
       const todos = [
-        ...investigacion.map(p => ({ ...p, proyecto: "Investigacion" })),
-        ...podtcas.map(p => ({ ...p, proyecto: "Podcast" })),
-        ...proyectos.map(p => ({ ...p, proyecto: "Proyecto" })),
-        ...simulaciones.map(p => ({ ...p, proyecto: "Simulacion" }))
+        ...investigacion.map(p => ({
+          ...p, proyecto: "Investigacion",
+
+          fechaPublicacion: new Date(p.fechaPublicacion).toLocaleString("es-CO", {
+            dateStyle: "long",
+            timeStyle: "short",
+            hour12: true,
+            timeZone: "America/Bogota"
+          })
+        })),
+        ...podtcas.map(p => ({
+          ...p, proyecto: "Podcast",
+
+          fechaPublicacion: new Date(p.fechaPublicacion).toLocaleString("es-CO", {
+            dateStyle: "long",
+            timeStyle: "short",
+            hour12: true,
+            timeZone: "America/Bogota"
+          })
+        })),
+        ...proyectos.map(p => ({
+          ...p, proyecto: "Proyecto",
+
+          fechaPublicacion: new Date(p.fechaPublicacion).toLocaleString("es-CO", {
+            dateStyle: "long",
+            timeStyle: "short",
+            hour12: true,
+            timeZone: "America/Bogota"
+          })
+
+        })),
+        ...simulaciones.map(p => ({
+          ...p, proyecto: "Simulacion",
+
+          fechaPublicacion: new Date(p.fechaPublicacion).toLocaleString("es-CO", {
+            dateStyle: "long",
+            timeStyle: "short",
+            hour12: true,
+            timeZone: "America/Bogota"
+          })
+        }))
       ];
 
       setProyectosUnificados({ data: todos });
