@@ -178,7 +178,7 @@ function EditarProyecto() {
                                         <input
                                             type="file"
                                             className="hidden"
-                                            accept=".mp3,audio/*"
+                                            accept=".apk"
                                             {...register('urlArchivoapk', {
                                                 validate: {
                                                     tamaño: (archivos) => !archivos[0] || archivos[0].size <= MAX_SIZE || 'APK supera los 10MB',

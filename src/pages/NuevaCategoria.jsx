@@ -1,38 +1,58 @@
 // Añadir categoria 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet } from 'react-router-dom';
 import MenuDocente from "../components/MenuAdmi_Doc";
 import { useForm } from "react-hook-form";
+import { useLocation, useNavigate } from "react-router-dom";
+
+
 import { UseCategoria } from "../context/CategoriaContext";
 import Alerta from "../components/AlertasDocente";
 function NuevaCategoria() {
-    const { 
-        register, 
-        handleSubmit, 
-        formState: { errors }, 
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
         reset,
-        watch 
+        watch
     } = useForm({
         defaultValues: {
             estado: 'activa'
         }
     });
-        const { sigout, errors: CategoriaErrors, mensaje } = UseCategoria()
+    const { sigout, errors: CategoriaErrors, mensaje } = UseCategoria()
     const [enviando, setEnviando] = useState(false);
     const [registroExitoso, setRegistroExitoso] = useState(false);
     const [exito, setExito] = useState(false);
+      const navigate = useNavigate()
+      const location = useLocation();
+      
+const [tipoMensaje, setTipoMensaje] = useState("success");
+    
 
     // Para el contador de caracteres en descripción
     const descripcion = watch('descripcion', '');
-    
+
     const onSubmit = async (data) => {
         const resultado = await sigout(data);
         if (resultado?.success) {
             setRegistroExitoso(true);
-     
-          }
+
+        }
 
     };
+
+    useEffect(() => {
+        if (location.state?.registroExitoso) {
+            setMensaje(location.state.registroExitoso);
+            setTipoMensaje(location.state.tipo || "success");
+
+            setTimeout(() => {
+                setRegistroExitoso(false);
+                navigate(location.pathname, { replace: true });
+            }, 3000);
+        }
+    }, [location.state, navigate, location.pathname]);
 
     return (
         <div className="flex h-screen bg-gray-100">
@@ -50,7 +70,7 @@ function NuevaCategoria() {
                         {exito && <div className="mb-4 p-3 bg-green-100 text-green-700 rounded-md text-center">¡Categoría creada exitosamente!</div>}
                         {CategoriaErrors.map((error, i) => (
                             <Alerta key={i} tipo="error" mensaje={error.msg} />
-                         ))}
+                        ))}
                         {mensaje && (<Alerta tipo="exito" mensaje={mensaje} />
                         )}
                         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
