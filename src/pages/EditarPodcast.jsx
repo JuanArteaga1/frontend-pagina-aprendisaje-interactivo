@@ -21,6 +21,9 @@ function EditarPodcast() {
     const { Usuario } = useLogin();
     const { TraerCategoria, Categoria, } = UseCategoria()
     const { id } = useParams();
+    const [fechaFormateada, setFechaFormateada] = useState("");
+
+
     useEffect(() => {
         TraerCategoria();
         console.log(Categoria) // Llamada inicial para traer los datos
@@ -29,7 +32,13 @@ function EditarPodcast() {
     useEffect(() => {
         if (podcast) {
             setPodcastActual(podcast);
-            const fechaFormateada = new Date(podcast.fechaPublicacion).toISOString().split("T")[0];
+
+            if (podcast.fechaPublicacion) {
+                const fecha = new Date(podcast.fechaPublicacion);
+                if (!isNaN(fecha.getTime())) {
+                    setFechaFormateada(fecha.toISOString().slice(0, 16));
+                }
+            }
             setValue("nombre_proyecto", podcast.nombre_proyecto);
             setValue("descripcion", podcast.descripcion);
             setValue("audioLink", podcast.UrlAudio); // Esto depende si usas link o archivo directamente
@@ -116,7 +125,7 @@ function EditarPodcast() {
                                         className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl h-40"
                                         placeholder="Describe el contenido de tu podcast..."
                                     />
-                                    {errors.descripcion && (<p className="text-red-500">la descripcion es requerido</p>)}
+                                    {errors.descripcion && (<p className="text-red-500">La descripcion es requerida</p>)}
 
                                 </div>
 
@@ -129,17 +138,22 @@ function EditarPodcast() {
                                             className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
                                             placeholder="Nombre del autor"
                                         />
-                                        {errors.autores && (<p className="text-red-500">los autores son requerido</p>)}
+                                        {errors.autores && (<p className="text-red-500">Autor/es es requerido</p>)}
                                     </div>
 
                                     <div className="space-y-2">
                                         <label className="block text-3x1 font-semibold text-gray-800">Fecha de Publicación</label>
                                         <input
-                                            type="date"
                                             {...register("fecha", { required: true })}
+                                            type="datetime-local"
+                                            value={fechaFormateada}
+                                            onChange={(e) => {
+                                                setFechaFormateada(e.target.value); // actualiza el input
+                                                setValue("fechaPublicacion", e.target.value); // también actualiza el form
+                                            }}
                                             className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
                                         />
-                                        {errors.fecha && (<p className="text-red-500">la fecha es requerido</p>)}
+                                        {errors.fecha && (<p className="text-red-500">La fecha es requerida</p>)}
                                     </div>
                                 </div>
 

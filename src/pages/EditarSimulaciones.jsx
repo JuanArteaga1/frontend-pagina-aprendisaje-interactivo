@@ -26,11 +26,13 @@ function EditarSimulaciones() {
     const navigate = useNavigate();
     const simulacion = location.state?.simulacion;
     const { Usuario } = useLogin();
-    const { errors: SimulacionesErrors, mensaje,ActualizarSimulaciones } = UseSimulaciones()
+    const { errors: SimulacionesErrors, mensaje, ActualizarSimulaciones } = UseSimulaciones()
     const { register, handleSubmit, setValue, formState: { errors } } = useForm();
     const [simulacionActual, setSimulacionActual] = useState(null);
     const { id } = useParams();
     const { TraerCategoria, Categoria } = UseCategoria()
+    const [fechaFormateada, setFechaFormateada] = useState("");
+
 
     useEffect(() => {
         TraerCategoria();
@@ -42,16 +44,22 @@ function EditarSimulaciones() {
         if (simulacion) {
             setSimulacionActual(simulacion);
 
-            const fechaFormateada = new Date(simulacion.fechaPublicacion).toISOString().split("T")[0];
+            if (simulacion.fechaPublicacion) {
+                const fecha = new Date(simulacion.fechaPublicacion);
+                if (!isNaN(fecha.getTime())) {
+                    setFechaFormateada(fecha.toISOString().slice(0, 16));
+                }
+            }
 
             setValue("nombre_proyecto", simulacion.nombre_proyecto);
             setValue("descripcion", simulacion.descripcion);
             setValue("autores", simulacion.autores);
-            setValue("fechaPublicacion", fechaFormateada);
+            setValue("fechaPublicacion", simulacion.fechaPublicacion); // original
             setValue("materia", simulacion.materia);
             setValue("categoriaId", simulacion.categoriaId);
         }
     }, [simulacion, setValue]);
+
 
     const onSubmit = async (data) => {
         try {
@@ -68,7 +76,7 @@ function EditarSimulaciones() {
             if (data.urlArchivoapk?.[0]) formData.append("urlArchivoapk", data.urlArchivoapk[0]);
             if (data.urlDoc?.[0]) formData.append("urlDoc", data.urlDoc[0]);
             if (data.portada?.[0]) formData.append("portada", data.portada[0]);
-            const respuesta = await ActualizarSimulaciones(id,formData)
+            const respuesta = await ActualizarSimulaciones(id, formData)
             if (respuesta?.success) {
                 navigate("/misproyectos", {
                     state: {
@@ -78,7 +86,7 @@ function EditarSimulaciones() {
                 });
             }
 
-            
+
         } catch (error) {
             console.error("Error al actualizar la simulación:", error);
             alert("Hubo un error al actualizar la simulación");
@@ -99,8 +107,8 @@ function EditarSimulaciones() {
                     <h2 className="text-3xl font-bold text-gray-800 mt-4 mb-4">Editar Simulación</h2>
                     <div className="bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
                         {SimulacionesErrors.map((error, i) => (
-                        <Alerta key={i} tipo="error" mensaje={error.msg} />
-                    ))}
+                            <Alerta key={i} tipo="error" mensaje={error.msg} />
+                        ))}
 
 
                         <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
@@ -147,11 +155,16 @@ function EditarSimulaciones() {
                             <h3 className="text-3x1 font-semibold text-gray-800 mb-2">Fecha de compilación</h3>
                             <input
                                 {...register('fechaPublicacion', { required: true })}
-                                type="date"
-                                name="fechaPublicacion"
+                                type="datetime-local"
+                                value={fechaFormateada}
+                                onChange={(e) => {
+                                    setFechaFormateada(e.target.value); // actualiza el input
+                                    setValue("fechaPublicacion", e.target.value); // también actualiza el form
+                                }}
                                 className="w-full px-4 py-2 text-medium border-2 border-gray-200 rounded-xl"
                                 required
                             />
+
                             {errors.fechaPublicacion && (<p className="text-red-500">La fecha es requerida</p>)}
 
                             <div>
