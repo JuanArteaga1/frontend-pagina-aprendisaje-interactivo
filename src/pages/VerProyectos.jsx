@@ -46,10 +46,10 @@ const MirarProyectos = () => {
       } = TraerProyectos.data;
 
       const todos = [
-        ...investigacion.map(p => ({ ...p, proyecto: "Investigación" })),
+        ...investigacion.map(p => ({ ...p, proyecto: "Investigacion" })),
         ...podtcas.map(p => ({ ...p, proyecto: "Podcast" })),
         ...proyectos.map(p => ({ ...p, proyecto: "Proyecto" })),
-        ...simulaciones.map(p => ({ ...p, proyecto: "Simulación" }))
+        ...simulaciones.map(p => ({ ...p, proyecto: "Simulacion" }))
       ];
 
       setProyectosUnificados({ data: todos });
@@ -75,8 +75,8 @@ const MirarProyectos = () => {
         const rutas = {
           "Proyecto": "/editar-proyecto",
           "Podcast": "/editar-podcast",
-          "Investigación": "/editar-investigacion",
-          "Simulación": "/editar-simulacion"
+          "Investigacion": "/editar-investigacion",
+          "Simulacion": "/editar-simulacion"
         };
         const ruta = rutas[fila.proyecto];
         if (ruta) {
@@ -84,7 +84,7 @@ const MirarProyectos = () => {
         }
       },
       mostrar: (fila) =>
-        ["Proyecto", "Podcast", "Investigación", "Simulación"].includes(fila.proyecto),
+        ["Proyecto", "Podcast", "Investigacion", "Simulacion"].includes(fila.proyecto),
       estilo: "bg-yellow-500 text-white hover:bg-yellow-600"
     },
     {
@@ -106,13 +106,13 @@ const MirarProyectos = () => {
             await EliminarProyectos(fila._id);
           } else if (fila.proyecto === "Podcast") {
             await EliminarPodcast(fila._id);
-          } else if (fila.proyecto === "Investigación") {
+          } else if (fila.proyecto === "Investigacion") {
             await EliminarInvestigacion(fila._id);
-          } else if (fila.proyecto === "Simulación") {
+          } else if (fila.proyecto === "Simulacion") {
             await EliminarSimulaciones(fila._id);
           }
 
-          await TraerProyectosT(); // Recargar después de eliminar
+          await TraerProyectosId(Usuario.Id);
 
           Swal.fire(
             '¡Eliminado!',

@@ -32,7 +32,8 @@ const Podcast = () => {
       <div className="flex justify-center gap-5 flex-wrap mt-8">
         {Podcast?.data.map((ep) => {
           const rutaLimpia = ep.ArchivoImagen.replace(/\\/g, "/");
-          const imagenURL = `http://localhost:3000/${rutaLimpia}`;
+          console.log(rutaLimpia)
+          const imagenURL = `http://localhost:3000/uploads/${rutaLimpia?.split("uploads/")[1]}`;;
 
           return (
             <div key={ep._id} className="card">
