@@ -112,7 +112,7 @@ const MirarProyectos = () => {
             await EliminarSimulaciones(fila._id);
           }
 
-          await TraerProyectosId(Usuario.Id);
+          await TraerProyectosT();
 
           Swal.fire(
             '¡Eliminado!',
@@ -129,7 +129,7 @@ const MirarProyectos = () => {
         }
       },
       mostrar: (fila) =>
-        ["Proyecto", "Podcast", "Investigación", "Simulación"].includes(fila.proyecto),
+        ["Proyecto", "Podcast", "Investigacion", "Simulacion"].includes(fila.proyecto),
       estilo: "bg-red-500 text-white hover:bg-red-600"
     }
   ];
