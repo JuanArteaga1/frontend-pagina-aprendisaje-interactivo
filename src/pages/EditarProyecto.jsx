@@ -8,9 +8,9 @@ import { UseCategoria } from "../context/CategoriaContext"
 import { useLogin } from "../context/LoginContext";
 import Alerta from "../components/AlertasDocente";
 import {
-  Image,
-  Upload,
-  FileUp,
+    Image,
+    Upload,
+    FileUp,
 } from "lucide-react";
 
 
@@ -29,6 +29,7 @@ function EditarProyecto() {
     const { TraerCategoria, Categoria } = UseCategoria()
     const { Usuario } = useLogin();
     const { id } = useParams();
+    
     useEffect(() => {
         TraerCategoria();
         console.log(Categoria)
@@ -51,12 +52,22 @@ function EditarProyecto() {
             formData.append("seccion", "Proyectos");
             const respuesta = await ActualizarProyectos(id, formData)
             if (respuesta?.success) {
-                navigate("/misproyectos", {
+                if (Usuario.Rol === "Docente") {
+                    navigate("/misproyectos", {
                     state: {
                         mensaje: "Podcast actualizado correctamente",
                         tipo: "success"
                     }
                 });
+                } else if (Usuario.Rol === "Administrador") {
+                    navigate("/VerProyectos", {
+                        state: {
+                            mensaje: "Podcast actualizado correctamente",
+                            tipo: "success"
+                        }
+                    });
+                }
+                
             }
         } catch (error) {
             // Muestra un error en consola y alerta si la actualización falla

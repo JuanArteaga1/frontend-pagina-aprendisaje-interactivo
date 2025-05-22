@@ -4,50 +4,40 @@ import Alerta from "../components/AlertasDocente";
 import { FaUserGraduate, FaIdCard, FaEnvelope, FaLock, FaChalkboardTeacher, FaSave } from 'react-icons/fa'
 import { useForm } from "react-hook-form";
 import { UseDocente } from "../context/DocenteContext";
-import { useParams, useLocation, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 const EditarDocente = () => {
     const { register, handleSubmit, setValue, formState: { errors } } = useForm();
-    const { getDocenteById, updateDocente, errors: DocenteErrors, mensaje } = UseDocente();
-    const { id } = useParams(); // Obtiene el ID desde la URL
+    const {Docente, EditarDocentes, errors: DocenteErrors, mensaje,TraerDocentes } = UseDocente();
+    const { id } = useParams();
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const cargarDocente = async () => {
-            const data = await getDocenteById(id);
-            if (data) {
-                setValue("Nombre", data.NombreCompleto); // Este sí está bien
-                setValue("identificacion", data.NumeroIdentificacion); // <-- CORREGIDO
-                setValue("Codigo", data.Codigo); // Verifica si este campo existe
-                setValue("email", data.email);
-                setValue("rol", data.rol);
-                setValue("estado", data.estado);
-                setValue("funcion", data.funcion);
-            }
-        };
-        cargarDocente();
-    }, [id, getDocenteById, setValue]);
-
+    
+  
 
     const onSubmit = async (values) => {
-        const result = await updateDocente(id, values);
+        const result = await EditarDocentes(id,values);
         if (result?.success) {
-            navigate("/admin/docentes"); // Redirige si es exitoso
+        navigate("/AdministrarDocente", {
+                        state: {
+                            mensaje: "Podcast actualizado correctamente",
+                            tipo: "success"
+                        }
+                    });
         }
+        // Si hay error, se mostrará por DocenteErrors
     };
 
     return (
         <>
             <div className="flex h-screen bg-gray-100">
-                {/* Menú Lateral (no modificado) */}
+                {/* Menú Lateral */}
                 <div className="w-64 bg-gray-800 text-white">
                     <MenuLateral rol="admin" />
                 </div>
-                {/* Contenido principal con mejor manejo del zoom */}
+                {/* Contenido principal */}
                 <div className="flex-1 p-4 md:p-6 overflow-auto">
-                    {/* Tarjeta contenedora con mejor escalado */}
                     <div className="w-full max-w-2xl mx-auto bg-white p-6 md:p-8 rounded-xl shadow-lg border border-gray-100 transform origin-top transition-all duration-300">
-                        {/* Encabezado escalable */}
                         <div className="mb-6 md:mb-8">
                             <div className="flex items-center mb-2">
                                 <FaChalkboardTeacher className="text-blue-600 text-2xl md:text-3xl mr-3 flex-shrink-0" />
@@ -62,11 +52,7 @@ const EditarDocente = () => {
                         {DocenteErrors.map((error, i) => (
                             <Alerta key={i} tipo="error" mensaje={error.msg} />
                         ))}
-                        {mensaje && (
-                            <Alerta tipo="exito" mensaje={mensaje} />
-
-                        )}
-
+                        
                         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 md:space-y-6">
 
                             {/* Sección 1: Información personal */}
@@ -99,12 +85,10 @@ const EditarDocente = () => {
                                     <input
                                         type="text"
                                         {...register('identificacion', { required: true })}
-
                                         className="w-full pl-9 md:pl-10 pr-3 py-2 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500"
                                         placeholder="Ej: 1234567890"
                                     />
                                     {errors.identificacion && (<p className="text-red-500">identificacion es requerido</p>)}
-
                                 </div>
                             </div>
 
@@ -123,13 +107,11 @@ const EditarDocente = () => {
                                         </label>
                                         <input
                                             type="text"
-                                            name="codigo"
                                             {...register('Codigo', { required: true })}
                                             className="w-full pl-9 md:pl-10 pr-3 py-2 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500"
                                             placeholder="Ej: PROF-001"
                                         />
                                         {errors.Codigo && (<p className="text-red-500">codigo es requerido</p>)}
-
                                     </div>
                                     {/* Correo institucional */}
                                     <div className="relative">
@@ -139,14 +121,12 @@ const EditarDocente = () => {
                                         </label>
                                         <input
                                             type="email"
-                                            name="correo"
                                             {...register('email', { required: true })}
                                             className="w-full pl-9 md:pl-10 pr-3 py-2 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500"
                                             required
                                             placeholder="ejemplo@institucion.edu"
                                         />
                                         {errors.email && <p className="text-red-500">email es requerido</p>}
-
                                     </div>
                                 </div>
                             </div>
@@ -164,14 +144,12 @@ const EditarDocente = () => {
                                     </label>
                                     <input
                                         type="password"
-                                        name="contrasena"
                                         {...register('contrasena', { required: true })}
                                         className="w-full pl-9 md:pl-10 pr-3 py-2 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500"
                                         required
                                         placeholder="••••••••"
                                     />
                                     {errors.contrasena && (<p className="text-red-500">contraseña es requerido</p>)}
-
                                 </div>
                             </div>
                             <select {...register('rol', { required: true })}>
@@ -181,7 +159,6 @@ const EditarDocente = () => {
                             </select>
                             {errors.rol && (<p className="text-red-500">selecciones una opcion</p>)}
 
-
                             <select {...register('estado', { required: true })}>
                                 <option value="">Selecciona un estado</option>
                                 <option value="activo">Activo</option>
@@ -189,16 +166,14 @@ const EditarDocente = () => {
                             </select>
                             {errors.estado && (<p className="text-red-500">selecciones una opcion</p>)}
 
-
                             <input {...register('funcion', { required: true })} placeholder="Función que cumple" />
                             {errors.funcion && (<p className="text-red-500">funcion es requerido</p>)}
-
 
                             {/* Botones de acción */}
                             <div className="flex justify-end gap-4 mt-6">
                                 <button
                                     type="button"
-                                    onClick={() => navigate("/AdministrarDocente")}
+                                    onClick={() => navigate("/admin/docentes")}
                                     className="bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-lg transition duration-200"
                                 >
                                     Cancelar
@@ -211,7 +186,6 @@ const EditarDocente = () => {
                                     Guardar cambios
                                 </button>
                             </div>
-
                         </form>
                     </div>
                 </div>

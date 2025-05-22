@@ -78,12 +78,22 @@ function EditarSimulaciones() {
             if (data.portada?.[0]) formData.append("portada", data.portada[0]);
             const respuesta = await ActualizarSimulaciones(id, formData)
             if (respuesta?.success) {
-                navigate("/misproyectos", {
+                if (Usuario.Rol === "Docente") {
+                    navigate("/misproyectos", {
                     state: {
                         mensaje: "Podcast actualizado correctamente",
                         tipo: "success"
                     }
                 });
+                } else if (Usuario.Rol === "Administrador") {
+                    navigate("/VerProyectos", {
+                        state: {
+                            mensaje: "Podcast actualizado correctamente",
+                            tipo: "success"
+                        }
+                    });
+                }
+                
             }
 
 

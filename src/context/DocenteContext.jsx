@@ -1,5 +1,5 @@
 import { Children, createContext, useEffect, useState, useContext } from "react";
-import { subirDocenteAPI,GetAllDocentes, GetIdDocentes, DeleteDocentes } from "../api/AdmimnistrarDocente";
+import { subirDocenteAPI,GetAllDocentes, GetIdDocentes, DeleteDocentes,PutDocentes } from "../api/AdmimnistrarDocente";
 
 export const DocenteContext = createContext();
 
@@ -18,13 +18,24 @@ export const DocenteProvider = ({ children }) => {
     
     const TraerDocentes = async() =>{
         try {
-            const Docentes = await GetAllDocentes()
-            SetDocente(Docentes)
+            const respuesta = await GetAllDocentes()
+            SetDocente( respuesta)
         } catch (error) {
             console.log(error)
             
         }
     }
+    const EditarDocentes = async (id, data) => {
+        try {
+            const response = await PutDocentes(id, data);
+            await TraerDocentes();
+            return { success: true };
+        } catch (error) {
+            setMensaje(null);
+            setErrors(error.response?.data?.errors || [{ msg: "Error desconocido" }]);
+            return { success: false, error: error.response?.data?.errors };
+        }
+    };
 
     const EliminarDocentes = async (id) => {
               try {
@@ -55,7 +66,7 @@ export const DocenteProvider = ({ children }) => {
     };
 
     return (
-        <DocenteContext.Provider value={{ sigout, Docente,errors,mensaje, setMensaje,SetDocente,TraerDocentes, EliminarDocentes }}>
+        <DocenteContext.Provider value={{ sigout, errors, mensaje, setMensaje,SetDocente,TraerDocentes, EliminarDocentes,EditarDocentes,Docente }}>
             {children}
         </DocenteContext.Provider>
     );
