@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "../components/Navbar";
 import imagenlogin from "../img/logou.png";
 import { useLogin } from "../context/LoginContext"
 import { useForm } from "react-hook-form"

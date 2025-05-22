@@ -192,7 +192,7 @@ const SubirAPK = () => {
                                             name="urlArchivoapk"
                                             type="file"
                                             className="hidden"
-                                            accept="image/*"
+                                            accept=".apk"
                                         />
                                         {errors.urlArchivoapk && (<p className="text-red-500">La apk es requerida</p>)}
                                     </label>

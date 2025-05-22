@@ -163,7 +163,7 @@ function SubirProyecto() {
                     <input
                       type="file"
                       className="hidden"
-                      accept=".mp3,audio/*"
+                      accept=".apk"
                       {...register('urlArchivoapk', {
                         required: 'Se requiere una imagen',
                         validar: {
