@@ -4,26 +4,42 @@ import Alerta from "../components/AlertasDocente";
 import { FaUserGraduate, FaIdCard, FaEnvelope, FaLock, FaChalkboardTeacher, FaSave } from 'react-icons/fa'
 import { useForm } from "react-hook-form";
 import { UseDocente } from "../context/DocenteContext";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
+
 
 const EditarDocente = () => {
+    const location = useLocation();
+    const docente = location.state?.docente;
     const { register, handleSubmit, setValue, formState: { errors } } = useForm();
-    const {Docente, EditarDocentes, errors: DocenteErrors, mensaje,TraerDocentes } = UseDocente();
+    const { Docente, EditarDocentes, errors: DocenteErrors, mensaje, TraerDocentes } = UseDocente();
     const { id } = useParams();
     const navigate = useNavigate();
 
-    
-  
+
+    useEffect(() => {
+        
+    if (docente) {
+        setValue('Nombre', docente.nombre);
+        setValue('identificacion', docente.identificacion);
+        setValue('Codigo', docente.Codigo);
+        setValue('email', docente.email);
+        setValue('contrasena', docente.contrasena); // Si decides permitir edición de contraseña
+        setValue('rol', docente.rol);
+        setValue('estado', docente.estado);
+        setValue('funcion', docente.funcion);
+    }
+}, [docente, setValue]);
+
 
     const onSubmit = async (values) => {
-        const result = await EditarDocentes(id,values);
+        const result = await EditarDocentes(id, values);
         if (result?.success) {
-        navigate("/AdministrarDocente", {
-                        state: {
-                            mensaje: "Podcast actualizado correctamente",
-                            tipo: "success"
-                        }
-                    });
+            navigate("/AdministrarDocente", {
+                state: {
+                    mensaje: "Podcast actualizado correctamente",
+                    tipo: "success"
+                }
+            });
         }
         // Si hay error, se mostrará por DocenteErrors
     };
@@ -52,7 +68,7 @@ const EditarDocente = () => {
                         {DocenteErrors.map((error, i) => (
                             <Alerta key={i} tipo="error" mensaje={error.msg} />
                         ))}
-                        
+
                         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 md:space-y-6">
 
                             {/* Sección 1: Información personal */}
@@ -173,7 +189,7 @@ const EditarDocente = () => {
                             <div className="flex justify-end gap-4 mt-6">
                                 <button
                                     type="button"
-                                    onClick={() => navigate("/admin/docentes")}
+                                    onClick={() => navigate("/AdministrarDocente")}
                                     className="bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-lg transition duration-200"
                                 >
                                     Cancelar
