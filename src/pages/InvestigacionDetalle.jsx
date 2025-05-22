@@ -75,8 +75,10 @@ const InvestigacionDetalle = () => {
 
             <button
               onClick={() => {
+                if (!archivoURL) return;
                 const link = document.createElement("a");
-                link.download = archivoURL + ".pdf";
+                link.href = archivoURL;
+                link.download = archivoURL.split("/").pop(); // Nombre del archivo
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);

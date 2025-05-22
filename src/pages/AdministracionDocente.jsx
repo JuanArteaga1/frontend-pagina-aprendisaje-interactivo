@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from "react";
 import TablaDinamica from "../components/Tabla";
 import MenuAdministrador from "../components/MenuAdmi_Doc";
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { UseDocente } from "../context/DocenteContext";
-import { useParams, useLocation, useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
 
 const AdministrarDocente = () => {
-  const { Docente, TraerDocentes } = UseDocente();
+  const { Docente, TraerDocentes, EliminarDocentes } = UseDocente();
   const [columnas, setColumnas] = useState([]);
   const navigate = useNavigate();
-  const {EliminarDocentes } = UseDocente();
+  const location = useLocation(); // Estaba faltando esta línea si vas a usar location.state
+  const [tipoMensaje, setTipoMensaje] = useState("success");
+  const [mensaje, setMensaje] = useState(null);
 
   useEffect(() => {
-    TraerDocentes()
-  }, [])
-  // <- Asegúrate de que docentes ya tiene los datos
+    TraerDocentes();
+  }, []);
 
   useEffect(() => {
     setColumnas([
@@ -27,7 +27,6 @@ const AdministrarDocente = () => {
     ]);
   }, []);
 
-  // Opcional: Acciones
   const acciones = [
     {
       nombre: "Editar",
@@ -53,7 +52,7 @@ const AdministrarDocente = () => {
             try {
               await EliminarDocentes(fila._id);
               Swal.fire('¡Eliminado!', 'El docente ha sido eliminado.', 'success');
-              // Puedes actualizar tu tabla si es necesario aquí
+              TraerDocentes(); // <- para refrescar la lista después de eliminar
             } catch (error) {
               console.error(error);
               Swal.fire('Error', 'Hubo un problema al eliminar el docente.', 'error');
@@ -65,16 +64,30 @@ const AdministrarDocente = () => {
     }
   ];
 
+  useEffect(() => {
+    if (location.state?.mensaje) {
+      setMensaje(location.state.mensaje);
+      setTipoMensaje(location.state.tipo || "success");
+
+      setTimeout(() => {
+        setMensaje(null);
+        navigate(location.pathname, { replace: true });
+      }, 3000);
+    }
+  }, [location.state, navigate, location.pathname]);
+
   return (
     <div className="flex h-screen bg-gray-100">
-      {/* Menú Lateral (no modificado) */}
+      {/* Menú Lateral */}
       <div className="fixed h-full w-64 bg-gray-800 text-white z-10">
         <MenuAdministrador rol="admin" />
       </div>
 
       <main className="flex-1 overflow-y-auto p-4 lg:p-8 ml-64">
         <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4 md:mb-0">Administrar Docentes</h1>
+          <h1 className="text-2xl font-bold text-gray-800 mb-4 md:mb-0">
+            Administrar Docentes
+          </h1>
           <div className="flex space-x-4">
             <Link
               to="/SubirDocente"
@@ -84,6 +97,14 @@ const AdministrarDocente = () => {
             </Link>
           </div>
         </div>
+
+        {mensaje && (
+          <div className={`mb-4 p-2 rounded ${tipoMensaje === "success"
+            ? "bg-green-200 text-green-800"
+            : "bg-red-200 text-red-800"}`}>
+            {mensaje}
+          </div>
+        )}
 
         <TablaDinamica
           datos={Docente}

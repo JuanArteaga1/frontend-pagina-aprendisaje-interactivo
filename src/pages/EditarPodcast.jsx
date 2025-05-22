@@ -66,12 +66,22 @@ function EditarPodcast() {
 
             const respuesta = await ActualizarPodcast(id, formData)
             if (respuesta?.success) {
-                navigate("/misproyectos", {
+                if (Usuario.Rol === "Docente") {
+                    navigate("/misproyectos", {
                     state: {
                         mensaje: "Podcast actualizado correctamente",
                         tipo: "success"
                     }
                 });
+                } else if (Usuario.Rol === "Administrador") {
+                    navigate("/VerProyectos", {
+                        state: {
+                            mensaje: "Podcast actualizado correctamente",
+                            tipo: "success"
+                        }
+                    });
+                }
+                
             }
 
         } catch (error) {
