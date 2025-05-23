@@ -5,27 +5,20 @@ import { useInvestigacion } from "../context/InvestigacionContext";
 import Alerta from "../components/AlertasDocente";
 import { useLogin } from "../context/LoginContext";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { ImageIcon, UploadIcon } from 'lucide-react';
-import {
-    FaFileUpload,
-    FaFilePdf,
-    FaImage,
-    FaCalendarAlt,
-    FaUserEdit,
-    FaPaperclip,
-    FaLink,
-} from "react-icons/fa";
+
 
 function EditarInvestigacion() {
     const location = useLocation();
     const navigate = useNavigate();
     const investigacion = location.state?.investigacion;
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm();
+    const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm();
     const [investigacionActual, setInvestigacionActual] = useState(null);
     const { ActualizarInvestigaciones, errors: InvestigacionErrors, } = useInvestigacion()
     const { Usuario, setUsuario } = useLogin()
     const MAX_SIZE = 10 * 1024 * 1024; // 10MB
+    const portada = watch('portada');
+    const urlDoc = watch('urlDoc');
 
     const [fechaFormateada, setFechaFormateada] = useState("");
 
@@ -72,11 +65,11 @@ function EditarInvestigacion() {
             if (respuesta?.success) {
                 if (Usuario.Rol === "Docente") {
                     navigate("/misproyectos", {
-                    state: {
-                        mensaje: "Podcast actualizado correctamente",
-                        tipo: "success"
-                    }
-                });
+                        state: {
+                            mensaje: "Podcast actualizado correctamente",
+                            tipo: "success"
+                        }
+                    });
                 } else if (Usuario.Rol === "Administrador") {
                     navigate("/VerProyectos", {
                         state: {
@@ -85,7 +78,7 @@ function EditarInvestigacion() {
                         }
                     });
                 }
-                
+
             }
 
 
@@ -127,7 +120,7 @@ function EditarInvestigacion() {
                                     className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
                                     placeholder="Ingrese el título de la investigación"
                                 />
-                                {errors.titulo && <p className="text-red-500 text-sm">{errors.titulo.message}</p>}
+                                {errors.nombre_proyecto && <p className="text-red-500 font-semibold text-sm">{errors.nombre_proyecto.message}</p>}
                             </div>
 
                             {/* Descripción */}
@@ -139,7 +132,7 @@ function EditarInvestigacion() {
                                     className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
                                     placeholder="Descripción detallada de la investigación"
                                 ></textarea>
-                                {errors.descripcion && <p className="text-red-500 text-sm">{errors.descripcion.message}</p>}
+                                {errors.descripcion && <p className="text-red-500 font-semibold text-sm">{errors.descripcion.message}</p>}
                             </div>
 
                             {/* Autores y Fecha */}
@@ -149,10 +142,11 @@ function EditarInvestigacion() {
                                         Autores
                                     </label>
                                     <input
-                                        {...register("autores")}
+                                        {...register("autores", { required: "El autor es requerido" })}
                                         className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
                                         placeholder="Nombres de los autores"
                                     />
+                                    {errors.autores && <p className="text-red-500 font-semibold text-sm">{errors.autores.message}</p>}
                                 </div>
 
                                 <div>
@@ -160,15 +154,11 @@ function EditarInvestigacion() {
                                         Fecha
                                     </label>
                                     <input
-                                        {...register("fechaPublicacion")}
                                         type="datetime-local"
-                                        value={fechaFormateada}
-                                        onChange={(e) => {
-                                            setFechaFormateada(e.target.value); // actualiza el input
-                                            setValue("fechaPublicacion", e.target.value); // también actualiza el form
-                                        }}
+                                        {...register("fechaPublicacion", { required: "La fecha es requerida" })}
                                         className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
                                     />
+                                    {errors.fechaPublicacion && <p className="text-red-500 font-semibold text-sm">{errors.fechaPublicacion.message}</p>}
                                 </div>
                             </div>
 
@@ -184,7 +174,7 @@ function EditarInvestigacion() {
                                     <option value="ingenieria civil">Ingeniería Civil</option>
                                     <option value="Matematicas">Matematicas</option>
                                 </select>
-                                {errors.materia && <p className="text-red-500 text-sm">{errors.materia.message}</p>}
+                                {errors.materia && <p className="text-red-500 font-semibold text-sm">{errors.materia.message}</p>}
                             </div>
 
                             {/* URL Artículo */}
@@ -198,7 +188,7 @@ function EditarInvestigacion() {
                                     className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-300"
                                     placeholder="https://ejemplo.com/articulo"
                                 />
-                                {errors.UrlArticulo && <p className="text-red-500 text-sm">{errors.UrlArticulo.message}</p>}
+                                {errors.UrlArticulo && <p className="text-red-500 font-semibold text-sm">{errors.UrlArticulo.message}</p>}
                             </div>
 
                             {/* URL DOI */}
@@ -212,39 +202,47 @@ function EditarInvestigacion() {
                                     className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-300"
                                     placeholder="https://doi.org/xxxxx"
                                 />
-                                {errors.UrlDoi && <p className="text-red-500 text-sm">{errors.UrlDoi.message}</p>}
+                                {errors.UrlDoi && <p className="text-red-500 font-semibold text-sm">{errors.UrlDoi.message}</p>}
                             </div>
 
                             {/* Subir Archivos */}
                             <div>
                                 <h3 className="text-gray-800 font-semibold mb-3">Subir archivos</h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-                                    {/* Imagen de portada */}
                                     <label className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-400 cursor-pointer text-center">
-                                        <ImageIcon className="w-10 h-10 text-black " />
-                                        <span className="font-medium">Imagen de la portada</span>
-                                        <span className="text-xs text-gray-500">(JPG, PNG)</span>
                                         <input
                                             type="file"
-                                            accept="image/*"
+                                            accept=".jpg,.jpeg,.png,.webp"
                                             className="hidden"
                                             {...register('portada', {
                                                 required: 'Se requiere una imagen',
                                                 validate: {
-                                                    tamaño: archivos =>
-                                                        archivos && archivos[0]?.size <= MAX_SIZE || 'La imagen supera los 10MB',
+                                                    tamaño: (archivos) =>
+                                                        archivos[0]?.size <= MAX_SIZE || 'La imagen supera los 10MB',
+                                                    tipo: (archivos) =>
+                                                        /\.(jpg|jpeg|png|webp)$/i.test(archivos?.[0]?.name || '') ||
+                                                        'El archivo debe ser una imagen (.jpg, .jpeg, .png, .webp)',
                                                 },
                                             })}
                                         />
-                                        {errors.portada && <p className="text-red-500 text-sm">{errors.portada.message}</p>}
+                                        {portada?.[0] && (
+                                            <span className="text-sm text-gray-700 mt-1">{portada[0].name}</span>
+                                        )}
+
+                                        {portada?.length > 0 && !errors.portada && (
+                                            <p className="text-green-500 text-center font-semibold text-sm">Imagen subida correctamente</p>
+                                        )}
+                                        {errors.portada && (
+                                            <p className="text-red-500 font-semibold text-sm">{errors.portada.message}</p>
+                                        )}
+
+                                        {!portada?.[0] && <ImageIcon className="w-10 h-10 text-black opacity-50" />}
+
+                                        {!portada?.[0] && <span className="text-sm">Imagen de la portada</span>}
                                     </label>
 
-                                    {/* Documento PDF */}
                                     <label className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-400 cursor-pointer text-center">
-                                        <UploadIcon className="w-10 h-10 text-black" />
-                                        <span className="font-medium">Documento PDF</span>
-                                        <span className="text-xs text-gray-500">(Artículo completo)</span>
+
                                         <input
                                             type="file"
                                             accept=".pdf"
@@ -252,12 +250,27 @@ function EditarInvestigacion() {
                                             {...register('urlDoc', {
                                                 required: 'Se requiere un documento',
                                                 validate: {
-                                                    tamaño: archivos =>
-                                                        archivos && archivos[0]?.size <= MAX_SIZE || 'El documento supera los 10MB',
+                                                    tamaño: (archivos) => archivos[0]?.size <= MAX_SIZE || 'El documento es muy pesado',
+                                                    tipo: (archivos) =>
+                                                        archivos?.[0]?.name?.toLowerCase().endsWith('.pdf') || 'El archivo debe ser un PDF',
                                                 },
+
                                             })}
                                         />
-                                        {errors.urlDoc && <p className="text-red-500 text-sm">{errors.urlDoc.message}</p>}
+                                        {urlDoc?.[0] && (
+                                            <span className="text-sm text-gray-700 mt-1">{urlDoc[0].name}</span>
+                                        )}
+
+                                        {urlDoc?.length > 0 && !errors.urlDoc && (
+                                            <p className="text-green-500 text-center font-semibold text-sm">Documento subido correctamente</p>
+                                        )}
+                                        {errors.urlDoc && (
+                                            <p className="text-red-500 font-semibold text-sm">{errors.urlDoc.message}</p>
+                                        )}
+
+                                        {!urlDoc?.[0] && <UploadIcon className="w-10 h-10 text-black opacity-50" />}
+                                        {!urlDoc?.[0] && <span className="text-sm">Documento PDF</span>}
+
                                     </label>
 
                                 </div>

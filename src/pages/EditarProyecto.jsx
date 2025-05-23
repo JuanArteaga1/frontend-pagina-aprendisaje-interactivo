@@ -7,29 +7,23 @@ import { useForm } from "react-hook-form";
 import { UseCategoria } from "../context/CategoriaContext"
 import { useLogin } from "../context/LoginContext";
 import Alerta from "../components/AlertasDocente";
-import {
-    Image,
-    Upload,
-    FileUp,
-} from "lucide-react";
-
-
-
-
-
-// Tamaño máximo permitido para archivos: 10 megabytes
-const MAX_SIZE = 10 * 1024 * 1024; // 10MB
+import { Image, Upload, FileUp, } from "lucide-react";
 
 function EditarProyecto() {
     const location = useLocation();
     const navigate = useNavigate();
     const proyecto = location.state?.proyecto;
     const { errors: ProyectosErrors, mensaje, ActualizarProyectos } = useProyectos();
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, watch, formState: { errors } } = useForm();
     const { TraerCategoria, Categoria } = UseCategoria()
     const { Usuario } = useLogin();
     const { id } = useParams();
-    
+    const MAX_SIZE = 10 * 1024 * 1024; // 10MB
+
+    const archivoAPK = watch('urlArchivoapk');
+    const portada = watch('portada');
+    const urlDoc = watch('urlDoc');
+
     useEffect(() => {
         TraerCategoria();
         console.log(Categoria)
@@ -54,11 +48,11 @@ function EditarProyecto() {
             if (respuesta?.success) {
                 if (Usuario.Rol === "Docente") {
                     navigate("/misproyectos", {
-                    state: {
-                        mensaje: "Podcast actualizado correctamente",
-                        tipo: "success"
-                    }
-                });
+                        state: {
+                            mensaje: "Podcast actualizado correctamente",
+                            tipo: "success"
+                        }
+                    });
                 } else if (Usuario.Rol === "Administrador") {
                     navigate("/VerProyectos", {
                         state: {
@@ -67,7 +61,7 @@ function EditarProyecto() {
                         }
                     });
                 }
-                
+
             }
         } catch (error) {
             // Muestra un error en consola y alerta si la actualización falla
@@ -110,7 +104,7 @@ function EditarProyecto() {
                                         {...register('nombre_proyecto', { required: true })}
                                         className="mt-1 block w-full border-2 border-gray-200 rounded-md px-4 py-1"
                                     />
-                                    {errors.nombre_proyecto && <p className="text-red-500">Nombre es requerido</p>}
+                                    {errors.nombre_proyecto && <p className="text-red-500 font-semibold text-sm">Nombre es requerido</p>}
                                 </div>
 
                                 <div>
@@ -120,7 +114,7 @@ function EditarProyecto() {
                                         {...register('autores', { required: true })}
                                         className="mt-1 block w-full border-2 border-gray-200 rounded-md px-4 py-1"
                                     />
-                                    {errors.autores && <p className="text-red-500">Autor es requerido</p>}
+                                    {errors.autores && <p className="text-red-500 font-semibold text-sm">Autor es requerido</p>}
                                 </div>
 
                                 <div>
@@ -131,7 +125,7 @@ function EditarProyecto() {
                                         {...register('fechaPublicacion', { required: true })}
                                         className="mt-1 block w-full border-2 border-gray-200 rounded-md px-4 py-2"
                                     />
-                                    {errors.fechaPublicacion && <p className="text-red-500">La fecha es requerida</p>}
+                                    {errors.fechaPublicacion && <p className="text-red-500 font-semibold text-sm">La fecha es requerida</p>}
                                 </div>
 
                                 <div>
@@ -139,7 +133,6 @@ function EditarProyecto() {
                                     <select
                                         {...register('categoriaId', { required: true })}
                                         name="categoriaId"
-                                        required
                                         className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
                                     >
                                         <option value="">Seleccionar categoría</option>
@@ -150,7 +143,7 @@ function EditarProyecto() {
                                         ))}
                                     </select>
                                     {errors.categoriaId && (
-                                        <p className="text-red-500">Categoria es requerida</p>
+                                        <p className="text-red-500 font-semibold text-sm">Categoria es requerida</p>
                                     )}
                                 </div>
 
@@ -163,7 +156,7 @@ function EditarProyecto() {
                                         rows="4"
                                         className="mt-1 block w-full border-2 border-gray-200 rounded-md px-4 py-2"
                                     />
-                                    {errors.descripcion && <p className="text-red-500">Descripción es requerida</p>}
+                                    {errors.descripcion && <p className="text-red-500 font-semibold text-sm">Descripción es requerida</p>}
                                 </div>
                             </div>
 
@@ -179,59 +172,99 @@ function EditarProyecto() {
                                     <option value="ingenieria civil">Ingeniería Civil</option>
                                     <option value="Matematicas">Matemáticas</option>
                                 </select>
-                                {errors.materia && <p className="text-red-500">Materia es requerida</p>}
+                                {errors.materia && <p className="text-red-500 font-semibold text-sm">Materia es requerida</p>}
                             </div>
 
                             <div className="space-y-4">
                                 <h3 className="text-base font-semibold text-gray-800">Cargar Archivos</h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                                    <label className="flex flex-col items-center justify-center h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
+
+                                    <label className="flex flex-col items-center justify-center w-full max-w-[220px] aspect-square border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
                                         <input
                                             type="file"
                                             className="hidden"
                                             accept=".apk"
                                             {...register('urlArchivoapk', {
+                                                required: 'Se requiere una APK',
                                                 validate: {
-                                                    tamaño: (archivos) => !archivos[0] || archivos[0].size <= MAX_SIZE || 'APK supera los 10MB',
-                                                }
+                                                    tamaño: (archivos) => archivos[0]?.size <= MAX_SIZE || 'El archivo supera los 10MB',
+                                                    tipo: (archivos) =>
+                                                        archivos?.[0]?.name.toLowerCase().endsWith('.apk') || 'El archivo debe ser .apk',
+                                                },
                                             })}
                                         />
-                                        <Upload className="w-5 h-5 text-black" />
-                                        <span className="text-sm text-gray-600 mt-1">Subir APK</span>
-                                        {errors.urlArchivoapk && <p className="text-red-500">{errors.urlArchivoapk.message}</p>}
+                                        {archivoAPK?.[0] && (
+                                            <span className="text-center text-sm text-gray-700 mt-1">{archivoAPK[0].name}</span>
+                                        )}
+                                        {archivoAPK?.length > 0 && !errors.urlArchivoapk && (
+                                            <p className="text-green-500 text-center font-semibold text-sm">APK subida correctamente</p>
+                                        )}
+                                        {errors.urlArchivoapk && (
+                                            <p className="text-red-500 text-center font-semibold text-sm">{errors.urlArchivoapk.message}</p>
+                                        )}
+                                        {!archivoAPK?.[0] && <Upload className="w-5 h-5 text-black" />}
+                                        {!archivoAPK?.[0] && <span className="text-sm text-gray-600 mt-1">Subir APK</span>}
                                     </label>
 
-                                    <label className="flex flex-col items-center justify-center h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
+                                    <label className="flex flex-col items-center justify-center w-full max-w-[220px] aspect-square border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
                                         <input
                                             type="file"
                                             className="hidden"
                                             accept="image/*"
                                             {...register('portada', {
+                                                required: 'Se requiere una imagen',
                                                 validate: {
-                                                    tamaño: (archivos) => !archivos[0] || archivos[0].size <= MAX_SIZE || 'Imagen supera los 10MB',
-                                                }
+                                                    tamaño: (archivos) =>
+                                                        archivos?.[0]?.size <= MAX_SIZE || 'La imagen supera los 10MB',
+                                                    tipo: (archivos) =>
+                                                        /\.(jpg|jpeg|png|webp)$/i.test(archivos?.[0]?.name) ||
+                                                        'El archivo debe ser una imagen (.jpg, .jpeg, .png, .webp)',
+                                                },
                                             })}
                                         />
-                                        <Image className="w-5 h-5 text-black" />
-                                        <span className="text-sm text-gray-600 mt-1">Subir IMG</span>
-                                        {errors.portada && <p className="text-red-500">{errors.portada.message}</p>}
+                                        {portada?.[0] && (
+                                            <span className="text-sm text-center text-gray-700 mt-1 break-words w-full px-2 max-w-[220px]">
+                                                {portada[0].name}</span>
+                                        )}
+                                        {portada?.length > 0 && !errors.portada && (
+                                            <p className="text-green-500 text-center font-semibold text-sm">Imagen subida correctamente</p>
+                                        )}
+                                        {errors.portada && (
+                                            <p className="text-red-500 text-center font-semibold text-sm">{errors.portada.message}</p>
+                                        )}
+                                        {!portada?.[0] && <Image className="w-5 h-5 text-black" />}
+                                        {!portada?.[0] && <span className="text-sm text-gray-600 mt-1">Subir IMG</span>}
                                     </label>
 
-                                    <label className="flex flex-col items-center justify-center h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
+                                    <label className="flex flex-col items-center justify-center w-full max-w-[220px] aspect-square border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
                                         <input
                                             type="file"
                                             className="hidden"
                                             accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
                                             {...register('urlDoc', {
+                                                required: 'Se requiere un documento',
                                                 validate: {
-                                                    tamaño: (archivos) => !archivos[0] || archivos[0].size <= MAX_SIZE || 'Documento supera los 10MB',
-                                                }
+                                                    tamaño: (archivos) =>
+                                                        archivos?.[0]?.size <= MAX_SIZE || 'El documento es muy pesado',
+                                                    tipo: (archivos) =>
+                                                        archivos?.[0]?.name?.toLowerCase().endsWith('.pdf') || 'El archivo debe ser un PDF',
+                                                },
                                             })}
                                         />
-                                        <FileUp className="w-5 h-5 text-black" />
-                                        <span className="text-sm text-gray-600 mt-1">Subir PDF</span>
-                                        {errors.urlDoc && <p className="text-red-500">{errors.urlDoc.message}</p>}
+                                        {urlDoc?.[0] && (
+                                            <span className="text-sm text-center text-gray-700 mt-1 break-words w-full px-2 max-w-[220px]">
+                                                {urlDoc[0].name}</span>
+                                        )}
+                                        {urlDoc?.length > 0 && !errors.urlDoc && (
+                                            <p className="text-green-500 text-center font-semibold text-sm">Documento subido correctamente</p>
+                                        )}
+                                        {errors.urlDoc && (
+                                            <p className="text-red-500 text-center font-semibold text-sm">{errors.urlDoc.message}</p>
+                                        )}
+                                        {!urlDoc?.[0] && <FileUp className="w-5 h-5 text-black" />}
+                                        {!urlDoc?.[0] && <span className="text-sm text-gray-600 mt-1">Subir PDF</span>}
                                     </label>
+
                                 </div>
                             </div>
 

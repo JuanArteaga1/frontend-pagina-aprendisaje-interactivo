@@ -22,6 +22,8 @@ function EditarPodcast() {
     const { TraerCategoria, Categoria, } = UseCategoria()
     const { id } = useParams();
     const [fechaFormateada, setFechaFormateada] = useState("");
+    const portada = watch('portada');
+    const MAX_SIZE = 10 * 1024 * 1024; // 10MB
 
 
     useEffect(() => {
@@ -68,11 +70,11 @@ function EditarPodcast() {
             if (respuesta?.success) {
                 if (Usuario.Rol === "Docente") {
                     navigate("/misproyectos", {
-                    state: {
-                        mensaje: "Podcast actualizado correctamente",
-                        tipo: "success"
-                    }
-                });
+                        state: {
+                            mensaje: "Podcast actualizado correctamente",
+                            tipo: "success"
+                        }
+                    });
                 } else if (Usuario.Rol === "Administrador") {
                     navigate("/VerProyectos", {
                         state: {
@@ -81,7 +83,7 @@ function EditarPodcast() {
                         }
                     });
                 }
-                
+
             }
 
         } catch (error) {
@@ -125,7 +127,7 @@ function EditarPodcast() {
                                         className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
                                         placeholder="Ej: La revolución de la IA"
                                     />
-                                    {errors.titulo && (<p className="text-red-500">El titulo es requerido</p>)}
+                                    {errors.nombre_proyecto && (<p className="text-red-500 font-semibold text-sm">El titulo es requerido</p>)}
                                 </div>
 
                                 <div className="space-y-2">
@@ -135,7 +137,7 @@ function EditarPodcast() {
                                         className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl h-40"
                                         placeholder="Describe el contenido de tu podcast..."
                                     />
-                                    {errors.descripcion && (<p className="text-red-500">La descripcion es requerida</p>)}
+                                    {errors.descripcion && (<p className="text-red-500 font-semibold text-sm">La descripcion es requerida</p>)}
 
                                 </div>
 
@@ -163,7 +165,7 @@ function EditarPodcast() {
                                             }}
                                             className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
                                         />
-                                        {errors.fecha && (<p className="text-red-500">La fecha es requerida</p>)}
+                                        {errors.fecha && (<p className="text-red-500 font-semibold text-sm">La fecha es requerida</p>)}
                                     </div>
                                 </div>
 
@@ -172,7 +174,6 @@ function EditarPodcast() {
                                     <select
                                         {...register('categoriaId', { required: true })}
                                         name="categoriaId"
-                                        required
                                         className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
                                     >
                                         <option value="">Seleccionar categoría</option>
@@ -183,7 +184,7 @@ function EditarPodcast() {
                                         ))}
                                     </select>
                                     {errors.categoriaId && (
-                                        <p className="text-red-500">Categoria es requerida</p>
+                                        <p className="text-red-500 font-semibold text-sm">Categoria es requerida</p>
                                     )}
                                 </div>
 
@@ -198,7 +199,7 @@ function EditarPodcast() {
                                         <option value="ingenieria_civil">Ingeniería Civil</option>
                                         <option value="matematicas">Matemáticas</option>
                                     </select>
-                                    {errors.materia && (<p className="text-red-500">La materia es requerida</p>)}
+                                    {errors.materia && (<p className="text-red-500 font-semibold text-sm">La materia es requerida</p>)}
 
                                 </div>
 
@@ -213,7 +214,7 @@ function EditarPodcast() {
                                             className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
                                             placeholder="https://ejemplo.com/audio.mp3"
                                         />
-                                        {errors.audioLink && (<p className="text-red-500">El link del audio es requerido</p>)}
+                                        {errors.audioLink && (<p className="text-red-500 font-semibold text-sm">El link del audio es requerido</p>)}
 
                                     </div>
 
@@ -223,17 +224,34 @@ function EditarPodcast() {
                                             <input
                                                 type="file"
                                                 accept="image/*"
-                                                {...register("portada", { required: true })}
                                                 className="hidden"
-                                            />
-                                            {errors.portada && (<p className="text-red-500">La portada es requerida</p>)}
+                                                {...register("portada", {
+                                                    required: "La imagen es obligatoria",
+                                                    validate: {
+                                                        tamaño: (archivos) =>
+                                                            archivos[0]?.size <= MAX_SIZE || 'La imagen supera los 10MB',
+                                                        tipo: (archivos) =>
+                                                            /\.(jpg|jpeg|png|webp)$/i.test(archivos?.[0]?.name || '') ||
+                                                            'El archivo debe ser una imagen (.jpg, .jpeg, .png, .webp)',
+                                                    },
+                                                })}
 
-                                            <ImageIcon className="w-10 h-10 text-black " />
-                                            <p className="text-center text-sm text-gray-500">
-                                                {portadaPreview
-                                                    ? <span className="text-indigo-600 font-semibold">{portadaPreview.name}</span>
-                                                    : "Haz clic para subir la imagen de portada"}
-                                            </p>
+                                            />
+                                            {portada?.[0] && (
+                                                <span className="text-sm text-gray-700 mt-1">{portada[0].name}</span>
+                                            )}
+
+                                            {portada?.length > 0 && !errors.portada && (
+                                                <p className="text-green-500 text-center font-semibold text-sm">Imagen subida correctamente</p>
+                                            )}
+                                            {errors.portada && (
+                                                <p className="text-red-500 font-semibold text-sm">{errors.portada.message}</p>
+                                            )}
+
+                                            {!portada?.[0] && <ImageIcon className="w-10 h-10 text-black opacity-50" />}
+
+                                            {!portada?.[0] && <span className="text-sm">Imagen de la portada</span>}
+
                                         </label>
                                     </div>
 
