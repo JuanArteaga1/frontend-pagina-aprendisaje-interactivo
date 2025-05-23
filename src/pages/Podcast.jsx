@@ -22,7 +22,7 @@ const Podcast = () => {
 
       {/* Imagen de portada con texto encima */}
       <div className="imagen-seccion">
-                <img src="img/portada-podcast.jpg" alt="Imagen de simulaciones" />
+                <img src="img/DSC05007.JPG" alt="Imagen de simulaciones" />
                 <h1 className="titulo-seccion">Ahora estás en: {seccionActual}</h1>
             </div>
 

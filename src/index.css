@@ -110,9 +110,9 @@ body {
 
 .imagen-seccion img {
   width: 100%; 
-  height: 350px; /* Mantiene la relación de aspecto */
+  height: 450px; /* Mantiene la relación de aspecto */
   object-fit: cover; /* Asegura que la imagen cubra el área de la imagen sin distorsionarse */
-  object-position: center 30%;
+  object-position: center 63%;
 }
 
 .titulo-seccion {
