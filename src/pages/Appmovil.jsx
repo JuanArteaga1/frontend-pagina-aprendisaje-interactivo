@@ -37,7 +37,7 @@ const AplicacionesMoviles = () => {
 
       {/* Sección de portada */}
       <div className="imagen-seccion">
-        <img src="img/portada-aplicaciones-moviles.jpg" alt="" />
+        <img src="img/DSC04968.JPG" alt="" />
         <h1 className="titulo-seccion">Ahora estás en: {seccionActual}</h1>
       </div>
 

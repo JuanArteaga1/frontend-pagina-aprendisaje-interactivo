@@ -29,29 +29,43 @@ const Home = () => {
       {/* Carrusel de imágenes */}
       <div className="hero w-full mt-0 relative max-h-[600px] pb-8">
         <Slider {...settings} className="h-full">
-          {[1, 2, 3].map((n) => (
-            <div key={n} className="relative w-full h-[300px] sm:h-[400px] md:h-[600px]">
+          {[
+            {
+              src: "/img/DSC04986.jpg",
+              alt: "Imagen 1",
+              buttonText: "Explora nuestras simulaciones",
+              link: "/simulaciones"
+            },
+            {
+              src: "/img/DSC04949.jpg",
+              alt: "Imagen 2",
+              buttonText: "Consulta nuestras investigaciones",
+              link: "/investigaciones"
+            },
+            {
+              src: "/img/DSC04945.jpg",
+              alt: "Imagen 3",
+              buttonText: "Explora nuestro podcast",
+              link: "/podcast"
+            }
+          ].map(({ src, alt, buttonText, link }, index) => (
+            <div key={index} className="relative w-full h-[300px] sm:h-[400px] md:h-[600px]">
               <img
-                src={`/img/uni${n === 1 ? "" : n - 1}.jpg`}
-                alt={`Imagen ${n}`}
+                src={src}
+                alt={alt}
                 className="w-full h-full object-cover"
               />
               <button
-                className={`absolute bottom-10 left-1/2 transform -translate-x-1/2 z-10 text-white px-6 py-3 rounded-2xl border-2 border-[#3C64C9] shadow-lg transition font-bold cursor-pointer bg-[#3C64C9] hover:bg-[#2a4fa2]`}
-                onClick={() =>
-                  navigate(n === 1 ? "/simulaciones" : n === 2 ? "/investigaciones" : "/podcast")
-                }
+                className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-10 text-white px-6 py-3 rounded-2xl border-2 border-[#3C64C9] shadow-lg transition font-bold cursor-pointer bg-[#3C64C9] hover:bg-[#2a4fa2]"
+                onClick={() => navigate(link)}
               >
-                {n === 1
-                  ? "Explora nuestras simulaciones"
-                  : n === 2
-                    ? "Consulta nuestras investigaciones"
-                    : "Explora nuestro podcast"}
+                {buttonText}
               </button>
             </div>
           ))}
         </Slider>
       </div>
+
 
 
       {/* Sección de categorías */}
@@ -87,7 +101,7 @@ const Home = () => {
           </div>
           <div className="w-full md:w-1/3 h-full flex items-center max-w-2xl mx-auto">
             <img
-              src="/img/imagen_uniautonoma.jpg"
+              src="/img/DSC04860.jpg"
               alt="Quiénes somos"
               className="w-full h-auto max-h-[400px] object-cover shadow-xl"
             />
