@@ -48,67 +48,43 @@ const DetalleSimulacion = () => {
             <Navbar />
             <div className="p-8 max-w-6xl mx-auto space-y-8">
                 {/* Header con imagen y botón */}
-                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-2xl shadow-sm flex flex-col md:flex-row items-center gap-6 border border-gray-100">
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-2xl shadow-sm flex flex-row items-center gap-6 border border-gray-100 overflow-x-auto">
+                    {/* Imagen */}
                     <div className="w-32 h-32 md:w-40 md:h-40 flex-shrink-0 overflow-hidden rounded-xl shadow-md border-2 border-white">
-                        <img 
-                            src={imagenURL} 
-                            alt={`Foto de ${simulacion.nombre_proyecto}`} 
-                            className="w-full h-full object-cover" 
+                        <img
+                            src={imagenURL}
+                            alt={`Foto de ${simulacion.nombre_proyecto}`}
+                            className="w-full h-full object-cover"
                         />
                     </div>
-                    
-                    <div className="flex-1 space-y-2">
-                        <h1 className="text-3xl font-bold text-gray-800">{simulacion.nombre_proyecto}</h1>
-                        <p className="text-indigo-600 flex items-center gap-1">
+
+                    {/* Texto */}
+                    <div className="flex-1 space-y-2 min-w-[200px]">
+                        <h1 className="text-2xl md:text-3xl font-bold text-gray-800 whitespace-nowrap">{simulacion.nombre_proyecto}</h1>
+                        <p className="text-indigo-600 flex items-center gap-1 text-sm md:text-base whitespace-nowrap">
                             <Users size={16} className="inline" />
                             {simulacion.autores.join(', ')}
                         </p>
                     </div>
-                    
-                    <button
-                        onClick={() => {
-                            const link = document.createElement("a");
-                            link.href = archivoURL;
-                            link.download = simulacion.nombre_proyecto + ".apk";
-                            document.body.appendChild(link);
-                            link.click();
-                            document.body.removeChild(link);
-                        }}
-                        className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white px-6 py-3 rounded-xl text-lg font-medium transition-all shadow-md hover:shadow-lg"
-                    >
-                        <Download size={20} /> Descargar APK
-                    </button>
-                </div>
 
-                {/* Galería multimedia */}
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                    <h3 className="text-2xl font-semibold mb-4 text-gray-800 flex items-center gap-2">
-                        <Video size={20} /> Galería Multimedia
-                    </h3>
-                    <div className="flex overflow-x-auto gap-4 pb-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-                        {simulacion.video && (
-                            <div className="flex-shrink-0 w-80 h-48 md:w-96 md:h-56 rounded-xl overflow-hidden shadow-md">
-                                <video controls className="w-full h-full object-cover">
-                                    <source src={simulacion.video} type="video/mp4" />
-                                    Tu navegador no soporta el video.
-                                </video>
-                            </div>
-                        )}
-                        {simulacion.imagenes?.map((img, idx) => {
-                            const rutaLimpiaImg = img.replace(/\\/g, "/");
-                            const imagenURL = `http://localhost:3000/${rutaLimpiaImg}`;
-                            return (
-                                <div key={idx} className="flex-shrink-0 w-80 h-48 md:w-96 md:h-56 rounded-xl overflow-hidden shadow-md">
-                                    <img 
-                                        src={imagenURL} 
-                                        alt={`Imagen ${idx}`} 
-                                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" 
-                                    />
-                                </div>
-                            );
-                        })}
+                    {/* Botón */}
+                    <div className="flex-shrink-0">
+                        <button
+                            onClick={() => {
+                                const link = document.createElement("a");
+                                link.href = archivoURL;
+                                link.download = simulacion.nombre_proyecto + ".apk";
+                                document.body.appendChild(link);
+                                link.click();
+                                document.body.removeChild(link);
+                            }}
+                            className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white px-4 py-2 md:px-6 md:py-3 rounded-xl text-sm md:text-lg font-medium transition-all shadow-md hover:shadow-lg whitespace-nowrap"
+                        >
+                            <Download size={20} /> Descargar APK
+                        </button>
                     </div>
                 </div>
+
 
                 {/* Contenido informativo */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -116,7 +92,7 @@ const DetalleSimulacion = () => {
                     <div className="md:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                         <h3 className="text-2xl font-semibold text-gray-800 mb-4">Sobre esta aplicación</h3>
                         <p className="text-gray-700 leading-relaxed">{simulacion.descripcion}</p>
-                        
+
                         <div className="mt-6 space-y-3">
                             <div className="flex items-start gap-3">
                                 <Users size={20} className="text-indigo-600 mt-1 flex-shrink-0" />
@@ -125,7 +101,7 @@ const DetalleSimulacion = () => {
                                     <p className="text-gray-600">{simulacion.autores.join(', ')}</p>
                                 </div>
                             </div>
-                            
+
                             <div className="flex items-start gap-3">
                                 <CalendarDays size={20} className="text-indigo-600 mt-1 flex-shrink-0" />
                                 <div>
@@ -142,7 +118,7 @@ const DetalleSimulacion = () => {
                             </div>
                         </div>
                     </div>
-                    
+
                     {/* Documentación */}
                     <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                         <h3 className="text-2xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
@@ -152,9 +128,9 @@ const DetalleSimulacion = () => {
                             const rutaDoc = simulacion.urlDoc.replace(/\\/g, "/");
                             const docURL = `http://localhost:3000/uploads/${rutaDoc.split("uploads/")[1]}`;
                             return (
-                                <a 
-                                    href={docURL} 
-                                    target="_blank" 
+                                <a
+                                    href={docURL}
+                                    target="_blank"
                                     rel="noopener noreferrer"
                                     className="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-800 font-medium transition-colors"
                                 >
