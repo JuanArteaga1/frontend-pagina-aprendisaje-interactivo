@@ -41,7 +41,7 @@ const Simulaciones = () => {
             <div className="contenido-proyectos">
                 {Object.entries(simulacionesAgrupadas).map(([categoria, items]) => (
                     <div key={categoria} className="categoria">
-                        <h2>{categoria}</h2>
+                        <h2 className="text-2xl">{categoria}</h2>
                         {items.length > 0 ? (
                             <div className="cards-container">
                                 {items.map((simulacion, i) => {
