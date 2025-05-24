@@ -7,10 +7,17 @@ const Simulaciones = () => {
     const [seccionActual] = useState("Simulaciones");
     const navigate = useNavigate();
     const { Simulaciones, TraerSimulaciones } = UseSimulaciones();
+    const [loading, setLoading] = useState(true);
+
 
     useEffect(() => {
-        TraerSimulaciones();
+        const cargarDatos = async () => {
+            await TraerSimulaciones();
+            setLoading(false);
+        };
+        cargarDatos();
     }, []);
+
 
     // Filtrar solo los proyectos que pertenezcan a la sección "Simulaciones"
     const simulacionesOrdenadas = useMemo(() => {
@@ -29,6 +36,19 @@ const Simulaciones = () => {
             acc[categoria].push(simulaciones);
             return acc;
         }, {});
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-gray-50">
+                <Navbar />
+                <div className="min-h-screen flex flex-col justify-center items-center">
+                    <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                    <p className="mt-4 text-sm text-cyan-600">Cargando simulaciones...</p>
+                </div>
+            </div>
+        );
+    }
+
 
     return (
         <div className="simulaciones">

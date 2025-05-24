@@ -8,13 +8,29 @@ const Podcast = () => {
   const [seccionActual, setSeccionActual] = useState("Podcasts");
   const { TraerPodcast, Podcast } = usePodcast();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const obtenerDatos = async () => {
       await TraerPodcast();
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
     };
     obtenerDatos();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Navbar />
+        <div className="min-h-screen flex flex-col justify-center items-center">
+          <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+          <p className="mt-4 text-sm text-cyan-600">Cargando podcasts...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -22,9 +38,9 @@ const Podcast = () => {
 
       {/* Imagen de portada con texto encima */}
       <div className="imagen-seccion">
-                <img src="img/DSC05007.JPG" alt="Imagen de simulaciones" />
-                <h1 className="titulo-seccion">Ahora estás en: {seccionActual}</h1>
-            </div>
+        <img src="img/DSC05007.JPG" alt="Imagen de simulaciones" />
+        <h1 className="titulo-seccion">Ahora estás en: {seccionActual}</h1>
+      </div>
 
       <h2 className="text-left pl-[200px] text-2xl font-bold mt-5 text-gray-800 w-full">Lista de Episodios</h2>
 

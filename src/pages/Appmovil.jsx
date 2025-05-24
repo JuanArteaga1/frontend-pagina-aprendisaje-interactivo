@@ -7,10 +7,15 @@ const AplicacionesMoviles = () => {
   const navigate = useNavigate(); // Hook para redireccionar entre rutas
   const { Proyectos, TraerProyectos } = useProyectos(); // Obtener datos del contexto de proyectos
   const [seccionActual, setSeccionActual] = useState("Aplicaciones Moviles"); // Estado para mostrar la sección actual
+  const [loading, setLoading] = useState(true);
+
 
   useEffect(() => {
-    // Al cargar el componente, se traen los proyectos disponibles
-    TraerProyectos();
+    const cargarDatos = async () => {
+      await TraerProyectos();
+      setLoading(false);
+    };
+    cargarDatos();
   }, []);
 
   console.log(Proyectos); // Mostrar los proyectos en consola para depuración
@@ -29,6 +34,18 @@ const AplicacionesMoviles = () => {
     acc[categoria].push(proyecto); // Agregar el proyecto a su grupo correspondiente
     return acc;
   }, {});
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Navbar />
+        <div className="min-h-screen flex flex-col justify-center items-center">
+          <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+          <p className="mt-4 text-sm text-cyan-600">Cargando aplicaciones...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="aplicaciones-moviles">
