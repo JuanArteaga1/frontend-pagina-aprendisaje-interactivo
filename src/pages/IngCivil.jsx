@@ -44,19 +44,35 @@ const IngCivil = () => {
     <div>
       <Navbar />
 
-      <div className="contenido-proyectos">
-        <CategoriaProyectos
-          titulo="Simulaciones de Ing Civil"
-          categoria="ingenieria civil"
-          proyectos={simulacionesIngCivil}
-        />
+      <div className="container mx-auto px-4 py-12">
+        <div className="text-center mb-16">
+          <h1 className="text-5xl md:text-6xl font-bold text-gray-800 mb-6">
+            Explorando la Ingeniería Civil
+          </h1>
+          <p className="text-2xl text-gray-600 max-w-3xl mx-auto">
+            Descubre simulaciones interactivas y aplicaciones móviles que hacen de la ingeniería civil una experiencia fascinante.
+          </p>
+        </div>
 
+        <section className="mb-20">
+          <h2 className="text-4xl font-bold text-gray-800 mb-8">
+            Simulaciones de Ing. Civil
+          </h2>
+          <CategoriaProyectos
+            categoria="ingenieria civil"
+            proyectos={simulacionesIngCivil}
+          />
+        </section>
 
-        <CategoriaProyectos
-          titulo="Aplicaciones de Ing Civil"
-          categoria="ingenieria civil"
-          proyectos={aplicacionesIngCivil}
-        />
+        <section className="mb-20">
+          <h2 className="text-4xl font-bold text-gray-800 mb-8">
+            Aplicaciones de Ing. Civil
+          </h2>
+          <CategoriaProyectos
+            categoria="ingenieria civil"
+            proyectos={aplicacionesIngCivil}
+          />
+        </section>
 
       </div>
     </div>

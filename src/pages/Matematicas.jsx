@@ -44,21 +44,33 @@ const Matematicas = () => {
     <div>
       {/* Barra de navegación superior */}
       <Navbar />
-
-      <div className="contenido-proyectos">
-        <CategoriaProyectos
-          titulo="Simulaciones de Matematicas"
-          categoria="Matematicas"
-          proyectos={simulacionesMatematicas}
-        />
-
-
-        <CategoriaProyectos
-          titulo="Aplicaciones de Matematicas"
-          categoria="Matematicas"
-          proyectos={aplicacionesMatematicas}
-        />
-
+      <div className="container mx-auto px-4 py-12">
+        <div className="text-center mb-16">
+          <h1 className="text-5xl md:text-6xl font-bold text-gray-800 mb-6">
+            Explorando las Matemáticas
+          </h1>
+          <p className="text-2xl text-gray-600 max-w-3xl mx-auto">
+            Descubre simulaciones interactivas y aplicaciones móviles que hacen de matemáticas una experiencia fascinante.
+          </p>
+        </div>
+        <section className="mb-20">
+          <h2 className="text-4xl font-bold text-gray-800 mb-8">
+            Simulaciones de Matemáticas
+          </h2>
+          <CategoriaProyectos
+            categoria="Matematicas"
+            proyectos={simulacionesMatematicas}
+          />
+        </section>
+        <section className="mb-20">
+          <h2 className="text-4xl font-bold text-gray-800 mb-8">
+            Aplicaciones de Matemáticas
+          </h2>
+          <CategoriaProyectos
+            categoria="Matematicas"
+            proyectos={aplicacionesMatematicas}
+          />
+        </section>
       </div>
     </div>
   );
