@@ -3,12 +3,11 @@ import { useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { UseTraerProyectos } from "../context/TraerProyectos";
 import { useInvestigacion } from "../context/InvestigacionContext";
-
+import { Download, FileText, CalendarDays, Users, Link as LinkIcon } from "lucide-react";
 
 const InvestigacionDetalle = () => {
   const { id } = useParams();
   const { investigaciones, traerInvestigaciones } = useInvestigacion();
-
 
   useEffect(() => {
     if (!investigaciones.some(i => i._id === id)) {
@@ -22,27 +21,14 @@ const InvestigacionDetalle = () => {
     return (
       <>
         <Navbar />
-        <div className="p-5 max-w-6xl mx-auto">
-          <h2 className="text-xl font-bold">Cargando investigación...</h2>
+        <div className="p-8 max-w-6xl mx-auto">
+          <h2 className="text-2xl font-bold text-gray-800">Cargando investigación...</h2>
         </div>
       </>
     );
   }
 
-
-  if (!investigacion) {
-    return (
-      <>
-        <Navbar />
-        <div className="p-5 max-w-6xl mx-auto">
-          <h2 className="text-xl font-bold">Investigación no encontrada</h2>
-        </div>
-      </>
-    );
-  }
-
-  // Construcción de URLs si es necesario
-
+  // Construcción de URLs
   const fuenteURL = investigacion.urlArticulo;
   const imagenURL = investigacion.urlimg
     ? `http://localhost:3000/uploads/${investigacion.urlimg.replace(/\\/g, "/").split("uploads/").pop()}`
@@ -51,54 +37,60 @@ const InvestigacionDetalle = () => {
     ? `http://localhost:3000/uploads/${investigacion.urlDoc.replace(/\\/g, "/").split("uploads/").pop()}`
     : null;
 
+  const handleDescarga = () => {
+    if (!archivoURL) return;
+    const link = document.createElement("a");
+    link.href = archivoURL;
+    link.download = archivoURL.split("/").pop();
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <>
       <Navbar />
-      <div className="p-5 max-w-6xl mx-auto">
-        <div className="flex flex-col gap-8">
-
-          {/* Título y autores */}
-          <div className="bg-gray-50 p-5 rounded-lg shadow-md flex justify-between items-center">
-            <div className="w-36 h-36">
-              <img src={imagenURL} alt={`Foto de ${investigacion.nombre_proyecto}`} className="w-full h-full object-cover rounded-lg" />
-            </div>
-
-            <div className="flex flex-col">
-              <h1 className="text-2xl font-bold text-gray-800 mb-1">{investigacion.nombre_proyecto}</h1>
-              <p className="text-sm text-gray-600">{investigacion.autores}</p>
-            </div>
-
-
-
-            {/* {investigacion.archivo && ( */}
-
-            <button
-              onClick={() => {
-                if (!archivoURL) return;
-                const link = document.createElement("a");
-                link.href = archivoURL;
-                link.download = archivoURL.split("/").pop(); // Nombre del archivo
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-              }}
-              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-500"
-            >
-              Descargar
-            </button>
-            {/* )} */}
-
+      <div className="p-8 max-w-6xl mx-auto space-y-6">
+        {/* Encabezado */}
+        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-2xl shadow-sm flex flex-col md:flex-row items-center gap-6 border border-gray-100">
+          <div className="w-32 h-32 md:w-40 md:h-40 flex-shrink-0 overflow-hidden rounded-xl shadow-md border-2 border-white">
+            <img 
+              src={imagenURL} 
+              alt={`Foto de ${investigacion.nombre_proyecto}`} 
+              className="w-full h-full object-cover" 
+            />
           </div>
+          
+          <div className="flex-1 space-y-2">
+            <h1 className="text-3xl font-bold text-gray-800">{investigacion.nombre_proyecto}</h1>
+            <p className="text-indigo-600 flex items-center gap-1">
+              <Users size={16} className="inline" />
+              {investigacion.autores}
+            </p>
+          </div>
+          
+          {archivoURL && (
+            <button
+              onClick={handleDescarga}
+              className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white px-6 py-3 rounded-xl text-lg font-medium transition-all shadow-md hover:shadow-lg"
+            >
+              <Download size={20} /> Descargar Documento
+            </button>
+          )}
+        </div>
 
-          {/* Descripción y datos */}
-          <div className="bg-gray-50 p-5 rounded-lg shadow-md">
-            <div className="flex justify-between gap-10">
-              <div className="w-2/3">
-                <h3 className="text-lg font-semibold mb-2">Resumen:</h3>
-                <p className="text-base">{investigacion.descripcion}</p>
-                <p className="mt-2">
-                  <strong>Fecha de publicación:</strong>{" "}
+        {/* Contenido principal */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Resumen y detalles */}
+          <div className="md:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+            <h3 className="text-2xl font-semibold text-gray-800 mb-4">Resumen de la Investigación</h3>
+            <p className="text-gray-700 leading-relaxed mb-6">{investigacion.descripcion}</p>
+            
+            <div className="flex items-start gap-3">
+              <CalendarDays size={20} className="text-indigo-600 mt-1 flex-shrink-0" />
+              <div>
+                <h4 className="font-medium text-gray-800">Fecha de publicación</h4>
+                <p className="text-gray-600">
                   {new Date(investigacion.fechaPublicacion).toLocaleString('es-CO', {
                     dateStyle: 'long',
                     timeStyle: 'short',
@@ -107,22 +99,43 @@ const InvestigacionDetalle = () => {
                   })}
                 </p>
               </div>
-              <div className="w-1/3">
-                <h3 className="text-lg font-semibold mb-2">Fuente:</h3>
-                {fuenteURL ? (
-                  <a
-                    href={fuenteURL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block text-blue-600 hover:underline text-sm"
-                  >
-                    🔗 Ver fuente externa
-                  </a>
-                ) : (
-                  <p className="text-base mb-2">No hay fuente disponible.</p>
-                )}
-              </div>
             </div>
+          </div>
+          
+          {/* Fuente y enlaces */}
+          <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+            <h3 className="text-2xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+              <LinkIcon size={20} /> Fuentes
+            </h3>
+            
+            {fuenteURL ? (
+              <a
+                href={fuenteURL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-800 font-medium transition-colors"
+              >
+                <LinkIcon size={18} />
+                Ver fuente externa
+              </a>
+            ) : (
+              <p className="text-gray-500 italic">No hay fuente disponible</p>
+            )}
+            
+            {archivoURL && (
+              <div className="mt-6">
+                <h4 className="font-medium text-gray-800 mb-2 flex items-center gap-2">
+                  <FileText size={18} /> Documentación adjunta
+                </h4>
+                <button
+                  onClick={handleDescarga}
+                  className="text-indigo-600 hover:text-indigo-800 font-medium flex items-center gap-1"
+                >
+                  <Download size={16} />
+                  Descargar archivo
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -131,4 +144,3 @@ const InvestigacionDetalle = () => {
 };
 
 export default InvestigacionDetalle;
-
