@@ -52,32 +52,41 @@ const InvestigacionDetalle = () => {
       <Navbar />
       <div className="p-8 max-w-6xl mx-auto space-y-6">
         {/* Encabezado */}
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-2xl shadow-sm flex flex-col md:flex-row items-center gap-6 border border-gray-100">
-          <div className="w-32 h-32 md:w-40 md:h-40 flex-shrink-0 overflow-hidden rounded-xl shadow-md border-2 border-white">
-            <img 
-              src={imagenURL} 
-              alt={`Foto de ${investigacion.nombre_proyecto}`} 
-              className="w-full h-full object-cover" 
+        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-2xl shadow-sm flex flex-col sm:flex-row items-start sm:items-center gap-6 border border-gray-100">
+          {/* Imagen */}
+          <div className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 flex-shrink-0 overflow-hidden rounded-xl shadow-md border-2 border-white">
+            <img
+              src={imagenURL}
+              alt={`Foto de ${investigacion.nombre_proyecto}`}
+              className="w-full h-full object-cover"
             />
           </div>
-          
-          <div className="flex-1 space-y-2">
-            <h1 className="text-3xl font-bold text-gray-800">{investigacion.nombre_proyecto}</h1>
-            <p className="text-indigo-600 flex items-center gap-1">
-              <Users size={16} className="inline" />
-              {investigacion.autores}
-            </p>
+
+          {/* Contenedor texto + botón */}
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center flex-1 gap-4 w-full">
+            {/* Texto */}
+            <div className="flex-1 space-y-1">
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-800 break-words">
+                {investigacion.nombre_proyecto}
+              </h1>
+              <p className="text-indigo-600 flex items-center gap-1 text-sm sm:text-base break-words">
+                <Users size={16} className="inline" />
+                {investigacion.autores}
+              </p>
+            </div>
+
+            {/* Botón */}
+            {archivoURL && (
+              <button
+                onClick={handleDescarga}
+                className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white px-4 py-2 md:px-6 md:py-3 rounded-xl text-sm md:text-lg font-medium transition-all shadow-md hover:shadow-lg whitespace-nowrap"
+              >
+                <Download size={20} /> Descargar Documento
+              </button>
+            )}
           </div>
-          
-          {archivoURL && (
-            <button
-              onClick={handleDescarga}
-              className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white px-6 py-3 rounded-xl text-lg font-medium transition-all shadow-md hover:shadow-lg"
-            >
-              <Download size={20} /> Descargar Documento
-            </button>
-          )}
         </div>
+
 
         {/* Contenido principal */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -85,7 +94,7 @@ const InvestigacionDetalle = () => {
           <div className="md:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
             <h3 className="text-2xl font-semibold text-gray-800 mb-4">Resumen de la Investigación</h3>
             <p className="text-gray-700 leading-relaxed mb-6">{investigacion.descripcion}</p>
-            
+
             <div className="flex items-start gap-3">
               <CalendarDays size={20} className="text-indigo-600 mt-1 flex-shrink-0" />
               <div>
@@ -101,13 +110,13 @@ const InvestigacionDetalle = () => {
               </div>
             </div>
           </div>
-          
+
           {/* Fuente y enlaces */}
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
             <h3 className="text-2xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
               <LinkIcon size={20} /> Fuentes
             </h3>
-            
+
             {fuenteURL ? (
               <a
                 href={fuenteURL}
@@ -121,7 +130,7 @@ const InvestigacionDetalle = () => {
             ) : (
               <p className="text-gray-500 italic">No hay fuente disponible</p>
             )}
-            
+
             {archivoURL && (
               <div className="mt-6">
                 <h4 className="font-medium text-gray-800 mb-2 flex items-center gap-2">
