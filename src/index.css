@@ -250,10 +250,12 @@ h2 {
   padding: 15px;
   border-radius: 10px;
   overflow-y: auto;
+  color: #ffffff;
 }
 
 .card-back h3 {
   margin-bottom: 20px;
+  color: #ffffff;
 }
 
 .card-back button {
@@ -316,6 +318,11 @@ h2 {
   .imagen-seccion img {
     height: 250px;
   }
+}
+
+.transition-height {
+  transition: max-height 0.3s ease-in-out;
+  overflow: hidden;
 }
 
 @keyframes fadeInUp {
