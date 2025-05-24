@@ -54,9 +54,10 @@ const MenuAdministrador = ({ rol }) => {
     docente: [
       { nombre: "Inicio", ruta: "/", icono: <Home className="w-5 h-5" />},
       { nombre: "Subir proyectos", ruta: "/subir-proyecto", icono: <Upload className="w-5 h-5" /> },
+      { nombre: "Simulaciones", ruta: "/subirsimulaciones", icono: <Monitor className="w-5 h-5" />},
       { nombre: "Investigaciones", ruta: "/SubirInvestigaciones", icono: <FileText className="w-5 h-5" />  },
       { nombre: "Podcasts", ruta: "/subir-podcast", icono: <Mic className="w-5 h-5" />},
-      { nombre: "Simulaciones", ruta: "/subirsimulaciones", icono: <Monitor className="w-5 h-5" />},
+  
       { nombre: "Mis proyectos", ruta: "/misproyectos", icono: <Folder className="w-5 h-5" /> }
     ]
   };

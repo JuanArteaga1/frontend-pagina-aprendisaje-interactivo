@@ -12,7 +12,7 @@ import { useInvestigacion } from "../context/InvestigacionContext";
 const SubirInvestigaciones = () => {
 
   const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm();
-  const { sigout, errors: InvestigacionErrors, mensaje } = useInvestigacion()
+  const { sigout, errors: InvestigacionErrors, mensaje, setMensaje, setErrors } = useInvestigacion()
   const [registroExitoso, setRegistroExitoso] = useState(false);
   const { Usuario, setUsuario } = useLogin()
   const MAX_SIZE = 10 * 1024 * 1024; // 10MB
@@ -26,8 +26,45 @@ const SubirInvestigaciones = () => {
     }
   };
 
+  useEffect(() => {
+    if (mensaje) {
+      const timer = setTimeout(() => {
+        setRegistroExitoso(false);
+      }, 3000); // 3 segundos
+
+      return () => clearTimeout(timer);
+    }
+  }, [mensaje]);
+
+  useEffect(() => {
+    if (InvestigacionErrors.length > 0) {
+      const timer = setTimeout(() => {
+        // Limpiar errores después de 3 segundos
+        setErrors([]);
+      }, 8000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [InvestigacionErrors]);
+
   return (
     <div className="flex h-screen bg-gray-100">
+      {mensaje && (
+        <div className="fixed top-5 right-5 z-50">
+          <Alerta
+            tipo="exito"
+            mensaje={mensaje}
+            onClose={() => setMensaje(null)} />
+        </div>
+      )}
+
+      {InvestigacionErrors.length > 0 && (
+        <div className="fixed top-20 right-5 z-50 space-y-2">
+          {InvestigacionErrors.map((error, i) => (
+            <Alerta key={i} tipo="error" mensaje={error.msg} />
+          ))}
+        </div>
+      )}
       {/* Menú Lateral */}
       <MenuLateral rol="docente" />
 
@@ -43,13 +80,6 @@ const SubirInvestigaciones = () => {
         <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-md p-8 border border-gray-200">
 
           {/* Formulario */}
-          {InvestigacionErrors.map((error, i) => (
-            <Alerta key={i} tipo="error" mensaje={error.msg} />
-          ))}
-          {mensaje && (
-            <Alerta tipo="exito" mensaje={mensaje} />
-
-          )}
           <form onSubmit={handleSubmit(async (data) => {
             const formData = new FormData()
             formData.append("nombre_proyecto", data.nombre_proyecto);
@@ -117,7 +147,7 @@ const SubirInvestigaciones = () => {
                 </label>
                 <input
                   type="datetime-local"
-                  {...register("fechaPublicacion", {required: "La fecha es requerida"})}
+                  {...register("fechaPublicacion", { required: "La fecha es requerida" })}
                   className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
                 />
                 {errors.fechaPublicacion && <p className="text-red-500 font-semibold text-sm">{errors.fechaPublicacion.message}</p>}

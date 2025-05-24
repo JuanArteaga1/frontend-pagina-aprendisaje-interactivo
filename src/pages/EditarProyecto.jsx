@@ -49,14 +49,14 @@ function EditarProyecto() {
                 if (Usuario.Rol === "Docente") {
                     navigate("/misproyectos", {
                         state: {
-                            mensaje: "Podcast actualizado correctamente",
+                            mensaje: "Proyecto actualizado correctamente",
                             tipo: "success"
                         }
                     });
                 } else if (Usuario.Rol === "Administrador") {
                     navigate("/VerProyectos", {
                         state: {
-                            mensaje: "Podcast actualizado correctamente",
+                            mensaje: "Proyecto actualizado correctamente ",
                             tipo: "success"
                         }
                     });
