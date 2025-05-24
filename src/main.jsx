@@ -46,11 +46,25 @@ import EditarInvestigacion from "./pages/EditarInvestigacion";
 import EditarSimulaciones from "./pages/EditarSimulaciones";
 import EditarDocente from "./pages/EditarDocente";
 
+import Resultados from "./pages/Resultados";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <LoginProvider>
     <BrowserRouter>
       <Routes>
+        <Route path="/resultados" element={
+          <InvestigacionProvider>
+            <PodcastProvider>
+              <SimulacionesProvider>
+                <ProyectosProvider>
+                  <Resultados />
+                </ProyectosProvider>
+              </SimulacionesProvider>
+            </PodcastProvider>
+          </InvestigacionProvider>
+        }
+        />
+
       //Rutas sin autenticacion
         //rutas de estudiante y visualizacion
         <Route path="/" element={<Home />} />
