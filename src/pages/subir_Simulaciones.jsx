@@ -11,7 +11,7 @@ import { Image, FileUp, UploadIcon, } from "lucide-react";
 const SubirAPK = () => {
 
     const { register, handleSubmit, watch, formState: { errors }, reset } = useForm();
-    const { sigout, errors: SimulacionesErrors, mensaje } = UseSimulaciones()
+    const { sigout, errors: SimulacionesErrors, mensaje, setMensaje, setErrors } = UseSimulaciones()
     const { Usuario } = useLogin()
     const [setRegistroExitoso] = useState(false);
     const { TraerCategoria, Categoria } = UseCategoria()
@@ -27,19 +27,52 @@ const SubirAPK = () => {
         console.log(Categoria) // Llamada inicial para traer los datos
     }, []);
 
+    useEffect(() => {
+        if (mensaje) {
+            const timer = setTimeout(() => {
+                setRegistroExitoso(false);
+            }, 3000); // 3 segundos
+
+            return () => clearTimeout(timer);
+        }
+    }, [mensaje]);
+
+    useEffect(() => {
+        if (SimulacionesErrors.length > 0) {
+            const timer = setTimeout(() => {
+                // Limpiar errores después de 3 segundos
+                setErrors([]);
+            }, 8000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [SimulacionesErrors]);
+
     return (
         <div className="flex h-screen bg-gray-100">
+            {mensaje && (
+                <div className="fixed top-5 right-5 z-50">
+                    <Alerta
+                        tipo="exito"
+                        mensaje={mensaje}
+                        onClose={() => setMensaje(null)} />
+                </div>
+            )}
+
+            {SimulacionesErrors.length > 0 && (
+                <div className="fixed top-20 right-5 z-50 space-y-2">
+                    {SimulacionesErrors.map((error, i) => (
+                        <Alerta key={i} tipo="error" mensaje={error.msg} />
+                    ))}
+                </div>
+            )}
+            
             {/* Menú Lateral */}
             <MenuLateral rol="docente" />
 
             <main className="flex-1 p-8 overflow-y-auto">
                 <div className="max-w-4xl mx-auto">
                     <h2 className="text-3xl font-bold text-gray-800 mb-8">Subir simulación</h2>
-
-                    {SimulacionesErrors.map((error, i) => (
-                        <Alerta key={i} tipo="error" mensaje={error.msg} />
-                    ))}
-                    {mensaje && <Alerta tipo="exito" mensaje={mensaje} />}
 
                     <form
                         onSubmit={handleSubmit(async (data) => {

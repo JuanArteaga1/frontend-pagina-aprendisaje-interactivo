@@ -66,6 +66,7 @@ export const PodcastProvider = ({ children }) => {
 
     const sigout = async (data) => {
         try {
+            setErrors([]);
             const response = await subirPodcastAPI(data);
             SetPodcast(response.data);
             if (response.status >= 200 && response.status <= 399) {
@@ -87,7 +88,7 @@ export const PodcastProvider = ({ children }) => {
     };
 
     return (
-        <PodcastContext.Provider value={{ sigout, Podcast, errors, mensaje, setMensaje, SetPodcast, TraerPodcast, ActualizarPodcast, EliminarPodcast, TraerPodcastId}}>
+        <PodcastContext.Provider value={{ sigout, Podcast, errors, setErrors, mensaje, setMensaje, SetPodcast, TraerPodcast, ActualizarPodcast, EliminarPodcast, TraerPodcastId}}>
             {children}
         </PodcastContext.Provider>
     );

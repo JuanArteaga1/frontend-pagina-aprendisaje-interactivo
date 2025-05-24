@@ -10,7 +10,7 @@ import { ImageIcon } from 'lucide-react';
 
 function SubirPodcast() {
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
-  const { sigout, errors: PodcastErros, mensaje } = usePodcast(); // Si tienes esta función en contexto
+  const { sigout, errors: PodcastErros, mensaje, setMensaje, setErrors } = usePodcast(); // Si tienes esta función en contexto
   const portadaPreview = watch("portada")?.[0];
   const { TraerCategoria, Categoria } = UseCategoria()
   const [setRegistroExitoso] = useState(false);
@@ -23,6 +23,26 @@ function SubirPodcast() {
     console.log(Categoria) // Llamada inicial para traer los datos
   }, []);
 
+  useEffect(() => {
+    if (mensaje) {
+      const timer = setTimeout(() => {
+        setRegistroExitoso(false);
+      }, 3000); // 3 segundos
+
+      return () => clearTimeout(timer);
+    }
+  }, [mensaje]);
+
+  useEffect(() => {
+    if (PodcastErros.length > 0) {
+      const timer = setTimeout(() => {
+        // Limpiar errores después de 3 segundos
+        setErrors([]);
+      }, 8000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [PodcastErros]);
 
   const onSubmit = async (data) => {
     const formData = new FormData();
@@ -49,6 +69,22 @@ function SubirPodcast() {
 
   return (
     <div className="flex h-screen bg-gray-100 overflow-hidden">
+      {mensaje && (
+        <div className="fixed top-5 right-5 z-50">
+          <Alerta
+            tipo="exito"
+            mensaje={mensaje}
+            onClose={() => setMensaje(null)} />
+        </div>
+      )}
+
+      {PodcastErros.length > 0 && (
+        <div className="fixed top-20 right-5 z-50 space-y-2">
+          {PodcastErros.map((error, i) => (
+            <Alerta key={i} tipo="error" mensaje={error.msg} />
+          ))}
+        </div>
+      )}
       <div className="fixed h-full w-64 bg-white shadow-lg z-10">
         <MenuLateral rol="docente" />
       </div>
@@ -61,14 +97,7 @@ function SubirPodcast() {
                 Subir Nuevo Podcast
               </h2>
             </div>
-            {PodcastErros.map((error, i) => (
 
-              <Alerta key={i} tipo="error" mensaje={error.msg} />
-            ))}
-            {mensaje && (
-              <Alerta tipo="exito" mensaje={mensaje} />
-
-            )}
             <form
               onSubmit={handleSubmit(onSubmit)}
               className="space-y-6 bg-white p-8 rounded-2xl shadow-xl border border-gray-100"
@@ -201,7 +230,7 @@ function SubirPodcast() {
                       {!portada?.[0] && <ImageIcon className="w-10 h-10 text-black opacity-50" />}
 
                       {!portada?.[0] && <span className="text-sm">Imagen de la portada</span>}
-                     
+
                     </label>
                   </div>
 

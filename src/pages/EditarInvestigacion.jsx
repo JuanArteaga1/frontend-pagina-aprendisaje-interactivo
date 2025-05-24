@@ -66,14 +66,14 @@ function EditarInvestigacion() {
                 if (Usuario.Rol === "Docente") {
                     navigate("/misproyectos", {
                         state: {
-                            mensaje: "Podcast actualizado correctamente",
+                            mensaje: "Investigación actualizada correctamente",
                             tipo: "success"
                         }
                     });
                 } else if (Usuario.Rol === "Administrador") {
                     navigate("/VerProyectos", {
                         state: {
-                            mensaje: "Podcast actualizado correctamente",
+                            mensaje: "Investigacion actualizada correctamente",
                             tipo: "success"
                         }
                     });

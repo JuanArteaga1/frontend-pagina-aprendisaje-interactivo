@@ -10,37 +10,74 @@ import { Image, Upload, FileUp, } from "lucide-react";
 function SubirProyecto() {
 
   const { register, handleSubmit, watch, formState: { errors }, reset } = useForm();
-  const { sigout, Proyectos, errors: ProyectosErrors, mensaje } = useProyectos()
+  const { sigout, Proyectos, errors: ProyectosErrors, mensaje, setMensaje, setErrors} = useProyectos()
   const { TraerCategoria, Categoria } = UseCategoria()
   const { Usuario, setUsuario } = useLogin()
   const [registroExitoso, setRegistroExitoso] = useState(false);
   const MAX_SIZE = 10 * 1024 * 1024; // 10MB
 
+  
+
   const archivoAPK = watch('urlArchivoapk');
   const portada = watch('portada');
   const urlDoc = watch('urlDoc');
+
+  
 
   useEffect(() => {
     TraerCategoria();
     console.log(Categoria) // Llamada inicial para traer los datos
   }, []);
 
+  useEffect(() => {
+    if (mensaje) {
+      const timer = setTimeout(() => {
+        setRegistroExitoso(false); 
+      }, 3000); // 3 segundos
+
+      return () => clearTimeout(timer);
+    }
+  }, [mensaje]);
+
+  useEffect(() => {
+  if (ProyectosErrors.length > 0) {
+    const timer = setTimeout(() => {
+      // Limpiar errores después de 3 segundos
+      setErrors([]);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }
+}, [ProyectosErrors]);
+
+
   return (
     <div className="flex h-screen bg-gray-100">
+      
+      {mensaje && (
+        <div className="fixed top-5 right-5 z-50">
+          <Alerta 
+          tipo="exito" 
+          mensaje={mensaje}
+          onClose={() => setMensaje(null)}  />
+        </div>
+      )}
+
+      {/* Errores fijos (uno debajo del otro si hay varios) */}
+    {ProyectosErrors.length > 0 && (
+      <div className="fixed top-20 right-5 z-50 space-y-2">
+        {ProyectosErrors.map((error, i) => (
+          <Alerta key={i} tipo="error" mensaje={error.msg}  />
+        ))}
+      </div>
+    )}
+
       {/* Menú Lateral */}
       <MenuLateral rol="docente" />
 
       <main className="flex-1 p-8 overflow-y-auto">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl font-bold text-gray-800 mb-8">Subir Proyecto</h2>
-
-          {ProyectosErrors.map((error, i) => (
-            <Alerta key={i} tipo="error" mensaje={error.msg} />
-          ))}
-          {mensaje && (
-            <Alerta tipo="exito" mensaje={mensaje} />
-
-          )}
 
           <form onSubmit={handleSubmit(async (data) => {
             const formData = new FormData()
@@ -83,7 +120,7 @@ function SubirProyecto() {
                   {...register('autores', { required: true })}
                   type="text"
                   name="autores"
-                  
+
                   className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-1"
                 />
                 {errors.autores && (<p className="text-red-500 font-semibold text-sm">Autor es requerido</p>)}
@@ -95,7 +132,7 @@ function SubirProyecto() {
                   {...register('fechaPublicacion', { required: true })}
                   type="datetime-local"
                   name="fechaPublicacion"
-                  
+
                   className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
                 />
                 {errors.fechaPublicacion && (<p className="text-red-500 font-semibold text-sm">La fecha es requerida</p>)}
@@ -106,7 +143,7 @@ function SubirProyecto() {
                 <select
                   {...register('categoriaId', { required: true })}
                   name="categoriaId"
-                  
+
                   className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
                 >
                   <option value="">Seleccionar categoría</option>
@@ -126,7 +163,7 @@ function SubirProyecto() {
                 <textarea
                   {...register('descripcion', { required: true })}
                   name="descripcion"
-                  
+
                   rows="4"
                   className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
                 />
@@ -139,7 +176,7 @@ function SubirProyecto() {
               <select
                 {...register('materia', { required: true })}
                 name="materia"
-                
+
                 className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-2">
                 <option value="">Seleccionar materia</option>
                 <option value="Fisica">Fisica</option>
