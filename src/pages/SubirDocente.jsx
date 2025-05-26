@@ -24,7 +24,7 @@ const SubirDocente = () => {
                         {/* Encabezado escalable */}
                         <div className="mb-6 md:mb-8">
                             <div className="flex items-center mb-2">
-                                <h2 className="text-xl md:text-2xl font-bold text-gray-800">Registro de docente</h2>
+                                <h2 className="text-xl md:text-2xl font-bold text-gray-800">Registro Usuario</h2>
                             </div>
                         </div>
 
@@ -91,7 +91,7 @@ const SubirDocente = () => {
                                     {/* Código del docente */}
                                     <div className="relative">
                                         <label className="block text-xs md:text-sm font-medium text-gray-700 mb-1 flex items-center">
-                                            Código del docente
+                                            Código Usuario
                                         </label>
                                         <input
                                             type="text"

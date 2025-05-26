@@ -2,12 +2,16 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Search, User } from "lucide-react";
 import Swal from 'sweetalert2';
+import { useLogin } from "../context/LoginContext"
+
 
 const Navbar = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [busqueda, setBusqueda] = useState("");
     const [mostrarBusqueda, setMostrarBusqueda] = useState(false);
+    const { signin, Usuario, isAutheticated, errors: LoginErrors } = useLogin()
+
 
     let timeoutId = null;
 
@@ -15,6 +19,8 @@ const Navbar = () => {
         clearTimeout(timeoutId);
         setIsDropdownOpen(true);
     };
+
+
 
     const handleMouseLeave = () => {
         timeoutId = setTimeout(() => {
@@ -116,34 +122,68 @@ const Navbar = () => {
                                     onMouseLeave={handleMouseLeave}
                                 >
                                     <div className="py-1">
-                                        <Link
-                                            to="/login"
-                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                        >
-                                            Iniciar sesión
-                                        </Link>
-                                        <button
-                                            onClick={() => {
-                                                Swal.fire({
-                                                    title: '¿Cerrar sesión?',
-                                                    text: '¿Estás segur@ de que quieres cerrar sesión?',
-                                                    icon: 'warning',
-                                                    showCancelButton: true,
-                                                    confirmButtonColor: '#d33',
-                                                    cancelButtonColor: '#3085d6',
-                                                    confirmButtonText: 'Sí, cerrar sesión',
-                                                    cancelButtonText: 'Cancelar'
-                                                }).then((result) => {
-                                                    if (result.isConfirmed) {
-                                                        localStorage.clear();
-                                                        window.location.href = "/";
-                                                    }
-                                                });
-                                            }}
-                                            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                        >
-                                            Cerrar sesión
-                                        </button>
+                                        {!isAutheticated ? (
+                                            // No está logeado
+                                            <Link
+                                                to="/login"
+                                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                            >
+                                                Iniciar sesión
+                                            </Link>
+                                        ) : (
+                                            <>
+                                                {/* Usuario logeado - mostrar por rol */}
+                                                {Usuario?.Rol === "Administrador" && (
+                                                    <>
+                                                        <Link
+                                                            to="/menuadministrador"
+                                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                        >
+                                                            Menú Administrador
+                                                        </Link>
+                                                        <Link
+                                                            to="/menudocente"
+                                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                        >
+                                                            Menú Docente
+                                                        </Link>
+                                                    </>
+                                                )}
+                                                {Usuario?.Rol === "Docente" && (
+                                                    <Link
+                                                        to="/menudocente"
+                                                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                    >
+                                                        Menú Docente
+                                                    </Link>
+                                                )}
+
+                                                {/* Cerrar sesión */}
+                                                <button
+                                                    onClick={() => {
+                                                        Swal.fire({
+                                                            title: '¿Cerrar sesión?',
+                                                            text: '¿Estás segur@ de que quieres cerrar sesión?',
+                                                            icon: 'warning',
+                                                            showCancelButton: true,
+                                                            confirmButtonColor: '#d33',
+                                                            cancelButtonColor: '#3085d6',
+                                                            confirmButtonText: 'Sí, cerrar sesión',
+                                                            cancelButtonText: 'Cancelar'
+                                                        }).then((result) => {
+                                                            if (result.isConfirmed) {
+                                                                localStorage.clear();
+                                                                window.location.href = "/";
+                                                            }
+                                                        });
+                                                    }}
+                                                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                >
+                                                    Cerrar sesión
+                                                </button>
+                                            </>
+                                        )}
+                                        {/* Opción de ayuda (siempre disponible) */}
                                         <Link
                                             to="/ayuda"
                                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"

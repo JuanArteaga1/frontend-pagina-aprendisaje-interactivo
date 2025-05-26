@@ -45,11 +45,11 @@ const MenuAdministrador = ({ rol }) => {
   const opcionesMenu = {
     admin: [
       { nombre: "Inicio", ruta: "/", icono: <Home className="w-5 h-5" /> },
-      { nombre: "Administrar docentes", ruta: "/AdministrarDocente", icono: <Users className="w-5 h-5" /> },
-      { nombre: "Registrar docente", ruta: "/SubirDocente", icono: <UserPlus className="w-5 h-5" /> },
+      { nombre: "Administrar Usuarios", ruta: "/AdministrarDocente", icono: <Users className="w-5 h-5" /> },
+      { nombre: "Registrar Usuario", ruta: "/SubirDocente", icono: <UserPlus className="w-5 h-5" /> },
       { nombre: "Proyectos", ruta: "/VerProyectos", icono: <FileText className="w-5 h-5" /> },
-      { nombre: "Aprobación de proyectos", ruta: "/Aprobar", icono: <CheckCircle className="w-5 h-5" /> },
-      { nombre: "Gestión de categorías", ruta: "/SubirCategoria", icono: <Settings className="w-5 h-5" /> },
+      { nombre: "Gestión de categorías", ruta: "/SubirCategoria", icono: <Settings className="w-5 h-5"/> },
+      { nombre: "Menu Docente", ruta: "/menudocente", icono: <CheckCircle className="w-5 h-5" /> },
     ],
     docente: [
       { nombre: "Inicio", ruta: "/", icono: <Home className="w-5 h-5" />},
