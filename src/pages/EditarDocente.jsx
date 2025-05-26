@@ -57,7 +57,7 @@ const EditarDocente = () => {
                         <div className="mb-6 md:mb-8">
                             <div className="flex items-center mb-2">
                                 <FaChalkboardTeacher className="text-blue-600 text-2xl md:text-3xl mr-3 flex-shrink-0" />
-                                <h2 className="text-xl md:text-2xl font-bold text-gray-800"> EDICION DE DOCENTE</h2>
+                                <h2 className="text-xl md:text-2xl font-bold text-gray-800"> EDICION DE USUARIO</h2>
                             </div>
                             <p className="text-green-500 text-xs md:text-sm flex items-center ml-9 md:ml-10">
                                 <span className="w-2 h-2 bg-green-500 rounded-full mr-2 flex-shrink-0"></span>
@@ -119,7 +119,7 @@ const EditarDocente = () => {
                                     <div className="relative">
                                         <label className="block text-xs md:text-sm font-medium text-gray-700 mb-1 flex items-center">
                                             <FaIdCard className="mr-2 text-blue-500 flex-shrink-0" />
-                                            Código del docente
+                                            Código Usuario
                                         </label>
                                         <input
                                             type="text"
