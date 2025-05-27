@@ -7,10 +7,15 @@ const AplicacionesMoviles = () => {
   const navigate = useNavigate(); // Hook para redireccionar entre rutas
   const { Proyectos, TraerProyectos } = useProyectos(); // Obtener datos del contexto de proyectos
   const [seccionActual, setSeccionActual] = useState("Aplicaciones Moviles"); // Estado para mostrar la sección actual
+  const [loading, setLoading] = useState(true);
+
 
   useEffect(() => {
-    // Al cargar el componente, se traen los proyectos disponibles
-    TraerProyectos();
+    const cargarDatos = async () => {
+      await TraerProyectos();
+      setLoading(false);
+    };
+    cargarDatos();
   }, []);
 
   console.log(Proyectos); // Mostrar los proyectos en consola para depuración
@@ -30,6 +35,18 @@ const AplicacionesMoviles = () => {
     return acc;
   }, {});
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Navbar />
+        <div className="min-h-screen flex flex-col justify-center items-center">
+          <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+          <p className="mt-4 text-sm text-cyan-600">Cargando aplicaciones...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="aplicaciones-moviles">
       {/* Navbar de la aplicación */}
@@ -37,7 +54,7 @@ const AplicacionesMoviles = () => {
 
       {/* Sección de portada */}
       <div className="imagen-seccion">
-        <img src="img/portada-aplicaciones-moviles.jpg" alt="" />
+        <img src="img/DSC04968.JPG" alt="" />
         <h1 className="titulo-seccion">Ahora estás en: {seccionActual}</h1>
       </div>
 
@@ -45,7 +62,7 @@ const AplicacionesMoviles = () => {
       <div className="contenido-proyectos">
         {Object.entries(proyectosAgrupados).map(([categoria, items]) => (
           <div key={categoria} className="categoria">
-            <h2>{categoria}</h2>
+            <h2 className="text-2xl">{categoria}</h2>
             {items.length > 0 ? (
               <div className="cards-container">
                 {/* Mostrar cada proyecto como una tarjeta */}

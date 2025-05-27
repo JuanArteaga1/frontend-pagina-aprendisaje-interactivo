@@ -7,10 +7,17 @@ const Simulaciones = () => {
     const [seccionActual] = useState("Simulaciones");
     const navigate = useNavigate();
     const { Simulaciones, TraerSimulaciones } = UseSimulaciones();
+    const [loading, setLoading] = useState(true);
+
 
     useEffect(() => {
-        TraerSimulaciones();
+        const cargarDatos = async () => {
+            await TraerSimulaciones();
+            setLoading(false);
+        };
+        cargarDatos();
     }, []);
+
 
     // Filtrar solo los proyectos que pertenezcan a la sección "Simulaciones"
     const simulacionesOrdenadas = useMemo(() => {
@@ -30,18 +37,31 @@ const Simulaciones = () => {
             return acc;
         }, {});
 
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-gray-50">
+                <Navbar />
+                <div className="min-h-screen flex flex-col justify-center items-center">
+                    <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                    <p className="mt-4 text-sm text-cyan-600">Cargando simulaciones...</p>
+                </div>
+            </div>
+        );
+    }
+
+
     return (
         <div className="simulaciones">
             <Navbar />
             <div className="imagen-seccion">
-                <img src="img/portada-simulaciones.jpg" alt="Imagen de simulaciones" />
+                <img src="img/DSC04973.JPG" alt="Imagen de simulaciones" />
                 <h1 className="titulo-seccion">Ahora estás en: {seccionActual}</h1>
             </div>
 
             <div className="contenido-proyectos">
                 {Object.entries(simulacionesAgrupadas).map(([categoria, items]) => (
                     <div key={categoria} className="categoria">
-                        <h2>{categoria}</h2>
+                        <h2 className="text-2xl">{categoria}</h2>
                         {items.length > 0 ? (
                             <div className="cards-container">
                                 {items.map((simulacion, i) => {

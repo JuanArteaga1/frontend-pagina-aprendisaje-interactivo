@@ -71,6 +71,7 @@ export const ProyectosProvider = ({ children }) => {
     // Función para subir o registrar un nuevo proyecto a través de la API
     const sigout = async (data) => {
         try {
+            setErrors([]);
             const response = await subirProyectosAPI(data); // Enviar los datos del proyecto
             SetProyectos(response.data); // Actualizar lista con la respuesta
 
@@ -87,7 +88,7 @@ export const ProyectosProvider = ({ children }) => {
 
     // Proveer los valores a los componentes hijos que estén dentro del contexto
     return (
-        <ProyectoContext.Provider value={{ sigout, Proyectos, errors, mensaje, setMensaje, TraerProyectos, TraerProyectoId, ActualizarProyectos, EliminarProyectos }}>
+        <ProyectoContext.Provider value={{ sigout, Proyectos, errors, mensaje, setMensaje, TraerProyectos, TraerProyectoId, ActualizarProyectos, EliminarProyectos, setErrors }}>
             {children}
         </ProyectoContext.Provider>
     );

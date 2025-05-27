@@ -59,6 +59,7 @@ export const SimulacionesProvider = ({ children }) => {
 
     const sigout = async (data) => {
         try {
+            setErrors([]);
             const response = await subirSimulacionesAPI(data);
             SetSimulaciones(response.data);
 
@@ -74,7 +75,7 @@ export const SimulacionesProvider = ({ children }) => {
         }
     };
     return (
-        <SimulacionesContext.Provider value={{ sigout, Simulaciones, errors, mensaje, setMensaje, ActualizarSimulaciones, EliminarSimulaciones, TraerSimulaciones }}>
+        <SimulacionesContext.Provider value={{ sigout, Simulaciones, errors, setErrors, mensaje, setMensaje, ActualizarSimulaciones, EliminarSimulaciones, TraerSimulaciones }}>
             {children}
         </SimulacionesContext.Provider>
     );

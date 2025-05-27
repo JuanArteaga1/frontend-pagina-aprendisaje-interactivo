@@ -57,6 +57,7 @@ export const InvestigacionProvider = ({ children }) => {
 
   const sigout = async (data) => {
     try {
+      setErrors([]);
       const response = await subirInvestigacionAPI(data);
       setInvestigaciones(response.data);
 
@@ -79,6 +80,7 @@ export const InvestigacionProvider = ({ children }) => {
         mensaje,
         setMensaje,
         errors,
+        setErrors,
         ActualizarInvestigaciones,
         EliminarInvestigacion
       }}

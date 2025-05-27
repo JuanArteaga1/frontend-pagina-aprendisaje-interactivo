@@ -45,18 +45,19 @@ const MenuAdministrador = ({ rol }) => {
   const opcionesMenu = {
     admin: [
       { nombre: "Inicio", ruta: "/", icono: <Home className="w-5 h-5" /> },
-      { nombre: "Administrar docentes", ruta: "/AdministrarDocente", icono: <Users className="w-5 h-5" /> },
-      { nombre: "Registrar docente", ruta: "/SubirDocente", icono: <UserPlus className="w-5 h-5" /> },
+      { nombre: "Administrar Usuarios", ruta: "/AdministrarDocente", icono: <Users className="w-5 h-5" /> },
+      { nombre: "Registrar Usuario", ruta: "/SubirDocente", icono: <UserPlus className="w-5 h-5" /> },
       { nombre: "Proyectos", ruta: "/VerProyectos", icono: <FileText className="w-5 h-5" /> },
-      { nombre: "Aprobación de proyectos", ruta: "/Aprobar", icono: <CheckCircle className="w-5 h-5" /> },
-      { nombre: "Gestión de categorías", ruta: "/SubirCategoria", icono: <Settings className="w-5 h-5" /> },
+      { nombre: "Gestión de categorías", ruta: "/SubirCategoria", icono: <Settings className="w-5 h-5"/> },
+      { nombre: "Menu Docente", ruta: "/menudocente", icono: <CheckCircle className="w-5 h-5" /> },
     ],
     docente: [
       { nombre: "Inicio", ruta: "/", icono: <Home className="w-5 h-5" />},
       { nombre: "Subir proyectos", ruta: "/subir-proyecto", icono: <Upload className="w-5 h-5" /> },
+      { nombre: "Simulaciones", ruta: "/subirsimulaciones", icono: <Monitor className="w-5 h-5" />},
       { nombre: "Investigaciones", ruta: "/SubirInvestigaciones", icono: <FileText className="w-5 h-5" />  },
       { nombre: "Podcasts", ruta: "/subir-podcast", icono: <Mic className="w-5 h-5" />},
-      { nombre: "Simulaciones", ruta: "/subirsimulaciones", icono: <Monitor className="w-5 h-5" />},
+  
       { nombre: "Mis proyectos", ruta: "/misproyectos", icono: <Folder className="w-5 h-5" /> }
     ]
   };

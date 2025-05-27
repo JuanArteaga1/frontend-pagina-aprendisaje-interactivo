@@ -5,250 +5,290 @@ import { UseSimulaciones } from "../context/SimulacionesContex";
 import Alerta from "../components/AlertasDocente";
 import { useLogin } from "../context/LoginContext"
 import { UseCategoria } from "../context/CategoriaContext"
+import { Image, FileUp, UploadIcon, } from "lucide-react";
 
-import {
-    Image,
-    Upload,
-    FileUp,
-    UploadIcon,
-} from "lucide-react";
-
-
-
-
-
-import {
-    FaFileUpload,
-    FaAndroid,        // Icono de Android para APK
-    FaFileCode,       // Icono para archivos de código
-    FaImage,          // Icono para imágenes
-    FaCalendarAlt,
-    FaUserEdit,
-    FaUpload          // Icono más adecuado para subir
-} from 'react-icons/fa';
 
 const SubirAPK = () => {
 
-    const { register, handleSubmit, formState: { errors }, reset } = useForm();
-    const { sigout, errors: SimulacionesErrors, mensaje } = UseSimulaciones()
+    const { register, handleSubmit, watch, formState: { errors }, reset } = useForm();
+    const { sigout, errors: SimulacionesErrors, mensaje, setMensaje, setErrors } = UseSimulaciones()
     const { Usuario } = useLogin()
     const [setRegistroExitoso] = useState(false);
     const { TraerCategoria, Categoria } = UseCategoria()
+    const MAX_SIZE = 10 * 1024 * 1024; // 10MB
+
+    const archivoAPK = watch('urlArchivoapk');
+    const portada = watch('portada');
+    const urlDoc = watch('urlDoc');
+
+
     useEffect(() => {
         TraerCategoria();
         console.log(Categoria) // Llamada inicial para traer los datos
     }, []);
 
+    useEffect(() => {
+        if (mensaje) {
+            const timer = setTimeout(() => {
+                setRegistroExitoso(false);
+            }, 3000); // 3 segundos
 
+            return () => clearTimeout(timer);
+        }
+    }, [mensaje]);
 
+    useEffect(() => {
+        if (SimulacionesErrors.length > 0) {
+            const timer = setTimeout(() => {
+                // Limpiar errores después de 3 segundos
+                setErrors([]);
+            }, 8000);
 
+            return () => clearTimeout(timer);
+        }
+    }, [SimulacionesErrors]);
 
     return (
-        <>
-            <div className="flex h-screen bg-gray-100">
-                {/* Menú Lateral */}
-                <MenuLateral rol="docente" />
+        <div className="flex h-screen bg-gray-100">
+            {mensaje && (
+                <div className="fixed top-5 right-5 z-50">
+                    <Alerta
+                        tipo="exito"
+                        mensaje={mensaje}
+                        onClose={() => setMensaje(null)} />
+                </div>
+            )}
 
-                <div className="flex-1 p-4 overflow-auto">
-                    <div className="max-w-xl mx-auto">
-                        {/* TÍTULO FUERA DEL CONTENEDOR */}
-                        <h2 className="text-3xl font-bold text-gray-800 mt-4 mb-4">Subir Aplicación</h2>
+            {SimulacionesErrors.length > 0 && (
+                <div className="fixed top-20 right-5 z-50 space-y-2">
+                    {SimulacionesErrors.map((error, i) => (
+                        <Alerta key={i} tipo="error" mensaje={error.msg} />
+                    ))}
+                </div>
+            )}
+            
+            {/* Menú Lateral */}
+            <MenuLateral rol="docente" />
 
-                        <div className="bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
-                            {/*<h3 className="text-sm font-medium text-green-600 mb-3">Subir APK</h3>*/}
-                            {SimulacionesErrors.map((error, i) => (
-                                <Alerta key={i} tipo="error" mensaje={error.msg} />
-                            ))}
-                            {mensaje && (
-                                <Alerta tipo="exito" mensaje={mensaje} />
+            <main className="flex-1 p-8 overflow-y-auto">
+                <div className="max-w-4xl mx-auto">
+                    <h2 className="text-3xl font-bold text-gray-800 mb-8">Subir simulación</h2>
 
-                            )}
-                            <form onSubmit={handleSubmit(async (data) => {
-                                const formData = new FormData();
+                    <form
+                        onSubmit={handleSubmit(async (data) => {
+                            const formData = new FormData();
+                            formData.append("nombre_proyecto", data.nombre_proyecto);
+                            formData.append("descripcion", data.descripcion);
+                            formData.append("autores", data.autores);
+                            formData.append("fechaPublicacion", data.fechaPublicacion);
+                            formData.append("materia", data.materia);
+                            formData.append("Usuario", Usuario.Id);
+                            formData.append("categoriaId", data.categoriaId);
 
-                                // Agregar los datos del formulario (campos de texto)
-                                formData.append("nombre_proyecto", data.nombre_proyecto);
-                                formData.append("descripcion", data.descripcion);
-                                formData.append("autores", data.autores);
-                                formData.append("fechaPublicacion", data.fechaPublicacion);
-                                formData.append("materia", data.materia);
-                                formData.append("Usuario", Usuario.Id)
-                                formData.append("categoriaId", data.categoriaId);
+                            if (data.urlArchivoapk && data.urlArchivoapk[0]) {
+                                formData.append("urlArchivoapk", data.urlArchivoapk[0]);
+                            }
+                            if (data.urlDoc && data.urlDoc[0]) {
+                                formData.append("urlDoc", data.urlDoc[0]);
+                            }
+                            if (data.portada && data.portada[0]) {
+                                formData.append("portada", data.portada[0]);
+                            }
 
-                                // Asegúrate de que estos campos sean de tipo 'file'
-                                if (data.urlArchivoapk && data.urlArchivoapk[0]) {
-                                    formData.append("urlArchivoapk", data.urlArchivoapk[0]); // Para archivos APK
-                                }
-                                if (data.urlDoc && data.urlDoc[0]) {
-                                    formData.append("urlDoc", data.urlDoc[0]); // Para documentos
-                                }
-                                if (data.portada && data.portada[0]) {
-                                    formData.append("portada", data.portada[0]); // Para la imagen de portada
-                                }
+                            formData.append("seccion", "simulaciones");
+                            const resultado = await sigout(formData);
+                            if (resultado?.success) {
+                                setRegistroExitoso(true);
+                            }
+                        })}
+                        className="space-y-6 bg-white p-6 rounded-lg shadow-md"
+                    >
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label className="block text-base font-semibold text-gray-800 mb-1">Nombre de la simulación</label>
+                                <input
+                                    {...register('nombre_proyecto', { required: true })}
+                                    type="text"
+                                    name="nombre_proyecto"
+                                    className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
+                                    placeholder="Ej: MiAplicación v1.0"
+                                />
+                                {errors.nombre_proyecto && (<p className="text-red-500 font-semibold text-sm">El nombre es requerido</p>)}
+                            </div>
 
-                                formData.append("seccion", "simulaciones"); // Establece la sección
-                                const resultado = await sigout(formData);
-                                if (resultado?.success) {
-                                    setRegistroExitoso(true);
-                                }
+                            <div>
+                                <label className="block text-base font-semibold text-gray-800 mb-1">Desarrolladores</label>
+                                <input
+                                    {...register('autores', { required: true })}
+                                    type="text"
+                                    name="autores"
+                                    className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
+                                    placeholder="Equipo de desarrollo"
+                                />
+                                {errors.autores && (<p className="text-red-500 font-semibold text-sm">El autor es requerido</p>)}
+                            </div>
 
-
-                            })} className="space-y-3">
-                                <div>
-                                    <label className="block text-3x1 font-semibold text-gray-800 mb-1">Nombre del APK</label>
-                                    <input
-                                        {...register('nombre_proyecto', {})}
-                                        type="text"
-                                        name="nombre_proyecto"
-                                        className="w-full px-4 py-2 text-medium border-2 border-gray-200 rounded-xl"
-                                        placeholder="Ej: MiAplicación v1.0"
-                                        required
-                                    />
-                                    {errors.nombre_proyecto && (<p className="text-red-500">El nombre es requerido</p>)}
-                                </div>
-
-                                <div>
-                                    <label className="block text-3x1 font-semibold text-gray-800 mb-1">Descripción técnica</label>
-                                    <textarea
-                                        {...register('descripcion', { required: true })}
-                                        name="descripcion"
-                                        className="w-full px-4 py-2 text-medium border-2 border-gray-200 rounded-xl"
-                                        rows="2"
-                                        placeholder="Especificaciones técnicas requeridas"
-                                        required
-                                    ></textarea>
-                                    {errors.descripcion && (<p className="text-red-500">La descripcion es requerida</p>)}
-                                </div>
-
-                                <div>
-                                    <label className="block text-3x1 font-semibold text-gray-800 mb-1">Desarrolladores</label>
-                                    <input
-                                        {...register('autores', { required: true })}
-                                        type="text"
-                                        name="autores"
-                                        className="w-full  px-4 py-2 text-medium border-2 border-gray-200 rounded-xl"
-                                        placeholder="Equipo de desarrollo"
-                                        required
-                                    />
-                                    {errors.autores && (<p className="text-red-500">El autor es requerida</p>)}
-                                </div>
-
-
-                                <h3 className="text-3x1 font-semibold text-gray-800 mb-2">Fecha de compilación</h3>
+                            <div>
+                                <label className="block text-base font-semibold text-gray-800 mb-1">Fecha de compilación</label>
                                 <input
                                     {...register('fechaPublicacion', { required: true })}
                                     type="datetime-local"
                                     name="fechaPublicacion"
-                                    className="w-full px-4 py-2 text-medium border-2 border-gray-200 rounded-xl"
-                                    required
+                                    className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
                                 />
-                                {errors.fechaPublicacion && (<p className="text-red-500">La fecha es requerida</p>)}
+                                {errors.fechaPublicacion && (<p className="text-red-500 font-semibold text-sm">La fecha es requerida</p>)}
+                            </div>
 
-                                <div>
-                                    <label className="block text-3x1 font-semibold text-gray-800 mb-1">Materia</label>
-                                    <select
-                                        {...register('materia', { required: true })}
-                                        name="materia"
-                                        className="w-full px-4 py-2 text-medium border-2 border-gray-200 rounded-xl"
-                                        required
-                                    >
+                            <div>
+                                <label className="block text-base font-semibold text-gray-800 mb-1">Categoría</label>
+                                <select
+                                    {...register('categoriaId', { required: true })}
+                                    name="categoriaId"
+                                    className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
+                                >
+                                    <option value="">Seleccionar categoría</option>
+                                    {Categoria && Categoria.map((categoria) => (
+                                        <option key={categoria.id} value={categoria.id}>
+                                            {categoria.Nombre_Categoria}
+                                        </option>
+                                    ))}
+                                </select>
+                                {errors.categoriaId && (
+                                    <p className="text-red-500 font-semibold text-sm">Categoria es requerida</p>
+                                )}
+                            </div>
 
-                                        <option value="">Seleccionar materia</option>
-                                        <option value="Fisica">Fisica</option>
-                                        <option value="ingenieria civil">Ingeniería Civil</option>
-                                        <option value="Matematicas">Matematicas</option>
-                                    </select>
-                                    {errors.materia && (<p className="text-red-500">La materia es requerida</p>)}
-                                </div>
+                            <div className="md:col-span-2">
+                                <label className="block text-base font-semibold text-gray-800 mb-1">Descripción técnica</label>
+                                <textarea
+                                    {...register('descripcion', { required: true })}
+                                    name="descripcion"
+                                    className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
+                                    rows="4"
+                                    placeholder="Especificaciones técnicas requeridas"
+                                ></textarea>
+                                {errors.descripcion && (<p className="text-red-500 font-semibold text-sm">La descripción es requerida</p>)}
+                            </div>
 
-                                <div>
-                                    <label className="block text-base font-semibold text-gray-800 mb-1">Categoría</label>
-                                    <select
-                                        {...register('categoriaId', { required: true })}
-                                        name="categoriaId"
-                                        required
-                                        className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
-                                    >
-                                        <option value="">Seleccionar categoría</option>
-                                        {Categoria && Categoria.map((categoria) => (
-                                            <option key={categoria.id} value={categoria.id}>
-                                                {categoria.Nombre_Categoria}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    {errors.categoriaId && (
-                                        <p className="text-red-500">Categoria es requerida</p>
-                                    )}
-                                </div>
-
-                                <h3 className="text-3x1 font-semibold text-gray-800 mb-2">Archivos requeridos</h3>
-                                <div className="grid grid-cols-3 gap-2">
-                                    {/* APK Principal */}
-                                    <label className="flex flex-col items-center p-2 border-2 border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50">
-                                        <UploadIcon className="w-5 h-5 text-black" />
-                                        <span className="text-3x1 text-center">APK Principal</span>
-                                        <input
-                                            {...register('urlArchivoapk', { required: true })}
-                                            name="urlArchivoapk"
-                                            type="file"
-                                            className="hidden"
-                                            accept=".apk"
-                                        />
-                                        {errors.urlArchivoapk && (<p className="text-red-500">La apk es requerida</p>)}
-                                    </label>
-
-                                    {/* Requisitos */}
-                                    <label className="flex flex-col items-center p-2 border border-gray-300 rounded cursor-pointer hover:bg-gray-50">
-                                        <FileUp className="w-5 h-5 text-black" />
-                                        <span className="text-3x1 text-center">Requisitos (PDF)</span>
-                                        <input
-                                            {...register('urlDoc', { required: true })}
-                                            name="urlDoc"
-                                            type="file"
-                                            className="hidden"
-                                            accept=".pdf"
-
-                                        />
-                                        {errors.urlDoc && (<p className="text-red-500">El documento es requerido</p>)}
-                                    </label>
-
-                                    {/* Capturas */}
-                                    <label className="flex flex-col items-center p-2 border border-gray-300 rounded cursor-pointer hover:bg-gray-50">
-                                        <Image className="w-5 h-5 text-black" />
-                                        <span className="text-3x1 text-center">Capturas</span>
-                                        <input
-                                            {...register('portada', { required: true })}
-                                            name="portada"
-                                            type="file"
-                                            className="hidden"
-                                            accept="image/*"
-                                            multiple
-                                        />
-                                        {errors.portada && (<p className="text-red-500">La imagen es requerida</p>)}
-
-                                    </label>
-                                </div>
-
-
-                                {/* Vista previa de capturas */}
-
-
-
-                                <div className="flex justify-center pt-4">
-                                    <button
-                                        type="submit"
-                                        className="w-50 bg-gradient-to-br from-indigo-600 to-blue-600 text-white py-4 px-6 rounded-xl font-semibold hover:from-indigo-700 hover:to-blue-700 focus:outline-none focus:ring-4 focus:ring-indigo-200 transition-all transform hover:scale-[1.01] shadow-lg hover:shadow-indigo-200/50"
-                                    >
-                                        Subir APK
-                                    </button>
-                                </div>
-
-                            </form>
+                            <div className="md:col-span-2">
+                                <label className="block text-base font-semibold text-gray-800 mb-1">Materia</label>
+                                <select
+                                    {...register('materia', { required: true })}
+                                    name="materia"
+                                    className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
+                                >
+                                    <option value="">Seleccionar materia</option>
+                                    <option value="Fisica">Fisica</option>
+                                    <option value="ingenieria civil">Ingeniería Civil</option>
+                                    <option value="Matematicas">Matematicas</option>
+                                </select>
+                                {errors.materia && (<p className="text-red-500 font-semibold text-sm">La materia es requerida</p>)}
+                            </div>
                         </div>
-                    </div>
+
+                        <div className="space-y-4">
+                            <h3 className="text-base font-semibold text-gray-800">Cargar Archivos</h3>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
+                                <label className="flex flex-col items-center justify-center w-full max-w-[220px] aspect-square border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
+                                    <input
+                                        type="file"
+                                        className="hidden"
+                                        accept=".apk"
+                                        {...register('urlArchivoapk', {
+                                            required: 'Se requiere una APK',
+                                            validate: {
+                                                tamaño: (archivos) => archivos[0]?.size <= MAX_SIZE || 'El archivo supera los 10MB',
+                                                tipo: (archivos) =>
+                                                    archivos?.[0]?.name.toLowerCase().endsWith('.apk') || 'El archivo debe ser .apk',
+                                            },
+                                        })}
+                                    />
+                                    {archivoAPK?.[0] && (
+                                        <span className="text-center text-sm text-gray-700 mt-1 break-words w-full px-2 max-w-[220px]">{archivoAPK[0].name}</span>
+                                    )}
+                                    {archivoAPK?.length > 0 && !errors.urlArchivoapk && (
+                                        <p className="text-green-500 text-center font-semibold text-sm">APK subida correctamente</p>
+                                    )}
+                                    {errors.urlArchivoapk && (
+                                        <p className="text-red-500 text-center font-semibold text-sm">{errors.urlArchivoapk.message}</p>
+                                    )}
+                                    {!archivoAPK?.[0] && <UploadIcon className="w-5 h-5 text-black" />}
+                                    {!archivoAPK?.[0] && <span className="text-sm text-gray-600 mt-1">Subir APK</span>}
+                                </label>
+
+                                <label className="flex flex-col items-center justify-center w-full max-w-[220px] aspect-square border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
+                                    <input
+                                        type="file"
+                                        className="hidden"
+                                        accept=".pdf"
+                                        {...register('urlDoc', {
+                                            required: 'Se requiere un documento',
+                                            validate: {
+                                                tamaño: (archivos) => archivos[0]?.size <= MAX_SIZE || 'El documento es muy pesado',
+                                                tipo: (archivos) =>
+                                                    archivos?.[0]?.name?.toLowerCase().endsWith('.pdf') || 'El archivo debe ser un PDF',
+                                            },
+                                        })}
+                                    />
+                                    {urlDoc?.[0] && (
+                                        <span className="text-sm text-center text-gray-700 mt-1 break-words w-full px-2 max-w-[220px]">{urlDoc[0].name}</span>
+                                    )}
+                                    {urlDoc?.length > 0 && !errors.urlDoc && (
+                                        <p className="text-green-500 text-center font-semibold text-sm">Documento subido correctamente</p>
+                                    )}
+                                    {errors.urlDoc && (
+                                        <p className="text-red-500 text-center font-semibold text-sm">{errors.urlDoc.message}</p>
+                                    )}
+                                    {!urlDoc?.[0] && <FileUp className="w-5 h-5 text-black" />}
+                                    {!urlDoc?.[0] && <span className="text-sm text-gray-600 mt-1">Subir PDF</span>}
+                                </label>
+
+                                <label className="flex flex-col items-center justify-center w-full max-w-[220px] aspect-square border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
+                                    <input
+                                        type="file"
+                                        className="hidden"
+                                        accept="image/*"
+                                        multiple
+                                        {...register('portada', {
+                                            required: 'Se requiere una imagen',
+                                            validate: {
+                                                tamaño: (archivos) =>
+                                                    archivos?.[0]?.size <= MAX_SIZE || 'La imagen supera los 10MB',
+                                                tipo: (archivos) =>
+                                                    /\.(jpg|jpeg|png|webp)$/i.test(archivos?.[0]?.name) ||
+                                                    'El archivo debe ser una imagen (.jpg, .jpeg, .png, .webp)',
+                                            },
+                                        })}
+                                    />
+                                    {portada?.[0] && (
+                                        <span className="text-sm text-center text-gray-700 mt-1 break-words w-full px-2 max-w-[220px]">
+                                            {portada[0].name}
+                                        </span>
+                                    )}
+                                    {portada?.length > 0 && !errors.portada && (
+                                        <p className="text-green-500 text-center font-semibold text-sm">Imagen subida correctamente</p>
+                                    )}
+                                    {errors.portada && (
+                                        <p className="text-red-500 text-center font-semibold text-sm">{errors.portada.message}</p>
+                                    )}
+                                    {!portada?.[0] && <Image className="w-5 h-5 text-black" />}
+                                    {!portada?.[0] && <span className="text-sm text-gray-600 mt-1">Subir IMG</span>}
+                                </label>
+                            </div>
+                        </div>
+
+                        <div className="flex justify-center pt-4">
+                            <button
+                                type="submit"
+                                className="w-50 bg-gradient-to-br from-indigo-600 to-blue-600 text-white py-4 px-6 rounded-xl font-semibold hover:from-indigo-700 hover:to-blue-700 focus:outline-none focus:ring-4 focus:ring-indigo-200 transition-all transform hover:scale-[1.01] shadow-lg hover:shadow-indigo-200/50"
+                            >
+                                Subir simulación
+                            </button>
+                        </div>
+                    </form>
                 </div>
-            </div>
-        </>
+            </main>
+        </div>
     );
 };
 
