@@ -88,7 +88,7 @@ const DetalleProyecto = () => {
                         {/* Botón */}
                         <button
                             onClick={handleDescarga}
-                            className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white px-4 py-2 md:px-6 md:py-3 rounded-xl text-sm md:text-lg font-medium transition-all shadow-md hover:shadow-lg whitespace-nowrap"
+                            className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white px-4 py-2 md:px-6 md:py-3 rounded-xl text-sm md:text-lg font-medium transition-all shadow-md hover:shadow-lg whitespace-nowrap hover:scale-110"
                         >
                             <Download size={20} /> Descargar APK
                         </button>

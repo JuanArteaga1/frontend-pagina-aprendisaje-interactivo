@@ -83,7 +83,7 @@ const Login = () => {
 
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-colors"
+              className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-colors hover:scale-103"
             >
               Acceder
             </button>
@@ -99,7 +99,7 @@ const Login = () => {
             <p className="text-sm text-gray-600 mb-2">Identifíquese usando su cuenta en:</p>
             <button
               type="button"
-              className="flex items-center justify-center w-full px-4 py-2 border border-gray-300 rounded hover:bg-gray-100"
+              className="flex items-center justify-center w-full px-4 py-2 border border-gray-300 rounded hover:bg-gray-100 hover:scale-104"
             >
               <img
                 src="https://www.svgrepo.com/show/475656/google-color.svg"
