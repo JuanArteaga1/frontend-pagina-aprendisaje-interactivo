@@ -1,28 +1,39 @@
 import React, { useEffect, useState } from "react";
 import subirInvestigacionesImg from "../img/Subir_Investigaciones.jpg";
 import MenuLateral from "../components/MenuAdmi_Doc";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import Alerta from "../components/AlertasDocente";
-import { useLogin } from "../context/LoginContext"
+import { useLogin } from "../context/LoginContext";
 
-import { ImageIcon, UploadIcon } from 'lucide-react';
+import { ImageIcon, UploadIcon } from "lucide-react";
 
 import { useInvestigacion } from "../context/InvestigacionContext";
 
 const SubirInvestigaciones = () => {
-
-  const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm();
-  const { sigout, errors: InvestigacionErrors, mensaje, setMensaje, setErrors } = useInvestigacion()
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    control,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      autores: [""], // iniciamos con un autor vacío
+    },
+  });
+  const { sigout, errors: InvestigacionErrors, mensaje, setMensaje, setErrors } =
+    useInvestigacion();
   const [registroExitoso, setRegistroExitoso] = useState(false);
-  const { Usuario, setUsuario } = useLogin()
+  const { Usuario, setUsuario } = useLogin();
   const MAX_SIZE = 10 * 1024 * 1024; // 10MB
-  const portada = watch('portada');
-  const urlDoc = watch('urlDoc');
+  const portada = watch("portada");
+  const urlDoc = watch("urlDoc");
 
   const handleFileChange = (e, name) => {
     const file = e.target.files[0];
     if (file) {
-      setValue(name, file);  // react-hook-form controla el archivo
+      setValue(name, file); // react-hook-form controla el archivo
     }
   };
 
@@ -51,10 +62,7 @@ const SubirInvestigaciones = () => {
     <div className="flex h-screen bg-gray-100">
       {mensaje && (
         <div className="fixed top-5 right-5 z-50">
-          <Alerta
-            tipo="exito"
-            mensaje={mensaje}
-            onClose={() => setMensaje(null)} />
+          <Alerta tipo="exito" mensaje={mensaje} onClose={() => setMensaje(null)} />
         </div>
       )}
 
@@ -70,7 +78,6 @@ const SubirInvestigaciones = () => {
 
       {/* Contenido principal */}
       <div className="flex-1 p-8 overflow-x-hidden overflow-auto">
-
         {/* Título FUERA del contenedor */}
         <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center ml-34">
           Subir Investigación
@@ -78,79 +85,150 @@ const SubirInvestigaciones = () => {
 
         {/* Contenedor del formulario */}
         <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-md p-8 border border-gray-200">
-
           {/* Formulario */}
-          <form onSubmit={handleSubmit(async (data) => {
-            const formData = new FormData()
-            formData.append("nombre_proyecto", data.nombre_proyecto);
-            formData.append("descripcion", data.descripcion);
-            formData.append("autores", data.autores);
-            formData.append("fechaPublicacion", data.fechaPublicacion);
-            formData.append("materia", data.materia);
-            formData.append("urlArticulo", data.UrlArticulo);
-            formData.append("urlDoi", data.UrlDoi);
-            formData.append("portada", data.portada[0]);
-            formData.append("urlDoc", data.urlDoc[0]);
-            formData.append("Usuario", Usuario.Id)
-            formData.append("seccion", "Investigacion");
-            console.log(formData)
-            const resultado = await sigout(formData);
-            if (resultado?.success) {
-              setRegistroExitoso(true);
-              // Limpiar campos
-            }
-
-
-
-          })} className="space-y-6">
-
+          <form
+            onSubmit={handleSubmit(async (data) => {
+              const formData = new FormData();
+              formData.append("nombre_proyecto", data.nombre_proyecto);
+              formData.append("descripcion", data.descripcion);
+              // autores será array, lo convertimos a string separado por comas
+              formData.append("autores", data.autores.join(", "));
+              formData.append("fechaPublicacion", data.fechaPublicacion);
+              formData.append("materia", data.materia);
+              formData.append("urlArticulo", data.UrlArticulo);
+              formData.append("urlDoi", data.UrlDoi);
+              formData.append("portada", data.portada[0]);
+              formData.append("urlDoc", data.urlDoc[0]);
+              formData.append("Usuario", Usuario.Id);
+              formData.append("seccion", "Investigacion");
+              console.log(formData);
+              const resultado = await sigout(formData);
+              if (resultado?.success) {
+                setRegistroExitoso(true);
+                // Limpiar campos (opcional)
+              }
+            })}
+            className="space-y-6"
+          >
             {/* Título */}
             <div>
               <label className="block mb-1 font-semibold text-gray-800">Título</label>
               <input
-                {...register("nombre_proyecto", { required: "El título es obligatorio" })}
+                {...register("nombre_proyecto", {
+                  required: "El título es obligatorio",
+                })}
                 className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
                 placeholder="Ingrese el título de la investigación"
               />
-              {errors.nombre_proyecto && <p className="text-red-500 font-semibold text-sm">{errors.nombre_proyecto.message}</p>}
+              {errors.nombre_proyecto && (
+                <p className="text-red-500 font-semibold text-sm">
+                  {errors.nombre_proyecto.message}
+                </p>
+              )}
             </div>
 
             {/* Descripción */}
             <div>
               <label className="block mb-1 font-semibold text-gray-800">Descripción</label>
               <textarea
-                {...register("descripcion", { required: "La descripción es obligatoria" })}
+                {...register("descripcion", {
+                  required: "La descripción es obligatoria",
+                })}
                 rows="4"
                 className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
                 placeholder="Descripción detallada de la investigación"
               ></textarea>
-              {errors.descripcion && <p className="text-red-500 font-semibold text-sm">{errors.descripcion.message}</p>}
+              {errors.descripcion && (
+                <p className="text-red-500 font-semibold text-sm">
+                  {errors.descripcion.message}
+                </p>
+              )}
             </div>
 
             {/* Autores y Fecha */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Autores dinámicos */}
               <div>
                 <label className="flex items-center gap-2 mb-1 text-gray-800 font-semibold">
                   Autores
                 </label>
-                <input
-                  {...register("autores", { required: "El autor es requerido" })}
-                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-                  placeholder="Nombres de los autores"
+
+                <Controller
+                  control={control}
+                  name="autores"
+                  rules={{
+                    validate: (value) =>
+                      value.length > 0 &&
+                      value.every((autor) => autor.trim() !== "") ||
+                      "Debe ingresar al menos un autor válido",
+                  }}
+                  render={({ field: { value, onChange } }) => (
+                    <>
+                      {value.map((autor, index) => (
+                        <div key={index} className="flex items-center gap-2 mb-2">
+                          <input
+                            type="text"
+                            value={autor}
+                            onChange={(e) => {
+                              const nuevosAutores = [...value];
+                              nuevosAutores[index] = e.target.value;
+                              onChange(nuevosAutores);
+                            }}
+                            className="flex-grow px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
+                            placeholder={`Autor ${index + 1}`}
+                          />
+                          {value.length > 1 && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const nuevosAutores = value.filter(
+                                  (_, i) => i !== index
+                                );
+                                onChange(nuevosAutores);
+                              }}
+                              className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                              title="Eliminar autor"
+                            >
+                              X
+                            </button>
+                          )}
+                        </div>
+                      ))}
+
+                      <button
+                        type="button"
+                        onClick={() => onChange([...value, ""])}
+                        className="mt-2 bg-green-500 text-white px-4 py-1 rounded hover:bg-green-600"
+                      >
+                        + Añadir autor
+                      </button>
+                    </>
+                  )}
                 />
-                {errors.autores && <p className="text-red-500 font-semibold text-sm">{errors.autores.message}</p>}
+                {errors.autores && (
+                  <p className="text-red-500 font-semibold text-sm">
+                    {errors.autores.message}
+                  </p>
+                )}
               </div>
 
+              {/* Fecha */}
               <div>
                 <label className="flex items-center gap-2 mb-1 text-gray-800 font-semibold">
                   Fecha
                 </label>
                 <input
                   type="datetime-local"
-                  {...register("fechaPublicacion", { required: "La fecha es requerida" })}
+                  {...register("fechaPublicacion", {
+                    required: "La fecha es requerida",
+                  })}
                   className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
                 />
-                {errors.fechaPublicacion && <p className="text-red-500 font-semibold text-sm">{errors.fechaPublicacion.message}</p>}
+                {errors.fechaPublicacion && (
+                  <p className="text-red-500 font-semibold text-sm">
+                    {errors.fechaPublicacion.message}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -166,7 +244,9 @@ const SubirInvestigaciones = () => {
                 <option value="ingenieria civil">Ingeniería Civil</option>
                 <option value="Matematicas">Matematicas</option>
               </select>
-              {errors.materia && <p className="text-red-500 font-semibold text-sm">{errors.materia.message}</p>}
+              {errors.materia && (
+                <p className="text-red-500 font-semibold text-sm">{errors.materia.message}</p>
+              )}
             </div>
 
             {/* URL Artículo */}
@@ -176,11 +256,15 @@ const SubirInvestigaciones = () => {
               </label>
               <input
                 type="url"
-                {...register("UrlArticulo", { required: "Debe ingresar el enlace del artículo" })}
+                {...register("UrlArticulo", {
+                  required: "Debe ingresar el enlace del artículo",
+                })}
                 className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-300"
                 placeholder="https://ejemplo.com/articulo"
               />
-              {errors.UrlArticulo && <p className="text-red-500 font-semibold text-sm">{errors.UrlArticulo.message}</p>}
+              {errors.UrlArticulo && (
+                <p className="text-red-500 font-semibold text-sm">{errors.UrlArticulo.message}</p>
+              )}
             </div>
 
             {/* URL DOI */}
@@ -190,11 +274,15 @@ const SubirInvestigaciones = () => {
               </label>
               <input
                 type="url"
-                {...register("UrlDoi", { required: "Debe ingresar la URL del DOI" })}
+                {...register("UrlDoi", {
+                  required: "Debe ingresar la URL del DOI",
+                })}
                 className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-300"
                 placeholder="https://doi.org/xxxxx"
               />
-              {errors.UrlDoi && <p className="text-red-500 font-semibold text-sm">{errors.UrlDoi.message}</p>}
+              {errors.UrlDoi && (
+                <p className="text-red-500 font-semibold text-sm">{errors.UrlDoi.message}</p>
+              )}
             </div>
 
             {/* Subir Archivos */}
@@ -206,14 +294,14 @@ const SubirInvestigaciones = () => {
                     type="file"
                     accept=".jpg,.jpeg,.png,.webp"
                     className="hidden"
-                    {...register('portada', {
-                      required: 'Se requiere una imagen',
+                    {...register("portada", {
+                      required: "Se requiere una imagen",
                       validate: {
                         tamaño: (archivos) =>
-                          archivos[0]?.size <= MAX_SIZE || 'La imagen supera los 10MB',
+                          archivos[0]?.size <= MAX_SIZE || "La imagen supera los 10MB",
                         tipo: (archivos) =>
-                          /\.(jpg|jpeg|png|webp)$/i.test(archivos?.[0]?.name || '') ||
-                          'El archivo debe ser una imagen (.jpg, .jpeg, .png, .webp)',
+                          /\.(jpg|jpeg|png|webp)$/i.test(archivos?.[0]?.name || "") ||
+                          "El archivo debe ser una imagen (.jpg, .jpeg, .png, .webp)",
                       },
                     })}
                   />
@@ -222,7 +310,9 @@ const SubirInvestigaciones = () => {
                   )}
 
                   {portada?.length > 0 && !errors.portada && (
-                    <p className="text-green-500 text-center font-semibold text-sm">Imagen subida correctamente</p>
+                    <p className="text-green-500 text-center font-semibold text-sm">
+                      Imagen subida correctamente
+                    </p>
                   )}
                   {errors.portada && (
                     <p className="text-red-500 font-semibold text-sm">{errors.portada.message}</p>
@@ -234,19 +324,19 @@ const SubirInvestigaciones = () => {
                 </label>
 
                 <label className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-400 cursor-pointer text-center">
-
                   <input
                     type="file"
                     accept=".pdf"
                     className="hidden"
-                    {...register('urlDoc', {
-                      required: 'Se requiere un documento',
+                    {...register("urlDoc", {
+                      required: "Se requiere un documento",
                       validate: {
-                        tamaño: (archivos) => archivos[0]?.size <= MAX_SIZE || 'El documento es muy pesado',
+                        tamaño: (archivos) =>
+                          archivos[0]?.size <= MAX_SIZE || "El documento es muy pesado",
                         tipo: (archivos) =>
-                          archivos?.[0]?.name?.toLowerCase().endsWith('.pdf') || 'El archivo debe ser un PDF',
+                          archivos?.[0]?.name?.toLowerCase().endsWith(".pdf") ||
+                          "El archivo debe ser un PDF",
                       },
-
                     })}
                   />
                   {urlDoc?.[0] && (
@@ -254,7 +344,9 @@ const SubirInvestigaciones = () => {
                   )}
 
                   {urlDoc?.length > 0 && !errors.urlDoc && (
-                    <p className="text-green-500 text-center font-semibold text-sm">Documento subido correctamente</p>
+                    <p className="text-green-500 text-center font-semibold text-sm">
+                      Documento subido correctamente
+                    </p>
                   )}
                   {errors.urlDoc && (
                     <p className="text-red-500 font-semibold text-sm">{errors.urlDoc.message}</p>
@@ -262,7 +354,6 @@ const SubirInvestigaciones = () => {
 
                   {!urlDoc?.[0] && <UploadIcon className="w-10 h-10 text-black opacity-50" />}
                   {!urlDoc?.[0] && <span className="text-sm">Documento PDF</span>}
-
                 </label>
               </div>
             </div>
@@ -276,7 +367,6 @@ const SubirInvestigaciones = () => {
                 Subir investigación
               </button>
             </div>
-
           </form>
         </div>
       </div>
