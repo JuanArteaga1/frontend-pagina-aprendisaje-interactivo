@@ -1,6 +1,29 @@
 import React, { useEffect, useState } from "react";
 import subirInvestigacionesImg from "../img/Subir_Investigaciones.jpg";
 import MenuLateral from "../components/MenuAdmi_Doc";
+ilto
+import { useForm, useFieldArray } from "react-hook-form";
+import Alerta from "../components/AlertasDocente";
+import { useLogin } from "../context/LoginContext";
+import { ImageIcon, UploadIcon } from 'lucide-react';
+import { useInvestigacion } from "../context/InvestigacionContext";
+
+const SubirInvestigaciones = () => {
+  const { register, handleSubmit, watch, setValue, control, formState: { errors } } = useForm();
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "autores"
+  });
+
+  const { sigout, errors: InvestigacionErrors, mensaje, setMensaje, setErrors } = useInvestigacion();
+  const [registroExitoso, setRegistroExitoso] = useState(false);
+  const { Usuario } = useLogin();
+  const MAX_SIZE = 10 * 1024 * 1024;
+
+  const portada = watch('portada');
+  const urlDoc = watch('urlDoc');
+
+=======
 import { useForm, Controller } from "react-hook-form";
 import Alerta from "../components/AlertasDocente";
 import { useLogin } from "../context/LoginContext";
@@ -37,23 +60,17 @@ const SubirInvestigaciones = () => {
     }
   };
 
+ master
   useEffect(() => {
     if (mensaje) {
-      const timer = setTimeout(() => {
-        setRegistroExitoso(false);
-      }, 3000); // 3 segundos
-
+      const timer = setTimeout(() => setRegistroExitoso(false), 3000);
       return () => clearTimeout(timer);
     }
   }, [mensaje]);
 
   useEffect(() => {
     if (InvestigacionErrors.length > 0) {
-      const timer = setTimeout(() => {
-        // Limpiar errores después de 3 segundos
-        setErrors([]);
-      }, 8000);
-
+      const timer = setTimeout(() => setErrors([]), 8000);
       return () => clearTimeout(timer);
     }
   }, [InvestigacionErrors]);
@@ -65,7 +82,6 @@ const SubirInvestigaciones = () => {
           <Alerta tipo="exito" mensaje={mensaje} onClose={() => setMensaje(null)} />
         </div>
       )}
-
       {InvestigacionErrors.length > 0 && (
         <div className="fixed top-20 right-5 z-50 space-y-2">
           {InvestigacionErrors.map((error, i) => (
@@ -73,27 +89,31 @@ const SubirInvestigaciones = () => {
           ))}
         </div>
       )}
-      {/* Menú Lateral */}
       <MenuLateral rol="docente" />
-
-      {/* Contenido principal */}
       <div className="flex-1 p-8 overflow-x-hidden overflow-auto">
+ filtos
+=======
         {/* Título FUERA del contenedor */}
+ master
         <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center ml-34">
           Subir Investigación
         </h2>
-
-        {/* Contenedor del formulario */}
         <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-md p-8 border border-gray-200">
-          {/* Formulario */}
+s
+=======
+          {/* Formulario */} master
           <form
             onSubmit={handleSubmit(async (data) => {
               const formData = new FormData();
               formData.append("nombre_proyecto", data.nombre_proyecto);
               formData.append("descripcion", data.descripcion);
+<              data.autores.forEach((autor, i) => {
+                formData.append(`autores[${i}]`, autor.nombre);
+              });
+=======
               // autores será array, lo convertimos a string separado por comas
               formData.append("autores", data.autores.join(", "));
-              formData.append("fechaPublicacion", data.fechaPublicacion);
+>              formData.append("fechaPublicacion", data.fechaPublicacion);
               formData.append("materia", data.materia);
               formData.append("urlArticulo", data.UrlArticulo);
               formData.append("urlDoi", data.UrlDoi);
@@ -101,11 +121,18 @@ const SubirInvestigaciones = () => {
               formData.append("urlDoc", data.urlDoc[0]);
               formData.append("Usuario", Usuario.Id);
               formData.append("seccion", "Investigacion");
+
+
+              const resultado = await sigout(formData);
+              if (resultado?.success) {
+                setRegistroExitoso(true);
+=======
               console.log(formData);
               const resultado = await sigout(formData);
               if (resultado?.success) {
                 setRegistroExitoso(true);
                 // Limpiar campos (opcional)
+
               }
             })}
             className="space-y-6"
@@ -149,6 +176,26 @@ const SubirInvestigaciones = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Autores dinámicos */}
               <div>
+                <label className="block mb-1 font-semibold text-gray-800">Autores</label>
+                {fields.map((field, index) => (
+                  <div key={field.id} className="flex items-center gap-2 mb-2">
+                    <input
+                      {...register(`autores.${index}.nombre`, { required: "El autor es requerido" })}
+                      placeholder={`Autor ${index + 1}`}
+                      className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
+                    />
+                    <button type="button" onClick={() => remove(index)} className="text-red-500 font-bold">✕</button>
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => append({ nombre: "" })}
+                  className="mt-2 px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                >
+                  Añadir autor
+                </button>
+                {errors.autores && <p className="text-red-500 font-semibold text-sm">{errors.autores.message}</p>}
+=======
                 <label className="flex items-center gap-2 mb-1 text-gray-800 font-semibold">
                   Autores
                 </label>
@@ -251,9 +298,7 @@ const SubirInvestigaciones = () => {
 
             {/* URL Artículo */}
             <div>
-              <label className="flex items-center gap-2 mb-1 text-gray-800 font-semibold">
-                URL del Artículo
-              </label>
+              <label className="block mb-1 font-semibold text-gray-800">URL del Artículo</label>
               <input
                 type="url"
                 {...register("UrlArticulo", {
@@ -269,9 +314,7 @@ const SubirInvestigaciones = () => {
 
             {/* URL DOI */}
             <div>
-              <label className="flex items-center gap-2 mb-1 text-gray-800 font-semibold">
-                URL DOI
-              </label>
+              <label className="block mb-1 font-semibold text-gray-800">URL DOI</label>
               <input
                 type="url"
                 {...register("UrlDoi", {
@@ -285,10 +328,11 @@ const SubirInvestigaciones = () => {
               )}
             </div>
 
-            {/* Subir Archivos */}
+            {/* Subida de archivos */}
             <div>
               <h3 className="text-gray-800 font-semibold mb-3">Subir archivos</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Portada */}
                 <label className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-400 cursor-pointer text-center">
                   <input
                     type="file"
@@ -297,6 +341,16 @@ const SubirInvestigaciones = () => {
                     {...register("portada", {
                       required: "Se requiere una imagen",
                       validate: {
+
+                        tamaño: (archivos) => archivos[0]?.size <= MAX_SIZE || 'La imagen supera los 10MB',
+                        tipo: (archivos) => /\.(jpg|jpeg|png|webp)$/i.test(archivos?.[0]?.name || '') || 'Debe ser una imagen',
+                      },
+                    })}
+                  />
+                  {portada?.[0] && <span className="text-sm text-gray-700 mt-1">{portada[0].name}</span>}
+                  {portada?.length > 0 && !errors.portada && <p className="text-green-500 font-semibold text-sm">Imagen subida correctamente</p>}
+                  {errors.portada && <p className="text-red-500 font-semibold text-sm">{errors.portada.message}</p>}
+=======
                         tamaño: (archivos) =>
                           archivos[0]?.size <= MAX_SIZE || "La imagen supera los 10MB",
                         tipo: (archivos) =>
@@ -319,10 +373,10 @@ const SubirInvestigaciones = () => {
                   )}
 
                   {!portada?.[0] && <ImageIcon className="w-10 h-10 text-black opacity-50" />}
-
                   {!portada?.[0] && <span className="text-sm">Imagen de la portada</span>}
                 </label>
 
+                {/* Documento PDF */}
                 <label className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-400 cursor-pointer text-center">
                   <input
                     type="file"
@@ -331,6 +385,16 @@ const SubirInvestigaciones = () => {
                     {...register("urlDoc", {
                       required: "Se requiere un documento",
                       validate: {
+
+                        tamaño: (archivos) => archivos[0]?.size <= MAX_SIZE || 'El documento es muy pesado',
+                        tipo: (archivos) => archivos?.[0]?.name?.toLowerCase().endsWith('.pdf') || 'Debe ser un PDF',
+                      },
+                    })}
+                  />
+                  {urlDoc?.[0] && <span className="text-sm text-gray-700 mt-1">{urlDoc[0].name}</span>}
+                  {urlDoc?.length > 0 && !errors.urlDoc && <p className="text-green-500 font-semibold text-sm">Documento subido correctamente</p>}
+                  {errors.urlDoc && <p className="text-red-500 font-semibold text-sm">{errors.urlDoc.message}</p>}
+=======
                         tamaño: (archivos) =>
                           archivos[0]?.size <= MAX_SIZE || "El documento es muy pesado",
                         tipo: (archivos) =>
@@ -358,7 +422,7 @@ const SubirInvestigaciones = () => {
               </div>
             </div>
 
-            {/* Botón */}
+            {/* Botón de envío */}
             <div className="pt-4 flex justify-center">
               <button
                 type="submit"

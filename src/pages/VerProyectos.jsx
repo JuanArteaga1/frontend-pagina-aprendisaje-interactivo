@@ -8,6 +8,7 @@ import { usePodcast } from "../context/PodcastContext";
 import { useInvestigacion } from "../context/InvestigacionContext";
 import { UseSimulaciones } from "../context/SimulacionesContex";
 import Swal from "sweetalert2";
+import { FiSearch } from "react-icons/fi";
 
 const MirarProyectos = () => {
   const navigate = useNavigate();
@@ -22,9 +23,13 @@ const MirarProyectos = () => {
   const [proyectosUnificados, setProyectosUnificados] = useState({ data: [] });
   const [mensaje, setMensaje] = useState(null);
   const [tipoMensaje, setTipoMensaje] = useState("success");
+  const [mostrarFiltros, setMostrarFiltros] = useState(false);
+  const [filtroNombre, setFiltroNombre] = useState("");
+  const [filtroAutor, setFiltroAutor] = useState("");
+  const [filtroTipo, setFiltroTipo] = useState("");
 
   useEffect(() => {
-    TraerProyectosT(); // Llamada inicial para traer los datos
+    TraerProyectosT();
   }, []);
 
   useEffect(() => {
@@ -67,6 +72,18 @@ const MirarProyectos = () => {
       }, 3000);
     }
   }, [location.state, navigate, location.pathname]);
+
+  const datosFiltrados = proyectosUnificados.data.filter(p => {
+    const nombre = p.nombre_proyecto?.toLowerCase() || "";
+    const autores = Array.isArray(p.autores)
+      ? p.autores.join(", ").toLowerCase()
+      : (p.autores?.toLowerCase?.() || "");
+    return (
+      nombre.includes(filtroNombre.toLowerCase()) &&
+      autores.includes(filtroAutor.toLowerCase()) &&
+      (filtroTipo === "" || p.proyecto === filtroTipo)
+    );
+  });
 
   const acciones = [
     {
@@ -136,7 +153,6 @@ const MirarProyectos = () => {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      {/* Menú Lateral */}
       <div className="fixed h-full w-64 bg-gray-800 text-white z-10">
         <MenuAdministrador rol="admin" />
       </div>
@@ -164,11 +180,58 @@ const MirarProyectos = () => {
           </div>
         )}
 
-        <TablaDinamica
-          datos={proyectosUnificados}
-          columnas={columnas}
-          acciones={acciones}
-        />
+        {/* Botón de búsqueda */}
+        <div className="relative mb-4 flex justify-end">
+          <button
+            onClick={() => setMostrarFiltros(!mostrarFiltros)}
+            className="text-gray-600 hover:text-black transition-transform duration-300 text-2xl"
+          >
+            <FiSearch />
+          </button>
+        </div>
+
+        {/* Filtros con animación */}
+        <div
+          className={`transition-all duration-500 ease-in-out overflow-hidden ${
+            mostrarFiltros ? "max-h-40 opacity-100 translate-y-0" : "max-h-0 opacity-0 -translate-y-2"
+          }`}
+        >
+          <div className="mt-4 flex flex-col md:flex-row gap-4">
+            <input
+              type="text"
+              placeholder="Buscar por nombre del proyecto..."
+              className="p-2 border rounded w-full md:w-1/3"
+              value={filtroNombre}
+              onChange={(e) => setFiltroNombre(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="Buscar por autor o código..."
+              className="p-2 border rounded w-full md:w-1/3"
+              value={filtroAutor}
+              onChange={(e) => setFiltroAutor(e.target.value)}
+            />
+            <select
+              value={filtroTipo}
+              onChange={(e) => setFiltroTipo(e.target.value)}
+              className="p-2 border rounded w-full md:w-1/3"
+            >
+              <option value="">Todos los tipos</option>
+              <option value="Proyecto">Proyecto</option>
+              <option value="Podcast">Podcast</option>
+              <option value="Investigacion">Investigacion</option>
+              <option value="Simulacion">Simulacion</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="mt-6 bg-white rounded-lg shadow-sm overflow-hidden">
+          <TablaDinamica
+            datos={{ data: datosFiltrados }}
+            columnas={columnas}
+            acciones={acciones}
+          />
+        </div>
       </main>
     </div>
   );
