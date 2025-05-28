@@ -79,7 +79,7 @@ const Home = () => {
             title="FÍSICA"
             image="/img/physics.png"
             path="/Fisica"
-            className="hover:shadow-xl transition-all duration-300"
+            className="hover:shadow-xl transition-all duration-300 "
           />
           <CategoryBox
             title="ING CIVIL"
@@ -117,7 +117,7 @@ const Home = () => {
             </p>
             <button
               onClick={() => navigate("/quienes-somos")}
-              className="px-8 py-4 bg-white text-[#3C64C9] rounded-full font-bold text-lg hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl cursor-pointer"
+              className="px-8 py-4 bg-white text-[#3C64C9] rounded-full font-bold text-lg hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl cursor-pointer hover:scale-110"
             >
               Conoce más sobre nosotros
             </button>
@@ -149,7 +149,7 @@ const Home = () => {
           <div>
             <h4 className="text-xl font-semibold mb-4">Enlaces rápidos</h4>
             <ul className="space-y-2">
-              <li><a href="/simulaciones" className="hover:text-blue-300 transition">Simulaciones</a></li>
+              <li><a href="/simulaciones" className="hover:text-blue-300 transition ">Simulaciones</a></li>
               <li><a href="/investigaciones" className="hover:text-blue-300 transition">Investigaciones</a></li>
               <li><a href="/podcast" className="hover:text-blue-300 transition">Podcast</a></li>
               <li><a href="/quienes-somos" className="hover:text-blue-300 transition">Quiénes somos</a></li>

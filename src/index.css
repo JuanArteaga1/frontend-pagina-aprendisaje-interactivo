@@ -241,6 +241,7 @@ h2 {
 
 .card-back {
   background-color: #3C64C9;
+  color: white;
   transform: rotateY(180deg);
   display: flex;
   flex-direction: column;
