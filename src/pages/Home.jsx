@@ -43,7 +43,7 @@ const Home = () => {
               link: "/investigaciones"
             },
             {
-              src: "/img/DSC04945.jpg",
+              src: "/img/IMG_4525.jpeg",
               alt: "Imagen 3",
               buttonText: "Explora nuestro podcast",
               link: "/podcast"

@@ -209,11 +209,7 @@ const MisProyectos = () => {
               strokeWidth={2}
             >
               {mostrarFiltros ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               ) : (
                 <path
                   strokeLinecap="round"
@@ -296,6 +292,7 @@ const MisProyectos = () => {
             </div>
           </div>
         )}
+
         <div className="mt-5 bg-white rounded-lg shadow-sm overflow-hidden"></div>
         <div className="bg-white rounded-lg shadow-sm overflow-hidden">
           <TablaDinamica datos={{ data: datosFiltrados }} columnas={columnas} acciones={acciones} />

@@ -12,12 +12,11 @@ function SubirPodcast() {
   const { sigout, errors: PodcastErros, mensaje, setMensaje, setErrors } = usePodcast();
   const portadaPreview = watch("portada")?.[0];
   const { TraerCategoria, Categoria } = UseCategoria();
-  const [setRegistroExitoso] = useState(false);
+  const [, setRegistroExitoso] = useState(false);
   const { Usuario } = useLogin();
   const portada = watch('portada');
   const MAX_SIZE = 10 * 1024 * 1024;
 
-  // Configuración de campos dinámicos para autores
   const { fields, append, remove } = useFieldArray({
     control,
     name: "autores"
@@ -49,11 +48,8 @@ function SubirPodcast() {
     const formData = new FormData();
     formData.append("nombre_proyecto", data.nombre_proyecto);
     formData.append("descripcion", data.descripcion);
-
-    // Concatenar nombres de autores
     const autoresFormateados = data.autores.map(a => a.nombre).join(", ");
     formData.append("autores", autoresFormateados);
-
     formData.append("fechaPublicacion", data.fecha);
     formData.append("materia", data.materia);
     formData.append("UrlAudio", data.audioLink);
@@ -103,7 +99,6 @@ function SubirPodcast() {
               className="space-y-6 bg-white p-8 rounded-2xl shadow-xl border border-gray-100"
             >
               <div className="space-y-6">
-                {/* Título */}
                 <div className="space-y-2">
                   <label className="block text-3x1 font-semibold text-gray-800">Título del Podcast</label>
                   <input
@@ -115,7 +110,6 @@ function SubirPodcast() {
                   {errors.nombre_proyecto && <p className="text-red-500 font-semibold text-sm">El titulo es requerido</p>}
                 </div>
 
-                {/* Descripción */}
                 <div className="space-y-2">
                   <label className="block text-3x1 font-semibold text-gray-800">Descripción</label>
                   <textarea
@@ -126,7 +120,6 @@ function SubirPodcast() {
                   {errors.descripcion && <p className="text-red-500 font-semibold text-sm">La descripcion es requerida</p>}
                 </div>
 
-                {/* Autores dinámicos */}
                 <div className="space-y-2">
                   <label className="block text-3x1 font-semibold text-gray-800">Autores</label>
                   {fields.map((field, index) => (
@@ -157,7 +150,6 @@ function SubirPodcast() {
                   {errors.autores && <p className="text-red-500 font-semibold text-sm">{errors.autores.message}</p>}
                 </div>
 
-                {/* Fecha */}
                 <div className="space-y-2">
                   <label className="block text-3x1 font-semibold text-gray-800">Fecha de Publicación</label>
                   <input
@@ -168,7 +160,6 @@ function SubirPodcast() {
                   {errors.fecha && <p className="text-red-500 font-semibold text-sm">La fecha es requerida</p>}
                 </div>
 
-                {/* Categoría */}
                 <div>
                   <label className="block text-base font-semibold text-gray-800 mb-1">Categoría</label>
                   <select
@@ -185,7 +176,6 @@ function SubirPodcast() {
                   {errors.categoriaId && <p className="text-red-500 font-semibold text-sm">La categoria es requerida</p>}
                 </div>
 
-                {/* Materia */}
                 <div className="space-y-2">
                   <label className="block text-3x1 font-semibold text-gray-800">Materia</label>
                   <select
@@ -200,11 +190,9 @@ function SubirPodcast() {
                   {errors.materia && <p className="text-red-500 font-semibold text-sm">La materia es requerida</p>}
                 </div>
 
-                {/* Archivos */}
                 <div className="space-y-6">
                   <h3 className="text-lg font-semibold text-gray-800 border-b border-gray-300 border-opacity-40 pb-2">Cargar Archivos</h3>
 
-                  {/* Audio */}
                   <div className="space-y-2">
                     <label className="block text-3x1 font-semibold text-gray-800">Link del Audio</label>
                     <input
@@ -216,7 +204,6 @@ function SubirPodcast() {
                     {errors.audioLink && <p className="text-red-500 font-semibold text-sm">El link del audio es requerido</p>}
                   </div>
 
-                  {/* Portada */}
                   <div className="space-y-2">
                     <label className="block text-3x1 font-semibold text-gray-800">Subir Portada</label>
                     <label className="flex flex-col items-center justify-center border-2 border-dashed border-gray-200 rounded-xl p-6 cursor-pointer hover:border-indigo-500 bg-gray-50 hover:bg-indigo-50 transition-colors group">
@@ -248,7 +235,6 @@ function SubirPodcast() {
                     </label>
                   </div>
 
-                  {/* Vista previa */}
                   {portadaPreview && (
                     <div className="mt-4">
                       <h4 className="text-sm font-semibold text-gray-800 mb-2">Vista previa de la portada:</h4>
@@ -262,7 +248,6 @@ function SubirPodcast() {
                 </div>
               </div>
 
-              {/* Botón */}
               <div className="flex justify-center pt-4">
                 <button
                   type="submit"

@@ -1,5 +1,5 @@
 import React from "react";
-import imagenAyuda from "../img/compas.jpg"
+
 
 const AyudaT = () => {
   return (
@@ -9,7 +9,7 @@ const AyudaT = () => {
       
       {/* Imagen del equipo */}
       <img 
-        src={imagenAyuda}
+        src="../img/grupo.jpg"
         alt="Equipo de Desarrollo" 
         className="w-2/3 md:w-1/3 rounded-lg shadow-lg mb-6"
       />
