@@ -104,12 +104,17 @@ const DetalleProyecto = () => {
                     <div className="flex overflow-x-auto gap-4 pb-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
                         {proyecto.video && (
                             <div className="flex-shrink-0 w-80 h-48 md:w-96 md:h-56 rounded-xl overflow-hidden shadow-md">
-                                <video controls className="w-full h-full object-cover">
-                                    <source src={proyecto.video} type="video/mp4" />
-                                    Tu navegador no soporta el video.
-                                </video>
+                                <iframe
+                                    className="w-full h-full"
+                                    src={proyecto.video.replace("watch?v=", "embed/")}
+                                    title="Video de YouTube"
+                                    frameBorder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                ></iframe>
                             </div>
                         )}
+
                         {proyecto.imagenes?.map((img, idx) => {
                             const rutaLimpiaImg = img.replace(/\\/g, "/");
                             const imagenURL = `http://localhost:3000/${rutaLimpiaImg}`;
