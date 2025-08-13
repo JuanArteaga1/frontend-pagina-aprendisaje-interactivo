@@ -66,7 +66,7 @@ const SubirAPK = () => {
                     ))}
                 </div>
             )}
-            
+
             {/* Menú Lateral */}
             <MenuLateral rol="docente" />
 
@@ -158,6 +158,47 @@ const SubirAPK = () => {
                                 )}
                             </div>
 
+                            {/* Autores dinámicos con opción de quitar */}
+                            <div>
+                                <label className="block text-3x1 font-semibold text-gray-800 mb-1">Autores</label>
+                                {watch('autores')?.map((_, index) => (
+                                    <div key={index} className="flex items-center gap-2 mb-2">
+                                        <input
+                                            {...register(`autores.${index}`, { required: true })}
+                                            type="text"
+                                            placeholder={`Autor ${index + 1}`}
+                                            className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-1"
+                                        />
+                                        {watch('autores').length > 1 && (
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    const currentAutores = [...watch('autores')];
+                                                    currentAutores.splice(index, 1);
+                                                    reset({ ...watch(), autores: currentAutores });
+                                                }}
+                                                className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600 transition-colors"
+                                            >
+                                                -
+                                            </button>
+                                        )}
+                                    </div>
+                                ))}
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        const currentAutores = watch('autores') || [];
+                                        reset({ ...watch(), autores: [...currentAutores, ""] });
+                                    }}
+                                    className="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600 transition-colors"
+                                >
+                                    +
+                                </button>
+                                {errors.autores && (
+                                    <p className="text-red-500 font-semibold text-sm">Se requiere al menos un autor</p>
+                                )}
+                            </div>
+
                             <div className="md:col-span-2">
                                 <label className="block text-base font-semibold text-gray-800 mb-1">Descripción técnica</label>
                                 <textarea
@@ -184,6 +225,25 @@ const SubirAPK = () => {
                                 </select>
                                 {errors.materia && (<p className="text-red-500 font-semibold text-sm">La materia es requerida</p>)}
                             </div>
+                        </div>
+                        {/* Link YouTube */}
+                        <div>
+                            <label className="block text-base font-semibold text-gray-800 mb-1">Link de YouTube</label>
+                            <input
+                                {...register('youtubeLink', {
+                                    validate: (value) => {
+                                        if (!value) return true;
+                                        return /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/.test(value) || 'Ingrese un enlace válido de YouTube';
+                                    }
+                                })}
+                                type="url"
+                                name="youtubeLink"
+                                placeholder="https://www.youtube.com"
+                                className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
+                            />
+                            {errors.youtubeLink && (
+                                <p className="text-red-500 font-semibold text-sm">{errors.youtubeLink.message}</p>
+                            )}
                         </div>
 
                         <div className="space-y-4">
