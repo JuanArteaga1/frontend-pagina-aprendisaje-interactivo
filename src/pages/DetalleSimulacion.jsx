@@ -90,24 +90,21 @@ const DetalleSimulacion = () => {
                     <h3 className="text-2xl font-semibold mb-4 text-gray-800 flex items-center gap-2">
                         <Video size={20} /> Galería Multimedia
                     </h3>
-
                     <div className="flex overflow-x-auto gap-4 pb-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
                         {simulacion.video && (
-                            <iframe
-                                width="560"
-                                height="315"
-                                src={simulacion.video}
-                                title="Video de simulación"
-                                frameBorder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
-                                className="rounded-lg shadow-md"
-                            />
+                            <div className="flex-shrink-0 w-80 h-48 md:w-96 md:h-56 rounded-xl overflow-hidden shadow-md">
+                                <iframe
+                                    className="w-full h-full"
+                                    src={simulacion.video.replace("watch?v=", "embed/")}
+                                    title="Video de simulación"
+                                    frameBorder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                ></iframe>
+                            </div>
                         )}
                     </div>
                 </div>
-
-
 
                 {/* Contenido informativo */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
