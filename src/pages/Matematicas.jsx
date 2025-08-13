@@ -7,6 +7,7 @@ import { UseSimulaciones } from "../context/SimulacionesContex";
 const Matematicas = () => {
   const { Proyectos, TraerProyectos } = useProyectos();
   const { Simulaciones, TraerSimulaciones } = UseSimulaciones();
+  const apiUrl = import.meta.env.VITE_RUTA1;
 
   useEffect(() => {
     TraerProyectos();
@@ -18,7 +19,7 @@ const Matematicas = () => {
     .filter(sim => sim.materia?.nombre === "Matematicas")
     .map(sim => ({
       nombre: sim.nombre_proyecto,
-      imagen: `http://localhost:3000/uploads/${sim.urlimg?.replace(/\\/g, "/").split("uploads/")[1]}`,
+      imagen: `${apiUrl}/uploads/${sim.urlimg?.replace(/\\/g, "/").split("uploads/")[1]}`,
       tipo: "Simulación",
       categoria: "Matematicas",
       autores: sim.autores,
@@ -30,7 +31,7 @@ const Matematicas = () => {
     .filter(app => app.materia?.nombre === "Matematicas")
     .map(app => ({
       nombre: app.nombre_proyecto,
-      imagen: `http://localhost:3000/uploads/${app.urlimg?.replace(/\\/g, "/").split("uploads/")[1]}`,
+      imagen: `${apiUrl}/uploads/${app.urlimg?.replace(/\\/g, "/").split("uploads/")[1]}`,
       tipo: "Aplicación",
       categoria: "Matematicas",
       autores: app.autores,

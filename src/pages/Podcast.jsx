@@ -7,6 +7,7 @@ import { usePodcast } from "../context/PodcastContext";
 const Podcast = () => {
   const [seccionActual, setSeccionActual] = useState("Podcasts");
   const { TraerPodcast, Podcast } = usePodcast();
+  const apiUrl = import.meta.env.VITE_RUTA1;
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
 
@@ -49,7 +50,7 @@ const Podcast = () => {
         {Podcast?.data.map((ep) => {
           const rutaLimpia = ep.ArchivoImagen.replace(/\\/g, "/");
           console.log(rutaLimpia)
-          const imagenURL = `http://localhost:3000/uploads/${rutaLimpia?.split("uploads/")[1]}`;;
+          const imagenURL = `${apiUrl}/uploads/${rutaLimpia?.split("uploads/")[1]}`;
 
           return (
             <div key={ep._id} className="card">

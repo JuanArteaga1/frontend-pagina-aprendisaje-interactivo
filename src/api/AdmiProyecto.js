@@ -1,6 +1,6 @@
 import axios from "axios";
+const Api = import.meta.env.VITE_RUTA1;// tu IP local aquí
 
-const Api = 'http://localhost:3000'
 
 export const subirProyectosAPI = Proyectos => axios.post(`${Api}/Proyectos`, Proyectos)
 

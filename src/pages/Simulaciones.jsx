@@ -8,6 +8,7 @@ const Simulaciones = () => {
     const navigate = useNavigate();
     const { Simulaciones, TraerSimulaciones } = UseSimulaciones();
     const [loading, setLoading] = useState(true);
+    const apiUrl = import.meta.env.VITE_RUTA1;
 
 
     useEffect(() => {
@@ -66,7 +67,7 @@ const Simulaciones = () => {
                             <div className="cards-container">
                                 {items.map((simulacion, i) => {
                                     const rutaLimpia = simulacion.urlimg?.replace(/\\/g, "/");
-                                    const imagenURL = `http://localhost:3000/uploads/${rutaLimpia?.split("uploads/")[1]}`;
+                                    const imagenURL = `${apiUrl}/uploads/${rutaLimpia?.split("uploads/")[1]}`;
 
                                     return (
                                         <div className="card" key={i}>

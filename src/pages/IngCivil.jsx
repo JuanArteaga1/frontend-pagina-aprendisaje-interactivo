@@ -8,6 +8,7 @@ const IngCivil = () => {
   // Obtener todos los proyectos desde el contexto
   const { Proyectos, TraerProyectos } = useProyectos();
   const { Simulaciones, TraerSimulaciones } = UseSimulaciones();
+  const apiUrl = import.meta.env.VITE_RUTA1;
 
   useEffect(() => {
     TraerProyectos();
@@ -20,7 +21,7 @@ const IngCivil = () => {
     .filter(sim => sim.materia?.nombre === "ingenieria civil")
     .map(sim => ({
       nombre: sim.nombre_proyecto,
-      imagen: `http://localhost:3000/uploads/${sim.urlimg?.replace(/\\/g, "/").split("uploads/")[1]}`,
+      imagen: `${apiUrl}/uploads/${sim.urlimg?.replace(/\\/g, "/").split("uploads/")[1]}`,
       tipo: "Simulación",
       categoria: "ingenieria civil",
       autores: sim.autores,
@@ -32,7 +33,7 @@ const IngCivil = () => {
     .filter(app => app.materia?.nombre === "ingenieria civil")
     .map(app => ({
       nombre: app.nombre_proyecto,
-      imagen: `http://localhost:3000/uploads/${app.urlimg?.replace(/\\/g, "/").split("uploads/")[1]}`,
+      imagen: `${apiUrl}/uploads/${app.urlimg?.replace(/\\/g, "/").split("uploads/")[1]}`,
       tipo: "Aplicación",
       categoria: "ingenieria civil",
       autores: app.autores,

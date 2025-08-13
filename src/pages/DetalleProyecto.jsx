@@ -7,6 +7,7 @@ import { Download, FileText, CalendarDays, Users, Video, Image } from "lucide-re
 const DetalleProyecto = () => {
     const { id } = useParams();
     const { Proyectos, TraerProyectos } = useProyectos();
+    const apiUrl = import.meta.env.VITE_RUTA1;
 
     useEffect(() => {
         const proyectoExiste = Proyectos.some(p => p._id === id);
@@ -40,12 +41,12 @@ const DetalleProyecto = () => {
     }
 
     const rutaLimpia = proyecto.urlimg?.replace(/\\/g, "/");
-    const imagenURL = `http://localhost:3000/uploads/${rutaLimpia?.split("uploads/")[1]}`;
+    const imagenURL = `${apiUrl}/uploads/${rutaLimpia?.split("uploads/")[1]}`;
     const rutaAPK = proyecto.urlArchivoapk?.replace(/\\/g, "/");
     let archivoURL = "";
     if (proyecto.urlArchivoapk) {
         const rutaAPK = proyecto.urlArchivoapk.replace(/\\/g, "/");
-        archivoURL = `http://localhost:3000/uploads/${rutaAPK.split("uploads/")[1]}`;
+        archivoURL = `${apiUrl}/uploads/${rutaAPK.split("uploads/")[1]}`;
     }
 
     const handleDescarga = () => {
@@ -166,7 +167,7 @@ const DetalleProyecto = () => {
                         </h3>
                         {proyecto.urlDoc ? (() => {
                             const rutaDoc = proyecto.urlDoc.replace(/\\/g, "/");
-                            const docURL = `http://localhost:3000/uploads/${rutaDoc.split("uploads/")[1]}`;
+                            const docURL = `${apiUrl}/uploads/${rutaDoc.split("uploads/")[1]}`;
                             return (
                                 <a
                                     href={docURL}

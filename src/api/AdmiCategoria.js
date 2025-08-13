@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const Api = 'http://localhost:3000'
+const Api = import.meta.env.VITE_RUTA1; // tu IP local aquí
 
 export const subirCategoriaAPI = Categoria => axios.post(`${Api}/Categorias`, Categoria) 
 export const GetAllCategoria = () => axios.get(`${Api}/Categorias`)

@@ -10,6 +10,7 @@ const Investigaciones = () => {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(null);
+  const apiUrl = import.meta.env.VITE_RUTA1;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -138,12 +139,12 @@ const Investigaciones = () => {
                         .map((inv) => {
                           const rutaImagen = normalizePath(inv.urlimg) || "";
                           const urlImagen = rutaImagen
-                            ? `http://localhost:3000/uploads/${rutaImagen.split("uploads/").pop()}`
+                            ? `${apiUrl}/uploads/${rutaImagen.split("uploads/").pop()}`
                             : "img/placeholder.jpg";
 
                           const rutaPDF = normalizePath(inv.urlDoc) || "";
                           const urlPDF = rutaPDF
-                            ? `http://localhost:3000/uploads/${rutaPDF.split("uploads/").pop()}`
+                            ? `${apiUrl}/uploads/${rutaPDF.split("uploads/").pop()}`
                             : "#";
 
                           return (

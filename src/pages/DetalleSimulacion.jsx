@@ -7,6 +7,8 @@ import { Download, FileText, CalendarDays, Users, Video, Image } from "lucide-re
 const DetalleSimulacion = () => {
     const { id } = useParams();
     const { Simulaciones, TraerSimulaciones } = UseSimulaciones();
+    const apiUrl = import.meta.env.VITE_RUTA1;
+
 
     useEffect(() => {
         const existe = Simulaciones.some(s => s._id === id);
@@ -38,10 +40,10 @@ const DetalleSimulacion = () => {
     }
 
     const rutaLimpia = simulacion.urlimg?.replace(/\\/g, "/");
-    const imagenURL = `http://localhost:3000/uploads/${rutaLimpia?.split("uploads/")[1]}`;
+    const imagenURL = `${apiUrl}/uploads/${rutaLimpia?.split("uploads/")[1]}`;
 
     const rutaAPK = simulacion.urlArchivoapk?.replace(/\\/g, "/");
-    const archivoURL = `http://localhost:3000/uploads/${rutaAPK.replace(/\\/g, "/").split("uploads/")[1]}`;
+    const archivoURL = `${apiUrl}/uploads/${rutaAPK.split("uploads/")[1]}`;
 
     return (
         <>
@@ -126,7 +128,7 @@ const DetalleSimulacion = () => {
                         </h3>
                         {simulacion.urlDoc ? (() => {
                             const rutaDoc = simulacion.urlDoc.replace(/\\/g, "/");
-                            const docURL = `http://localhost:3000/uploads/${rutaDoc.split("uploads/")[1]}`;
+                            const docURL =  `${apiUrl}/uploads/${rutaDoc.split("uploads/")[1]}`;
                             return (
                                 <a
                                     href={docURL}
