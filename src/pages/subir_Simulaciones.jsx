@@ -84,6 +84,8 @@ const SubirAPK = () => {
                             formData.append("materia", data.materia);
                             formData.append("Usuario", Usuario.Id);
                             formData.append("categoriaId", data.categoriaId);
+                            formData.append("youtubeLink", data.youtubeLink || "");
+
 
                             if (data.urlArchivoapk && data.urlArchivoapk[0]) {
                                 formData.append("urlArchivoapk", data.urlArchivoapk[0]);
@@ -116,16 +118,45 @@ const SubirAPK = () => {
                                 {errors.nombre_proyecto && (<p className="text-red-500 font-semibold text-sm">El nombre es requerido</p>)}
                             </div>
 
+                            {/* Autores dinámicos con opción de quitar */}
                             <div>
-                                <label className="block text-base font-semibold text-gray-800 mb-1">Desarrolladores</label>
-                                <input
-                                    {...register('autores', { required: true })}
-                                    type="text"
-                                    name="autores"
-                                    className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
-                                    placeholder="Equipo de desarrollo"
-                                />
-                                {errors.autores && (<p className="text-red-500 font-semibold text-sm">El autor es requerido</p>)}
+                                <label className="block text-3x1 font-semibold text-gray-800 mb-1">Autores</label>
+                                {Array.isArray(watch('autores')) ? watch('autores').map((_, index) => (
+                                    <div key={index} className="flex items-center gap-2 mb-2">
+                                        <input
+                                            {...register(`autores.${index}`, { required: true })}
+                                            type="text"
+                                            placeholder={`Autor ${index + 1}`}
+                                            className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-1"
+                                        />
+                                        {watch('autores').length > 1 && (
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    const currentAutores = [...watch('autores')];
+                                                    currentAutores.splice(index, 1);
+                                                    reset({ ...watch(), autores: currentAutores });
+                                                }}
+                                                className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600 transition-colors"
+                                            >
+                                                -
+                                            </button>
+                                        )}
+                                    </div>
+                                )) : null}
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        const currentAutores = watch('autores') || [];
+                                        reset({ ...watch(), autores: [...currentAutores, ""] });
+                                    }}
+                                    className="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600 transition-colors"
+                                >
+                                    +
+                                </button>
+                                {errors.autores && (
+                                    <p className="text-red-500 font-semibold text-sm">Se requiere al menos un autor</p>
+                                )}
                             </div>
 
                             <div>
@@ -155,47 +186,6 @@ const SubirAPK = () => {
                                 </select>
                                 {errors.categoriaId && (
                                     <p className="text-red-500 font-semibold text-sm">Categoria es requerida</p>
-                                )}
-                            </div>
-
-                            {/* Autores dinámicos con opción de quitar */}
-                            <div>
-                                <label className="block text-3x1 font-semibold text-gray-800 mb-1">Autores</label>
-                                {watch('autores')?.map((_, index) => (
-                                    <div key={index} className="flex items-center gap-2 mb-2">
-                                        <input
-                                            {...register(`autores.${index}`, { required: true })}
-                                            type="text"
-                                            placeholder={`Autor ${index + 1}`}
-                                            className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-1"
-                                        />
-                                        {watch('autores').length > 1 && (
-                                            <button
-                                                type="button"
-                                                onClick={() => {
-                                                    const currentAutores = [...watch('autores')];
-                                                    currentAutores.splice(index, 1);
-                                                    reset({ ...watch(), autores: currentAutores });
-                                                }}
-                                                className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600 transition-colors"
-                                            >
-                                                -
-                                            </button>
-                                        )}
-                                    </div>
-                                ))}
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        const currentAutores = watch('autores') || [];
-                                        reset({ ...watch(), autores: [...currentAutores, ""] });
-                                    }}
-                                    className="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600 transition-colors"
-                                >
-                                    +
-                                </button>
-                                {errors.autores && (
-                                    <p className="text-red-500 font-semibold text-sm">Se requiere al menos un autor</p>
                                 )}
                             </div>
 
