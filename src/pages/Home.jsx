@@ -27,7 +27,7 @@ const Home = () => {
       <Navbar />
 
       {/* Carrusel Hero */}
-      <div className="hero w-full relative max-h-[700px] overflow-hidden shadow-lg">
+      <div className="hero w-full relative max-h-[1500px] overflow-hidden shadow-lg">
         <Slider {...settings} className="h-full">
           {[
             {
