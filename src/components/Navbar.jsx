@@ -61,7 +61,7 @@ const Navbar = () => {
                                 to="/investigaciones"
                                 className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md  font-medium transition-colors duration-200 hover:scale-110"
                             >
-                                Investigaciones
+                                Proyecto Investigación
                             </Link>
                             <Link
                                 to="/podcast"
