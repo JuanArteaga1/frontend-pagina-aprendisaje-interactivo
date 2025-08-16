@@ -33,8 +33,8 @@ function SubirPodcast() {
   ];
 
   // NUEVO: Funciones de navegación
-  const camposPaso1 = ["nombre_proyecto", "descripcion", "autores", "fecha", "categoriaId", "materia"];
-  const camposPaso2 = ["audioLink"];
+  const camposPaso1 = ["nombre_proyecto", "descripcion", "autores", "fecha"];
+  const camposPaso2 = ["audioLink", "categoriaId", "materia"];
   const camposPaso3 = ["portada"];
 
   const siguientePaso = async () => {
@@ -99,7 +99,7 @@ function SubirPodcast() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100 overflow-hidden">
+    <div className="flex min-h-screen bg-gray-100">
       {mensaje && (
         <div className="fixed top-5 right-5 z-50">
           <Alerta tipo="exito" mensaje={mensaje} onClose={() => setMensaje(null)} />
