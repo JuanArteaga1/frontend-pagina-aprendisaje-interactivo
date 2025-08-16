@@ -114,45 +114,46 @@ function SubirPodcast() {
         </div>
       )}
 
-      <div className="fixed h-full w-64 bg-white shadow-lg z-10">
+      <div>
         <MenuLateral rol="docente" />
       </div>
 
-      <div className="flex-1 ml-64 overflow-y-auto">
-        <div className="p-8 pl-16">
-          <div className="max-w-2xl mx-auto">
+      <div className="w-full">
+        <div className="p-4 md:p-8 md:pl-16">
+          <div className="w-full md:max-w-2xl mx-auto">
 
             {/* Indicador de pasos */}
             <div className="mb-12">
-              <div className="flex flex-col sm:flex-row sm:justify-between items-center relative w-full">
-                {/* Línea divisoria */}
-                {/* Horizontal en sm+ y vertical en móviles */}
-                <div className="absolute sm:left-0 sm:right-0 sm:top-1/3 sm:h-1 sm:w-auto h-full w-1 bg-gray-300 z-0 sm:mx-6"></div>
+              <div className="flex justify-between items-center relative w-full">
+                {/* Línea divisoria horizontal */}
+                <div className="absolute left-0 right-0 h-1 bg-gray-300 z-0 top-1/3 mx-6"></div>
 
                 {pasosInfo.map((paso) => (
-                  <React.Fragment key={paso.id}>
-                    <div className="flex flex-col items-center relative z-10 flex-1 mb-6 sm:mb-0">
-                      <span
-                        className={`w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full text-white transition-colors duration-300
-              ${pasoActual === paso.id ? 'bg-blue-600 shadow-md' : 'bg-gray-400'}`}
-                      >
-                        {React.cloneElement(paso.icono, { className: "w-5 h-5 sm:w-6 sm:h-6" })}
-                      </span>
-                      <div
-                        className={`text-center mt-2 text-xs sm:text-sm whitespace-nowrap
-              ${pasoActual === paso.id ? 'text-blue-600 font-semibold' : 'text-gray-600'}`}
-                      >
-                        {paso.titulo}
-                      </div>
+                  <div
+                    key={paso.id}
+                    className="flex flex-col items-center relative z-10 flex-1"
+                  >
+                    <span
+                      className={`w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full text-white transition-colors duration-300
+          ${pasoActual === paso.id ? 'bg-blue-600 shadow-md' : 'bg-gray-400'}`}
+                    >
+                      {React.cloneElement(paso.icono, { className: "w-5 h-5 sm:w-6 sm:h-6" })}
+                    </span>
+                    <div
+                      className={`text-center mt-2 text-xs sm:text-sm whitespace-nowrap
+          ${pasoActual === paso.id ? 'text-blue-600 font-semibold' : 'text-gray-600'}`}
+                    >
+                      {paso.titulo}
                     </div>
-                  </React.Fragment>
+                  </div>
                 ))}
               </div>
             </div>
-            
+
+            {/* Formulario */}
             <form
               onSubmit={handleSubmit(onSubmit)}
-              className="space-y-6 bg-white p-8 rounded-2xl shadow-xl border border-gray-100"
+              className="space-y-6 bg-white p-6 md:p-8 rounded-2xl shadow-xl border border-gray-100"
             >
               {/* Contenido del Paso 1 */}
               {pasoActual === 1 && (
