@@ -36,8 +36,8 @@ const SubirAPK = () => {
 
     const pasosInfo = [
         { id: 1, titulo: 'Información General', icono: <FileText className="w-5 h-5 mr-2" /> },
-        { id: 2, titulo: 'Detalles Adicionales', icono: <Sliders className="w-5 h-5 mr-2" /> },
-        { id: 3, titulo: 'Carga de Archivos', icono: <UploadCloud className="w-5 h-5 mr-2" /> },
+        { id: 2, titulo: 'Detalles', icono: <Sliders className="w-5 h-5 mr-2" /> },
+        { id: 3, titulo: 'Archivos', icono: <UploadCloud className="w-5 h-5 mr-2" /> },
     ];
 
 
@@ -113,31 +113,30 @@ const SubirAPK = () => {
                 <div className="max-w-4xl mx-auto">
                     {/* Indicador de pasos con línea divisoria y subtítulos */}
                     <div className="mb-12">
-                        <div className="flex justify-center items-center relative">
-                            {/* La línea divisoria */}
-                            <div className="absolute w-[80%] h-1 bg-gray-300 z-0 top-1/3"></div>
+                        <div className="flex justify-between items-center relative w-full">
+                            {/* Línea divisoria */}
+                            <div className="absolute left-0 right-0 h-1 bg-gray-300 z-0 top-1/3 mx-6"></div>
 
                             {pasosInfo.map((paso) => (
                                 <React.Fragment key={paso.id}>
-                                    {/* El contenedor de cada paso */}
-                                    <div className="flex flex-col items-center relative z-10 px-6">
+                                    {/* Cada paso ocupa el mismo espacio */}
+                                    <div className="flex flex-col items-center relative z-10 flex-1">
                                         <span
-                                            className={`w-12 h-12 flex items-center justify-center rounded-full text-white transition-colors duration-300
-          ${pasoActual === paso.id ? 'bg-blue-600 shadow-md' : 'bg-gray-400'}`}
+                                            className={`w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full text-white transition-colors duration-300
+                  ${pasoActual === paso.id ? 'bg-blue-600 shadow-md' : 'bg-gray-400'}`}
                                         >
                                             {/* Icono dentro del círculo */}
-                                            {React.cloneElement(paso.icono, { className: "w-6 h-6" })}
+                                            {React.cloneElement(paso.icono, { className: "w-5 h-5 sm:w-6 sm:h-6" })}
                                         </span>
                                         <div
-                                            className={`text-center mt-2 text-sm whitespace-nowrap 
-          ${pasoActual === paso.id ? 'text-blue-600 font-semibold' : 'text-gray-600'}`}
+                                            className={`text-center mt-2 text-xs sm:text-sm whitespace-nowrap
+                  ${pasoActual === paso.id ? 'text-blue-600 font-semibold' : 'text-gray-600'}`}
                                         >
                                             {paso.titulo}
                                         </div>
                                     </div>
                                 </React.Fragment>
                             ))}
-
                         </div>
                     </div>
 
