@@ -30,8 +30,8 @@ const SubirAPK = () => {
     const portada = watch('portada');
     const urlDoc = watch('urlDoc');
 
-    const camposPaso1 = ['nombre_proyecto', 'autores', 'fechaPublicacion', 'categoriaId', 'descripcion'];
-    const camposPaso2 = ['materia', 'youtubeLink'];
+    const camposPaso1 = ['nombre_proyecto', 'autores', 'fechaPublicacion', 'descripcion'];
+    const camposPaso2 = ['materia', 'categoriaId', 'youtubeLink'];
     const camposPaso3 = ['urlArchivoapk', 'portada', 'urlDoc'];
 
     const pasosInfo = [
@@ -305,15 +305,15 @@ const SubirAPK = () => {
                                     <label className="block text-base font-semibold text-gray-800 mb-1">Link de YouTube</label>
                                     <input
                                         {...register('youtubeLink', {
-                                            validate: (value) => {
-                                                if (!value) return true;
-                                                return /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/.test(value) || 'Ingrese un enlace válido de YouTube';
-                                            }
+                                            required: 'El enlace de YouTube es obligatorio',
+                                            pattern: {
+                                                value: /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/,
+                                                message: 'Ingrese un enlace válido de YouTube',
+                                            },
                                         })}
                                         type="url"
-                                        name="youtubeLink"
                                         placeholder="https://www.youtube.com"
-                                        className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
+                                        className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                                     />
                                     {errors.youtubeLink && (
                                         <p className="text-red-500 font-semibold text-sm">{errors.youtubeLink.message}</p>

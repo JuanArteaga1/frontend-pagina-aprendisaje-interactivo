@@ -283,29 +283,49 @@ const SubirInvestigaciones = () => {
               <div className="space-y-6">
                 <h3 className="text-xl font-semibold text-gray-700">Paso 3: Cargar Archivos</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Imagen */}
-                  <label className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer">
-                    <input type="file" accept="image/*" className="hidden" {...register("portada", { required: "Se requiere una imagen" })} />
-                    {!portada?.[0] ? (
+                  {/* Imagen de portada */}
+                  <label className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      {...register("portada", { required: "Se requiere una imagen" })}
+                    />
+                    {portada?.[0] ? (
+                      <span className="text-center text-sm text-gray-700 mt-1 break-words w-full px-2">
+                        {portada[0].name}
+                      </span>
+                    ) : (
                       <>
                         <ImageIcon className="w-10 h-10 text-black opacity-50" />
-                        <span>Imagen de la portada</span>
+                        <span className="text-sm text-gray-600 mt-1">Imagen de la portada</span>
                       </>
-                    ) : (
-                      <span>{portada[0].name}</span>
+                    )}
+                    {errors.portada && (
+                      <p className="mt-1 text-red-500 text-sm text-center">{errors.portada.message}</p>
                     )}
                   </label>
 
-                  {/* PDF */}
-                  <label className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer">
-                    <input type="file" accept=".pdf" className="hidden" {...register("urlDoc", { required: "Se requiere un documento" })} />
-                    {!urlDoc?.[0] ? (
+                  {/* Documento PDF */}
+                  <label className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
+                    <input
+                      type="file"
+                      accept=".pdf"
+                      className="hidden"
+                      {...register("urlDoc", { required: "Se requiere un documento" })}
+                    />
+                    {urlDoc?.[0] ? (
+                      <span className="text-center text-sm text-gray-700 mt-1 break-words w-full px-2">
+                        {urlDoc[0].name}
+                      </span>
+                    ) : (
                       <>
                         <UploadIcon className="w-10 h-10 text-black opacity-50" />
-                        <span>Documento PDF</span>
+                        <span className="text-sm text-gray-600 mt-1">Documento PDF</span>
                       </>
-                    ) : (
-                      <span>{urlDoc[0].name}</span>
+                    )}
+                    {errors.urlDoc && (
+                      <p className="mt-1 text-red-500 text-sm text-center">{errors.urlDoc.message}</p>
                     )}
                   </label>
                 </div>
