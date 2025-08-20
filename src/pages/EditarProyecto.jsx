@@ -21,10 +21,11 @@ function EditarProyecto() {
     const MAX_SIZE = 10 * 1024 * 1024; // 10MB
 
     // Initialize default values with existing project data
-    const { register, handleSubmit, watch, formState: { errors }, trigger } = useForm({
+    const { register, handleSubmit, watch, formState: { errors }, setValue, trigger } = useForm({
         defaultValues: {
             nombre_proyecto: proyecto?.nombre_proyecto || "",
-            autores: proyecto?.autores || "",
+            // Corregido: Separa la cadena de autores por comas para crear un array.
+            autores: proyecto?.autores || [""],
             fechaPublicacion: proyecto?.fechaPublicacion?.substring(0, 16) || "",
             descripcion: proyecto?.descripcion || "",
             materia: proyecto?.materia || "",
@@ -83,7 +84,8 @@ function EditarProyecto() {
         try {
             const formData = new FormData();
             formData.append("nombre_proyecto", data.nombre_proyecto);
-            formData.append("autores", data.autores);
+            // Corregido: Convierte el array de autores a una cadena separada por comas.
+            formData.append("autores", JSON.stringify(data.autores));
             formData.append("fechaPublicacion", data.fechaPublicacion);
             formData.append("descripcion", data.descripcion);
             formData.append("materia", data.materia);
@@ -119,6 +121,17 @@ function EditarProyecto() {
 
     const handleCancel = () => {
         navigate("/misproyectos");
+    };
+
+    const handleAddAuthor = () => {
+      const currentAutores = watch('autores');
+      setValue('autores', [...currentAutores, '']);
+    };
+
+    const handleRemoveAuthor = (index) => {
+      const currentAutores = watch('autores');
+      const newAutores = currentAutores.filter((_, i) => i !== index);
+      setValue('autores', newAutores);
     };
 
     return (
@@ -178,13 +191,36 @@ function EditarProyecto() {
                                     </div>
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700">Autores</label>
-                                        <input
-                                            defaultValue={proyecto.autores}
-                                            {...register('autores', { required: true })}
-                                            type="text"
-                                            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                                        />
-                                        {errors.autores && (<p className="mt-1 text-red-500 text-sm">El autor es requerido</p>)}
+                                        {watch('autores')?.map((_, index) => (
+                                            <div key={index} className="flex items-center gap-2 mb-2">
+                                                <input
+                                                    {...register(`autores.${index}`, { required: true })}
+                                                    type="text"
+                                                    placeholder={`Autor ${index + 1}`}
+                                                    className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                                                />
+                                                {watch('autores').length > 1 && (
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleRemoveAuthor(index)}
+                                                        className="text-gray-500 hover:text-red-600 transition-colors"
+                                                    >
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-trash-2"><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /><line x1="10" x2="10" y1="11" y2="17" /><line x1="14" x2="14" y1="11" y2="17" /></svg>
+                                                    </button>
+                                                )}
+                                            </div>
+                                        ))}
+                                        <button
+                                            type="button"
+                                            onClick={handleAddAuthor}
+                                            className="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors"
+                                        >
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-plus"><path d="M5 12h14" /><path d="M12 5v14" /></svg>
+                                            Añadir autor
+                                        </button>
+                                        {errors.autores && (
+                                            <p className="mt-1 text-red-500 text-sm">Se requiere al menos un autor</p>
+                                        )}
                                     </div>
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700">Descripción</label>
@@ -269,7 +305,6 @@ function EditarProyecto() {
                         {pasoActual === 3 && (
                             <div className="space-y-6">
                                 <h3 className="text-xl font-semibold text-gray-700">Paso 3: Carga de Archivos</h3>
-                                <p className="text-gray-500 text-sm mb-4">Solo necesita subir archivos si desea reemplazar los existentes.</p>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
                                     {/* File Upload for APK */}
                                     <label className="flex flex-col items-center justify-center w-full max-w-[220px] aspect-square border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors hover:shadow-md">
@@ -278,6 +313,7 @@ function EditarProyecto() {
                                             className="hidden"
                                             accept=".apk"
                                             {...register('urlArchivoapk', {
+                                                required: "El archivo APK es obligatorio",
                                                 validate: {
                                                     tamaño: (archivos) => !archivos[0] || archivos[0].size <= MAX_SIZE || 'El archivo supera los 10MB',
                                                     tipo: (archivos) => !archivos[0] || archivos[0].name.toLowerCase().endsWith('.apk') || 'El archivo debe ser .apk',
@@ -302,6 +338,7 @@ function EditarProyecto() {
                                             className="hidden"
                                             accept="image/*"
                                             {...register('portada', {
+                                                required: "La imagen es obligatoria",
                                                 validate: {
                                                     tamaño: (archivos) => !archivos[0] || archivos[0].size <= MAX_SIZE || 'La imagen supera los 10MB',
                                                     tipo: (archivos) => !archivos[0] || /\.(jpg|jpeg|png|webp)$/i.test(archivos[0].name) || 'El archivo debe ser una imagen (.jpg, .jpeg, .png, .webp)',
@@ -326,6 +363,7 @@ function EditarProyecto() {
                                             className="hidden"
                                             accept=".pdf"
                                             {...register('urlDoc', {
+                                                required: "El documento PDF es obligatorio",
                                                 validate: {
                                                     tamaño: (archivos) => !archivos[0] || archivos[0].size <= MAX_SIZE || 'El documento es muy pesado',
                                                     tipo: (archivos) => !archivos[0] || archivos[0].name?.toLowerCase().endsWith('.pdf') || 'El archivo debe ser un PDF',
