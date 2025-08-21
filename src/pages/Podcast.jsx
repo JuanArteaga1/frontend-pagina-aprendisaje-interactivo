@@ -48,16 +48,26 @@ const Podcast = () => {
       {/* Contenedor de episodios con tarjetas interactivas */}
       <div className="flex justify-center gap-5 flex-wrap mt-8">
         {Podcast?.data.map((ep) => {
+
+          
+          
+          
+
           const rutaLimpia = ep.ArchivoImagen.replace(/\\/g, "/");
-          console.log(rutaLimpia)
+            ? ep.ArchivoImagen.replace(/\\/g, "/")
+            : null;
+
           const imagenURL = `${apiUrl}/uploads/${rutaLimpia?.split("uploads/")[1]}`;
+            ? `http://localhost:3000/uploads/${rutaLimpia.split("uploads/")[1]}`
+            : "img/default-podcast.png"; // 👈 usa una imagen por defecto si no hay portada
+
 
           return (
             <div key={ep._id} className="card">
               <div className="card-inner">
                 {/* Lado frontal */}
                 <div className="card-front">
-                  <img src={imagenURL} alt={ep.titulo} className="card-img" />
+                  <img src={imagenURL} alt={ep.nombre_proyecto} className="card-img" />
                 </div>
 
                 {/* Lado trasero */}
@@ -79,6 +89,7 @@ const Podcast = () => {
             </div>
           );
         })}
+
       </div>
     </div>
   );

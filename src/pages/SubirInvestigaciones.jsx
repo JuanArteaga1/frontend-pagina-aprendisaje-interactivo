@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
-import subirInvestigacionesImg from "../img/Subir_Investigaciones.jpg";
 import MenuLateral from "../components/MenuAdmi_Doc";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import Alerta from "../components/AlertasDocente";
 import { useLogin } from "../context/LoginContext";
-
-import { ImageIcon, UploadIcon } from "lucide-react";
-
+import { ImageIcon, UploadIcon, FileText, Sliders, UploadCloud, ArrowRight, ArrowLeft } from "lucide-react";
 import { useInvestigacion } from "../context/InvestigacionContext";
 
 const SubirInvestigaciones = () => {
@@ -14,49 +11,67 @@ const SubirInvestigaciones = () => {
     register,
     handleSubmit,
     watch,
-    setValue,
     control,
     formState: { errors },
+    trigger,
   } = useForm({
     defaultValues: {
-      autores: [""], // iniciamos con un autor vacío
+      autores: [{ nombre: "" }],
     },
   });
-  const { sigout, errors: InvestigacionErrors, mensaje, setMensaje, setErrors } =
-    useInvestigacion();
+
+  const { fields, append, remove } = useFieldArray({ control, name: "autores" });
+
+  const { sigout, errors: InvestigacionErrors, mensaje, setMensaje, setErrors } = useInvestigacion();
+  const { Usuario } = useLogin();
   const [registroExitoso, setRegistroExitoso] = useState(false);
-  const { Usuario, setUsuario } = useLogin();
-  const MAX_SIZE = 10 * 1024 * 1024; // 10MB
+  const [pasoActual, setPasoActual] = useState(1);
+
+  const MAX_SIZE = 10 * 1024 * 1024;
   const portada = watch("portada");
   const urlDoc = watch("urlDoc");
 
-  const handleFileChange = (e, name) => {
-    const file = e.target.files[0];
-    if (file) {
-      setValue(name, file); // react-hook-form controla el archivo
-    }
+  const pasosInfo = [
+    { id: 1, titulo: "Información General", icono: <FileText className="w-5 h-5 mr-2" /> },
+    { id: 2, titulo: "Detalles", icono: <Sliders className="w-5 h-5 mr-2" /> },
+    { id: 3, titulo: "Archivos", icono: <UploadCloud className="w-5 h-5 mr-2" /> },
+  ];
+
+  // Validación por pasos
+  const camposPaso1 = ["nombre_proyecto", "descripcion", "autores", "fechaPublicacion"];
+  const camposPaso2 = ["materia", "UrlArticulo", "UrlDoi"];
+  const camposPaso3 = ["portada", "urlDoc"];
+
+  const siguientePaso = async () => {
+    let camposAValidar = [];
+    if (pasoActual === 1) camposAValidar = camposPaso1;
+    if (pasoActual === 2) camposAValidar = camposPaso2;
+
+    const valido = await trigger(camposAValidar);
+    if (valido && pasoActual < pasosInfo.length) setPasoActual(pasoActual + 1);
+  };
+
+  const pasoAnterior = () => {
+    if (pasoActual > 1) setPasoActual(pasoActual - 1);
   };
 
   useEffect(() => {
     if (mensaje) {
+      setRegistroExitoso(true);
       const timer = setTimeout(() => {
         setRegistroExitoso(false);
-      }, 3000); // 3 segundos
-
+        setMensaje(null);
+      }, 3000);
       return () => clearTimeout(timer);
     }
-  }, [mensaje]);
+  }, [mensaje, setMensaje]);
 
   useEffect(() => {
     if (InvestigacionErrors.length > 0) {
-      const timer = setTimeout(() => {
-        // Limpiar errores después de 3 segundos
-        setErrors([]);
-      }, 8000);
-
+      const timer = setTimeout(() => setErrors([]), 8000);
       return () => clearTimeout(timer);
     }
-  }, [InvestigacionErrors]);
+  }, [InvestigacionErrors, setErrors]);
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -73,305 +88,274 @@ const SubirInvestigaciones = () => {
           ))}
         </div>
       )}
-      {/* Menú Lateral */}
+
       <MenuLateral rol="docente" />
 
-      {/* Contenido principal */}
-      <div className="flex-1 p-8 overflow-x-hidden overflow-auto">
-        {/* Título FUERA del contenedor */}
-        <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center ml-34">
-          Subir Investigación
-        </h2>
+      <main className="flex-1 p-8 overflow-y-auto">
+        <div className="max-w-4xl mx-auto">
+          {/* Indicador de pasos */}
+          <div className="mb-12">
+            <div className="flex justify-between items-center relative w-full">
+              {/* Línea divisoria siempre horizontal */}
+              <div className="absolute left-0 right-0 h-1 bg-gray-300 z-0 top-1/3 mx-6"></div>
 
-        {/* Contenedor del formulario */}
-        <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-md p-8 border border-gray-200">
+              {pasosInfo.map((paso) => (
+                <React.Fragment key={paso.id}>
+                  <div className="flex flex-col items-center relative z-10 flex-1">
+                    <span
+                      className={`w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full text-white transition-colors duration-300 
+                  ${pasoActual === paso.id ? "bg-blue-600 shadow-md" : "bg-gray-400"}`}
+                    >
+                      {React.cloneElement(paso.icono, { className: "w-5 h-5 sm:w-6 sm:h-6" })}
+                    </span>
+                    <div
+                      className={`text-center mt-2 text-xs sm:text-sm whitespace-nowrap 
+                  ${pasoActual === paso.id ? "text-blue-600 font-semibold" : "text-gray-600"}`}
+                    >
+                      {paso.titulo}
+                    </div>
+                  </div>
+                </React.Fragment>
+              ))}
+            </div>
+          </div>
+
           {/* Formulario */}
           <form
             onSubmit={handleSubmit(async (data) => {
               const formData = new FormData();
               formData.append("nombre_proyecto", data.nombre_proyecto);
               formData.append("descripcion", data.descripcion);
-              // autores será array, lo convertimos a string separado por comas
-              formData.append("autores", data.autores.join(", "));
+              formData.append("autores", data.autores.map((a) => a.nombre).join(", "));
               formData.append("fechaPublicacion", data.fechaPublicacion);
               formData.append("materia", data.materia);
               formData.append("urlArticulo", data.UrlArticulo);
               formData.append("urlDoi", data.UrlDoi);
-              formData.append("portada", data.portada[0]);
-              formData.append("urlDoc", data.urlDoc[0]);
-              formData.append("Usuario", Usuario.Id);
+              if (data.portada?.[0]) formData.append("portada", data.portada[0]);
+              if (data.urlDoc?.[0]) formData.append("urlDoc", data.urlDoc[0]);
+              formData.append("Usuario", Usuario?.Id || "");
               formData.append("seccion", "Investigacion");
-              console.log(formData);
-              const resultado = await sigout(formData);
-              if (resultado?.success) {
-                setRegistroExitoso(true);
-                // Limpiar campos (opcional)
-              }
+              await sigout(formData);
             })}
-            className="space-y-6"
+            className="space-y-6 bg-white p-8 rounded-2xl shadow-xl"
           >
-            {/* Título */}
-            <div>
-              <label className="block mb-1 font-semibold text-gray-800">Título</label>
-              <input
-                {...register("nombre_proyecto", {
-                  required: "El título es obligatorio",
-                })}
-                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-                placeholder="Ingrese el título de la investigación"
-              />
-              {errors.nombre_proyecto && (
-                <p className="text-red-500 font-semibold text-sm">
-                  {errors.nombre_proyecto.message}
-                </p>
-              )}
-            </div>
+            {pasoActual === 1 && (
+              <div className="space-y-6">
+                <h3 className="text-xl font-semibold text-gray-700">Paso 1: Información General</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
 
-            {/* Descripción */}
-            <div>
-              <label className="block mb-1 font-semibold text-gray-800">Descripción</label>
-              <textarea
-                {...register("descripcion", {
-                  required: "La descripción es obligatoria",
-                })}
-                rows="4"
-                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-                placeholder="Descripción detallada de la investigación"
-              ></textarea>
-              {errors.descripcion && (
-                <p className="text-red-500 font-semibold text-sm">
-                  {errors.descripcion.message}
-                </p>
-              )}
-            </div>
+                  {/* Columna izquierda */}
+                  <div className="space-y-6">
+                    {/* Título */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Título</label>
+                      <input
+                        {...register("nombre_proyecto", { required: true })}
+                        type="text"
+                        placeholder="Ejemplo: Investigación sobre energías renovables"
+                        className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      />
+                      {errors.nombre_proyecto && (
+                        <p className="mt-1 text-red-500 text-sm">El título es obligatorio</p>
+                      )}
+                    </div>
 
-            {/* Autores y Fecha */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Autores dinámicos */}
-              <div>
-                <label className="flex items-center gap-2 mb-1 text-gray-800 font-semibold">
-                  Autores
-                </label>
+                    {/* Descripción */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Descripción</label>
+                      <textarea
+                        {...register("descripcion", { required: true })}
+                        rows="4"
+                        placeholder="Una breve descripción de la investigación"
+                        className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      />
+                      {errors.descripcion && (
+                        <p className="mt-1 text-red-500 text-sm">La descripción es obligatoria</p>
+                      )}
+                    </div>
+                  </div>
 
-                <Controller
-                  control={control}
-                  name="autores"
-                  rules={{
-                    validate: (value) =>
-                      value.length > 0 &&
-                      value.every((autor) => autor.trim() !== "") ||
-                      "Debe ingresar al menos un autor válido",
-                  }}
-                  render={({ field: { value, onChange } }) => (
-                    <>
-                      {value.map((autor, index) => (
-                        <div key={index} className="flex items-center gap-2 mb-2">
+                  {/* Columna derecha */}
+                  <div className="space-y-6">
+                    {/* Autores */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Autores</label>
+                      {fields.map((field, index) => (
+                        <div key={field.id} className="flex items-center gap-2 mb-2">
                           <input
+                            {...register(`autores.${index}.nombre`, { required: true })}
                             type="text"
-                            value={autor}
-                            onChange={(e) => {
-                              const nuevosAutores = [...value];
-                              nuevosAutores[index] = e.target.value;
-                              onChange(nuevosAutores);
-                            }}
-                            className="flex-grow px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
                             placeholder={`Autor ${index + 1}`}
+                            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                           />
-                          {value.length > 1 && (
+                          {fields.length > 1 && (
                             <button
                               type="button"
-                              onClick={() => {
-                                const nuevosAutores = value.filter(
-                                  (_, i) => i !== index
-                                );
-                                onChange(nuevosAutores);
-                              }}
-                              className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-                              title="Eliminar autor"
+                              onClick={() => remove(index)}
+                              className="text-gray-500 hover:text-red-600 transition-colors"
                             >
-                              X
+                              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-trash-2">
+                                <path d="M3 6h18" />
+                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                                <line x1="10" x2="10" y1="11" y2="17" />
+                                <line x1="14" x2="14" y1="11" y2="17" />
+                              </svg>
                             </button>
                           )}
                         </div>
                       ))}
-
                       <button
                         type="button"
-                        onClick={() => onChange([...value, ""])}
-                        className="mt-2 bg-green-500 text-white px-4 py-1 rounded hover:bg-green-600"
+                        onClick={() => append({ nombre: "" })}
+                        className="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors"
                       >
-                        + Añadir autor
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-plus mr-1">
+                          <path d="M5 12h14" />
+                          <path d="M12 5v14" />
+                        </svg>
+                        Añadir autor
                       </button>
-                    </>
-                  )}
-                />
-                {errors.autores && (
-                  <p className="text-red-500 font-semibold text-sm">
-                    {errors.autores.message}
-                  </p>
-                )}
+                      {errors.autores && (
+                        <p className="mt-1 text-red-500 text-sm">Se requiere al menos un autor</p>
+                      )}
+                    </div>
+
+                    {/* Fecha */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Fecha de Publicación</label>
+                      <input
+                        type="datetime-local"
+                        {...register("fechaPublicacion", { required: true })}
+                        className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      />
+                      {errors.fechaPublicacion && (
+                        <p className="mt-1 text-red-500 text-sm">La fecha es requerida</p>
+                      )}
+                    </div>
+                  </div>
+                </div>
               </div>
+            )}
 
-              {/* Fecha */}
-              <div>
-                <label className="flex items-center gap-2 mb-1 text-gray-800 font-semibold">
-                  Fecha
-                </label>
-                <input
-                  type="datetime-local"
-                  {...register("fechaPublicacion", {
-                    required: "La fecha es requerida",
-                  })}
-                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-                />
-                {errors.fechaPublicacion && (
-                  <p className="text-red-500 font-semibold text-sm">
-                    {errors.fechaPublicacion.message}
-                  </p>
-                )}
-              </div>
-            </div>
+            {/* Paso 2 */}
+            {pasoActual === 2 && (
+              <div className="space-y-6">
+                <h3 className="text-xl font-semibold text-gray-700">Paso 2: Detalles Adicionales</h3>
+                <div>
+                  <label className="block font-semibold text-gray-800">Materia</label>
+                  <select
+                    {...register("materia", { required: "Debe seleccionar una materia" })}
+                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg"
+                  >
+                    <option value="">Seleccionar materia</option>
+                    <option value="Fisica">Fisica</option>
+                    <option value="Ingenieria Civil">Ingeniería Civil</option>
+                    <option value="Matematicas">Matematicas</option>
+                  </select>
+                  {errors.materia && <p className="text-red-500 text-sm">{errors.materia.message}</p>}
+                </div>
 
-            {/* Materia */}
-            <div>
-              <label className="block text-3x1 font-semibold text-gray-800">Materia</label>
-              <select
-                {...register("materia", { required: "Debe seleccionar una materia" })}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500"
-              >
-                <option value="">Seleccionar materia</option>
-                <option value="Fisica">Fisica</option>
-                <option value="ingenieria civil">Ingeniería Civil</option>
-                <option value="Matematicas">Matematicas</option>
-              </select>
-              {errors.materia && (
-                <p className="text-red-500 font-semibold text-sm">{errors.materia.message}</p>
-              )}
-            </div>
-
-            {/* URL Artículo */}
-            <div>
-              <label className="flex items-center gap-2 mb-1 text-gray-800 font-semibold">
-                URL del Artículo
-              </label>
-              <input
-                type="url"
-                {...register("UrlArticulo", {
-                  required: "Debe ingresar el enlace del artículo",
-                })}
-                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-300"
-                placeholder="https://ejemplo.com/articulo"
-              />
-              {errors.UrlArticulo && (
-                <p className="text-red-500 font-semibold text-sm">{errors.UrlArticulo.message}</p>
-              )}
-            </div>
-
-            {/* URL DOI */}
-            <div>
-              <label className="flex items-center gap-2 mb-1 text-gray-800 font-semibold">
-                URL DOI
-              </label>
-              <input
-                type="url"
-                {...register("UrlDoi", {
-                  required: "Debe ingresar la URL del DOI",
-                })}
-                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-300"
-                placeholder="https://doi.org/xxxxx"
-              />
-              {errors.UrlDoi && (
-                <p className="text-red-500 font-semibold text-sm">{errors.UrlDoi.message}</p>
-              )}
-            </div>
-
-            {/* Subir Archivos */}
-            <div>
-              <h3 className="text-gray-800 font-semibold mb-3">Subir archivos</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <label className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-400 cursor-pointer text-center">
+                <div>
+                  <label className="block font-semibold text-gray-800">URL del Artículo</label>
                   <input
-                    type="file"
-                    accept=".jpg,.jpeg,.png,.webp"
-                    className="hidden"
-                    {...register("portada", {
-                      required: "Se requiere una imagen",
-                      validate: {
-                        tamaño: (archivos) =>
-                          archivos[0]?.size <= MAX_SIZE || "La imagen supera los 10MB",
-                        tipo: (archivos) =>
-                          /\.(jpg|jpeg|png|webp)$/i.test(archivos?.[0]?.name || "") ||
-                          "El archivo debe ser una imagen (.jpg, .jpeg, .png, .webp)",
-                      },
-                    })}
+                    type="url"
+                    {...register("UrlArticulo", { required: "Debe ingresar el enlace del artículo" })}
+                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg"
                   />
-                  {portada?.[0] && (
-                    <span className="text-sm text-gray-700 mt-1">{portada[0].name}</span>
-                  )}
+                  {errors.UrlArticulo && <p className="text-red-500 text-sm">{errors.UrlArticulo.message}</p>}
+                </div>
 
-                  {portada?.length > 0 && !errors.portada && (
-                    <p className="text-green-500 text-center font-semibold text-sm">
-                      Imagen subida correctamente
-                    </p>
-                  )}
-                  {errors.portada && (
-                    <p className="text-red-500 font-semibold text-sm">{errors.portada.message}</p>
-                  )}
-
-                  {!portada?.[0] && <ImageIcon className="w-10 h-10 text-black opacity-50" />}
-
-                  {!portada?.[0] && <span className="text-sm">Imagen de la portada</span>}
-                </label>
-
-                <label className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-400 cursor-pointer text-center">
+                <div>
+                  <label className="block font-semibold text-gray-800">URL DOI</label>
                   <input
-                    type="file"
-                    accept=".pdf"
-                    className="hidden"
-                    {...register("urlDoc", {
-                      required: "Se requiere un documento",
-                      validate: {
-                        tamaño: (archivos) =>
-                          archivos[0]?.size <= MAX_SIZE || "El documento es muy pesado",
-                        tipo: (archivos) =>
-                          archivos?.[0]?.name?.toLowerCase().endsWith(".pdf") ||
-                          "El archivo debe ser un PDF",
-                      },
-                    })}
+                    type="url"
+                    {...register("UrlDoi", { required: "Debe ingresar la URL del DOI" })}
+                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg"
                   />
-                  {urlDoc?.[0] && (
-                    <span className="text-sm text-gray-700 mt-1">{urlDoc[0].name}</span>
-                  )}
-
-                  {urlDoc?.length > 0 && !errors.urlDoc && (
-                    <p className="text-green-500 text-center font-semibold text-sm">
-                      Documento subido correctamente
-                    </p>
-                  )}
-                  {errors.urlDoc && (
-                    <p className="text-red-500 font-semibold text-sm">{errors.urlDoc.message}</p>
-                  )}
-
-                  {!urlDoc?.[0] && <UploadIcon className="w-10 h-10 text-black opacity-50" />}
-                  {!urlDoc?.[0] && <span className="text-sm">Documento PDF</span>}
-                </label>
+                  {errors.UrlDoi && <p className="text-red-500 text-sm">{errors.UrlDoi.message}</p>}
+                </div>
               </div>
-            </div>
+            )}
 
-            {/* Botón */}
-            <div className="pt-4 flex justify-center">
-              <button
-                type="submit"
-                className="w-50 bg-gradient-to-br from-indigo-600 to-blue-600 text-white py-4 px-6 rounded-xl font-semibold hover:from-indigo-700 hover:to-blue-700 focus:outline-none focus:ring-4 focus:ring-indigo-200 transition-all transform hover:scale-[1.01] shadow-lg hover:shadow-indigo-200/50"
-              >
-                Subir investigación
-              </button>
+            {/* Paso 3 */}
+            {pasoActual === 3 && (
+              <div className="space-y-6">
+                <h3 className="text-xl font-semibold text-gray-700">Paso 3: Cargar Archivos</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Imagen de portada */}
+                  <label className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      {...register("portada", { required: "Se requiere una imagen" })}
+                    />
+                    {portada?.[0] ? (
+                      <span className="text-center text-sm text-gray-700 mt-1 break-words w-full px-2">
+                        {portada[0].name}
+                      </span>
+                    ) : (
+                      <>
+                        <ImageIcon className="w-10 h-10 text-black opacity-50" />
+                        <span className="text-sm text-gray-600 mt-1">Imagen de la portada</span>
+                      </>
+                    )}
+                    {errors.portada && (
+                      <p className="mt-1 text-red-500 text-sm text-center">{errors.portada.message}</p>
+                    )}
+                  </label>
+
+                  {/* Documento PDF */}
+                  <label className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors">
+                    <input
+                      type="file"
+                      accept=".pdf"
+                      className="hidden"
+                      {...register("urlDoc", { required: "Se requiere un documento" })}
+                    />
+                    {urlDoc?.[0] ? (
+                      <span className="text-center text-sm text-gray-700 mt-1 break-words w-full px-2">
+                        {urlDoc[0].name}
+                      </span>
+                    ) : (
+                      <>
+                        <UploadIcon className="w-10 h-10 text-black opacity-50" />
+                        <span className="text-sm text-gray-600 mt-1">Documento PDF</span>
+                      </>
+                    )}
+                    {errors.urlDoc && (
+                      <p className="mt-1 text-red-500 text-sm text-center">{errors.urlDoc.message}</p>
+                    )}
+                  </label>
+                </div>
+              </div>
+            )}
+
+            {/* Botones de navegación */}
+            <div className="flex justify-between pt-4">
+              {pasoActual > 1 && (
+                <button type="button" onClick={pasoAnterior} className="w-40 flex items-center justify-center bg-gray-300 text-gray-800 py-2 px-4 rounded-xl font-semibold hover:bg-gray-400">
+                  <ArrowLeft className="w-4 h-4 mr-2" /> Anterior
+                </button>
+              )}
+              {pasoActual < pasosInfo.length && (
+                <button type="button" onClick={siguientePaso} className="w-40 ml-auto flex items-center justify-center bg-indigo-600 text-white py-2 px-4 rounded-xl font-semibold hover:bg-indigo-700">
+                  Siguiente <ArrowRight className="w-4 h-4 ml-2" />
+                </button>
+              )}
+              {pasoActual === pasosInfo.length && (
+                <button type="submit" className="w-50 bg-gradient-to-br from-indigo-600 to-blue-600 text-white py-4 px-6 rounded-xl font-semibold hover:from-indigo-700 hover:to-blue-700">
+                  Subir investigación
+                </button>
+              )}
             </div>
           </form>
         </div>
-      </div>
+      </main>
     </div>
   );
 };
 
 export default SubirInvestigaciones;
+

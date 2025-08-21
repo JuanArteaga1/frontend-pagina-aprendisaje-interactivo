@@ -22,7 +22,7 @@ export const InvestigacionProvider = ({ children }) => {
   const ActualizarInvestigaciones = async (Id, data) => {
     try {
       const response = await PutInvestigacion(Id, data);
-      setInvestigaciones(response);
+      setInvestigaciones(response.data);
 
       return { success: true, data: response };
     } catch (error) {

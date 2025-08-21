@@ -5,20 +5,33 @@ import { useProyectos } from "../context/ProyectoContext";
 import { UseCategoria } from "../context/CategoriaContext";
 import Alerta from "../components/AlertasDocente";
 import { useLogin } from "../context/LoginContext";
-import { Image, Upload, FileUp } from "lucide-react";
+import { Image, Upload, FileUp, ArrowRight, ArrowLeft, FileText, Sliders, UploadCloud } from "lucide-react";
 
 function SubirProyecto() {
-  const { register, handleSubmit, watch, formState: { errors }, reset } = useForm();
+  const { register, handleSubmit, watch, formState: { errors }, reset, trigger } = useForm({
+    defaultValues: { autores: [""] }
+  });
+
   const { sigout, Proyectos, errors: ProyectosErrors, mensaje, setMensaje, setErrors } = useProyectos();
   const { TraerCategoria, Categoria } = UseCategoria();
-  const { Usuario, setUsuario } = useLogin();
+  const { Usuario } = useLogin();
   const [registroExitoso, setRegistroExitoso] = useState(false);
-  const [autores, setAutores] = useState([""]);
+  const [pasoActual, setPasoActual] = useState(1);
   const MAX_SIZE = 10 * 1024 * 1024; // 10MB
 
   const archivoAPK = watch('urlArchivoapk');
   const portada = watch('portada');
   const urlDoc = watch('urlDoc');
+
+  const camposPaso1 = ['nombre_proyecto', 'autores', 'fechaPublicacion', 'descripcion'];
+  const camposPaso2 = ['materia', 'categoriaId', 'youtubeLink'];
+  const camposPaso3 = ['urlArchivoapk', 'portada', 'urlDoc'];
+
+  const pasosInfo = [
+    { id: 1, titulo: 'Información General', icono: <FileText className="w-5 h-5 mr-2" /> },
+    { id: 2, titulo: 'Detalles ', icono: <Sliders className="w-5 h-5 mr-2" /> },
+    { id: 3, titulo: 'Archivos', icono: <UploadCloud className="w-5 h-5 mr-2" /> },
+  ];
 
   useEffect(() => {
     TraerCategoria();
@@ -26,21 +39,37 @@ function SubirProyecto() {
 
   useEffect(() => {
     if (mensaje) {
-      const timer = setTimeout(() => {
-        setRegistroExitoso(false);
-      }, 3000);
+      const timer = setTimeout(() => setRegistroExitoso(false), 3000);
       return () => clearTimeout(timer);
     }
   }, [mensaje]);
 
   useEffect(() => {
     if (ProyectosErrors.length > 0) {
-      const timer = setTimeout(() => {
-        setErrors([]);
-      }, 3000);
+      const timer = setTimeout(() => setErrors([]), 3000);
       return () => clearTimeout(timer);
     }
   }, [ProyectosErrors]);
+
+  const siguientePaso = async () => {
+    let camposAValidar = [];
+    if (pasoActual === 1) camposAValidar = camposPaso1;
+    if (pasoActual === 2) camposAValidar = camposPaso2;
+
+    const esValido = await trigger(camposAValidar);
+
+    if (esValido) {
+      if (pasoActual < pasosInfo.length) {
+        setPasoActual(pasoActual + 1);
+      }
+    }
+  };
+
+  const pasoAnterior = () => {
+    if (pasoActual > 1) {
+      setPasoActual(pasoActual - 1);
+    }
+  };
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -62,156 +91,297 @@ function SubirProyecto() {
 
       <main className="flex-1 p-8 overflow-y-auto">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold text-gray-800 mb-8">Subir Proyecto</h2>
 
-          <form onSubmit={handleSubmit(async (data) => {
-            const formData = new FormData();
-            formData.append("nombre_proyecto", data.nombre_proyecto);
-            formData.append("autores", autores.join(", "));
-            formData.append("fechaPublicacion", data.fechaPublicacion);
-            formData.append("descripcion", data.descripcion);
-            formData.append("materia", data.materia);
-            formData.append("categoriaId", data.categoriaId);
-            formData.append("urlArchivoapk", data.urlArchivoapk[0]);
-            formData.append("portada", data.portada[0]);
-            formData.append("urlDoc", data.urlDoc[0]);
-            formData.append("Usuario", Usuario.Id);
-            formData.append("seccion", "Proyectos");
+          {/* Indicador de pasos con línea divisoria y subtítulos */}
+          <div className="mb-12">
+            <div className="flex justify-between items-center relative w-full">
+              {/* Línea divisoria */}
+              <div className="absolute left-0 right-0 h-1 bg-gray-300 z-0 top-1/3 mx-6"></div>
 
-            const resultado = await sigout(formData);
-            if (resultado?.success) {
-              setRegistroExitoso(true);
-              reset();
-              setAutores([""]);
-            }
-          })}
-            className="space-y-6 bg-white p-6 rounded-lg shadow-md">
+              {pasosInfo.map((paso) => (
+                <React.Fragment key={paso.id}>
+                  {/* Cada paso ocupa el mismo espacio */}
+                  <div className="flex flex-col items-center relative z-10 flex-1">
+                    <span
+                      className={`w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full text-white font-bold transition-colors duration-300
+                  ${pasoActual === paso.id ? 'bg-blue-600 shadow-md' : 'bg-gray-400'}`}
+                    >
+                      {/* Ícono en lugar del número */}
+                      {React.cloneElement(paso.icono, { className: "w-5 h-5 sm:w-6 sm:h-6" })}
+                    </span>
+                    <div
+                      className={`text-center mt-2 text-xs sm:text-sm whitespace-nowrap
+                  ${pasoActual === paso.id ? 'text-blue-600 font-semibold' : 'text-gray-600'}`}
+                    >
+                      {paso.titulo}
+                    </div>
+                  </div>
+                </React.Fragment>
+              ))}
+            </div>
+          </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-3x1 font-semibold text-gray-800 mb-1">Nombre del proyecto</label>
-                <input
-                  {...register('nombre_proyecto', { required: true })}
-                  type="text"
-                  className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-1"
-                />
-                {errors.nombre_proyecto && (<p className="text-red-500 font-semibold text-sm">El nombre es requerido</p>)}
-              </div>
+          <form
+            onSubmit={handleSubmit(async (data) => {
+              const formData = new FormData();
+              formData.append("nombre_proyecto", data.nombre_proyecto);
+              formData.append("autores", JSON.stringify(data.autores));
+              formData.append("fechaPublicacion", data.fechaPublicacion);
+              formData.append("descripcion", data.descripcion);
+              formData.append("materia", data.materia);
+              formData.append("youtubeLink", data.youtubeLink || "");
+              formData.append("categoriaId", data.categoriaId);
+              formData.append("urlArchivoapk", data.urlArchivoapk?.[0]);
+              formData.append("portada", data.portada?.[0]);
+              formData.append("urlDoc", data.urlDoc?.[0]);
+              formData.append("Usuario", Usuario.Id);
+              formData.append("seccion", "Proyectos");
 
-              {/* Campo de Autores dinámico */}
-              <div>
-                <label className="block text-3x1 font-semibold text-gray-800 mb-1">Autores</label>
-                {autores.map((autor, index) => (
-                  <div key={index} className="flex items-center mb-2">
+              const resultado = await sigout(formData);
+              if (resultado?.success) setRegistroExitoso(true);
+            })}
+            className="space-y-6 bg-white p-8 rounded-2xl shadow-xl"
+          >
+            {pasoActual === 1 && (
+              <div className="space-y-6">
+                <h3 className="text-xl font-semibold text-gray-700">Paso 1: Información General</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Nombre de la aplicación</label>
                     <input
+                      {...register('nombre_proyecto', { required: true })}
                       type="text"
-                      value={autor}
-                      onChange={(e) => {
-                        const nuevosAutores = [...autores];
-                        nuevosAutores[index] = e.target.value;
-                        setAutores(nuevosAutores);
-                      }}
-                      className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-1"
+                      placeholder="Ejemplo: Fuerzas Electromagneticas"
+                      className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     />
-                    {index > 0 && (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const nuevosAutores = autores.filter((_, i) => i !== index);
-                          setAutores(nuevosAutores);
-                        }}
-                        className="ml-2 text-red-500 font-bold"
-                      >
-                        X
-                      </button>
+                    {errors.nombre_proyecto && (<p className="mt-1 text-red-500 text-sm">El nombre es requerido</p>)}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Autores</label>
+                    {watch('autores')?.map((_, index) => (
+                      <div key={index} className="flex items-center gap-2 mb-2">
+                        <input
+                          {...register(`autores.${index}`, { required: true })}
+                          type="text"
+                          placeholder={`Autor ${index + 1}`}
+                          className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                        />
+                        {watch('autores').length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const currentAutores = [...watch('autores')];
+                              currentAutores.splice(index, 1);
+                              reset({ ...watch(), autores: currentAutores });
+                            }}
+                            className="text-gray-500 hover:text-red-600 transition-colors"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-trash-2"><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /><line x1="10" x2="10" y1="11" y2="17" /><line x1="14" x2="14" y1="11" y2="17" /></svg>
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const currentAutores = watch('autores') || [];
+                        reset({ ...watch(), autores: [...currentAutores, ""] });
+                      }}
+                      className="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-plus"><path d="M5 12h14" /><path d="M12 5v14" /></svg>
+                      Añadir autor
+                    </button>
+                    {errors.autores && (
+                      <p className="mt-1 text-red-500 text-sm">Se requiere al menos un autor</p>
                     )}
                   </div>
-                ))}
+
+                  {/* Aquí antes estaba la fecha, ahora va Descripción */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Descripción</label>
+                    <textarea
+                      {...register('descripcion', { required: true })}
+                      rows="4"
+                      placeholder="Una breve descripción de lo que trata la aplicación"
+                      className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    />
+                    {errors.descripcion && (<p className="mt-1 text-red-500 text-sm">Descripcion es requerida</p>)}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Fecha de realización</label>
+                    <input
+                      {...register('fechaPublicacion', { required: true })}
+                      type="datetime-local"
+                      className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    />
+                    {errors.fechaPublicacion && (<p className="mt-1 text-red-500 text-sm">La fecha es requerida</p>)}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {pasoActual === 2 && (
+              <div className="space-y-6">
+                <h3 className="text-xl font-semibold text-gray-700">Paso 2: Detalles Adicionales</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Categoría movida aquí */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Categoría</label>
+                    <select
+                      {...register('categoriaId', { required: true })}
+                      className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    >
+                      <option value="">Seleccionar categoría</option>
+                      {Categoria && Categoria.map((categoria) => (
+                        <option key={categoria.id} value={categoria.id}>
+                          {categoria.Nombre_Categoria}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.categoriaId && (<p className="mt-1 text-red-500 text-sm">Categoria es requerida</p>)}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Materia</label>
+                    <select
+                      {...register('materia', { required: true })}
+                      className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    >
+                      <option value="">Seleccionar materia</option>
+                      <option value="Fisica">Física</option>
+                      <option value="ingenieria civil">Ingeniería Civil</option>
+                      <option value="Matematicas">Matemáticas</option>
+                    </select>
+                    {errors.materia && (<p className="mt-1 text-red-500 text-sm">Materia es requerida</p>)}
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700">Link de YouTube</label>
+                    <input
+                      {...register('youtubeLink', {
+                        required: 'El enlace de YouTube es obligatorio',
+                        pattern: {
+                          value: /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/,
+                          message: 'Ingrese un enlace válido de YouTube',
+                        },
+                      })}
+                      type="url"
+                      placeholder="https://www.youtube.com"
+                      className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    />
+
+                    {errors.youtubeLink && (
+                      <p className="mt-1 text-red-500 text-sm">{errors.youtubeLink.message}</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+
+            {pasoActual === 3 && (
+              <div className="space-y-6">
+                <h3 className="text-xl font-semibold text-gray-700">Paso 3: Carga de Archivos</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
+                  <label className="flex flex-col items-center justify-center w-full max-w-[220px] aspect-square border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors hover:shadow-md">
+                    <input
+                      type="file"
+                      className="hidden"
+                      accept=".apk"
+                      {...register('urlArchivoapk', {
+                        required: 'Se requiere una APK',
+                        validate: {
+                          tamaño: (archivos) => archivos?.[0]?.size <= MAX_SIZE || 'El archivo supera los 10MB',
+                          tipo: (archivos) => archivos?.[0]?.name.toLowerCase().endsWith('.apk') || 'El archivo debe ser .apk',
+                        },
+                      })}
+                    />
+                    {archivoAPK?.[0] && <span className="text-center text-sm text-gray-700 mt-1 px-2">{archivoAPK?.[0].name}</span>}
+                    {archivoAPK?.length > 0 && !errors.urlArchivoapk && (<p className="text-green-500 text-center font-semibold text-sm">APK subida</p>)}
+                    {errors.urlArchivoapk && (<p className="text-red-500 text-center font-semibold text-sm px-2">{errors.urlArchivoapk.message}</p>)}
+                    {!archivoAPK?.[0] && <Upload className="w-8 h-8 text-black opacity-50" />}
+                    {!archivoAPK?.[0] && <span className="text-sm text-gray-600 mt-1">Subir APK</span>}
+                  </label>
+
+                  <label className="flex flex-col items-center justify-center w-full max-w-[220px] aspect-square border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors hover:shadow-md">
+                    <input
+                      type="file"
+                      className="hidden"
+                      accept="image/*"
+                      {...register('portada', {
+                        required: 'Se requiere una imagen',
+                        validate: {
+                          tamaño: (archivos) => archivos?.[0]?.size <= MAX_SIZE || 'La imagen supera los 10MB',
+                          tipo: (archivos) => /\.(jpg|jpeg|png|webp)$/i.test(archivos?.[0]?.name) || 'El archivo debe ser una imagen (.jpg, .jpeg, .png, .webp)',
+                        },
+                      })}
+                    />
+                    {portada?.[0] && (
+                      <span className="text-sm text-center text-gray-700 mt-1 break-words w-full px-2 max-w-[220px]">{portada?.[0].name}</span>
+                    )}
+                    {portada?.length > 0 && !errors.portada && (<p className="text-green-500 text-center font-semibold text-sm">Imagen subida</p>)}
+                    {errors.portada && (<p className="text-red-500 text-center font-semibold text-sm px-2">{errors.portada.message}</p>)}
+                    {!portada?.[0] && <Image className="w-8 h-8 text-black opacity-50" />}
+                    {!portada?.[0] && <span className="text-sm text-gray-600 mt-1">Subir IMG</span>}
+                  </label>
+
+                  <label className="flex flex-col items-center justify-center w-full max-w-[220px] aspect-square border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors hover:shadow-md">
+                    <input
+                      type="file"
+                      className="hidden"
+                      accept=".pdf"
+                      {...register('urlDoc', {
+                        required: 'Se requiere un documento',
+                        validate: {
+                          tamaño: (archivos) => archivos?.[0]?.size <= MAX_SIZE || 'El documento es muy pesado',
+                          tipo: (archivos) => archivos?.[0]?.name?.toLowerCase().endsWith('.pdf') || 'El archivo debe ser un PDF',
+                        },
+                      })}
+                    />
+                    {urlDoc?.[0] && (
+                      <span className="text-sm text-center text-gray-700 mt-1 break-words w-full px-2 max-w-[220px]">{urlDoc?.[0].name}</span>
+                    )}
+                    {urlDoc?.length > 0 && !errors.urlDoc && (<p className="text-green-500 text-center font-semibold text-sm">Documento subido</p>)}
+                    {errors.urlDoc && (<p className="text-red-500 text-center font-semibold text-sm px-2">{errors.urlDoc.message}</p>)}
+                    {!urlDoc?.[0] && <FileUp className="w-8 h-8 text-black opacity-50" />}
+                    {!urlDoc?.[0] && <span className="text-sm text-gray-600 mt-1">Subir PDF</span>}
+                  </label>
+                </div>
+              </div>
+            )}
+
+            <div className="flex justify-between pt-4">
+              {pasoActual > 1 && (
                 <button
                   type="button"
-                  onClick={() => setAutores([...autores, ""])}
-                  className="text-blue-500 hover:underline text-sm"
+                  onClick={pasoAnterior}
+                  className="w-40 flex items-center justify-center bg-gray-300 text-gray-800 py-2 px-4 rounded-xl font-semibold hover:bg-gray-400 transition-all"
                 >
-                  + Agregar autor
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  Anterior
                 </button>
-                {autores.length === 0 || autores.some(a => a.trim() === "") ? (
-                  <p className="text-red-500 font-semibold text-sm">Se requiere al menos un autor</p>
-                ) : null}
-              </div>
-
-              <div>
-                <label className="block text-base font-semibold text-gray-800 mb-1">Fecha de realización</label>
-                <input
-                  {...register('fechaPublicacion', { required: true })}
-                  type="datetime-local"
-                  className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
-                />
-                {errors.fechaPublicacion && (<p className="text-red-500 font-semibold text-sm">La fecha es requerida</p>)}
-              </div>
-
-              <div>
-                <label className="block text-base font-semibold text-gray-800 mb-1">Categoría</label>
-                <select
-                  {...register('categoriaId', { required: true })}
-                  className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
+              )}
+              {pasoActual < pasosInfo.length && (
+                <button
+                  type="button"
+                  onClick={siguientePaso}
+                  className="w-40 ml-auto flex items-center justify-center bg-indigo-600 text-white py-2 px-4 rounded-xl font-semibold hover:bg-indigo-700 transition-all"
                 >
-                  <option value="">Seleccionar categoría</option>
-                  {Categoria && Categoria.map((categoria) => (
-                    <option key={categoria.id} value={categoria.id}>
-                      {categoria.Nombre_Categoria}
-                    </option>
-                  ))}
-                </select>
-                {errors.categoriaId && (
-                  <p className="text-red-500 font-semibold text-sm">Categoria es requerida</p>
-                )}
-              </div>
-
-              <div className="md:col-span-2">
-                <label className="block text-base font-semibold text-gray-800 mb-1">Descripción</label>
-                <textarea
-                  {...register('descripcion', { required: true })}
-                  rows="4"
-                  className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
-                />
-                {errors.descripcion && (<p className="text-red-500 font-semibold text-sm">Descripción es requerida</p>)}
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-base font-semibold text-gray-800 mb-1">Materia</label>
-              <select
-                {...register('materia', { required: true })}
-                className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-2">
-                <option value="">Seleccionar materia</option>
-                <option value="Fisica">Física</option>
-                <option value="ingenieria civil">Ingeniería Civil</option>
-                <option value="Matematicas">Matemáticas</option>
-              </select>
-              {errors.materia && (<p className="text-red-500 font-semibold text-sm">Materia es requerida</p>)}
-            </div>
-
-            {/* Archivos */}
-            <div className="space-y-4">
-              <h3 className="text-base font-semibold text-gray-800">Cargar Archivos</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
-                {/* Subir APK */}
-                <label className="upload-label">{/* ...contenido original... */}</label>
-
-                {/* Subir Imagen */}
-                <label className="upload-label">{/* ...contenido original... */}</label>
-
-                {/* Subir PDF */}
-                <label className="upload-label">{/* ...contenido original... */}</label>
-              </div>
-
-              <div className="flex justify-center pt-4">
+                  Siguiente
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </button>
+              )}
+              {pasoActual === pasosInfo.length && (
                 <button
                   type="submit"
-                  className="w-50 bg-gradient-to-br from-indigo-600 to-blue-600 text-white py-4 px-6 rounded-xl font-semibold hover:from-indigo-700 hover:to-blue-700 focus:outline-none focus:ring-4 focus:ring-indigo-200 transition-all transform hover:scale-[1.01] shadow-lg hover:shadow-indigo-200/50">
+                  className="w-50 ml-auto bg-gradient-to-br from-indigo-600 to-blue-600 text-white py-4 px-6 rounded-xl font-semibold hover:from-indigo-700 hover:to-blue-700 focus:outline-none focus:ring-4 focus:ring-indigo-200 transition-all transform hover:scale-[1.01] shadow-lg hover:shadow-indigo-200/50"
+                >
                   Subir proyecto
                 </button>
-              </div>
+              )}
             </div>
           </form>
         </div>

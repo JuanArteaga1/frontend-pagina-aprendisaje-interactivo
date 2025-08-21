@@ -27,7 +27,7 @@ const Home = () => {
       <Navbar />
 
       {/* Carrusel Hero */}
-      <div className="hero w-full relative max-h-[700px] overflow-hidden shadow-lg">
+      <div className="hero w-full relative max-h-[1500px] overflow-hidden shadow-lg">
         <Slider {...settings} className="h-full">
           {[
             {
@@ -43,7 +43,7 @@ const Home = () => {
               link: "/investigaciones"
             },
             {
-              src: "/img/DSC04945.jpg",
+              src: "/img/IMG_4525.jpeg",
               alt: "Imagen 3",
               buttonText: "Explora nuestro podcast",
               link: "/podcast"

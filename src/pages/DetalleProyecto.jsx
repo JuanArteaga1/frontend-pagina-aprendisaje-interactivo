@@ -27,8 +27,12 @@ const DetalleProyecto = () => {
         );
     }
 
+    const getYouTubeVideoId = (url) => {
+        const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+        const match = url.match(regex);
+        return match ? match[1] : null;
+    };
     const proyecto = Proyectos.find(p => p._id === id);
-
     if (!proyecto) {
         return (
             <>
@@ -103,14 +107,22 @@ const DetalleProyecto = () => {
                         <Video size={20} /> Galería Multimedia
                     </h3>
                     <div className="flex overflow-x-auto gap-4 pb-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-                        {proyecto.video && (
-                            <div className="flex-shrink-0 w-80 h-48 md:w-96 md:h-56 rounded-xl overflow-hidden shadow-md">
-                                <video controls className="w-full h-full object-cover">
-                                    <source src={proyecto.video} type="video/mp4" />
-                                    Tu navegador no soporta el video.
-                                </video>
-                            </div>
-                        )}
+                        {proyecto.youtubeLink && (() => {
+                            const videoId = getYouTubeVideoId(proyecto.youtubeLink);
+                            return videoId ? (
+                                <div className="flex-shrink-0 w-80 h-48 md:w-96 md:h-56 rounded-xl overflow-hidden shadow-md">
+                                    <iframe
+                                        className="w-full h-full"
+                                        src={`https://www.youtube.com/embed/${videoId}`}
+                                        title="Video de YouTube"
+                                        frameBorder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                    ></iframe>
+                                </div>
+                            ) : null;
+                        })()}
+
                         {proyecto.imagenes?.map((img, idx) => {
                             const rutaLimpiaImg = img.replace(/\\/g, "/");
                             const imagenURL = `http://localhost:3000/${rutaLimpiaImg}`;
