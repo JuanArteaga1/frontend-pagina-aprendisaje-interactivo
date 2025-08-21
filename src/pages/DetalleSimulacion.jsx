@@ -7,6 +7,7 @@ import { Download, FileText, CalendarDays, Users, Video } from "lucide-react";
 const DetalleSimulacion = () => {
     const { id } = useParams();
     const { Simulaciones, TraerSimulaciones } = UseSimulaciones();
+    const apiUrl = import.meta.env.VITE_RUTA1;
 
     useEffect(() => {
         if (!Simulaciones.some(s => s._id === id)) {
@@ -48,13 +49,15 @@ const DetalleSimulacion = () => {
         );
     }
 
-    const imagenURL = `http://localhost:3000/uploads/${simulacion.urlimg
-        ?.replace(/\\/g, "/")
-        ?.split("uploads/")[1]}`;
+    // URLs usando la variable de entorno (versión segura)
+    const rutaLimpia = simulacion.urlimg?.replace(/\\/g, "/");
+    const imagenURL = `${apiUrl}/uploads/${rutaLimpia?.split("uploads/")[1]}`;
 
-    const archivoURL = `http://localhost:3000/uploads/${simulacion.urlArchivoapk
-        ?.replace(/\\/g, "/")
-        ?.split("uploads/")[1]}`;
+    const rutaAPK = simulacion.urlArchivoapk?.replace(/\\/g, "/");
+    const archivoURL = `${apiUrl}/uploads/${rutaAPK?.split("uploads/")[1]}`;
+
+    const rutaDoc = simulacion.urlDoc?.replace(/\\/g, "/");
+    const docURL = `${apiUrl}/uploads/${rutaDoc?.split("uploads/")[1]}`;
 
     return (
         <>
@@ -125,21 +128,16 @@ const DetalleSimulacion = () => {
                     <h3 className="text-xl font-semibold text-gray-800 mb-3 flex items-center gap-2">
                         <FileText size={20} /> Documentación
                     </h3>
-                    {simulacion.urlDoc ? (() => {
-                        const docURL = `http://localhost:3000/uploads/${simulacion.urlDoc
-                            ?.replace(/\\/g, "/")
-                            ?.split("uploads/")[1]}`;
-                        return (
-                            <a
-                                href={docURL}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-800 text-base font-medium transition-colors"
-                            >
-                                <FileText size={18} /> Ver documentación completa
-                            </a>
-                        );
-                    })() : (
+                    {simulacion.urlDoc ? (
+                        <a
+                            href={docURL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-800 text-base font-medium transition-colors"
+                        >
+                            <FileText size={18} /> Ver documentación completa
+                        </a>
+                    ) : (
                         <p className="text-gray-500 italic text-base">No hay documentación disponible</p>
                     )}
                 </div>

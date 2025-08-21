@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const Api = 'http://localhost:3000'
+const Api = import.meta.env.VITE_RUTA1; // tu IP local aquí
+
 
 export const GetAllProyectos = () => axios.get(`${Api}/TraerProyectos`)
 export const GetIdProyectos = (id) => axios.get(`${Api}/TraerProyectos/${id}`)

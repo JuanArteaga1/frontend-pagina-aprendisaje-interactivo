@@ -7,6 +7,7 @@ import { usePodcast } from "../context/PodcastContext";
 const Podcast = () => {
   const [seccionActual, setSeccionActual] = useState("Podcasts");
   const { TraerPodcast, Podcast } = usePodcast();
+  const apiUrl = import.meta.env.VITE_RUTA1;
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
 
@@ -47,13 +48,19 @@ const Podcast = () => {
       {/* Contenedor de episodios con tarjetas interactivas */}
       <div className="flex justify-center gap-5 flex-wrap mt-8">
         {Podcast?.data.map((ep) => {
-          const rutaLimpia = ep.ArchivoImagen
+
+          
+          
+          
+
+          const rutaLimpia = ep.ArchivoImagen.replace(/\\/g, "/");
             ? ep.ArchivoImagen.replace(/\\/g, "/")
             : null;
 
-          const imagenURL = rutaLimpia
+          const imagenURL = `${apiUrl}/uploads/${rutaLimpia?.split("uploads/")[1]}`;
             ? `http://localhost:3000/uploads/${rutaLimpia.split("uploads/")[1]}`
             : "img/default-podcast.png"; // 👈 usa una imagen por defecto si no hay portada
+
 
           return (
             <div key={ep._id} className="card">

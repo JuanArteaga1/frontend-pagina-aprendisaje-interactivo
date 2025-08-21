@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const Api = 'http://localhost:3000'
+const Api = import.meta.env.VITE_RUTA1;// tu IP local aquí
+
 
 export const subirSimulacionesAPI = Simulaciones => axios.post(`${Api}/Simulaciones`, Simulaciones)
 export const GetAllSimulaciones = () => axios.get(`${Api}/Simulaciones`)

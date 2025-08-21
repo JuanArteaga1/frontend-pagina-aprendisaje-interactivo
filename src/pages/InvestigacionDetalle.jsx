@@ -8,6 +8,7 @@ import { Download, FileText, CalendarDays, Users, Link as LinkIcon } from "lucid
 const InvestigacionDetalle = () => {
   const { id } = useParams();
   const { investigaciones, traerInvestigaciones } = useInvestigacion();
+  const apiUrl = import.meta.env.VITE_RUTA1;
 
   useEffect(() => {
     if (!investigaciones.some(i => i._id === id)) {
@@ -31,10 +32,10 @@ const InvestigacionDetalle = () => {
   // Construcción de URLs
   const fuenteURL = investigacion.urlArticulo;
   const imagenURL = investigacion.urlimg
-    ? `http://localhost:3000/uploads/${investigacion.urlimg.replace(/\\/g, "/").split("uploads/").pop()}`
+    ? `${apiUrl}/uploads/${investigacion.urlimg.replace(/\\/g, "/").split("uploads/").pop()}`
     : "img/placeholder.jpg";
   const archivoURL = investigacion.urlDoc?.replace(/\\/g, "/")
-    ? `http://localhost:3000/uploads/${investigacion.urlDoc.replace(/\\/g, "/").split("uploads/").pop()}`
+    ? `${apiUrl}/uploads/${investigacion.urlDoc.replace(/\\/g, "/").split("uploads/").pop()}`
     : null;
 
   const handleDescarga = () => {

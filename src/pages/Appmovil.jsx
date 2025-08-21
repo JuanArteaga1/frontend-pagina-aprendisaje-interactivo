@@ -8,6 +8,7 @@ const AplicacionesMoviles = () => {
   const { Proyectos, TraerProyectos } = useProyectos(); // Obtener datos del contexto de proyectos
   const [seccionActual, setSeccionActual] = useState("Aplicaciones Moviles"); // Estado para mostrar la sección actual
   const [loading, setLoading] = useState(true);
+  const apiUrl = import.meta.env.VITE_RUTA1;
 
 
   useEffect(() => {
@@ -70,7 +71,7 @@ const AplicacionesMoviles = () => {
                   // Limpiar la ruta de la imagen (reemplazar \ por /)
                   const rutaLimpia = app.urlimg?.replace(/\\/g, "/");
                   // Construir la URL completa de la imagen
-                  const imagenURL = `http://localhost:3000/uploads/${rutaLimpia?.split("uploads/")[1]}`;
+                  const imagenURL = `${apiUrl}/uploads/${rutaLimpia?.split("uploads/")[1]}`;
 
                   return (
                     <div key={i} className="card">
