@@ -1,5 +1,5 @@
 import { Children, createContext, useEffect, useState, useContext } from "react";
-import { subirDocenteAPI,GetAllDocentes, GetIdDocentes, DeleteDocentes,PutDocentes } from "../api/AdmimnistrarDocente";
+import { subirDocenteAPI, GetAllDocentes, GetIdDocentes, DeleteDocentes, PutDocentes } from "../api/AdmimnistrarDocente";
 
 export const DocenteContext = createContext();
 
@@ -13,16 +13,16 @@ export const UseDocente = () => {
 
 export const DocenteProvider = ({ children }) => {
     const [Docente, SetDocente] = useState(null);
-    const [errors,setErrors ] = useState([])
-    const [mensaje, setMensaje] = useState(null); 
-    
-    const TraerDocentes = async() =>{
+    const [errors, setErrors] = useState([])
+    const [mensaje, setMensaje] = useState(null);
+
+    const TraerDocentes = async () => {
         try {
             const respuesta = await GetAllDocentes()
-            SetDocente( respuesta)
+            SetDocente(respuesta)
         } catch (error) {
             console.log(error)
-            
+
         }
     }
     const EditarDocentes = async (id, data) => {
@@ -38,26 +38,26 @@ export const DocenteProvider = ({ children }) => {
     };
 
     const EliminarDocentes = async (id) => {
-              try {
-                await DeleteDocentes(id);
-                await TraerDocentes();
-                return { success: true };
-              } catch (error) {
-                console.log("Error al eliminar el docente:", error);
-                return { success: false, error };
-              }
-            };
+        try {
+            await DeleteDocentes(id);
+            await TraerDocentes();
+            return { success: true };
+        } catch (error) {
+            console.log("Error al eliminar el docente:", error);
+            return { success: false, error };
+        }
+    };
 
     const sigout = async (data) => {
         try {
             const response = await subirDocenteAPI(data);
             SetDocente(response.data);
-    
+
             if (response.status === 200) {
                 setMensaje("¡Docente registrado correctamente!"); // <-- Mensaje de éxito
                 setErrors([]); // Limpiar errores anteriores
             }
-    
+
         } catch (error) {
             setMensaje(null); // Ocultar mensaje anterior de éxito si hay error
             setErrors(error.response?.data?.errors || [{ msg: "Error desconocido" }]);
@@ -66,7 +66,7 @@ export const DocenteProvider = ({ children }) => {
     };
 
     return (
-        <DocenteContext.Provider value={{ sigout, errors, mensaje, setMensaje,SetDocente,TraerDocentes, EliminarDocentes,EditarDocentes,Docente }}>
+        <DocenteContext.Provider value={{ sigout, errors, mensaje, setMensaje, SetDocente, TraerDocentes, EliminarDocentes, EditarDocentes, Docente }}>
             {children}
         </DocenteContext.Provider>
     );
