@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { usePodcast } from "../context/PodcastContext";
 
-
 const Podcast = () => {
   const [seccionActual, setSeccionActual] = useState("Podcasts");
   const { TraerPodcast, Podcast } = usePodcast();
@@ -43,31 +42,32 @@ const Podcast = () => {
         <h1 className="titulo-seccion">Ahora estás en: {seccionActual}</h1>
       </div>
 
-      <h2 className="text-left pl-[200px] text-2xl font-bold mt-5 text-gray-800 w-full">Lista de Episodios</h2>
+      <h2 className="text-left pl-[200px] text-2xl font-bold mt-5 text-gray-800 w-full">
+        Lista de Episodios
+      </h2>
 
       {/* Contenedor de episodios con tarjetas interactivas */}
       <div className="flex justify-center gap-5 flex-wrap mt-8">
         {Podcast?.data.map((ep) => {
-
-          
-          
-          
-
-          const rutaLimpia = ep.ArchivoImagen.replace(/\\/g, "/");
+          const rutaLimpia = ep.ArchivoImagen
             ? ep.ArchivoImagen.replace(/\\/g, "/")
             : null;
 
-          const imagenURL = `${apiUrl}/uploads/${rutaLimpia?.split("uploads/")[1]}`;
-            ? `http://localhost:3000/uploads/${rutaLimpia.split("uploads/")[1]}`
-            : "img/default-podcast.png"; // 👈 usa una imagen por defecto si no hay portada
-
+          // ✅ Corregido: uso correcto del ternario
+          const imagenURL = rutaLimpia
+            ? `${apiUrl}/uploads/${rutaLimpia.split("uploads/")[1]}`
+            : "img/default-podcast.png"; // usa imagen por defecto si no hay portada
 
           return (
             <div key={ep._id} className="card">
               <div className="card-inner">
                 {/* Lado frontal */}
                 <div className="card-front">
-                  <img src={imagenURL} alt={ep.nombre_proyecto} className="card-img" />
+                  <img
+                    src={imagenURL}
+                    alt={ep.nombre_proyecto}
+                    className="card-img"
+                  />
                 </div>
 
                 {/* Lado trasero */}
@@ -89,7 +89,6 @@ const Podcast = () => {
             </div>
           );
         })}
-
       </div>
     </div>
   );
