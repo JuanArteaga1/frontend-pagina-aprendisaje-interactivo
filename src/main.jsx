@@ -22,6 +22,7 @@ import MisProyectos from "./pages/MisProyectos";
 import AdministrarDocentes from "./pages/AdministracionDocente";
 import MirarProyectos from "./pages/VerProyectos";
 import ProyectosPorAprobar from "./pages/ProyectosAprobar";
+import RegistrarDocente from "./pages/registroDocente";
 import Fisica from "./pages/Fisica";
 import IngCivil from "./pages/IngCivil";
 import Matematicas from "./pages/Matematicas";
@@ -39,6 +40,7 @@ import { InvestigacionProvider } from "./context/InvestigacionContext";
 import { CategoriaProvider } from "./context/CategoriaContext";
 import { TraerProyectosProvider } from "./context/TraerProyectos";
 import { SimulacionesProvider } from "./context/SimulacionesContex";
+import { RegistroProvider } from "./context/RegristroContext";
 import ProtectedRote from "./ProtectedRoute";
 import EditarProyecto from "./pages/EditarProyecto";
 import EditarPodcast from "./pages/EditarPodcast";
@@ -66,6 +68,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         />
 
       //Rutas sin autenticacion
+      //ruta registro de docente
+        <Route path="/registro-docente/:token" element={ <RegistroProvider><DocenteProvider><RegistrarDocente /></DocenteProvider></RegistroProvider> } />
         //rutas de estudiante y visualizacion
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
@@ -126,7 +130,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route path="/actualizar-proyectos" element={<ActualizarProyecto />} />
             <Route path="/subirsimulaciones" element={<SimulacionesProvider><Subirsimulaciones /></SimulacionesProvider>} />
             <Route path="/SubirInvestigaciones" element={<InvestigacionProvider><SubirInvestigaciones /></InvestigacionProvider>} />
-            <Route path="/SubirDocente" element={<DocenteProvider><SubirDocente /></DocenteProvider>} />
+            <Route path="/SubirDocente" element={<RegistroProvider><SubirDocente /></RegistroProvider>} />
             <Route path="/subir-podcast" element={<PodcastProvider><SubirPodcast /></PodcastProvider>} />
 
      //Ruta para editar proyecto
