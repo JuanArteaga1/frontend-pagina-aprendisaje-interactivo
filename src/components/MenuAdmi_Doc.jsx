@@ -55,14 +55,29 @@ const MenuAdministrador = ({ rol }) => {
         icono: <UserPlus className="w-6 h-6" />,
       },
       {
-        nombre: "Proyectos",
-        ruta: "/VerProyectos",
-        icono: <FileText className="w-6 h-6" />,
-      },
-      {
         nombre: "Gestión de categorías",
         ruta: "/SubirCategoria",
         icono: <Settings className="w-6 h-6" />,
+      },
+      {
+        nombre: "Gestión de materias",
+        ruta: "/SubirMateria",
+        icono: <Settings className="w-6 h-6" />,
+      },
+      {
+        nombre: "Lista de categorías",
+        ruta: "/categorias", // nueva página CRUD
+        icono: <Folder className="w-6 h-6" />,
+      },
+      {
+        nombre: "Lista de materias",
+        ruta: "/materias",
+        icono: <Folder className="w-6 h-6" />,
+      },
+      {
+        nombre: "Proyectos",
+        ruta: "/VerProyectos",
+        icono: <FileText className="w-6 h-6" />,
       },
       {
         nombre: "Menú Docente",
