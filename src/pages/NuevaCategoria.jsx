@@ -56,11 +56,8 @@ const [tipoMensaje, setTipoMensaje] = useState("success");
 
     return (
         <div className="flex h-screen bg-gray-100">
-            {/* Menú Lateral */}
-            <div className="w-64 bg-gray-800 text-white">
-                <MenuDocente rol="admin" />
-            </div>
-
+            {/* Menú Lateral */}            
+            <MenuDocente rol="admin" />            
             {/* Contenido Principal */}
             <div className="flex-1 overflow-y-auto p-6">
                 <div className="flex flex-col items-center pt-10">

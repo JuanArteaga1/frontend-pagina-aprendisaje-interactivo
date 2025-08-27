@@ -40,10 +40,10 @@ const Alerta = ({ tipo = "error", mensaje, onClose }) => {
     const estilo = estilos[tipo];
 
     return (
-        <div 
-            className={`${estilo.bg} ${estilo.border} ${estilo.text} p-4 rounded-md shadow-sm mb-4 flex items-start transition-opacity duration-300 ease-in-out ${isClosing ? 'opacity-0' : 'opacity-100'}`} 
-            role="alert"
-        >
+        <div
+  className={`${estilo?.bg || ''} ${estilo?.border || ''} ${estilo?.text || ''} p-4 rounded-md shadow-sm mb-4 flex items-start transition-opacity duration-300 ease-in-out ${isClosing ? 'opacity-0' : 'opacity-100'}`}
+  role="alert"
+>
             <div className="flex-shrink-0 mr-3">
                 {estilo.iconSVG}
             </div>

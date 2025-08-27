@@ -41,6 +41,8 @@ import { CategoriaProvider } from "./context/CategoriaContext";
 import { TraerProyectosProvider } from "./context/TraerProyectos";
 import { SimulacionesProvider } from "./context/SimulacionesContex";
 import { RegistroProvider } from "./context/RegristroContext";
+import { MateriaProvider } from "./context/MateriaContext";
+
 import ProtectedRote from "./ProtectedRoute";
 import EditarProyecto from "./pages/EditarProyecto";
 import EditarPodcast from "./pages/EditarPodcast";
@@ -49,6 +51,12 @@ import EditarSimulaciones from "./pages/EditarSimulaciones";
 import EditarDocente from "./pages/EditarDocente";
 
 import Resultados from "./pages/Resultados";
+import ListaCategorias from "./pages/ListaCategorias";
+
+import NuevaMateria from "./pages/NuevaMateria";
+import ListaMaterias from "./pages/ListaMaterias";
+
+
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <LoginProvider>
@@ -68,8 +76,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         />
 
       //Rutas sin autenticacion
-      //ruta registro de docente
-        <Route path="/registro-docente/:token" element={ <RegistroProvider><DocenteProvider><RegistrarDocente /></DocenteProvider></RegistroProvider> } />
+        //ruta registro de docente
+        <Route path="/registro-docente/:token" element={<RegistroProvider><DocenteProvider><RegistrarDocente /></DocenteProvider></RegistroProvider>} />
         //rutas de estudiante y visualizacion
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
@@ -94,7 +102,12 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route element={<ProtectedRote />}>
       //rutas de Administrador
           <Route path="/menuadministrador" element={<MenuAdmin />} />
+          <Route path="/categorias" element={<ListaCategorias />} />
           <Route path="/SubirCategoria" element={<CategoriaProvider>  <NuevaCategoria /> </CategoriaProvider>} />
+
+          {/* --- NUEVAS RUTAS DE MATERIAS --- */}
+          <Route path="/materias" element={<MateriaProvider><ListaMaterias /></MateriaProvider>} />
+          <Route path="/SubirMateria" element={<MateriaProvider><NuevaMateria /></MateriaProvider>} />
 
           <Route path="/VerProyectos" element={
             <ProyectosProvider>
