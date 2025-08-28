@@ -13,7 +13,7 @@ function MenuDocen() {
       </div>
 
       {/* Contenido Principal */}
-      <main className="flex-1 ml-64 p-8 overflow-y-auto">
+      <main className="flex-1 ml-68 p-8 overflow-y-auto">
         {/* Sección de Bienvenida */}
         <div className="text-center mt-24 mb-12">
           {/* Título principal con efecto de gradiente */}

@@ -16,7 +16,7 @@ function MenuDocen() {
       {/* Contenido Principal */}
       <main
         className={`flex-1 p-6 sm:p-8 overflow-y-auto transition-all duration-300
-        ${colapsado ? "lg:ml-20" : "lg:ml-64"}`}
+        ${colapsado ? "lg:ml-20" : "lg:ml 64"}`}
       >
         <div className="max-w-6xl lg:max-w-full mx-auto">
           {/* Sección de Bienvenida */}
