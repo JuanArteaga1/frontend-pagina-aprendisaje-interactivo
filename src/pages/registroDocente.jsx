@@ -385,34 +385,6 @@ const RegistrarDocente = () => {
                                     </p>
                                 )}
                             </div>
-
-                            {/* Código */}
-                            <div className="relative">
-                                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                    Código Usuario
-                                </label>
-                                <div className="relative">
-                                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <FaCode className="text-gray-400 text-lg" />
-                                    </div>
-                                    <input
-                                        type="text"
-                                        {...register('Codigo', {
-                                            required: 'El código es requerido',
-                                            minLength: { value: 3, message: 'El código debe tener al menos 3 caracteres' }
-                                        })}
-                                        className="w-full pl-12 pr-4 py-3 text-gray-800 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:border-gray-300"
-                                        placeholder="Ej: PROF-001"
-                                    />
-                                </div>
-                                {errors.Codigo && (
-                                    <p className="text-red-500 text-sm mt-1 flex items-center">
-                                        <span className="mr-1">⚠</span>
-                                        {errors.Codigo.message}
-                                    </p>
-                                )}
-                            </div>
-
                             {/* Contraseña */}
                             <div className="relative">
                                 <label className="block text-sm font-semibold text-gray-700 mb-2">

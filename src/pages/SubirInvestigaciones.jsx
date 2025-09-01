@@ -5,6 +5,8 @@ import Alerta from "../components/AlertasDocente";
 import { useLogin } from "../context/LoginContext";
 import { ImageIcon, UploadIcon, FileText, Sliders, UploadCloud, ArrowRight, ArrowLeft } from "lucide-react";
 import { useInvestigacion } from "../context/InvestigacionContext";
+import { GetAllMateria } from "../api/AdmiMateria";
+
 
 const SubirInvestigaciones = () => {
   const {
@@ -26,7 +28,7 @@ const SubirInvestigaciones = () => {
   const { Usuario } = useLogin();
   const [registroExitoso, setRegistroExitoso] = useState(false);
   const [pasoActual, setPasoActual] = useState(1);
-
+  const [materias, setMaterias] = useState([]);
   const MAX_SIZE = 10 * 1024 * 1024;
   const portada = watch("portada");
   const urlDoc = watch("urlDoc");
@@ -50,6 +52,14 @@ const SubirInvestigaciones = () => {
     const valido = await trigger(camposAValidar);
     if (valido && pasoActual < pasosInfo.length) setPasoActual(pasoActual + 1);
   };
+  const cargarMaterias = async () => {
+      try {
+        const res = await GetAllMateria();
+        setMaterias(res.data);
+      } catch (error) {
+        console.error("Error cargando materias", error);
+      }
+    };
 
   const pasoAnterior = () => {
     if (pasoActual > 1) setPasoActual(pasoActual - 1);
@@ -72,6 +82,10 @@ const SubirInvestigaciones = () => {
       return () => clearTimeout(timer);
     }
   }, [InvestigacionErrors, setErrors]);
+  useEffect(() => {
+      cargarMaterias();
+    }, []);
+  
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -133,7 +147,7 @@ const SubirInvestigaciones = () => {
               formData.append("urlDoi", data.UrlDoi);
               if (data.portada?.[0]) formData.append("portada", data.portada[0]);
               if (data.urlDoc?.[0]) formData.append("urlDoc", data.urlDoc[0]);
-              formData.append("Usuario", Usuario?.Id || "");
+              formData.append("Usuario", Usuario?.id || "");
               formData.append("seccion", "Investigacion");
               await sigout(formData);
             })}
@@ -243,18 +257,20 @@ const SubirInvestigaciones = () => {
               <div className="space-y-6">
                 <h3 className="text-xl font-semibold text-gray-700">Paso 2: Detalles Adicionales</h3>
                 <div>
-                  <label className="block font-semibold text-gray-800">Materia</label>
-                  <select
-                    {...register("materia", { required: "Debe seleccionar una materia" })}
-                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg"
-                  >
-                    <option value="">Seleccionar materia</option>
-                    <option value="Fisica">Fisica</option>
-                    <option value="Ingenieria Civil">Ingeniería Civil</option>
-                    <option value="Matematicas">Matematicas</option>
-                  </select>
-                  {errors.materia && <p className="text-red-500 text-sm">{errors.materia.message}</p>}
-                </div>
+                    <label className="block text-sm font-medium text-gray-700">Materia</label>
+                    <select
+                      {...register('materia', { required: true })}
+                      className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    >
+                      <option value="">Seleccionar materia</option>
+                      {materias.map((materia) => (
+                        <option key={materia._id || materia.id} value={materia.nombre}>
+                          {materia.nombre}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.materia && (<p className="mt-1 text-red-500 text-sm">Materia es requerida</p>)}
+                  </div>
 
                 <div>
                   <label className="block font-semibold text-gray-800">URL del Artículo</label>

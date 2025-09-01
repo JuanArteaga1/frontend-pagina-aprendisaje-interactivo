@@ -4,14 +4,14 @@ import { Search, User } from "lucide-react";
 import Swal from 'sweetalert2';
 import { useLogin } from "../context/LoginContext"
 
-
 const Navbar = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [busqueda, setBusqueda] = useState("");
     const [mostrarBusqueda, setMostrarBusqueda] = useState(false);
-    const { signin, Usuario, isAutheticated, errors: LoginErrors } = useLogin()
-
+    
+    // Usar directamente el contexto - no necesitas estado local para el rol
+    const { signout, Usuario, isAuthenticated, errors: LoginErrors } = useLogin();
 
     let timeoutId = null;
 
@@ -20,13 +20,12 @@ const Navbar = () => {
         setIsDropdownOpen(true);
     };
 
-
-
     const handleMouseLeave = () => {
         timeoutId = setTimeout(() => {
             setIsDropdownOpen(false);
         }, 300);
     };
+    
 
     return (
         <nav className="bg-white shadow-md sticky top-0 z-50">
@@ -122,7 +121,7 @@ const Navbar = () => {
                                     onMouseLeave={handleMouseLeave}
                                 >
                                     <div className="py-1">
-                                        {!isAutheticated ? (
+                                        {!isAuthenticated ? (
                                             // No está logeado
                                             <Link
                                                 to="/login"
@@ -132,8 +131,11 @@ const Navbar = () => {
                                             </Link>
                                         ) : (
                                             <>
-                                                {/* Usuario logeado - mostrar por rol */}
-                                                {Usuario?.Rol === "Administrador" && (
+                                                {/* Mostrar información del usuario si está disponible */}
+                                                
+
+                                                {/* Usuario logeado - mostrar por rol usando el contexto */}
+                                                {Usuario?.rol === "Administrador" || localStorage.getItem('Rol') === "Administrador" && (
                                                     <>
                                                         <Link
                                                             to="/menuadministrador"
@@ -149,7 +151,7 @@ const Navbar = () => {
                                                         </Link>
                                                     </>
                                                 )}
-                                                {Usuario?.Rol === "Docente" && (
+                                                {Usuario?.rol === "Docente" || localStorage.getItem('Rol') === "Docente" && (
                                                     <Link
                                                         to="/menudocente"
                                                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -157,6 +159,9 @@ const Navbar = () => {
                                                         Menú Docente
                                                     </Link>
                                                 )}
+
+                                                {/* Separador */}
+                                                <div className="border-t border-gray-200 my-1"></div>
 
                                                 {/* Cerrar sesión */}
                                                 <button
@@ -170,8 +175,9 @@ const Navbar = () => {
                                                             cancelButtonColor: '#3085d6',
                                                             confirmButtonText: 'Sí, cerrar sesión',
                                                             cancelButtonText: 'Cancelar'
-                                                        }).then((result) => {
+                                                        }).then(async (result) => {
                                                             if (result.isConfirmed) {
+                                                                await signout();
                                                                 localStorage.clear();
                                                                 window.location.href = "/";
                                                             }
@@ -183,6 +189,7 @@ const Navbar = () => {
                                                 </button>
                                             </>
                                         )}
+                                        
                                         {/* Opción de ayuda (siempre disponible) */}
                                         <Link
                                             to="/ayuda"
@@ -244,6 +251,41 @@ const Navbar = () => {
                     >
                         Podcast
                     </Link>
+
+                    {/* Menú móvil para usuarios autenticados */}
+                    {isAuthenticated && (
+                        <>
+                            <div className="border-t border-gray-200 mt-2 pt-2">
+                                {Usuario?.Rol === "Administrador"  || localStorage.getItem('Rol') === "Administrador" && (
+                                    <>
+                                        <Link
+                                            to="/menuadministrador"
+                                            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+                                            onClick={() => setIsMenuOpen(false)}
+                                        >
+                                            Menú Administrador
+                                        </Link>
+                                        <Link
+                                            to="/menudocente"
+                                            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+                                            onClick={() => setIsMenuOpen(false)}
+                                        >
+                                            Menú Docente
+                                        </Link>
+                                    </>
+                                )}
+                                {Usuario?.Rol === "Docente"  || localStorage.getItem('Rol') === "Docente" && (
+                                    <Link
+                                        to="/menudocente"
+                                        className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+                                        onClick={() => setIsMenuOpen(false)}
+                                    >
+                                        Menú Docente
+                                    </Link>
+                                )}
+                            </div>
+                        </>
+                    )}
                 </div>
             </div>
         </nav>

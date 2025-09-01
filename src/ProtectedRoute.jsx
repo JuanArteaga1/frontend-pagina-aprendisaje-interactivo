@@ -5,8 +5,8 @@ import { Navigate,Outlet} from "react-router-dom";
 
 
 function ProtectedRote() {
-    const {isAutheticated} = useLogin()
-    if (!isAutheticated) return <Navigate to='/login' replace/>
+    const {isAuthenticated} = useLogin()
+    if (!isAuthenticated) return <Navigate to='/login' replace/>
     return(
         <Outlet/>
     )

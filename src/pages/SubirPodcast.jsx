@@ -6,6 +6,8 @@ import { UseCategoria } from "../context/CategoriaContext"
 import Alerta from "../components/AlertasDocente";
 import { useLogin } from "../context/LoginContext"
 import { ImageIcon, FileText, Sliders, UploadCloud, ArrowRight, ArrowLeft } from 'lucide-react';
+import { GetAllMateria } from "../api/AdmiMateria";
+
 
 function SubirPodcast() {
   const { register, handleSubmit, watch, formState: { errors }, control, trigger } = useForm({
@@ -23,6 +25,7 @@ function SubirPodcast() {
   const { Usuario } = useLogin();
   const portada = watch('portada');
   const MAX_SIZE = 10 * 1024 * 1024;
+  const [materias, setMaterias] = useState([]);
 
   // NUEVO: Estado y configuración de los pasos
   const [pasoActual, setPasoActual] = useState(1);
@@ -47,6 +50,14 @@ function SubirPodcast() {
       setPasoActual(pasoActual + 1);
     }
   };
+  const cargarMaterias = async () => {
+      try {
+        const res = await GetAllMateria();
+        setMaterias(res.data);
+      } catch (error) {
+        console.error("Error cargando materias", error);
+      }
+    };
 
   const pasoAnterior = () => {
     if (pasoActual > 1) {
@@ -56,6 +67,7 @@ function SubirPodcast() {
 
   useEffect(() => {
     TraerCategoria();
+    cargarMaterias();
   }, []);
 
   useEffect(() => {
@@ -86,7 +98,7 @@ function SubirPodcast() {
     formData.append("materia", data.materia);
     formData.append("UrlAudio", data.audioLink);
     formData.append("portada", data.portada[0]);
-    formData.append("Usuario", Usuario.Id);
+    formData.append("Usuario", Usuario.id);
     formData.append("seccion", "Podcast");
     formData.append("categoriaId", data.categoriaId);
 
@@ -297,21 +309,20 @@ function SubirPodcast() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">Materia</label>
-                      <select
-                        {...register("materia", { required: true })}
-                        className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm 
-                     focus:ring-blue-500 focus:border-blue-500"
-                      >
-                        <option value="">Seleccionar materia</option>
-                        <option value="fisica">Física</option>
-                        <option value="ingenieria_civil">Ingeniería Civil</option>
-                        <option value="matematicas">Matemáticas</option>
-                      </select>
-                      {errors.materia && (
-                        <p className="mt-1 text-red-500 text-sm">La materia es requerida</p>
-                      )}
-                    </div>
+                    <label className="block text-sm font-medium text-gray-700">Materia</label>
+                    <select
+                      {...register('materia', { required: true })}
+                      className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    >
+                      <option value="">Seleccionar materia</option>
+                      {materias.map((materia) => (
+                        <option key={materia._id || materia.id} value={materia.nombre}>
+                          {materia.nombre}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.materia && (<p className="mt-1 text-red-500 text-sm">Materia es requerida</p>)}
+                  </div>
                   </div>
                 </div>
               )}

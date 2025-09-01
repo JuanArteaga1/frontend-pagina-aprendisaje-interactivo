@@ -5,6 +5,7 @@ import { useProyectos } from "../context/ProyectoContext";
 import { UseCategoria } from "../context/CategoriaContext";
 import Alerta from "../components/AlertasDocente";
 import { useLogin } from "../context/LoginContext";
+import { GetAllMateria } from "../api/AdmiMateria";
 import { Image, Upload, FileUp, ArrowRight, ArrowLeft, FileText, Sliders, UploadCloud } from "lucide-react";
 
 function SubirProyecto() {
@@ -18,10 +19,19 @@ function SubirProyecto() {
   const [registroExitoso, setRegistroExitoso] = useState(false);
   const [pasoActual, setPasoActual] = useState(1);
   const MAX_SIZE = 10 * 1024 * 1024; // 10MB
-
+  const [materias, setMaterias] = useState([]);
   const archivoAPK = watch('urlArchivoapk');
   const portada = watch('portada');
   const urlDoc = watch('urlDoc');
+
+  const cargarMaterias = async () => {
+    try {
+      const res = await GetAllMateria();
+      setMaterias(res.data);
+    } catch (error) {
+      console.error("Error cargando materias", error);
+    }
+  };
 
   const camposPaso1 = ['nombre_proyecto', 'autores', 'fechaPublicacion', 'descripcion'];
   const camposPaso2 = ['materia', 'categoriaId', 'youtubeLink'];
@@ -35,6 +45,7 @@ function SubirProyecto() {
 
   useEffect(() => {
     TraerCategoria();
+    cargarMaterias();
   }, []);
 
   useEffect(() => {
@@ -134,7 +145,7 @@ function SubirProyecto() {
               formData.append("urlArchivoapk", data.urlArchivoapk?.[0]);
               formData.append("portada", data.portada?.[0]);
               formData.append("urlDoc", data.urlDoc?.[0]);
-              formData.append("Usuario", Usuario.Id);
+              formData.append("Usuario", Usuario.id);
               formData.append("seccion", "Proyectos");
 
               const resultado = await sigout(formData);
@@ -251,9 +262,11 @@ function SubirProyecto() {
                       className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     >
                       <option value="">Seleccionar materia</option>
-                      <option value="Fisica">Física</option>
-                      <option value="ingenieria civil">Ingeniería Civil</option>
-                      <option value="Matematicas">Matemáticas</option>
+                      {materias.map((materia) => (
+                        <option key={materia._id || materia.id} value={materia.nombre}>
+                          {materia.nombre}
+                        </option>
+                      ))}
                     </select>
                     {errors.materia && (<p className="mt-1 text-red-500 text-sm">Materia es requerida</p>)}
                   </div>

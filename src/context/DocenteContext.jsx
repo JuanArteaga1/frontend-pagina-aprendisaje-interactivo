@@ -1,5 +1,5 @@
 import { Children, createContext, useEffect, useState, useContext } from "react";
-import { subirDocenteAPI, GetAllDocentes, GetIdDocentes, DeleteDocentes, PutDocentes } from "../api/AdmimnistrarDocente";
+import { subirDocenteAPI, GetAllDocentes, DeleteDocentes, PutDocentes, GetSolicitudes,DeleteSolicitudes } from "../api/AdmimnistrarDocente";
 
 export const DocenteContext = createContext();
 
@@ -12,6 +12,7 @@ export const UseDocente = () => {
 };
 
 export const DocenteProvider = ({ children }) => {
+    const [Solicitudes, SetSolicitudes] = useState(null);
     const [Docente, SetDocente] = useState(null);
     const [errors, setErrors] = useState([])
     const [mensaje, setMensaje] = useState(null);
@@ -65,8 +66,28 @@ export const DocenteProvider = ({ children }) => {
         }
     };
 
+    const TraerSolicitudes = async () => {
+        try {
+            const respuesta = await GetSolicitudes()
+            SetSolicitudes(respuesta)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const EliminarSolicitud = async (id) => {
+        try {
+            await DeleteSolicitudes(id);
+            await TraerSolicitudes();
+            return { success: true };
+            
+        } catch (error) {
+            console.error("Error al eliminar solicitud:", error);
+        }
+    };
+
     return (
-        <DocenteContext.Provider value={{ sigout, errors, mensaje, setMensaje, SetDocente, TraerDocentes, EliminarDocentes, EditarDocentes, Docente }}>
+        <DocenteContext.Provider value={{ EliminarSolicitud, Solicitudes, TraerSolicitudes, sigout, errors, mensaje, setMensaje, SetDocente, TraerDocentes, EliminarDocentes, EditarDocentes, Docente }}>
             {children}
         </DocenteContext.Provider>
     );

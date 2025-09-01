@@ -22,6 +22,8 @@ const Home = () => {
     nextArrow: <NextArrow />,
   };
 
+  
+
   return (
     <div className="w-full overflow-x-hidden bg-gray-50">
       <Navbar />
