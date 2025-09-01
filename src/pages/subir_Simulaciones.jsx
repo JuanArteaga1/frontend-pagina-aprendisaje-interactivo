@@ -6,6 +6,7 @@ import { UseSimulaciones } from "../context/SimulacionesContex";
 import Alerta from "../components/AlertasDocente";
 import { useLogin } from "../context/LoginContext"
 import { UseCategoria } from "../context/CategoriaContext"
+import { GetAllMateria } from "../api/AdmiMateria";
 import { Image, Upload as UploadIcon, FileUp, ArrowRight, ArrowLeft, FileText, Sliders, UploadCloud } from "lucide-react";
 
 
@@ -21,15 +22,13 @@ const SubirAPK = () => {
     const { sigout, errors: SimulacionesErrors, mensaje, setMensaje, setErrors } = UseSimulaciones()
     const { Usuario } = useLogin()
     const [registroExitoso, setRegistroExitoso] = useState(false);
-
     const { TraerCategoria, Categoria } = UseCategoria()
     const [pasoActual, setPasoActual] = useState(1);
     const MAX_SIZE = 10 * 1024 * 1024; // 10MB
-
     const archivoAPK = watch('urlArchivoapk');
     const portada = watch('portada');
     const urlDoc = watch('urlDoc');
-
+    const [materias, setMaterias] = useState([]);
     const camposPaso1 = ['nombre_proyecto', 'autores', 'fechaPublicacion', 'descripcion'];
     const camposPaso2 = ['materia', 'categoriaId', 'youtubeLink'];
     const camposPaso3 = ['urlArchivoapk', 'portada', 'urlDoc'];
@@ -39,11 +38,19 @@ const SubirAPK = () => {
         { id: 2, titulo: 'Detalles', icono: <Sliders className="w-5 h-5 mr-2" /> },
         { id: 3, titulo: 'Archivos', icono: <UploadCloud className="w-5 h-5 mr-2" /> },
     ];
+    const cargarMaterias = async () => {
+        try {
+            const res = await GetAllMateria();
+            setMaterias(res.data);
+        } catch (error) {
+            console.error("Error cargando materias", error);
+        }
+    };
 
 
     useEffect(() => {
         TraerCategoria();
-        console.log(Categoria) // Llamada inicial para traer los datos
+        cargarMaterias();
     }, []);
 
     useEffect(() => {
@@ -148,7 +155,7 @@ const SubirAPK = () => {
                             formData.append("autores", data.autores);
                             formData.append("fechaPublicacion", data.fechaPublicacion);
                             formData.append("materia", data.materia);
-                            formData.append("Usuario", Usuario.Id);
+                            formData.append("Usuario", Usuario.id);
                             formData.append("categoriaId", data.categoriaId);
                             formData.append("youtubeLink", data.youtubeLink || "");
 
@@ -264,20 +271,19 @@ const SubirAPK = () => {
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     {/* Materia */}
                                     <div>
-                                        <label className="block text-base font-semibold text-gray-800 mb-1">Materia</label>
+                                        <label className="block text-sm font-medium text-gray-700">Materia</label>
                                         <select
                                             {...register('materia', { required: true })}
-                                            name="materia"
-                                            className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
+                                            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                                         >
                                             <option value="">Seleccionar materia</option>
-                                            <option value="Fisica">Fisica</option>
-                                            <option value="ingenieria civil">Ingeniería Civil</option>
-                                            <option value="Matematicas">Matematicas</option>
+                                            {materias.map((materia) => (
+                                                <option key={materia._id || materia.id} value={materia.nombre}>
+                                                    {materia.nombre}
+                                                </option>
+                                            ))}
                                         </select>
-                                        {errors.materia && (
-                                            <p className="text-red-500 font-semibold text-sm">La materia es requerida</p>
-                                        )}
+                                        {errors.materia && (<p className="mt-1 text-red-500 text-sm">Materia es requerida</p>)}
                                     </div>
 
                                     {/* Categoría */}

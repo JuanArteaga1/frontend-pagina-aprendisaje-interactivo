@@ -9,6 +9,7 @@ import {
 import MenuDocente from "../components/MenuAdmi_Doc";
 
 function ListaMaterias() {
+    2
     const [materias, setMaterias] = useState([]);
     const [editandoId, setEditandoId] = useState(null);
     const [formEdit, setFormEdit] = useState({ nombre: "" });

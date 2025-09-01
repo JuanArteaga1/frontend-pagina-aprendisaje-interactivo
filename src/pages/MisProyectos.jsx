@@ -31,8 +31,8 @@ const MisProyectos = () => {
   const [filtroAutor, setFiltroAutor] = useState("");
 
   useEffect(() => {
-    TraerProyectosId(Usuario.Id);
-  }, [Usuario.Id]);
+    TraerProyectosId(Usuario.id);
+  }, [Usuario.id]);
 
   useEffect(() => {
     if (location.state?.mensaje) {

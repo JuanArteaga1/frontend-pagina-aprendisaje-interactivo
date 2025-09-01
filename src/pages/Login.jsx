@@ -3,44 +3,59 @@ import imagenlogin from "../img/logou.png";
 import { useLogin } from "../context/LoginContext"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
-import { Eye, EyeOff } from "lucide-react"; // Íconos para el campo de contraseña
+import { Eye, EyeOff } from "lucide-react";
 import Alerta from "../components/AlertasDocente";
-
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
-  const { signin, Usuario, isAutheticated, errors: LoginErrors } = useLogin()
-  console.log(LoginErrors)
-  const navigate = useNavigate()
+  const { signin, Usuario, isAuthenticated, errors: LoginErrors } = useLogin();
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-
+  // Debug logs
+console.log(localStorage.getItem('Rol'));
 
   useEffect(() => {
-    if (isAutheticated && Usuario) {
-      if (Usuario.Rol === "Docente") {
-        navigate("/menudocente");
-      } else if (Usuario.Rol === "Administrador") {
-        navigate("/menuadministrador");
+    if (isAuthenticated && Usuario?.rol || localStorage.getItem('Rol')) { // Cambiar Rol por rol
+
+      switch (Usuario?.rol || localStorage.getItem('Rol')) { 
+        
+        case "Docente":
+          navigate("/menudocente");
+          break;
+        case "Administrador":
+          navigate("/menuadministrador");
+          break;
+        default:
+          console.log("Rol no reconocido:", Usuario.rol);
+          navigate("/");
+          break;
       }
     }
-  }, [isAutheticated, Usuario, navigate]);
+}, [isAuthenticated, Usuario, navigate]);
 
   const onSubmit = handleSubmit(async (values) => {
+    console.log("🔍 Iniciando login con valores:", values);
+    setLoading(true);
+    
     try {
-      signin(values)
+      await signin(values); // ✅ Esperar a que termine la función signin
+      console.log("✅ signin completado");
     } catch (error) {
-      console.error("Error al iniciar sesión:", error);
+      console.error("❌ Error al iniciar sesión:", error);
+    } finally {
+      setLoading(false);
     }
   });
+
   return (
     <>
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <div className="w-full max-w-md p-8 bg-white rounded shadow-md">
           {LoginErrors.map((error, i) => (
-            <Alerta key={i} tipo="error" mensaje={error.msg} />
+            <Alerta key={i} tipo="error" mensaje={error.msg || error.message} />
           ))}
-          
 
           <div className="flex justify-center mb-6">
             <img src={imagenlogin} alt="Logo" className="h-24" />
@@ -53,6 +68,7 @@ const Login = () => {
                 {...register('email', { required: true })}
                 className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="ejemplo@correo.com"
+                disabled={loading}
               />
               {errors.email && (
                 <p className="text-red-500 text-sm mt-1">INGRESE CORREO</p>
@@ -66,11 +82,13 @@ const Login = () => {
                   {...register('contrasena', { required: true })}
                   className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="**********"
+                  disabled={loading}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-2.5 text-gray-500"
+                  disabled={loading}
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
@@ -80,12 +98,12 @@ const Login = () => {
               )}
             </div>
 
-
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-colors hover:scale-103"
+              disabled={loading}
+              className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-colors hover:scale-103 disabled:bg-blue-400 disabled:cursor-not-allowed"
             >
-              Acceder
+              {loading ? "Ingresando..." : "Acceder"}
             </button>
           </form>
 
@@ -100,6 +118,7 @@ const Login = () => {
             <button
               type="button"
               className="flex items-center justify-center w-full px-4 py-2 border border-gray-300 rounded hover:bg-gray-100 hover:scale-104"
+              disabled={loading}
             >
               <img
                 src="https://www.svgrepo.com/show/475656/google-color.svg"
@@ -109,9 +128,15 @@ const Login = () => {
               Google
             </button>
           </div>
+
+          {/* Debug info - remover en producción */}
+          <div className="mt-4 p-2 bg-gray-100 text-xs rounded">
+            <p>Debug: Auth={isAuthenticated ? "✅" : "❌"}</p>
+            <p>Rol: {Usuario?.rol || "Sin rol"}</p>
+            <p>Usuario: {Usuario?.nombre || "Sin usuario"}</p>
+          </div>
         </div>
       </div>
-
     </>
   );
 };
