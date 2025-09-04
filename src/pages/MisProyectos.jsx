@@ -31,6 +31,7 @@ const MisProyectos = () => {
   const [filtroAutor, setFiltroAutor] = useState("");
 
   useEffect(() => {
+    console.log("Usuario:", Usuario.id);
     TraerProyectosId(Usuario.id);
   }, [Usuario.id]);
 
@@ -98,8 +99,8 @@ const MisProyectos = () => {
           } else if (fila.proyecto === "Simulacion") {
             await EliminarSimulaciones(fila._id);
           }
-
-          await TraerProyectosId(Usuario.Id);
+          
+          await TraerProyectosId(Usuario.Id || localStorage.getItem('Id'));
 
           Swal.fire(
             "¡Eliminado!",

@@ -24,8 +24,6 @@ const AdministrarDocente = () => {
       { key: 'nombre', nombre: 'Nombre' },
       { key: 'identificacion', nombre: 'Identificación' },
       { key: 'email', nombre: 'Correo' },
-      { key: 'Codigo', nombre: 'Código' },
-      { key: 'estado', nombre: 'Estado' }
     ]);
 
     setColumnasSolicitudes([
@@ -36,13 +34,6 @@ const AdministrarDocente = () => {
   }, []);
 
   const acciones = [
-    {
-      nombre: "Editar",
-      fn: (fila) => {
-        navigate(`/editar-docente/${fila._id}`, { state: { docente: fila } });
-      },
-      estilo: "bg-yellow-500 text-white hover:bg-yellow-600"
-    },
     {
       nombre: "Eliminar",
       fn: (fila) => {
