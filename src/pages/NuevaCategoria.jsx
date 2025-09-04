@@ -117,14 +117,6 @@ const [tipoMensaje, setTipoMensaje] = useState("success");
 
                             {/* Campo Estado */}
                             <div>
-                                <label className="block text-gray-700 text-sm font-medium mb-1">Estado</label>
-                                <select
-                                    {...register('Estado')}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                                >
-                                    <option value="activa">Activa</option>
-                                    <option value="inactiva">Inactiva</option>
-                                </select>
                             </div>
 
                             {/* Botón de Guardar */}
