@@ -4,12 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { useProyectos } from "../context/ProyectoContext";
 
 const AplicacionesMoviles = () => {
-  const navigate = useNavigate(); // Hook para redireccionar entre rutas
-  const { Proyectos, TraerProyectos } = useProyectos(); // Obtener datos del contexto de proyectos
-  const [seccionActual, setSeccionActual] = useState("Aplicaciones Moviles"); // Estado para mostrar la sección actual
+  const navigate = useNavigate();
+  const { Proyectos, TraerProyectos } = useProyectos();
+  const [seccionActual, setSeccionActual] = useState("Aplicaciones Moviles");
   const [loading, setLoading] = useState(true);
   const apiUrl = import.meta.env.VITE_RUTA1;
-
 
   useEffect(() => {
     const cargarDatos = async () => {
@@ -19,22 +18,52 @@ const AplicacionesMoviles = () => {
     cargarDatos();
   }, []);
 
-  console.log(Proyectos); // Mostrar los proyectos en consola para depuración
-
-  // Memorizar el listado de proyectos ordenado por fecha (más recientes primero)
   const proyectosOrdenados = useMemo(() => {
     return [...Proyectos].sort(
       (a, b) => new Date(b.fechaPublicacion) - new Date(a.fechaPublicacion)
     );
   }, [Proyectos]);
 
-  // Agrupar los proyectos por materia (o categoría), usando los proyectos ya ordenados
   const proyectosAgrupados = proyectosOrdenados.reduce((acc, proyecto) => {
-    const categoria = proyecto.materia?.nombre || "Sin categoría"; // Si no hay materia, usar "Sin categoría"
-    if (!acc[categoria]) acc[categoria] = []; // Si no existe aún el grupo, crearlo
-    acc[categoria].push(proyecto); // Agregar el proyecto a su grupo correspondiente
+    const categoria = proyecto.materia?.nombre || "Sin categoría";
+    if (!acc[categoria]) acc[categoria] = [];
+    acc[categoria].push(proyecto);
     return acc;
   }, {});
+
+  // Función para formatear autores
+  const formatAutores = (autores) => {
+    if (!autores) return "No especificado";
+
+    try {
+      if (typeof autores === "string" && autores.startsWith("[")) {
+        const parsed = JSON.parse(autores);
+        if (Array.isArray(parsed)) {
+          return parsed.join(", ");
+        }
+      }
+
+      if (Array.isArray(autores)) {
+        return autores.join(", ");
+      }
+
+      if (typeof autores === "string") {
+        return autores
+          .replace(/[\[\]"']/g, "")
+          .replace(/,\s*,/g, ",")
+          .replace(/^\s*,|,\s*$/g, "")
+          .trim();
+      }
+    } catch (error) {
+      return String(autores)
+        .replace(/[\[\]"']/g, "")
+        .replace(/,\s*,/g, ",")
+        .replace(/^\s*,|,\s*$/g, "")
+        .trim() || "No especificado";
+    }
+
+    return "No especificado";
+  };
 
   if (loading) {
     return (
@@ -50,49 +79,104 @@ const AplicacionesMoviles = () => {
 
   return (
     <div className="aplicaciones-moviles">
-      {/* Navbar de la aplicación */}
       <Navbar />
-
-      {/* Sección de portada */}
+      
       <div className="imagen-seccion">
         <img src="img/DSC04968.JPG" alt="" />
         <h1 className="titulo-seccion">Ahora estás en: {seccionActual}</h1>
       </div>
 
-      {/* Contenedor principal de proyectos agrupados por categoría */}
       <div className="contenido-proyectos">
         {Object.entries(proyectosAgrupados).map(([categoria, items]) => (
           <div key={categoria} className="categoria">
-            <h2 className="text-2xl">{categoria}</h2>
+            <h2 className="text-3xl font-bold mt-6 ml-4 text-blue-900">
+              {categoria}
+            </h2>
             {items.length > 0 ? (
-              <div className="cards-container">
-                {/* Mostrar cada proyecto como una tarjeta */}
+              <div className="flex flex-wrap gap-8 justify-start py-6">
                 {items.map((app, i) => {
-                  // Limpiar la ruta de la imagen (reemplazar \ por /)
                   const rutaLimpia = app.urlimg?.replace(/\\/g, "/");
-                  // Construir la URL completa de la imagen
                   const imagenURL = `${apiUrl}/uploads/${rutaLimpia?.split("uploads/")[1]}`;
 
                   return (
-                    <div key={i} className="card">
-                      <div className="card-inner">
-                        {/* Parte frontal de la tarjeta: imagen */}
-                        <div className="card-front">
+                    <div 
+                      key={i} 
+                      className="w-96 h-[32rem] m-4 group cursor-pointer"
+                      style={{ perspective: '1000px' }}
+                    >
+                      <div 
+                        className="relative w-full h-full duration-700 group-hover:rotate-y-180"
+                        style={{
+                          transformStyle: 'preserve-3d',
+                          transition: 'transform 0.7s'
+                        }}
+                      >
+                        {/* Parte frontal */}
+                        <div 
+                          className="absolute inset-0 rounded-2xl shadow-xl overflow-hidden"
+                          style={{ backfaceVisibility: 'hidden' }}
+                        >
                           <img
                             src={imagenURL}
                             alt={app.nombre_proyecto}
-                            className="card-img"
+                            className="w-full h-full object-cover"
                           />
                         </div>
-                        {/* Parte trasera de la tarjeta: información y botón */}
-                        <div className="card-back">
-                          <h3><strong>{app.nombre_proyecto}</strong></h3>
-                          <p>{app.descripcion || "Sin descripción."}</p>
-                          <p><strong>Materia:</strong> {app.materia?.nombre || "Sin materia"}</p>
-                          <p><strong>Autor:</strong> {app.autores || "No hay autor"}</p>
-                          <button onClick={() => navigate(`/detalle/${app._id}`)}>
+                        
+                        {/* Parte trasera */}
+                        <div 
+                          className="absolute inset-0 bg-blue-900 text-white p-7 flex flex-col rounded-2xl shadow-2xl"
+                          style={{
+                            backfaceVisibility: 'hidden',
+                            transform: 'rotateY(180deg)'
+                          }}
+                        >
+                          {/* Header */}
+                          <div className="flex items-center mb-4">
+                            <span className="text-yellow-400 text-3xl mr-2">💡</span>
+                            <span className="text-yellow-400 font-bold uppercase text-base">
+                              Proyecto Estudiantil
+                            </span>
+                          </div>
+                          
+                          {/* Título */}
+                          <h3 className="text-3xl font-extrabold mb-4 leading-snug">
+                            {app.nombre_proyecto}
+                          </h3>
+                          
+                          {/* Descripción */}
+                          <p className="text-lg leading-relaxed mb-5 opacity-95 line-clamp-4">
+                            {app.descripcion || "Este proyecto busca fomentar la innovación tecnológica en el área de desarrollo..."}
+                          </p>
+                          
+                          {/* Autores y Programa */}
+                          <div className="mb-6 space-y-2 text-base">
+                            <p>
+                              <span className="font-semibold">Autores:</span>{" "}
+                              {formatAutores(app.autores)}
+                            </p>
+                            <p>
+                              <span className="font-semibold">Programa:</span>{" "}
+                              {app.materia?.nombre || "Sin especificar"}
+                            </p>
+                          </div>
+                          
+                          {/* Botón */}
+                          <button 
+                            className="bg-yellow-400 text-blue-900 font-bold py-3 px-6 rounded-md text-lg uppercase tracking-wide shadow-md hover:bg-yellow-500 transition-all duration-300 w-fit"
+                            onClick={() => navigate(`/detalle/${app._id}`)}
+                          >
                             Ver más
                           </button>
+                          
+                          {/* Footer */}
+                          <div className="absolute bottom-6 right-6 text-right opacity-90">
+                            <span className="text-base font-bold leading-tight tracking-wide">
+                              Universidad<br/>
+                              Autónoma<br/>
+                              del Cauca
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -100,7 +184,6 @@ const AplicacionesMoviles = () => {
                 })}
               </div>
             ) : (
-              // Mensaje si no hay proyectos en esta categoría
               <p style={{ marginLeft: "10px" }}>No hay aplicaciones disponibles.</p>
             )}
           </div>
