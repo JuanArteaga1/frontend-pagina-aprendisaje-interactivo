@@ -4,99 +4,204 @@ import Navbar from "../components/Navbar";
 import { UseSimulaciones } from "../context/SimulacionesContex";
 
 const Simulaciones = () => {
-    const [seccionActual] = useState("Simulaciones");
-    const navigate = useNavigate();
-    const { Simulaciones, TraerSimulaciones } = UseSimulaciones();
-    const [loading, setLoading] = useState(true);
-    const apiUrl = import.meta.env.VITE_RUTA1;
+  const [seccionActual] = useState("Simulaciones");
+  const navigate = useNavigate();
+  const { Simulaciones, TraerSimulaciones } = UseSimulaciones();
+  const [loading, setLoading] = useState(true);
+  const apiUrl = import.meta.env.VITE_RUTA1;
 
+  useEffect(() => {
+    const cargarDatos = async () => {
+      await TraerSimulaciones();
+      setLoading(false);
+    };
+    cargarDatos();
+  }, []);
 
-    useEffect(() => {
-        const cargarDatos = async () => {
-            await TraerSimulaciones();
-            setLoading(false);
-        };
-        cargarDatos();
-    }, []);
+  const simulacionesOrdenadas = useMemo(() => {
+    return [...Simulaciones].sort(
+      (a, b) => new Date(b.fechaPublicacion) - new Date(a.fechaPublicacion)
+    );
+  }, [Simulaciones]);
 
+  const simulacionesAgrupadas = simulacionesOrdenadas.reduce(
+    (acc, simulacion) => {
+      const categoria = simulacion.materia?.nombre || "Sin categoría";
+      if (!acc[categoria]) acc[categoria] = [];
+      acc[categoria].push(simulacion);
+      return acc;
+    },
+    {}
+  );
 
-    // Filtrar solo los proyectos que pertenezcan a la sección "Simulaciones"
-    const simulacionesOrdenadas = useMemo(() => {
-        return [...Simulaciones].sort(
-            (a, b) => new Date(b.fechaPublicacion) - new Date(a.fechaPublicacion)
-        );
-    }, [Simulaciones]);
+  // Formateo de autores (igual al de AplicacionesMoviles)
+  const formatAutores = (autores) => {
+    if (!autores) return "No especificado";
 
+    try {
+      if (typeof autores === "string" && autores.startsWith("[")) {
+        const parsed = JSON.parse(autores);
+        if (Array.isArray(parsed)) {
+          return parsed.join(", ");
+        }
+      }
 
-    // Ordenar por fecha y agrupar por materia
-    const simulacionesAgrupadas = simulacionesOrdenadas
-        .sort((a, b) => new Date(b.fechaPublicacion) - new Date(a.fechaPublicacion))
-        .reduce((acc, simulaciones) => {
-            const categoria = simulaciones.materia?.nombre || "Sin categoría";
-            if (!acc[categoria]) acc[categoria] = [];
-            acc[categoria].push(simulaciones);
-            return acc;
-        }, {});
+      if (Array.isArray(autores)) {
+        return autores.join(", ");
+      }
 
-    if (loading) {
-        return (
-            <div className="min-h-screen bg-gray-50">
-                <Navbar />
-                <div className="min-h-screen flex flex-col justify-center items-center">
-                    <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-                    <p className="mt-4 text-sm text-cyan-600">Cargando simulaciones...</p>
-                </div>
-            </div>
-        );
+      if (typeof autores === "string") {
+        return autores
+          .replace(/[\[\]"']/g, "")
+          .replace(/,\s*,/g, ",")
+          .replace(/^\s*,|,\s*$/g, "")
+          .trim();
+      }
+    } catch (error) {
+      return String(autores)
+        .replace(/[\[\]"']/g, "")
+        .replace(/,\s*,/g, ",")
+        .replace(/^\s*,|,\s*$/g, "")
+        .trim() || "No especificado";
     }
 
+    return "No especificado";
+  };
 
+  if (loading) {
     return (
-        <div className="simulaciones">
-            <Navbar />
-            <div className="imagen-seccion">
-                <img src="img/DSC04973.JPG" alt="Imagen de simulaciones" />
-                <h1 className="titulo-seccion">Ahora estás en: {seccionActual}</h1>
-            </div>
-
-            <div className="contenido-proyectos">
-                {Object.entries(simulacionesAgrupadas).map(([categoria, items]) => (
-                    <div key={categoria} className="categoria">
-                        <h2 className="text-2xl">{categoria}</h2>
-                        {items.length > 0 ? (
-                            <div className="cards-container">
-                                {items.map((simulacion, i) => {
-                                    const rutaLimpia = simulacion.urlimg?.replace(/\\/g, "/");
-                                    const imagenURL = `${apiUrl}/uploads/${rutaLimpia?.split("uploads/")[1]}`;
-
-                                    return (
-                                        <div className="card" key={i}>
-                                            <div className="card-inner">
-                                                <div className="card-front">
-                                                    <img src={imagenURL} alt={simulacion.nombre_proyecto} className="card-img" />
-                                                </div>
-                                                <div className="card-back">
-                                                    <h3><strong>{simulacion.nombre_proyecto}</strong></h3>
-                                                    <p>{simulacion.descripcion || "Sin descripción."}</p>
-                                                    <p><strong>Autor:</strong> {simulacion.autores || "No hay autor"}</p>
-                                                    <button onClick={() => navigate(`/detalle-simulacion/${simulacion._id}`)}>
-                                                        Ver más
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-
-                            </div>
-                        ) : (
-                            <p style={{ marginLeft: '10px' }}>No hay simulaciones disponibles.</p>
-                        )}
-                    </div>
-                ))}
-            </div>
+      <div className="min-h-screen bg-gray-50">
+        <Navbar />
+        <div className="min-h-screen flex flex-col justify-center items-center">
+          <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+          <p className="mt-4 text-sm text-cyan-600">Cargando simulaciones...</p>
         </div>
+      </div>
     );
+  }
+
+  return (
+    <div className="simulaciones">
+      <Navbar />
+      <div className="imagen-seccion">
+        <img src="img/DSC04973.JPG" alt="Imagen de simulaciones" />
+        <h1 className="titulo-seccion">Ahora estás en: {seccionActual}</h1>
+      </div>
+
+      <div className="contenido-proyectos">
+        {Object.entries(simulacionesAgrupadas).map(([categoria, items]) => (
+          <div key={categoria} className="categoria">
+            <h2 className="text-3xl font-bold mt-6 ml-4 text-blue-900">
+              {categoria}
+            </h2>
+            {items.length > 0 ? (
+              <div className="flex flex-wrap gap-8 justify-start py-6">
+                {items.map((simulacion, i) => {
+                  const rutaLimpia = simulacion.urlimg?.replace(/\\/g, "/");
+                  const imagenURL = `${apiUrl}/uploads/${rutaLimpia?.split("uploads/")[1]}`;
+
+                  return (
+                    <div
+                      key={i}
+                      className="w-96 h-[32rem] m-4 group cursor-pointer"
+                      style={{ perspective: "1000px" }}
+                    >
+                      <div
+                        className="relative w-full h-full duration-700 group-hover:rotate-y-180"
+                        style={{
+                          transformStyle: "preserve-3d",
+                          transition: "transform 0.7s",
+                        }}
+                      >
+                        {/* Parte frontal */}
+                        <div
+                          className="absolute inset-0 rounded-2xl shadow-xl overflow-hidden"
+                          style={{ backfaceVisibility: "hidden" }}
+                        >
+                          <img
+                            src={imagenURL}
+                            alt={simulacion.nombre_proyecto}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+
+                        {/* Parte trasera */}
+                        <div
+                          className="absolute inset-0 bg-blue-900 text-white p-7 flex flex-col rounded-2xl shadow-2xl"
+                          style={{
+                            backfaceVisibility: "hidden",
+                            transform: "rotateY(180deg)",
+                          }}
+                        >
+                          {/* Header */}
+                          <div className="flex items-center mb-4">
+                            <span className="text-yellow-400 text-3xl mr-2">
+                              💡
+                            </span>
+                            <span className="text-yellow-400 font-bold uppercase text-base">
+                              Proyecto Estudiantil
+                            </span>
+                          </div>
+
+                          {/* Título */}
+                          <h3 className="text-3xl font-extrabold mb-4 leading-snug">
+                            {simulacion.nombre_proyecto}
+                          </h3>
+
+                          {/* Descripción */}
+                          <p className="text-lg leading-relaxed mb-5 opacity-95 line-clamp-4">
+                            {simulacion.descripcion ||
+                              "Este proyecto busca fomentar la innovación tecnológica en el área de desarrollo..."}
+                          </p>
+
+                          {/* Autores y Programa */}
+                          <div className="mb-6 space-y-2 text-base">
+                            <p>
+                              <span className="font-semibold">Autores:</span>{" "}
+                              {formatAutores(simulacion.autores)}
+                            </p>
+                            <p>
+                              <span className="font-semibold">Programa:</span>{" "}
+                              {simulacion.materia?.nombre || "Sin especificar"}
+                            </p>
+                          </div>
+
+                          {/* Botón */}
+                          <button
+                            className="bg-yellow-400 text-blue-900 font-bold py-3 px-6 rounded-md text-lg uppercase tracking-wide shadow-md hover:bg-yellow-500 transition-all duration-300 w-fit"
+                            onClick={() =>
+                              navigate(`/detalle-simulacion/${simulacion._id}`)
+                            }
+                          >
+                            Ver más
+                          </button>
+
+                          {/* Footer */}
+                          <div className="absolute bottom-6 right-6 text-right opacity-90">
+                            <span className="text-base font-bold leading-tight tracking-wide">
+                              Universidad
+                              <br />
+                              Autónoma
+                              <br />
+                              del Cauca
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <p style={{ marginLeft: "10px" }}>
+                No hay simulaciones disponibles.
+              </p>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export default Simulaciones;
