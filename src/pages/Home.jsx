@@ -7,6 +7,7 @@ import { PrevArrow, NextArrow } from "../components/CustomArrows";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
+
 const Home = () => {
   const navigate = useNavigate();
 
