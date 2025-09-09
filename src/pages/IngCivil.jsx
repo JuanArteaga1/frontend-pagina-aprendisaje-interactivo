@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import Navbar from "../components/Navbar"; // Componente de navegación superior
 import CategoriaProyectos from "../components/CategoriaProyectos"; // Componente que muestra proyectos por categoría
 import { useProyectos } from "../context/ProyectoContext"; // Hook para acceder al contexto de proyectos
@@ -15,10 +15,9 @@ const IngCivil = () => {
     TraerSimulaciones();
   }, []);
 
-
   // Obtener simulaciones cuya materia es Ing Civil
-  const simulacionesIngCivil = Simulaciones
-    .filter(sim => sim.materia?.nombre === "ingenieria civil")
+  const simulacionesIngCivil = useMemo(() => Simulaciones
+    .filter(sim => sim.materia?.nombre === "Ingeniería Civil") // ✅ Con tilde y mayúsculas
     .map(sim => ({
       nombre: sim.nombre_proyecto,
       imagen: `${apiUrl}/uploads/${sim.urlimg?.replace(/\\/g, "/").split("uploads/")[1]}`,
@@ -27,10 +26,10 @@ const IngCivil = () => {
       autores: sim.autores,
       descripcion: sim.descripcion,
       _id: sim._id
-    }));
+    })), [Simulaciones, apiUrl]);
 
-  const aplicacionesIngCivil = Proyectos
-    .filter(app => app.materia?.nombre === "ingenieria civil")
+  const aplicacionesIngCivil = useMemo(() => Proyectos
+    .filter(app => app.materia?.nombre === "Ingeniería Civil") // ✅ Con tilde y mayúsculas
     .map(app => ({
       nombre: app.nombre_proyecto,
       imagen: `${apiUrl}/uploads/${app.urlimg?.replace(/\\/g, "/").split("uploads/")[1]}`,
@@ -39,13 +38,14 @@ const IngCivil = () => {
       autores: app.autores,
       descripcion: app.descripcion,
       _id: app._id
-    }));
+    })), [Proyectos, apiUrl]);
 
   return (
-    <div>
+    <div className="min-h-screen bg-gray-50">
       <Navbar />
 
       <div className="container mx-auto px-4 py-12">
+        {/* Hero Section */}
         <div className="text-center mb-16">
           <h1 className="text-5xl md:text-6xl font-bold text-gray-800 mb-6">
             Explorando la Ingeniería Civil
@@ -55,26 +55,29 @@ const IngCivil = () => {
           </p>
         </div>
 
+        {/* Sección de Simulaciones */}
         <section className="mb-20">
           <h2 className="text-4xl font-bold text-gray-800 mb-8">
             Simulaciones de Ing. Civil
           </h2>
           <CategoriaProyectos
+            titulo=""
             categoria="ingenieria civil"
             proyectos={simulacionesIngCivil}
           />
         </section>
 
+        {/* Sección de Aplicaciones */}
         <section className="mb-20">
           <h2 className="text-4xl font-bold text-gray-800 mb-8">
             Aplicaciones de Ing. Civil
           </h2>
           <CategoriaProyectos
+            titulo=""
             categoria="ingenieria civil"
             proyectos={aplicacionesIngCivil}
           />
         </section>
-
       </div>
     </div>
   );

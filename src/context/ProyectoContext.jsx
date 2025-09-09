@@ -26,7 +26,9 @@ export const ProyectosProvider = ({ children }) => {
     // Función para obtener todos los proyectos desde la API
     const TraerProyectos = async () => {
         try {
-            const proyectos = await GetAllProyectos(); // Llamada a la API // Imprimir respuesta para depuración
+            console.log("proyectoos")
+            const proyectos = await GetAllProyectos();
+            console.log(proyectos) // Llamada a la API // Imprimir respuesta para depuración
             SetProyectos(proyectos.data); // Guardar los datos en el estado
         } catch (error) {
             console.log(error); // Mostrar error en consola si falla la API

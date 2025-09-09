@@ -1,15 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import Navbar from "../components/Navbar";
 import CategoriaProyectos from "../components/CategoriaProyectos";
 import { useProyectos } from "../context/ProyectoContext";
 import { UseSimulaciones } from "../context/SimulacionesContex";
-import { useMemo } from "react";
 
 const Fisica = () => {
     const { Proyectos, TraerProyectos } = useProyectos();
     const { Simulaciones, TraerSimulaciones } = UseSimulaciones();
     const apiUrl = import.meta.env.VITE_RUTA1;
-
 
     useEffect(() => {
         TraerProyectos();
@@ -18,28 +16,28 @@ const Fisica = () => {
 
     // Obtener simulaciones cuya materia es Física
     const simulacionesFisica = useMemo(() => Simulaciones
-    .filter(sim => sim.materia?.nombre === "Fisica")
-    .map(sim => ({
-        nombre: sim.nombre_proyecto,
-        imagen: `${apiUrl}/uploads/${sim.urlimg?.replace(/\\/g, "/").split("uploads/")[1]}`,
-        tipo: "Simulación",
-        categoria: "Fisica",
-        autores: sim.autores,
-        descripcion: sim.descripcion,
-        _id: sim._id
-    })), [Simulaciones, apiUrl]);
+        .filter(sim => sim.materia?.nombre === "Física") // ✅ Con tilde
+        .map(sim => ({
+            nombre: sim.nombre_proyecto,
+            imagen: `${apiUrl}/uploads/${sim.urlimg?.replace(/\\/g, "/").split("uploads/")[1]}`,
+            tipo: "Simulación",
+            categoria: "Fisica",
+            autores: sim.autores,
+            descripcion: sim.descripcion,
+            _id: sim._id
+        })), [Simulaciones, apiUrl]);
 
-const aplicacionesFisica = useMemo(() => Proyectos
-    .filter(app => app.materia?.nombre === "Fisica")
-    .map(app => ({
-        nombre: app.nombre_proyecto,
-        imagen: `${apiUrl}/uploads/${app.urlimg?.replace(/\\/g, "/").split("uploads/")[1]}`,
-        tipo: "Aplicación",
-        categoria: "Fisica",
-        autores: app.autores,
-        descripcion: app.descripcion,
-        _id: app._id
-    })), [Proyectos, apiUrl]);
+    const aplicacionesFisica = useMemo(() => Proyectos
+        .filter(app => app.materia?.nombre === "Física") // ✅ Con tilde
+        .map(app => ({
+            nombre: app.nombre_proyecto,
+            imagen: `${apiUrl}/uploads/${app.urlimg?.replace(/\\/g, "/").split("uploads/")[1]}`,
+            tipo: "Aplicación",
+            categoria: "Fisica",
+            autores: app.autores,
+            descripcion: app.descripcion,
+            _id: app._id
+        })), [Proyectos, apiUrl]);
     
     return (
         <div className="min-h-screen bg-gray-50">
