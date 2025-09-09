@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import Navbar from "../components/Navbar"; // Componente de navegación principal
 import CategoriaProyectos from "../components/CategoriaProyectos"; // Componente para mostrar una categoría de proyectos
 import { useProyectos } from "../context/ProyectoContext"; // Importa el hook del contexto para acceder a los proyectos
@@ -14,9 +14,8 @@ const Matematicas = () => {
     TraerSimulaciones();
   }, []);
 
-
-  const simulacionesMatematicas = Simulaciones
-    .filter(sim => sim.materia?.nombre === "Matematicas")
+  const simulacionesMatematicas = useMemo(() => Simulaciones
+    .filter(sim => sim.materia?.nombre === "Matemáticas") // ✅ Con tilde
     .map(sim => ({
       nombre: sim.nombre_proyecto,
       imagen: `${apiUrl}/uploads/${sim.urlimg?.replace(/\\/g, "/").split("uploads/")[1]}`,
@@ -25,10 +24,10 @@ const Matematicas = () => {
       autores: sim.autores,
       descripcion: sim.descripcion,
       _id: sim._id
-    }));
+    })), [Simulaciones, apiUrl]);
 
-  const aplicacionesMatematicas = Proyectos
-    .filter(app => app.materia?.nombre === "Matematicas")
+  const aplicacionesMatematicas = useMemo(() => Proyectos
+    .filter(app => app.materia?.nombre === "Matemáticas") // ✅ Con tilde
     .map(app => ({
       nombre: app.nombre_proyecto,
       imagen: `${apiUrl}/uploads/${app.urlimg?.replace(/\\/g, "/").split("uploads/")[1]}`,
@@ -37,37 +36,43 @@ const Matematicas = () => {
       autores: app.autores,
       descripcion: app.descripcion,
       _id: app._id
-    }));
-
-
+    })), [Proyectos, apiUrl]);
 
   return (
-    <div>
+    <div className="min-h-screen bg-gray-50">
       {/* Barra de navegación superior */}
       <Navbar />
+      
       <div className="container mx-auto px-4 py-12">
+        {/* Hero Section */}
         <div className="text-center mb-16">
           <h1 className="text-5xl md:text-6xl font-bold text-gray-800 mb-6">
             Explorando las Matemáticas
           </h1>
           <p className="text-2xl text-gray-600 max-w-3xl mx-auto">
-            Descubre simulaciones interactivas y aplicaciones móviles que hacen de matemáticas una experiencia fascinante.
+            Descubre simulaciones interactivas y aplicaciones móviles que hacen de las matemáticas una experiencia fascinante.
           </p>
         </div>
+
+        {/* Sección de Simulaciones */}
         <section className="mb-20">
           <h2 className="text-4xl font-bold text-gray-800 mb-8">
             Simulaciones de Matemáticas
           </h2>
           <CategoriaProyectos
+            titulo=""
             categoria="Matematicas"
             proyectos={simulacionesMatematicas}
           />
         </section>
+
+        {/* Sección de Aplicaciones */}
         <section className="mb-20">
           <h2 className="text-4xl font-bold text-gray-800 mb-8">
             Aplicaciones de Matemáticas
           </h2>
           <CategoriaProyectos
+            titulo=""
             categoria="Matematicas"
             proyectos={aplicacionesMatematicas}
           />
