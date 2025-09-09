@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import { UseTraerProyectos } from "../context/TraerProyectos";
 import { useInvestigacion } from "../context/InvestigacionContext";
-import { Download, FileText, CalendarDays, Users, Link as LinkIcon } from "lucide-react";
+import { Download, FileText, CalendarDays, Users, Link as LinkIcon, Image } from "lucide-react";
 
 const InvestigacionDetalle = () => {
   const { id } = useParams();
@@ -16,27 +15,43 @@ const InvestigacionDetalle = () => {
     }
   }, [id, investigaciones, traerInvestigaciones]);
 
-  const investigacion = investigaciones.find((inv) => inv._id === id);
-
-  if (!investigacion) {
+  if (!investigaciones || investigaciones.length === 0) {
     return (
       <>
         <Navbar />
-        <div className="p-8 max-w-6xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-800">Cargando investigación...</h2>
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+          <div className="text-center space-y-4 p-8">
+            <div className="animate-spin w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full mx-auto"></div>
+            <p className="text-gray-600">Cargando investigación...</p>
+          </div>
         </div>
       </>
     );
   }
 
-  // Construcción de URLs
+  const investigacion = investigaciones.find((inv) => inv._id === id);
+  if (!investigacion) {
+    return (
+      <>
+        <Navbar />
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+          <div className="text-center space-y-4 p-8">
+            <h2 className="text-xl font-semibold text-gray-900">Investigación no encontrada</h2>
+            <p className="text-gray-600">La investigación que buscas no existe</p>
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  // URLs
+  const rutaLimpia = investigacion.urlimg?.replace(/\\/g, "/");
+  const imagenURL = rutaLimpia ? `${apiUrl}/uploads/${rutaLimpia.split("uploads/")[1]}` : "img/placeholder.jpg";
+
+  const rutaDoc = investigacion.urlDoc?.replace(/\\/g, "/");
+  const archivoURL = rutaDoc ? `${apiUrl}/uploads/${rutaDoc.split("uploads/")[1]}` : null;
+
   const fuenteURL = investigacion.urlArticulo;
-  const imagenURL = investigacion.urlimg
-    ? `${apiUrl}/uploads/${investigacion.urlimg.replace(/\\/g, "/").split("uploads/").pop()}`
-    : "img/placeholder.jpg";
-  const archivoURL = investigacion.urlDoc?.replace(/\\/g, "/")
-    ? `${apiUrl}/uploads/${investigacion.urlDoc.replace(/\\/g, "/").split("uploads/").pop()}`
-    : null;
 
   const handleDescarga = () => {
     if (!archivoURL) return;
@@ -51,101 +66,145 @@ const InvestigacionDetalle = () => {
   return (
     <>
       <Navbar />
-      <div className="p-8 max-w-6xl mx-auto space-y-6">
-        {/* Encabezado */}
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-2xl shadow-sm flex flex-col sm:flex-row items-start sm:items-center gap-6 border border-gray-100">
-          {/* Imagen */}
-          <div className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 flex-shrink-0 overflow-hidden rounded-xl shadow-md border-2 border-white">
-            <img
-              src={imagenURL}
-              alt={`Foto de ${investigacion.nombre_proyecto}`}
-              className="w-full h-full object-cover"
-            />
-          </div>
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-          {/* Contenedor texto + botón */}
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center flex-1 gap-4 w-full">
-            {/* Texto */}
-            <div className="flex-1 space-y-1">
-              <h1 className="text-xl sm:text-2xl font-bold text-gray-800 break-words">
-                {investigacion.nombre_proyecto}
-              </h1>
-              <p className="text-indigo-600 flex items-center gap-1 text-sm sm:text-base break-words">
-                <Users size={16} className="inline" />
-                {investigacion.autores}
-              </p>
-            </div>
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+            <div className="flex flex-col xl:flex-row min-h-[700px]">
 
-            {/* Botón */}
-            {archivoURL && (
-              <button
-                onClick={handleDescarga}
-                className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white px-4 py-2 md:px-6 md:py-3 rounded-xl text-sm md:text-lg font-medium transition-all shadow-md hover:shadow-lg whitespace-nowrap hover:scale-110"
-              >
-                <Download size={20} /> Descargar Documento
-              </button>
-            )}
-          </div>
-        </div>
+              {/* Left Section - Info */}
+              <div className="xl:w-2/5 p-8 sm:p-10 border-b xl:border-b-0 xl:border-r border-gray-200 bg-white">
+                <div className="flex flex-col h-full">
 
+                  {/* Header */}
+                  <div className="flex-shrink-0 mb-8">
+                    <div className="flex flex-col gap-6 items-center text-center">
+                      <div className="relative p-1 bg-gradient-to-r from-indigo-600 to-blue-500 rounded-2xl shadow-lg">
+                        <img
+                          src={imagenURL}
+                          alt={investigacion.nombre_proyecto}
+                          className="w-40 h-40 sm:w-48 sm:h-48 rounded-xl object-cover border-2 border-white shadow-lg"
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h1 className="text-2xl sm:text-4xl font-bold mb-4 leading-tight text-gray-900">
+                          {investigacion.nombre_proyecto}
+                        </h1>
+                        <div className="flex flex-wrap justify-center gap-2 mb-4">
+                          {investigacion.autores?.split(",").map((autor, idx) => (
+                            <span
+                              key={idx}
+                              className="inline-flex items-center gap-1 px-3 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg shadow-sm"
+                            >
+                              <Users size={14} />
+                              {autor.trim()}
+                            </span>
+                          ))}
+                        </div>
+                        <div className="flex items-center justify-center gap-2 text-gray-600 text-sm bg-gray-100 px-4 py-2 rounded-lg">
+                          <CalendarDays size={16} />
+                          {new Date(investigacion.fechaPublicacion).toLocaleDateString("es-CO", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric"
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
-        {/* Contenido principal */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Resumen y detalles */}
-          <div className="md:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-            <h3 className="text-2xl font-semibold text-gray-800 mb-4">Resumen de la Investigación</h3>
-            <p className="text-gray-700 leading-relaxed mb-6">{investigacion.descripcion}</p>
+                  {/* Descripción */}
+                  <div className="flex-1 mb-8">
+                    <h2 className="text-xl font-bold text-gray-900 mb-4 text-center">Resumen</h2>
+                    <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                      <p className="text-gray-700 leading-relaxed text-base text-center">
+                        {investigacion.descripcion}
+                      </p>
+                    </div>
+                  </div>
 
-            <div className="flex items-start gap-3">
-              <CalendarDays size={20} className="text-indigo-600 mt-1 flex-shrink-0" />
-              <div>
-                <h4 className="font-medium text-gray-800">Fecha de publicación</h4>
-                <p className="text-gray-600">
-                  {new Date(investigacion.fechaPublicacion).toLocaleString('es-CO', {
-                    dateStyle: 'long',
-                    timeStyle: 'short',
-                    hour12: true,
-                    timeZone: 'America/Bogota'
-                  })}
-                </p>
+                  {/* Botones */}
+                  <div className="flex-shrink-0 space-y-4">
+                    {archivoURL && (
+                      <button
+                        onClick={handleDescarga}
+                        className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-indigo-600 to-blue-700 hover:from-indigo-700 hover:to-blue-800 text-white px-6 py-4 rounded-xl font-bold text-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+                      >
+                        <Download size={20} />
+                        Descargar Documento
+                      </button>
+                    )}
+                    {fuenteURL && (
+                      <a
+                        href={fuenteURL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                         className="w-full flex items-center justify-center gap-3 border-2 border-indigo-500 hover:bg-indigo-500 text-indigo-600 hover:text-white px-6 py-4 rounded-xl font-bold text-lg transition-all duration-200 transform hover:scale-105"
+                      >
+                        <LinkIcon size={20} />
+                        Ver Fuente Externa
+                      </a>
+                    )}
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
 
-          {/* Fuente y enlaces */}
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-            <h3 className="text-2xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
-              <LinkIcon size={20} /> Fuentes
-            </h3>
+              {/* Right Section - Media */}
+              <div className="xl:w-3/5 p-8 sm:p-10 bg-gray-50">
+                <div className="h-full space-y-8">
 
-            {fuenteURL ? (
-              <a
-                href={fuenteURL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-800 font-medium transition-colors"
-              >
-                <LinkIcon size={18} />
-                Ver fuente externa
-              </a>
-            ) : (
-              <p className="text-gray-500 italic">No hay fuente disponible</p>
-            )}
+                  {/* Si no hay multimedia */}
+                  {!fuenteURL && !archivoURL && (
+                    <div className="flex items-center justify-center h-64 text-gray-500 border-2 border-dashed border-gray-300 rounded-xl bg-gray-50">
+                      <div className="text-center space-y-3">
+                        <div className="p-4 bg-gray-100 rounded-full inline-block">
+                          <Image size={40} className="text-gray-500" />
+                        </div>
+                        <p className="font-medium">No hay material adicional disponible</p>
+                      </div>
+                    </div>
+                  )}
 
-            {archivoURL && (
-              <div className="mt-6">
-                <h4 className="font-medium text-gray-800 mb-2 flex items-center gap-2">
-                  <FileText size={18} /> Documentación adjunta
-                </h4>
-                <button
-                  onClick={handleDescarga}
-                  className="text-indigo-600 hover:text-indigo-800 font-medium flex items-center gap-1"
-                >
-                  <Download size={16} />
-                  Descargar archivo
-                </button>
+                  {/* Sección de documentación */}
+                  {archivoURL && (
+                    <div className="space-y-6">
+                      <div className="flex items-center gap-3 bg-white rounded-lg p-4 shadow-md border-l-4 border-indigo-600">
+                        <div className="p-2 bg-indigo-600 rounded-lg">
+                          <FileText size={20} className="text-white" />
+                        </div>
+                        <h3 className="text-xl font-bold text-gray-900">Documentación Adjunta</h3>
+                      </div>
+                      <iframe
+                        src={archivoURL}
+                        title="Documento de investigación"
+                        className="w-full h-[500px] rounded-xl border-2 border-gray-200 shadow-lg"
+                      ></iframe>
+                    </div>
+                  )}
+
+                  {/* Fuente externa */}
+                  {fuenteURL && (
+                    <div className="space-y-6">
+                      <div className="flex items-center gap-3 bg-white rounded-lg p-4 shadow-md border-l-4 border-green-600">
+                        <div className="p-2 bg-green-600 rounded-lg">
+                          <LinkIcon size={20} className="text-white" />
+                        </div>
+                        <h3 className="text-xl font-bold text-gray-900">Fuente Externa</h3>
+                      </div>
+                      <a
+                        href={fuenteURL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block text-center text-indigo-600 hover:text-indigo-800 font-medium underline"
+                      >
+                        Ir al artículo original
+                      </a>
+                    </div>
+                  )}
+                </div>
               </div>
-            )}
+
+            </div>
           </div>
         </div>
       </div>
