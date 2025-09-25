@@ -8,3 +8,7 @@ export const GetAllProyectos = () => axios.get(`${Api}/Proyectos`)
 export const GetIdProyectos = (id) => axios.get(`${Api}/Proyectos/${id}`)
 export const PutProyectos = (id,Proyectos) => axios.put(`${Api}/Proyectos/${id}`,Proyectos)
 export const DeleteProyectos = (id) => axios.delete(`${Api}/Proyectos/${id}`)
+export const addReview = (id, review) =>
+  axios.post(`${Api}/Proyectos/${id}/reviews`, review);
+export const deleteReview = (id, reviewId) =>
+  axios.delete(`${Api}/Proyectos/${id}/reviews/${reviewId}`);

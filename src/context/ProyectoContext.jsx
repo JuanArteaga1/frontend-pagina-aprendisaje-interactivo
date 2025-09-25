@@ -1,6 +1,6 @@
 // Importación de funciones necesarias de React y del archivo de la API
 import { Children, createContext, useEffect, useState, useContext } from "react";
-import { GetAllProyectos, subirProyectosAPI, PutProyectos, DeleteProyectos, GetIdProyectos } from "../api/AdmiProyecto";
+import { GetAllProyectos, subirProyectosAPI, PutProyectos, DeleteProyectos, GetIdProyectos, addReview, deleteReview } from "../api/AdmiProyecto";
 
 // Crear el contexto que se usará para compartir datos entre componentes
 export const ProyectoContext = createContext();
@@ -60,14 +60,14 @@ export const ProyectosProvider = ({ children }) => {
     };
 
     const TraerProyectoId = async (Id) => {
-    try {
-        const response = await GetIdProyectos(Id); // Llamada a la API por ID
-        console.log(response.data); // Mostrar en consola para depuración
-        SettraerProyectoId(response.data); // Guardar el resultado en el estado
-    } catch (error) {
-        console.log(error); // Mostrar errores en consola
-    }
-};
+        try {
+            const response = await GetIdProyectos(Id); // Llamada a la API por ID
+            console.log(response.data); // Mostrar en consola para depuración
+            SettraerProyectoId(response.data); // Guardar el resultado en el estado
+        } catch (error) {
+            console.log(error); // Mostrar errores en consola
+        }
+    };
 
 
     // Función para subir o registrar un nuevo proyecto a través de la API
@@ -88,9 +88,30 @@ export const ProyectosProvider = ({ children }) => {
         }
     };
 
+    const AgregarReview = async (id, review) => {
+        try {
+            const response = await addReview(id, review);
+            return { success: true, data: response.data };
+        } catch (error) {
+            console.error("Error agregando review:", error);
+            return { success: false, error };
+        }
+    };
+
+    const EliminarReview = async (id, reviewId) => {
+        try {
+            const response = await deleteReview(id, reviewId);
+            return { success: true, data: response.data };
+        } catch (error) {
+            console.error("Error eliminando review:", error);
+            return { success: false, error };
+        }
+    };
+
+
     // Proveer los valores a los componentes hijos que estén dentro del contexto
     return (
-        <ProyectoContext.Provider value={{ sigout, Proyectos, errors, mensaje, setMensaje, TraerProyectos, TraerProyectoId, ActualizarProyectos, EliminarProyectos, setErrors }}>
+        <ProyectoContext.Provider value={{ sigout, Proyectos, errors, mensaje, setMensaje, TraerProyectos, TraerProyectoId, ActualizarProyectos, EliminarProyectos, setErrors, AgregarReview, EliminarReview }}>
             {children}
         </ProyectoContext.Provider>
     );

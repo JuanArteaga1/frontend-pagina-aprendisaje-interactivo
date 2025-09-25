@@ -1,5 +1,5 @@
 import { Children, createContext, useEffect, useState, useContext } from "react";
-import { subirSimulacionesAPI, GetAllSimulaciones, PutSimulaciones, GetIdSimulaciones, DeleteSimulaciones } from "../api/AdmiSimulaciones";
+import { subirSimulacionesAPI, GetAllSimulaciones, PutSimulaciones, GetIdSimulaciones, DeleteSimulaciones, addReview, deleteReview } from "../api/AdmiSimulaciones";
 import { GetAllPodcast } from "../api/AdmiPodcast";
 
 export const SimulacionesContext = createContext();
@@ -72,10 +72,29 @@ export const SimulacionesProvider = ({ children }) => {
             setMensaje(null); // Ocultar mensaje anterior de éxito si hay error
             setErrors(error.response?.data?.errors || [{ msg: "Error desconocido" }]);
 
-        }
+        }   
     };
+    const AgregarReview = async (id, review) => {
+                try {
+                    const response = await addReview(id, review);
+                    return { success: true, data: response.data };
+                } catch (error) {
+                    console.error("Error agregando review:", error);
+                    return { success: false, error };
+                }
+            };
+        
+            const EliminarReview = async (id, reviewId) => {
+                try {
+                    const response = await deleteReview(id, reviewId);
+                    return { success: true, data: response.data };
+                } catch (error) {
+                    console.error("Error eliminando review:", error);
+                    return { success: false, error };
+                }
+            };
     return (
-        <SimulacionesContext.Provider value={{ sigout, Simulaciones, errors, setErrors, mensaje, setMensaje, ActualizarSimulaciones, EliminarSimulaciones, TraerSimulaciones }}>
+        <SimulacionesContext.Provider value={{ sigout, Simulaciones, errors, setErrors, mensaje, setMensaje, ActualizarSimulaciones, EliminarSimulaciones, TraerSimulaciones, AgregarReview, EliminarReview}}>
             {children}
         </SimulacionesContext.Provider>
     );
