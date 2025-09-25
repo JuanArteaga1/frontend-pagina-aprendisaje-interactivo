@@ -63,20 +63,31 @@ const DetalleProyecto = () => {
     const rutaDoc = proyecto.urlDoc?.replace(/\\/g, "/");
     const docURL = `${apiUrl}/uploads/${rutaDoc?.split("uploads/")[1]}`;
 
+    const formatNumber = (num) => {
+        if (num >= 1_000_000) {
+            return (num / 1_000_000).toFixed(1).replace(/\.0$/, "") + "M";
+        }
+        if (num >= 1_000) {
+            return (num / 1_000).toFixed(1).replace(/\.0$/, "") + "k";
+        }
+        return num.toString();
+    };
+
+
     return (
         <>
             <Navbar />
             <div className="min-h-screen bg-gray-50">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                    
+
                     {/* Main Horizontal Layout */}
                     <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
                         <div className="flex flex-col xl:flex-row min-h-[700px]">
-                            
+
                             {/* Left Section - Project Info */}
                             <div className="xl:w-2/5 p-8 sm:p-10 border-b xl:border-b-0 xl:border-r border-gray-200 bg-white">
                                 <div className="flex flex-col h-full">
-                                    
+
                                     {/* Project Header */}
                                     <div className="flex-shrink-0 mb-8">
                                         <div className="flex flex-col gap-6 items-center text-center">
@@ -104,14 +115,24 @@ const DetalleProyecto = () => {
                                                         </span>
                                                     ))}
                                                 </div>
-                                                <div className="flex items-center justify-center gap-2 text-gray-600 text-sm bg-gray-100 px-4 py-2 rounded-lg">
-                                                    <CalendarDays size={16} />
-                                                    {new Date(proyecto.fechaPublicacion).toLocaleDateString("es-CO", {
-                                                        year: 'numeric',
-                                                        month: 'long',
-                                                        day: 'numeric'
-                                                    })}
+                                                <div className="flex flex-wrap justify-center gap-3 mt-4">
+                                                    {/* Fecha de publicación */}
+                                                    <div className="flex items-center gap-2 text-gray-600 text-sm bg-gray-100 px-4 py-2 rounded-lg">
+                                                        <CalendarDays size={16} />
+                                                        {new Date(proyecto.fechaPublicacion).toLocaleDateString("es-CO", {
+                                                            year: "numeric",
+                                                            month: "long",
+                                                            day: "numeric",
+                                                        })}
+                                                    </div>
+
+                                                    {/* Descargas */}
+                                                    <div className="text-gray-600 text-sm bg-blue-50 border border-blue-200 px-4 py-2 rounded-lg shadow-sm">
+                                                        {formatNumber(proyecto.downloads || 0)} Descargas
+                                                    </div>
+
                                                 </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -131,20 +152,32 @@ const DetalleProyecto = () => {
                                     {/* Action Buttons */}
                                     <div className="flex-shrink-0 space-y-4">
                                         <button
-                                            onClick={() => {
+                                            onClick={async () => {
                                                 const link = document.createElement("a");
                                                 link.href = archivoURL;
                                                 link.download = proyecto.nombre_proyecto + ".apk";
                                                 document.body.appendChild(link);
                                                 link.click();
                                                 document.body.removeChild(link);
+
+                                                // 2. Notificar al backend que hubo una descarga
+                                                try {
+                                                    await fetch(`${apiUrl}/proyectos/${proyecto._id}/descargar`, {
+                                                        method: "POST"
+                                                    });
+                                                    // opcional: recargar proyectos para que se vea actualizado
+                                                    // await TraerProyectos();
+                                                } catch (error) {
+                                                    console.error("Error registrando descarga:", error);
+                                                }
                                             }}
                                             className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-4 rounded-xl font-bold text-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
                                         >
                                             <Download size={20} />
                                             Descargar APK
                                         </button>
-                                        
+
+
                                         {proyecto.urlDoc && (
                                             <a
                                                 href={docURL}
@@ -163,7 +196,7 @@ const DetalleProyecto = () => {
                             {/* Right Section - Media Content */}
                             <div className="xl:w-3/5 p-8 sm:p-10 bg-gray-50">
                                 <div className="h-full space-y-8">
-                                    
+
                                     {/* Video Section */}
                                     {proyecto.youtubeLink && (() => {
                                         const videoId = getYouTubeVideoId(proyecto.youtubeLink);
@@ -202,7 +235,7 @@ const DetalleProyecto = () => {
                                                     Capturas de Pantalla
                                                 </h3>
                                             </div>
-                                            
+
                                             {/* Horizontal scrollable gallery for multiple images */}
                                             {proyecto.imagenes.length > 2 ? (
                                                 <div className="flex gap-4 overflow-x-auto pb-4 -mx-2 px-2">

@@ -63,19 +63,29 @@ const DetalleSimulacion = () => {
     const rutaDoc = simulacion.urlDoc?.replace(/\\/g, "/");
     const docURL = `${apiUrl}/uploads/${rutaDoc?.split("uploads/")[1]}`;
 
+    const formatNumber = (num) => {
+        if (num >= 1_000_000) {
+            return (num / 1_000_000).toFixed(1).replace(/\.0$/, "") + "M";
+        }
+        if (num >= 1_000) {
+            return (num / 1_000).toFixed(1).replace(/\.0$/, "") + "k";
+        }
+        return num.toString();
+    };
+
     return (
         <>
             <Navbar />
             <div className="min-h-screen bg-gray-50">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                    
+
                     <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
                         <div className="flex flex-col xl:flex-row min-h-[700px]">
-                            
+
                             {/* Left Section - Info */}
                             <div className="xl:w-2/5 p-8 sm:p-10 border-b xl:border-b-0 xl:border-r border-gray-200 bg-white">
                                 <div className="flex flex-col h-full">
-                                    
+
                                     {/* Header */}
                                     <div className="flex-shrink-0 mb-8">
                                         <div className="flex flex-col gap-6 items-center text-center">
@@ -101,13 +111,21 @@ const DetalleSimulacion = () => {
                                                         </span>
                                                     ))}
                                                 </div>
-                                                <div className="flex items-center justify-center gap-2 text-gray-600 text-sm bg-gray-100 px-4 py-2 rounded-lg">
-                                                    <CalendarDays size={16} />
-                                                    {new Date(simulacion.fechaPublicacion).toLocaleDateString("es-CO", {
-                                                        year: 'numeric',
-                                                        month: 'long',
-                                                        day: 'numeric'
-                                                    })}
+                                                <div className="flex flex-wrap justify-center gap-3 mt-4">
+                                                    <div className="flex items-center justify-center gap-2 text-gray-600 text-sm bg-gray-100 px-4 py-2 rounded-lg">
+                                                        <CalendarDays size={16} />
+                                                        {new Date(simulacion.fechaPublicacion).toLocaleDateString("es-CO", {
+                                                            year: 'numeric',
+                                                            month: 'long',
+                                                            day: 'numeric'
+                                                        })}
+                                                    </div>
+
+                                                    {/* Descargas */}
+                                                    <div className="text-gray-600 text-sm bg-blue-50 border border-blue-200 px-4 py-2 rounded-lg shadow-sm">
+                                                        {formatNumber(simulacion.downloads || 0)} Descargas
+                                                    </div>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -128,20 +146,31 @@ const DetalleSimulacion = () => {
                                     {/* Botones */}
                                     <div className="flex-shrink-0 space-y-4">
                                         <button
-                                            onClick={() => {
+                                            onClick={async () => {
                                                 const link = document.createElement("a");
                                                 link.href = archivoURL;
                                                 link.download = simulacion.nombre_proyecto + ".apk";
                                                 document.body.appendChild(link);
                                                 link.click();
                                                 document.body.removeChild(link);
+
+                                                try {
+                                                    await fetch(`${apiUrl}/simulaciones/${simulacion._id}/descargar`, {
+                                                        method: "POST"
+                                                    });
+                                                    // opcional: recargar proyectos para que se vea actualizado
+                                                    // await TraerProyectos();
+                                                } catch (error) {
+                                                    console.error("Error registrando descarga:", error);
+                                                }
+
                                             }}
                                             className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-indigo-600 to-blue-700 hover:from-indigo-700 hover:to-blue-800 text-white px-6 py-4 rounded-xl font-bold text-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
                                         >
                                             <Download size={20} />
                                             Descargar APK
                                         </button>
-                                        
+
                                         {simulacion.urlDoc && (
                                             <a
                                                 href={docURL}
@@ -160,7 +189,7 @@ const DetalleSimulacion = () => {
                             {/* Right Section - Media */}
                             <div className="xl:w-3/5 p-8 sm:p-10 bg-gray-50">
                                 <div className="h-full space-y-8">
-                                    
+
                                     {/* Video */}
                                     {simulacion.youtubeLink && (() => {
                                         const videoId = getYouTubeVideoId(simulacion.youtubeLink);
@@ -199,7 +228,7 @@ const DetalleSimulacion = () => {
                                                     Capturas de Pantalla
                                                 </h3>
                                             </div>
-                                            
+
                                             {simulacion.imagenes.length > 2 ? (
                                                 <div className="flex gap-4 overflow-x-auto pb-4 -mx-2 px-2">
                                                     {simulacion.imagenes.map((img, idx) => {
