@@ -56,6 +56,7 @@ import ListaCategorias from "./pages/ListaCategorias";
 import NuevaMateria from "./pages/NuevaMateria";
 import ListaMaterias from "./pages/ListaMaterias";
 
+import "./pruebaFirebase";
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
