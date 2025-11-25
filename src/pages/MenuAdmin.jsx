@@ -8,7 +8,7 @@ function MenuDocen() {
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Menú Lateral Fijo */}
-      <div className="fixed h-full w-64 bg-gray-800 text-white z-10">
+      <div className="fixed h-full w-64 text-white z-10">
         <MenuDocente rol={userRole} />
       </div>
 
