@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 import { useProyectos } from "../context/ProyectoContext";
 import { Download, FileText, CalendarDays, Users, Video, Image, Trash2 } from "lucide-react";
 import { useLogin } from "../context/LoginContext";
+import ValoracionesProyecto from "../components/valoraciones/ValoracionesProyecto";
 
 const DetalleProyecto = () => {
     const { id } = useParams();
@@ -315,168 +316,14 @@ const DetalleProyecto = () => {
                         </div>
                     </div>
                 </div>
-
-                <div className="mt-12 max-w-6xl mx-auto bg-white rounded-2xl shadow-lg border border-gray-100 p-6 lg:p-8">
-                    <h2 className="text-3xl font-bold text-gray-900 mb-2 text-center">
-                        Valoraciones del Proyecto
-                    </h2>
-                    <p className="text-gray-600 text-center mb-8">Comparte tu experiencia con la comunidad</p>
-
-                    {/* Estadísticas rápidas */}
-                    {proyecto.reviews?.length > 0 && (
-                        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 mb-8 border border-blue-100">
-                            <div className="flex flex-wrap items-center justify-center gap-6 text-center">
-                                <div className="flex items-center gap-2">
-                                    <span className="text-2xl font-bold text-blue-700">{proyecto.reviews.length}</span>
-                                    <span className="text-gray-600">valoraciones</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <span className="text-2xl font-bold text-yellow-600">⭐</span>
-                                    <span className="text-gray-600">
-                                        {(
-                                            proyecto.reviews.reduce((acc, rev) => acc + rev.rating, 0) /
-                                            proyecto.reviews.length
-                                        ).toFixed(1)}/5
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Listado de comentarios */}
-                    {proyecto.reviews?.length > 0 ? (
-                        <div className="space-y-6 mb-8">
-                            {proyecto.reviews.map((rev, idx) => (
-                                <div
-                                    key={idx}
-                                    className="flex flex-col sm:flex-row justify-between items-start bg-gray-50 rounded-xl p-6 border border-gray-200 hover:shadow-md transition-all duration-200"
-                                >
-                                    <div className="flex-1">
-                                        <div className="flex flex-wrap items-center gap-3 mb-3">
-                                            <div className="flex items-center gap-1">
-                                                {"⭐".repeat(rev.rating)}
-                                                <span className="text-yellow-500 text-sm font-medium ml-1">
-                                                    ({rev.rating}.0)
-                                                </span>
-                                            </div>
-                                            <span className="font-semibold text-gray-800 bg-white px-3 py-1 rounded-full text-sm border">
-                                                {rev.usuario}
-                                            </span>
-                                            <span className="text-gray-400 text-sm">
-                                                {new Date().toLocaleDateString()}
-                                            </span>
-                                        </div>
-                                        <p className="text-gray-700 leading-relaxed pl-1">
-                                            {rev.comentario}
-                                        </p>
-                                    </div>
-
-                                    {/* Mostrar botón eliminar solo si tiene permisos */}
-                                    {puedeComentar && (
-                                        <button
-                                            onClick={() => handleEliminar(rev._id)}
-                                            className="mt-3 sm:mt-0 bg-red-50 hover:bg-red-100 text-red-600 hover:text-red-700 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 border border-red-200 flex items-center gap-2"
-                                        >
-                                            <Trash2 className="w-4 h-4" />
-                                            Eliminar
-                                        </button>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="text-center py-12 bg-gray-50 rounded-xl mb-8">
-                            <div className="text-6xl mb-4">💬</div>
-                            <p className="text-gray-500 text-lg italic mb-2">
-                                Aún no hay valoraciones
-                            </p>
-                            <p className="text-gray-400 text-sm">
-                                ¡Sé el primero en compartir tu opinión!
-                            </p>
-                        </div>
-                    )}
-
-                    {/* Formulario */}
-                    {puedeComentar ? (
-                        <div className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-2xl p-6 border border-gray-200">
-                            <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                                <span>✍️</span>
-                                Añadir tu valoración
-                            </h3>
-
-                            <form
-                                onSubmit={async (e) => {
-                                    e.preventDefault();
-                                    await AgregarReview(proyecto._id, {
-                                        usuario: Usuario?.email || Usuario?.nombre || Usuario?.NombreCompleto || "Anon",
-                                        rating: Number(e.target.rating.value),
-                                        comentario: e.target.comentario.value,
-                                    });
-                                    e.target.reset();
-                                    await TraerProyectos();
-                                }}
-
-                                className="space-y-4"
-                            >
-                                <div className="flex flex-col lg:flex-row gap-4">
-                                    {/* Selector de rating */}
-                                    <div className="lg:w-48">
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                                            Tu puntuación
-                                        </label>
-                                        <div className="relative">
-                                            <select
-                                                name="rating"
-                                                required
-                                                className="w-full border border-gray-300 rounded-xl p-3 font-semibold text-yellow-600 focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 focus:outline-none appearance-none bg-white shadow-sm"
-                                            >
-                                                <option value="">Selecciona</option>
-                                                <option value="5">⭐⭐⭐⭐⭐ Excelente</option>
-                                                <option value="4">⭐⭐⭐⭐ Muy Bueno</option>
-                                                <option value="3">⭐⭐⭐ Bueno</option>
-                                                <option value="2">⭐⭐ Regular</option>
-                                                <option value="1">⭐ Malo</option>
-                                            </select>
-                                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                                <span>▼</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* Área de comentario */}
-                                    <div className="flex-1">
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                                            Tu comentario
-                                        </label>
-                                        <textarea
-                                            name="comentario"
-                                            required
-                                            className="w-full border border-gray-300 rounded-xl p-3 resize-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 focus:outline-none shadow-sm transition-all duration-200"
-                                            placeholder="Comparte tu experiencia, qué te gustó, qué mejorarías..."
-                                            rows={3}
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-2">
-                                    <p className="text-gray-500 text-sm">
-                                        Tu opinión ayuda a mejorar la comunidad
-                                    </p>
-                                    <button
-                                        type="submit"
-                                        className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 flex items-center gap-2"
-                                    >
-                                        Publicar Valoración
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    ) : (
-                        <p className="text-gray-500 mt-4 text-center">
-                            Solo usuarios que hayan iniciado sesión pueden dejar comentarios.
-                        </p>
-                    )}
-                </div>
+                <ValoracionesProyecto
+                    proyecto={proyecto}
+                    Usuario={Usuario}
+                    puedeComentar={puedeComentar}
+                    AgregarReview={AgregarReview}
+                    EliminarReview={EliminarReview}
+                    TraerProyectos={TraerProyectos}
+                />
 
             </div>
         </>

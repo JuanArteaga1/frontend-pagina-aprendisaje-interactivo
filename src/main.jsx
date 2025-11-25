@@ -56,7 +56,7 @@ import ListaCategorias from "./pages/ListaCategorias";
 import NuevaMateria from "./pages/NuevaMateria";
 import ListaMaterias from "./pages/ListaMaterias";
 
-
+import Comentarios from "./pages/Comentarios";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <LoginProvider>
@@ -100,10 +100,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
       //Rutas con autenticacion
         <Route element={<ProtectedRote />}>
-      //rutas de Administrador
+
+          {/* rutas de Administrador */}
           <Route path="/menuadministrador" element={<MenuAdmin />} />
           <Route path="/categorias" element={<ListaCategorias />} />
-          <Route path="/SubirCategoria" element={<CategoriaProvider>  <NuevaCategoria /> </CategoriaProvider>} />
+          <Route path="/SubirCategoria" element={<CategoriaProvider><NuevaCategoria /></CategoriaProvider>} />
 
           {/* --- NUEVAS RUTAS DE MATERIAS --- */}
           <Route path="/materias" element={<MateriaProvider><ListaMaterias /></MateriaProvider>} />
@@ -120,12 +121,28 @@ ReactDOM.createRoot(document.getElementById("root")).render(
               </PodcastProvider>
             </ProyectosProvider>
           } />
+
           <Route path="/Aprobar" element={<ProyectosPorAprobar />} />
-          <Route path="/AdministrarDocente" element={<DocenteProvider> <AdministrarDocentes /> </DocenteProvider>} />
-      //rutas de docentes
-          <Route element={<> <CategoriaProvider><Outlet /></CategoriaProvider></>}>
+          <Route path="/AdministrarDocente" element={<DocenteProvider><AdministrarDocentes /></DocenteProvider>} />
+
+          {/* ⭐⭐⭐ AQUI VA LA RUTA DE COMENTARIOS ⭐⭐⭐ */}
+          <Route
+            path="/comentarios"
+            element={
+              <ProyectosProvider>
+                <Comentarios />
+              </ProyectosProvider>
+            }
+          />
+          {/* ⭐⭐⭐ FIN DE LA RUTA DE COMENTARIOS ⭐⭐⭐ */}
+
+          {/* rutas de docentes */}
+          <Route element={<><CategoriaProvider><Outlet /></CategoriaProvider></>}>
+
             <Route path="/menudocente" element={<MenuDocen />} />
+
             <Route path="/subir-proyecto" element={<ProyectosProvider><SubirProyecto /></ProyectosProvider>} />
+
             <Route path="/misproyectos" element={
               <SimulacionesProvider>
                 <InvestigacionProvider>
@@ -146,16 +163,16 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route path="/SubirDocente" element={<RegistroProvider><SubirDocente /></RegistroProvider>} />
             <Route path="/subir-podcast" element={<PodcastProvider><SubirPodcast /></PodcastProvider>} />
 
-     //Ruta para editar proyecto
+            {/* rutas para editar */}
             <Route path="/editar-proyecto/:id" element={<ProyectosProvider><EditarProyecto /></ProyectosProvider>} />
             <Route path="/editar-podcast/:id" element={<PodcastProvider><EditarPodcast /></PodcastProvider>} />
             <Route path="/editar-investigacion/:id" element={<InvestigacionProvider><EditarInvestigacion /></InvestigacionProvider>} />
             <Route path="/editar-simulacion/:id" element={<SimulacionesProvider><EditarSimulaciones /></SimulacionesProvider>} />
-
             <Route path="/editar-docente/:id" element={<DocenteProvider><EditarDocente /></DocenteProvider>} />
 
           </Route>
         </Route>
+
 
       </Routes>
     </BrowserRouter>
