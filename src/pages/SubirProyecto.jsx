@@ -6,7 +6,7 @@ import { UseCategoria } from "../context/CategoriaContext";
 import Alerta from "../components/AlertasDocente";
 import { useLogin } from "../context/LoginContext";
 import { GetAllMateria } from "../api/AdmiMateria";
-import { Image, Upload, FileUp, ArrowRight, ArrowLeft, FileText, Sliders, UploadCloud } from "lucide-react";
+import { Image, Upload, FileUp, ArrowRight, ArrowLeft, FileText, Sliders, UploadCloud, Plus, Trash2 } from "lucide-react";
 
 function SubirProyecto() {
   const { register, handleSubmit, watch, formState: { errors }, reset, trigger } = useForm({
@@ -37,10 +37,11 @@ function SubirProyecto() {
   const camposPaso2 = ['materia', 'categoriaId', 'youtubeLink'];
   const camposPaso3 = ['urlArchivoapk', 'portada', 'urlDoc'];
 
+  // 1. Mejora: Nombres de pasos y descripción más claras
   const pasosInfo = [
-    { id: 1, titulo: 'Información General', icono: <FileText className="w-5 h-5 mr-2" /> },
-    { id: 2, titulo: 'Detalles ', icono: <Sliders className="w-5 h-5 mr-2" /> },
-    { id: 3, titulo: 'Archivos', icono: <UploadCloud className="w-5 h-5 mr-2" /> },
+    { id: 1, titulo: 'Información Básica', subtitulo: 'Nombre y autores del proyecto', icono: <FileText className="w-5 h-5" /> },
+    { id: 2, titulo: 'Clasificación', subtitulo: 'Materia, categoría y video demo', icono: <Sliders className="w-5 h-5" /> },
+    { id: 3, titulo: 'Archivos Finales', subtitulo: 'APK, Portada y Documentación', icono: <UploadCloud className="w-5 h-5" /> },
   ];
 
   useEffect(() => {
@@ -50,7 +51,13 @@ function SubirProyecto() {
 
   useEffect(() => {
     if (mensaje) {
-      const timer = setTimeout(() => setRegistroExitoso(false), 3000);
+      setRegistroExitoso(true); // Se usa el estado para mostrar el mensaje
+      const timer = setTimeout(() => {
+        setRegistroExitoso(false);
+        setMensaje(null);
+        reset({ autores: [""] }); // Opcional: limpiar el formulario después del éxito
+        setPasoActual(1); // Opcional: volver al primer paso
+      }, 3000);
       return () => clearTimeout(timer);
     }
   }, [mensaje]);
@@ -66,7 +73,9 @@ function SubirProyecto() {
     let camposAValidar = [];
     if (pasoActual === 1) camposAValidar = camposPaso1;
     if (pasoActual === 2) camposAValidar = camposPaso2;
+    // El paso 3 se valida al hacer submit.
 
+    // 2. Mejora: Validar todos los campos del paso actual
     const esValido = await trigger(camposAValidar);
 
     if (esValido) {
@@ -82,16 +91,70 @@ function SubirProyecto() {
     }
   };
 
+  // Función para obtener el estado visual de cada paso
+  const getPasoStatus = (pasoId) => {
+    if (pasoId === pasoActual) return 'active';
+    if (pasoId < pasoActual) return 'complete';
+    return 'upcoming';
+  };
+
+  // Componente de indicador de archivo (simplificación visual)
+  const FileIndicator = ({ fileName, error, Icon, requiredText, acceptedType }) => {
+    const isUploaded = !!fileName;
+    const isError = !!error;
+    const baseClasses = "flex flex-col items-center justify-center w-full max-w-xs aspect-square border-2 transition-all duration-300 rounded-2xl shadow-lg";
+    
+    let borderClass = 'border-gray-300 hover:border-indigo-500 bg-gray-50';
+    let iconClass = 'text-gray-500';
+    let textClass = 'text-gray-600';
+
+    if (isUploaded && !isError) {
+      borderClass = 'border-green-500 bg-green-50 shadow-green-200/50';
+      iconClass = 'text-green-500';
+      textClass = 'text-green-600 font-medium';
+    } else if (isError) {
+      borderClass = 'border-red-500 bg-red-50 shadow-red-200/50';
+      iconClass = 'text-red-500';
+      textClass = 'text-red-600 font-medium';
+    } else {
+       // Estilo para el estado por defecto o hover
+       borderClass = 'border-dashed border-gray-300 hover:border-indigo-600 bg-white hover:bg-indigo-50/50';
+       iconClass = 'text-indigo-400';
+       textClass = 'text-gray-600';
+    }
+
+    return (
+      <div className={`${baseClasses} ${borderClass} cursor-pointer p-4`}>
+        <div className={`w-12 h-12 flex items-center justify-center rounded-full ${iconClass} mb-2`}>
+          {React.cloneElement(Icon, { className: "w-8 h-8" })}
+        </div>
+        <p className="text-center text-sm font-medium mb-1 truncate w-full px-2">
+          {isUploaded ? fileName : `Subir ${requiredText}`}
+        </p>
+        <p className="text-xs text-center text-gray-400 mb-2">
+           {acceptedType} (Máx 10MB)
+        </p>
+        {isUploaded && !isError && (
+          <p className="text-xs font-semibold text-green-500">¡Archivo Cargado!</p>
+        )}
+        {isError && (
+          <p className="text-xs font-semibold text-red-500 px-1 text-center">{error}</p>
+        )}
+      </div>
+    );
+  };
+
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-gray-50">
+      {/* Sistema de Alertas (Mantener fuera del flujo para la posición fija) */}
       {mensaje && (
-        <div className="fixed top-5 right-5 z-50">
+        <div className="fixed top-5 right-5 z-50 animate-fadeInDown">
           <Alerta tipo="exito" mensaje={mensaje} onClose={() => setMensaje(null)} />
         </div>
       )}
 
       {ProyectosErrors.length > 0 && (
-        <div className="fixed top-20 right-5 z-50 space-y-2">
+        <div className="fixed top-5 right-5 z-50 space-y-2">
           {ProyectosErrors.map((error, i) => (
             <Alerta key={i} tipo="error" mensaje={error.msg} />
           ))}
@@ -100,43 +163,59 @@ function SubirProyecto() {
 
       <MenuLateral rol="docente" />
 
-      <main className="flex-1 p-8 overflow-y-auto">
-        <div className="max-w-4xl mx-auto">
+      <main className="flex-1 p-4 sm:p-8 overflow-y-auto">
+        {/* Contenedor principal con Título */}
+        <div className="max-w-5xl mx-auto pt-6">
+            <h1 className="text-3xl font-extrabold text-gray-900 mb-8 tracking-tight">
+                 Subir Nuevo Proyecto
+            </h1>
 
-          {/* Indicador de pasos con línea divisoria y subtítulos */}
-          <div className="mb-12">
-            <div className="flex justify-between items-center relative w-full">
-              {/* Línea divisoria */}
-              <div className="absolute left-0 right-0 h-1 bg-gray-300 z-0 top-1/3 mx-6"></div>
+          {/* Indicador de pasos Mejorado */}
+          <div className="mb-12 bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
+            <div className="flex justify-between items-start relative w-full">
+              {/* Línea de progreso (Ahora con color dinámico) */}
+              <div 
+                className="absolute left-0 right-0 h-1 bg-gray-200 z-0 top-1/2 -translate-y-1/2 mx-8 rounded-full"
+                aria-hidden="true"
+              >
+                <div 
+                    className="absolute h-full bg-indigo-500 rounded-full transition-all duration-500 ease-out" 
+                    style={{ width: `${((pasoActual - 1) / (pasosInfo.length - 1)) * 100}%` }}
+                ></div>
+              </div>
+
 
               {pasosInfo.map((paso) => (
-                <React.Fragment key={paso.id}>
-                  {/* Cada paso ocupa el mismo espacio */}
-                  <div className="flex flex-col items-center relative z-10 flex-1">
-                    <span
-                      className={`w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full text-white font-bold transition-colors duration-300
-                  ${pasoActual === paso.id ? 'bg-blue-600 shadow-md' : 'bg-gray-400'}`}
-                    >
-                      {/* Ícono en lugar del número */}
-                      {React.cloneElement(paso.icono, { className: "w-5 h-5 sm:w-6 sm:h-6" })}
-                    </span>
-                    <div
-                      className={`text-center mt-2 text-xs sm:text-sm whitespace-nowrap
-                  ${pasoActual === paso.id ? 'text-blue-600 font-semibold' : 'text-gray-600'}`}
-                    >
-                      {paso.titulo}
-                    </div>
+                <div key={paso.id} className="flex flex-col items-center relative z-10 flex-1">
+                  <div
+                    className={`w-12 h-12 flex items-center justify-center rounded-full text-white font-bold transition-all duration-500 transform
+                    ${getPasoStatus(paso.id) === 'active' ? 'bg-indigo-600 shadow-xl shadow-indigo-300/50 scale-105' : 
+                      getPasoStatus(paso.id) === 'complete' ? 'bg-green-500 border-2 border-white' : 
+                      'bg-gray-400 border-2 border-white'
+                    }`}
+                  >
+                    {/* El icono de Lucide es ya un componente, no necesitamos cloneElement aquí si solo cambiamos el wrapper */}
+                    {paso.icono}
                   </div>
-                </React.Fragment>
+                  <div className={`text-center mt-3 transition-colors duration-300 ${getPasoStatus(paso.id) === 'active' ? 'text-indigo-600 font-bold' : 'text-gray-600 font-medium'}`}>
+                    <p className="text-sm sm:text-base whitespace-nowrap">{paso.titulo}</p>
+                    <p className="hidden sm:block text-xs text-gray-400">{paso.subtitulo}</p>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
 
+
           <form
             onSubmit={handleSubmit(async (data) => {
+              // Validar paso 3 justo antes de enviar
+              const esPaso3Valido = await trigger(camposPaso3);
+              if (!esPaso3Valido) return; // Detener el submit si hay errores
+
               const formData = new FormData();
               formData.append("nombre_proyecto", data.nombre_proyecto);
-              formData.append("autores", JSON.stringify(data.autores));
+              formData.append("autores", JSON.stringify(data.autores.filter(a => a.trim() !== ''))); // Limpiar autores vacíos
               formData.append("fechaPublicacion", data.fechaPublicacion);
               formData.append("descripcion", data.descripcion);
               formData.append("materia", data.materia);
@@ -149,34 +228,40 @@ function SubirProyecto() {
               formData.append("seccion", "Proyectos");
 
               const resultado = await sigout(formData);
-              if (resultado?.success) setRegistroExitoso(true);
             })}
-            className="space-y-6 bg-white p-8 rounded-2xl shadow-xl"
+            className="space-y-8 bg-white p-6 sm:p-10 rounded-3xl shadow-2xl border border-gray-100"
           >
+            {/* Contenido del Paso 1 */}
             {pasoActual === 1 && (
-              <div className="space-y-6">
-                <h3 className="text-xl font-semibold text-gray-700">Paso 1: Información General</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+              <div className="space-y-6 animate-fadeIn">
+                <h3 className="text-2xl font-extrabold text-indigo-700 border-b pb-2 border-indigo-100">
+                    <FileText className="inline-block w-6 h-6 mr-2 mb-1 text-indigo-500"/>
+                    {pasosInfo[0].titulo}
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                  {/* Nombre del Proyecto */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Nombre de la aplicación</label>
+                    <label htmlFor="nombre_proyecto" className="block text-sm font-medium text-gray-700 mb-1">Nombre de la aplicación <span className="text-red-500">*</span></label>
                     <input
-                      {...register('nombre_proyecto', { required: true })}
+                      id="nombre_proyecto"
+                      {...register('nombre_proyecto', { required: "El nombre es requerido" })}
                       type="text"
-                      placeholder="Ejemplo: Fuerzas Electromagneticas"
-                      className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Ej: Fuerzas Electromagnéticas"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition-shadow"
                     />
-                    {errors.nombre_proyecto && (<p className="mt-1 text-red-500 text-sm">El nombre es requerido</p>)}
+                    {errors.nombre_proyecto && (<p className="mt-1 text-red-500 text-sm font-medium">{errors.nombre_proyecto.message}</p>)}
                   </div>
 
+                  {/* Autores */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Autores</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Autores <span className="text-red-500">*</span></label>
                     {watch('autores')?.map((_, index) => (
-                      <div key={index} className="flex items-center gap-2 mb-2">
+                      <div key={index} className="flex items-center gap-2 mb-3">
                         <input
-                          {...register(`autores.${index}`, { required: true })}
+                          {...register(`autores.${index}`, { required: "Autor es requerido" })}
                           type="text"
-                          placeholder={`Autor ${index + 1}`}
-                          className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                          placeholder={`Nombre del Autor ${index + 1}`}
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition-shadow"
                         />
                         {watch('autores').length > 1 && (
                           <button
@@ -186,9 +271,9 @@ function SubirProyecto() {
                               currentAutores.splice(index, 1);
                               reset({ ...watch(), autores: currentAutores });
                             }}
-                            className="text-gray-500 hover:text-red-600 transition-colors"
+                            className="p-3 text-red-400 hover:text-red-600 transition-colors bg-red-50 rounded-lg"
                           >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-trash-2"><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /><line x1="10" x2="10" y1="11" y2="17" /><line x1="14" x2="14" y1="11" y2="17" /></svg>
+                            <Trash2 className="w-5 h-5" />
                           </button>
                         )}
                       </div>
@@ -199,81 +284,93 @@ function SubirProyecto() {
                         const currentAutores = watch('autores') || [];
                         reset({ ...watch(), autores: [...currentAutores, ""] });
                       }}
-                      className="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors"
+                      className="inline-flex items-center text-indigo-600 hover:text-indigo-800 transition-colors text-sm font-medium mt-1"
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-plus"><path d="M5 12h14" /><path d="M12 5v14" /></svg>
-                      Añadir autor
+                      <Plus className="w-4 h-4 mr-1"/>
+                      Añadir otro autor
                     </button>
-                    {errors.autores && (
-                      <p className="mt-1 text-red-500 text-sm">Se requiere al menos un autor</p>
+                    {errors.autores && typeof errors.autores === 'object' && errors.autores.message && (
+                        <p className="mt-1 text-red-500 text-sm font-medium">{errors.autores.message}</p>
                     )}
                   </div>
 
-                  {/* Aquí antes estaba la fecha, ahora va Descripción */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Descripción</label>
+                  {/* Descripción */}
+                  <div className="md:col-span-2">
+                    <label htmlFor="descripcion" className="block text-sm font-medium text-gray-700 mb-1">Descripción del proyecto <span className="text-red-500">*</span></label>
                     <textarea
-                      {...register('descripcion', { required: true })}
+                      id="descripcion"
+                      {...register('descripcion', { required: "La descripción es requerida" })}
                       rows="4"
-                      placeholder="Una breve descripción de lo que trata la aplicación"
-                      className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Una breve descripción de lo que trata la aplicación, sus objetivos y público objetivo."
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition-shadow resize-none"
                     />
-                    {errors.descripcion && (<p className="mt-1 text-red-500 text-sm">Descripcion es requerida</p>)}
+                    {errors.descripcion && (<p className="mt-1 text-red-500 text-sm font-medium">{errors.descripcion.message}</p>)}
                   </div>
 
+                  {/* Fecha de realización */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Fecha de realización</label>
+                    <label htmlFor="fechaPublicacion" className="block text-sm font-medium text-gray-700 mb-1">Fecha de realización <span className="text-red-500">*</span></label>
                     <input
-                      {...register('fechaPublicacion', { required: true })}
+                      id="fechaPublicacion"
+                      {...register('fechaPublicacion', { required: "La fecha es requerida" })}
                       type="datetime-local"
-                      className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition-shadow"
                     />
-                    {errors.fechaPublicacion && (<p className="mt-1 text-red-500 text-sm">La fecha es requerida</p>)}
+                    {errors.fechaPublicacion && (<p className="mt-1 text-red-500 text-sm font-medium">{errors.fechaPublicacion.message}</p>)}
                   </div>
                 </div>
               </div>
             )}
 
+            {/* Contenido del Paso 2 */}
             {pasoActual === 2 && (
-              <div className="space-y-6">
-                <h3 className="text-xl font-semibold text-gray-700">Paso 2: Detalles Adicionales</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Categoría movida aquí */}
+              <div className="space-y-6 animate-fadeIn">
+                <h3 className="text-2xl font-extrabold text-indigo-700 border-b pb-2 border-indigo-100">
+                    <Sliders className="inline-block w-6 h-6 mr-2 mb-1 text-indigo-500"/>
+                    {pasosInfo[1].titulo}
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {/* Categoría */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Categoría</label>
+                    <label htmlFor="categoriaId" className="block text-sm font-medium text-gray-700 mb-1">Categoría <span className="text-red-500">*</span></label>
                     <select
-                      {...register('categoriaId', { required: true })}
-                      className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      id="categoriaId"
+                      {...register('categoriaId', { required: "La categoría es requerida" })}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition-shadow bg-white"
                     >
-                      <option value="">Seleccionar categoría</option>
+                      <option value="">-- Seleccionar categoría --</option>
                       {Categoria && Categoria.map((categoria) => (
                         <option key={categoria.id} value={categoria.id}>
                           {categoria.Nombre_Categoria}
                         </option>
                       ))}
                     </select>
-                    {errors.categoriaId && (<p className="mt-1 text-red-500 text-sm">Categoria es requerida</p>)}
+                    {errors.categoriaId && (<p className="mt-1 text-red-500 text-sm font-medium">{errors.categoriaId.message}</p>)}
                   </div>
 
+                  {/* Materia */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Materia</label>
+                    <label htmlFor="materia" className="block text-sm font-medium text-gray-700 mb-1">Materia asociada <span className="text-red-500">*</span></label>
                     <select
-                      {...register('materia', { required: true })}
-                      className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      id="materia"
+                      {...register('materia', { required: "La materia es requerida" })}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition-shadow bg-white"
                     >
-                      <option value="">Seleccionar materia</option>
+                      <option value="">-- Seleccionar materia --</option>
                       {materias.map((materia) => (
                         <option key={materia._id || materia.id} value={materia.nombre}>
                           {materia.nombre}
                         </option>
                       ))}
                     </select>
-                    {errors.materia && (<p className="mt-1 text-red-500 text-sm">Materia es requerida</p>)}
+                    {errors.materia && (<p className="mt-1 text-red-500 text-sm font-medium">{errors.materia.message}</p>)}
                   </div>
 
+                  {/* Link de YouTube */}
                   <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700">Link de YouTube</label>
+                    <label htmlFor="youtubeLink" className="block text-sm font-medium text-gray-700 mb-1">Link de YouTube (Video Demostrativo) <span className="text-red-500">*</span></label>
                     <input
+                      id="youtubeLink"
                       {...register('youtubeLink', {
                         required: 'El enlace de YouTube es obligatorio',
                         pattern: {
@@ -282,12 +379,11 @@ function SubirProyecto() {
                         },
                       })}
                       type="url"
-                      placeholder="https://www.youtube.com"
-                      className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="https://www.youtube.com/watch?v=tu_video_aqui"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 transition-shadow"
                     />
-
                     {errors.youtubeLink && (
-                      <p className="mt-1 text-red-500 text-sm">{errors.youtubeLink.message}</p>
+                      <p className="mt-1 text-red-500 text-sm font-medium">{errors.youtubeLink.message}</p>
                     )}
                   </div>
                 </div>
@@ -295,104 +391,117 @@ function SubirProyecto() {
             )}
 
 
+            {/* Contenido del Paso 3 - Mejora en Dropzones */}
             {pasoActual === 3 && (
-              <div className="space-y-6">
-                <h3 className="text-xl font-semibold text-gray-700">Paso 3: Carga de Archivos</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
-                  <label className="flex flex-col items-center justify-center w-full max-w-[220px] aspect-square border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors hover:shadow-md">
+              <div className="space-y-6 animate-fadeIn">
+                <h3 className="text-2xl font-extrabold text-indigo-700 border-b pb-2 border-indigo-100">
+                    <UploadCloud className="inline-block w-6 h-6 mr-2 mb-1 text-indigo-500"/>
+                    {pasosInfo[2].titulo}
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center pt-4">
+                  {/* Dropzone APK */}
+                  <label>
                     <input
                       type="file"
                       className="hidden"
                       accept=".apk"
                       {...register('urlArchivoapk', {
-                        required: 'Se requiere una APK',
+                        required: 'Se requiere la APK del proyecto',
                         validate: {
                           tamaño: (archivos) => archivos?.[0]?.size <= MAX_SIZE || 'El archivo supera los 10MB',
-                          tipo: (archivos) => archivos?.[0]?.name.toLowerCase().endsWith('.apk') || 'El archivo debe ser .apk',
+                          tipo: (archivos) => archivos?.[0]?.name?.toLowerCase().endsWith('.apk') || 'El archivo debe ser .apk',
                         },
                       })}
                     />
-                    {archivoAPK?.[0] && <span className="text-center text-sm text-gray-700 mt-1 px-2">{archivoAPK?.[0].name}</span>}
-                    {archivoAPK?.length > 0 && !errors.urlArchivoapk && (<p className="text-green-500 text-center font-semibold text-sm">APK subida</p>)}
-                    {errors.urlArchivoapk && (<p className="text-red-500 text-center font-semibold text-sm px-2">{errors.urlArchivoapk.message}</p>)}
-                    {!archivoAPK?.[0] && <Upload className="w-8 h-8 text-black opacity-50" />}
-                    {!archivoAPK?.[0] && <span className="text-sm text-gray-600 mt-1">Subir APK</span>}
+                    <FileIndicator
+                        fileName={archivoAPK?.[0]?.name}
+                        error={errors.urlArchivoapk?.message}
+                        Icon={<Upload />}
+                        requiredText="Archivo APK"
+                        acceptedType=".apk file"
+                    />
                   </label>
-
-                  <label className="flex flex-col items-center justify-center w-full max-w-[220px] aspect-square border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors hover:shadow-md">
+                  
+                  {/* Dropzone Imagen/Portada */}
+                  <label>
                     <input
                       type="file"
                       className="hidden"
                       accept="image/*"
                       {...register('portada', {
-                        required: 'Se requiere una imagen',
+                        required: 'Se requiere una imagen de portada',
                         validate: {
                           tamaño: (archivos) => archivos?.[0]?.size <= MAX_SIZE || 'La imagen supera los 10MB',
-                          tipo: (archivos) => /\.(jpg|jpeg|png|webp)$/i.test(archivos?.[0]?.name) || 'El archivo debe ser una imagen (.jpg, .jpeg, .png, .webp)',
+                          tipo: (archivos) => /\.(jpg|jpeg|png|webp)$/i.test(archivos?.[0]?.name) || 'Debe ser imagen (.jpg, .png, etc.)',
                         },
                       })}
                     />
-                    {portada?.[0] && (
-                      <span className="text-sm text-center text-gray-700 mt-1 break-words w-full px-2 max-w-[220px]">{portada?.[0].name}</span>
-                    )}
-                    {portada?.length > 0 && !errors.portada && (<p className="text-green-500 text-center font-semibold text-sm">Imagen subida</p>)}
-                    {errors.portada && (<p className="text-red-500 text-center font-semibold text-sm px-2">{errors.portada.message}</p>)}
-                    {!portada?.[0] && <Image className="w-8 h-8 text-black opacity-50" />}
-                    {!portada?.[0] && <span className="text-sm text-gray-600 mt-1">Subir IMG</span>}
+                    <FileIndicator
+                        fileName={portada?.[0]?.name}
+                        error={errors.portada?.message}
+                        Icon={<Image />}
+                        requiredText="Imagen de Portada"
+                        acceptedType=".jpg, .png, .webp"
+                    />
                   </label>
 
-                  <label className="flex flex-col items-center justify-center w-full max-w-[220px] aspect-square border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition-colors hover:shadow-md">
+                  {/* Dropzone Documento PDF */}
+                  <label>
                     <input
                       type="file"
                       className="hidden"
                       accept=".pdf"
                       {...register('urlDoc', {
-                        required: 'Se requiere un documento',
+                        required: 'Se requiere el documento de respaldo (PDF)',
                         validate: {
-                          tamaño: (archivos) => archivos?.[0]?.size <= MAX_SIZE || 'El documento es muy pesado',
+                          tamaño: (archivos) => archivos?.[0]?.size <= MAX_SIZE || 'El documento es muy pesado (Máx 10MB)',
                           tipo: (archivos) => archivos?.[0]?.name?.toLowerCase().endsWith('.pdf') || 'El archivo debe ser un PDF',
                         },
                       })}
                     />
-                    {urlDoc?.[0] && (
-                      <span className="text-sm text-center text-gray-700 mt-1 break-words w-full px-2 max-w-[220px]">{urlDoc?.[0].name}</span>
-                    )}
-                    {urlDoc?.length > 0 && !errors.urlDoc && (<p className="text-green-500 text-center font-semibold text-sm">Documento subido</p>)}
-                    {errors.urlDoc && (<p className="text-red-500 text-center font-semibold text-sm px-2">{errors.urlDoc.message}</p>)}
-                    {!urlDoc?.[0] && <FileUp className="w-8 h-8 text-black opacity-50" />}
-                    {!urlDoc?.[0] && <span className="text-sm text-gray-600 mt-1">Subir PDF</span>}
+                    <FileIndicator
+                        fileName={urlDoc?.[0]?.name}
+                        error={errors.urlDoc?.message}
+                        Icon={<FileUp />}
+                        requiredText="Documento PDF"
+                        acceptedType=".pdf file"
+                    />
                   </label>
                 </div>
               </div>
             )}
 
-            <div className="flex justify-between pt-4">
+            {/* Navegación y Botón Final */}
+            <div className={`flex ${pasoActual > 1 ? 'justify-between' : 'justify-end'} pt-6 border-t border-gray-100`}>
               {pasoActual > 1 && (
                 <button
                   type="button"
                   onClick={pasoAnterior}
-                  className="w-40 flex items-center justify-center bg-gray-300 text-gray-800 py-2 px-4 rounded-xl font-semibold hover:bg-gray-400 transition-all"
+                  className="w-40 flex items-center justify-center bg-gray-200 text-gray-700 py-3 px-4 rounded-xl font-semibold hover:bg-gray-300 transition-all transform hover:scale-[1.02] shadow-md"
                 >
-                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  <ArrowLeft className="w-5 h-5 mr-2" />
                   Anterior
                 </button>
               )}
+              
               {pasoActual < pasosInfo.length && (
                 <button
                   type="button"
                   onClick={siguientePaso}
-                  className="w-40 ml-auto flex items-center justify-center bg-indigo-600 text-white py-2 px-4 rounded-xl font-semibold hover:bg-indigo-700 transition-all"
+                  className={`${pasoActual === 1 ? 'ml-auto' : ''} w-40 flex items-center justify-center bg-indigo-600 text-white py-3 px-4 rounded-xl font-semibold hover:bg-indigo-700 transition-all transform hover:scale-[1.02] shadow-lg shadow-indigo-200/50`}
                 >
                   Siguiente
-                  <ArrowRight className="w-4 h-4 ml-2" />
+                  <ArrowRight className="w-5 h-5 ml-2" />
                 </button>
               )}
+              
+              {/* 3. Mejora: Botón de Submit llamativo */}
               {pasoActual === pasosInfo.length && (
                 <button
                   type="submit"
-                  className="w-50 ml-auto bg-gradient-to-br from-indigo-600 to-blue-600 text-white py-4 px-6 rounded-xl font-semibold hover:from-indigo-700 hover:to-blue-700 focus:outline-none focus:ring-4 focus:ring-indigo-200 transition-all transform hover:scale-[1.01] shadow-lg hover:shadow-indigo-200/50"
+                  className="w-full sm:w-60 ml-auto bg-gradient-to-br from-indigo-600 to-blue-600 text-white py-4 px-6 rounded-xl font-extrabold text-lg hover:from-indigo-700 hover:to-blue-700 focus:outline-none focus:ring-4 focus:ring-indigo-300 transition-all transform hover:scale-[1.03] shadow-xl hover:shadow-indigo-400/70 animate-pulse-once"
                 >
-                  Subir proyecto
+                  🎉 Subir Proyecto
                 </button>
               )}
             </div>
@@ -404,3 +513,22 @@ function SubirProyecto() {
 }
 
 export default SubirProyecto;
+
+// Estilos de animación simple para Tailwind (asumiendo que tienes configurado el `tailwind.config.js`)
+/* module.exports = {
+  theme: {
+    extend: {
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0', transform: 'translateY(10px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+      },
+      animation: {
+        fadeIn: 'fadeIn 0.5s ease-out',
+        'pulse-once': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) 1',
+      },
+    },
+  },
+}
+*/
