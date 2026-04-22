@@ -91,7 +91,6 @@ const DetalleSimulacion = () => {
             if (result.isConfirmed) {
                 await EliminarReview(simulacion._id, reviewId);
                 await TraerSimulaciones();
-                Swal.fire('¡Eliminado!', 'El comentario ha sido eliminado.', 'success');
             }
         };
     

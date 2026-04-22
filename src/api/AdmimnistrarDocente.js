@@ -8,7 +8,7 @@ export const subirDocenteAPI = Usuario => axios.post(`${Api}/Usuarios`, Usuario)
 export const GetAllDocentes = () => axios.get(`${Api}/Usuarios/C`)
 export const GetSolicitudes = () => axios.get(`${Api}/Usuarios/solicitudes/`);
 export const GetIdDocentes = (id) => axios.get(`${Api}/Usuarios/${id}`)
-export const PutDocentes = (id,docente) => axios.put(`${Api}/Usuarios/  ${id}`,docente)
+export const PutDocentes = (id, docente) => axios.put(`${Api}/Usuarios/${id}`, docente)
 export const DeleteDocentes = (id) => axios.delete(`${Api}/Usuarios/${id}`)
 
 

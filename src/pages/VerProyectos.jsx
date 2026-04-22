@@ -27,6 +27,7 @@ const MirarProyectos = () => {
   const [filtroNombre, setFiltroNombre] = useState("");
   const [filtroAutor, setFiltroAutor] = useState("");
   const [filtroTipo, setFiltroTipo] = useState("");
+  const [railColapsado, setRailColapsado] = useState(false);
 
   useEffect(() => {
     TraerProyectosT();
@@ -130,19 +131,8 @@ const MirarProyectos = () => {
           }
 
           await TraerProyectosT();
-
-          Swal.fire(
-            '¡Eliminado!',
-            `El ${fila.proyecto.toLowerCase()} fue eliminado correctamente.`,
-            'success'
-          );
         } catch (error) {
           console.error(error);
-          Swal.fire(
-            'Error',
-            `Hubo un problema al eliminar el ${fila.proyecto.toLowerCase()}.`,
-            'error'
-          );
         }
       },
       mostrar: (fila) =>
@@ -152,12 +142,18 @@ const MirarProyectos = () => {
   ];
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      <div className="fixed h-full w-64 bg-gray-800 text-white z-10">
-        <MenuAdministrador rol="admin" />
-      </div>
+    <div className="flex min-h-[100dvh] bg-[var(--color-background)]">
+      <aside className="fixed inset-y-0 left-0 z-20 h-[100dvh] max-h-[100dvh]">
+        <MenuAdministrador
+          rol="admin"
+          colapsado={railColapsado}
+          setColapsado={setRailColapsado}
+        />
+      </aside>
 
-      <main className="flex-1 overflow-y-auto p-4 lg:p-8 ml-64">
+      <main
+        className={`ml-0 flex-1 overflow-y-auto p-4 lg:p-8 ${railColapsado ? "pl-16" : "pl-[17.5rem]"}`}
+      >
         <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
           <h1 className="text-2xl font-bold text-gray-800 mb-4 md:mb-0">
             Administrar Proyectos

@@ -1,5 +1,6 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import { RegistroDocenteAPI, ValidarTokenAPI } from "../api/AdmiRegistro";
+import { notifyApiError, notifySuccess } from "../lib/notify";
 
 export const RegistroContext = createContext();
 
@@ -24,6 +25,7 @@ export const RegistroProvider = ({ children }) => {
             if (response.status === 200) {
                 setMensaje("¡Docente registrado correctamente!");
                 setErrors([]);
+                notifySuccess("Registro completado", "Tu cuenta quedó activada correctamente.");
             }
         } catch (error) {
             setMensaje(null);
@@ -34,6 +36,7 @@ export const RegistroProvider = ({ children }) => {
             } else {
                 setErrors([{ msg: "Error desconocido" }]);
             }
+            notifyApiError(error, "Error en el registro");
         }
     };
 

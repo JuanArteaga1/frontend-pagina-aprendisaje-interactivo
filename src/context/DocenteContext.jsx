@@ -1,5 +1,6 @@
 import { Children, createContext, useEffect, useState, useContext } from "react";
 import { subirDocenteAPI, GetAllDocentes, DeleteDocentes, PutDocentes, GetSolicitudes,DeleteSolicitudes } from "../api/AdmimnistrarDocente";
+import { notifyApiError, notifySuccess } from "../lib/notify";
 
 export const DocenteContext = createContext();
 
@@ -28,12 +29,14 @@ export const DocenteProvider = ({ children }) => {
     }
     const EditarDocentes = async (id, data) => {
         try {
-            const response = await PutDocentes(id, data);
+            await PutDocentes(id, data);
             await TraerDocentes();
+            notifySuccess("Docente actualizado", "Los cambios se guardaron correctamente.");
             return { success: true };
         } catch (error) {
             setMensaje(null);
             setErrors(error.response?.data?.errors || [{ msg: "Error desconocido" }]);
+            notifyApiError(error, "Error al actualizar docente");
             return { success: false, error: error.response?.data?.errors };
         }
     };
@@ -42,9 +45,11 @@ export const DocenteProvider = ({ children }) => {
         try {
             await DeleteDocentes(id);
             await TraerDocentes();
+            notifySuccess("Docente eliminado", "");
             return { success: true };
         } catch (error) {
             console.log("Error al eliminar el docente:", error);
+            notifyApiError(error, "Error al eliminar docente");
             return { success: false, error };
         }
     };
@@ -57,12 +62,13 @@ export const DocenteProvider = ({ children }) => {
             if (response.status === 200) {
                 setMensaje("¡Docente registrado correctamente!"); // <-- Mensaje de éxito
                 setErrors([]); // Limpiar errores anteriores
+                notifySuccess("Usuario registrado", "El docente se creó correctamente.");
             }
 
         } catch (error) {
             setMensaje(null); // Ocultar mensaje anterior de éxito si hay error
             setErrors(error.response?.data?.errors || [{ msg: "Error desconocido" }]);
-
+            notifyApiError(error, "Error al registrar docente");
         }
     };
 
@@ -79,10 +85,12 @@ export const DocenteProvider = ({ children }) => {
         try {
             await DeleteSolicitudes(id);
             await TraerSolicitudes();
+            notifySuccess("Solicitud eliminada", "");
             return { success: true };
             
         } catch (error) {
             console.error("Error al eliminar solicitud:", error);
+            notifyApiError(error, "Error al eliminar solicitud");
         }
     };
 

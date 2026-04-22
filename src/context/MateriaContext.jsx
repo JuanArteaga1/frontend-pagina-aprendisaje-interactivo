@@ -1,6 +1,7 @@
 // context/MateriaContext.jsx
 import { createContext, useState, useContext } from "react";
 import { PostMateria, GetAllMateria } from "../api/AdmiMateria"; // <-- importa tus funciones de la API
+import { notifyApiError, notifySuccess } from "../lib/notify";
 
 export const MateriaContext = createContext();
 
@@ -24,6 +25,7 @@ export const MateriaProvider = ({ children }) => {
       setMaterias(res.data);
     } catch (error) {
       console.error("Error al traer materias:", error);
+      notifyApiError(error, "No se pudieron cargar las materias");
     }
   };
 
@@ -36,12 +38,14 @@ export const MateriaProvider = ({ children }) => {
       if (response.status >= 200 && response.status <= 399) {
         setMensaje("¡Materia registrada correctamente!");
         setErrors([]);
+        notifySuccess("Materia creada", "Registro guardado correctamente.");
       }
     } catch (error) {
       setMensaje(null);
       setErrors(
         error.response?.data?.errors || [{ msg: "Error desconocido en materia" }]
       );
+      notifyApiError(error, "Error al crear materia");
     }
   };
 

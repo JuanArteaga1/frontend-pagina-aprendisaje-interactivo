@@ -18,19 +18,32 @@ import {
   ChevronRight,
 } from "lucide-react";
 
-const MenuAdministrador = ({ rol }) => {
+const iconProps = { className: "h-5 w-5 shrink-0", strokeWidth: 1.75 };
+
+/**
+ * Rail lateral estilo Linear/Vercel: superficie clara, una sola sombra suave,
+ * tipografía con peso 500 en enlaces, transiciones solo en transform/opacity/colores (GPU).
+ */
+const MenuAdministrador = ({
+  rol,
+  colapsado: colapsadoProp,
+  setColapsado: setColapsadoProp,
+  onNavigate,
+}) => {
   const navigate = useNavigate();
   const { signout } = useLogin();
-  const [colapsado, setColapsado] = useState(false);
+  const [colapsadoLocal, setColapsadoLocal] = useState(false);
+  const colapsado = colapsadoProp !== undefined ? colapsadoProp : colapsadoLocal;
+  const setColapsado = setColapsadoProp ?? setColapsadoLocal;
 
   const handleCerrarSesion = () => {
     Swal.fire({
       title: "¿Cerrar sesión?",
-      text: "¿Estás segur@ de que quieres cerrar sesión?",
+      text: "¿Seguro que deseas cerrar sesión?",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
+      confirmButtonColor: "#2563eb",
+      cancelButtonColor: "#64748b",
       confirmButtonText: "Sí, cerrar sesión",
       cancelButtonText: "Cancelar",
     }).then((result) => {
@@ -43,143 +56,95 @@ const MenuAdministrador = ({ rol }) => {
 
   const opcionesMenu = {
     admin: [
-      { nombre: "Inicio", ruta: "/", icono: <Home className="w-6 h-6" /> },
-      {
-        nombre: "Administrar Usuarios",
-        ruta: "/AdministrarDocente",
-        icono: <Users className="w-6 h-6" />,
-      },
-      {
-        nombre: "Registrar Usuario",
-        ruta: "/SubirDocente",
-        icono: <UserPlus className="w-6 h-6" />,
-      },
-      {
-        nombre: "Gestión de Categorías",
-        ruta: "/SubirCategoria",
-        icono: <Settings className="w-6 h-6" />,
-      },
-      {
-        nombre: "Gestión de Materias",
-        ruta: "/SubirMateria",
-        icono: <Settings className="w-6 h-6" />,
-      },
-      {
-        nombre: "Lista de Categorías",
-        ruta: "/categorias", // nueva página CRUD
-        icono: <Folder className="w-6 h-6" />,
-      },
-      {
-        nombre: "Lista de Materias",
-        ruta: "/materias",
-        icono: <Folder className="w-6 h-6" />,
-      },
-      {
-        nombre: "Proyectos",
-        ruta: "/VerProyectos",
-        icono: <FileText className="w-6 h-6" />,
-      },
-      {
-        nombre: "Menú Docente",
-        ruta: "/menudocente",
-        icono: <CheckCircle className="w-6 h-6" />,
-      },
+      { nombre: "Inicio", ruta: "/", Icon: Home },
+      { nombre: "Administrar Usuarios", ruta: "/AdministrarDocente", Icon: Users },
+      { nombre: "Registrar Usuario", ruta: "/SubirDocente", Icon: UserPlus },
+      { nombre: "Gestión de Categorías", ruta: "/SubirCategoria", Icon: Settings },
+      { nombre: "Gestión de Materias", ruta: "/SubirMateria", Icon: Settings },
+      { nombre: "Lista de Categorías", ruta: "/categorias", Icon: Folder },
+      { nombre: "Lista de Materias", ruta: "/materias", Icon: Folder },
+      { nombre: "Proyectos", ruta: "/VerProyectos", Icon: FileText },
+      { nombre: "Menú Docente", ruta: "/menudocente", Icon: CheckCircle },
     ],
     docente: [
-      { nombre: "Inicio", ruta: "/", icono: <Home className="w-6 h-6" /> },
-      {
-        nombre: "Subir Aplicación",
-        ruta: "/subir-proyecto",
-        icono: <Upload className="w-6 h-6" />,
-      },
-      {
-        nombre: "Subir Simulaciones",
-        ruta: "/subirsimulaciones",
-        icono: <Monitor className="w-6 h-6" />,
-      },
-      {
-        nombre: "Subir Investigación",
-        ruta: "/SubirInvestigaciones",
-        icono: <FileText className="w-6 h-6" />,
-      },
-      {
-        nombre: "Subir Podcasts",
-        ruta: "/subir-podcast",
-        icono: <Mic className="w-6 h-6" />,
-      },
-      {
-        nombre: "Mis Proyectos",
-        ruta: "/misproyectos",
-        icono: <Folder className="w-6 h-6" />,
-      },
+      { nombre: "Inicio", ruta: "/", Icon: Home },
+      { nombre: "Subir Aplicación", ruta: "/subir-proyecto", Icon: Upload },
+      { nombre: "Subir Simulaciones", ruta: "/subirsimulaciones", Icon: Monitor },
+      { nombre: "Subir Investigación", ruta: "/SubirInvestigaciones", Icon: FileText },
+      { nombre: "Subir Podcasts", ruta: "/subir-podcast", Icon: Mic },
+      { nombre: "Mis Proyectos", ruta: "/misproyectos", Icon: Folder },
     ],
   };
 
   const opciones = opcionesMenu[rol] || opcionesMenu.docente;
+  const anchoRail = colapsado ? "w-16" : "w-[17.5rem]";
 
   return (
     <div
-      className={`relative h-full bg-gradient-to-b from-gray-800 to-gray-900 text-white flex flex-col border-r border-gray-700 transition-all duration-300
-      ${colapsado ? "w-16" : "w-72"}`}
+      className={`flex h-full min-h-0 flex-col border-r border-slate-300/50 bg-[var(--color-sidebar)] text-slate-900 shadow-[var(--shadow-sidebar)] transition-[width] duration-200 ease-out ${anchoRail}`}
     >
-      {/* Botón para colapsar/expandir */}
-      <button
-        onClick={() => setColapsado(!colapsado)}
-        className="absolute -right-3 top-6 bg-gray-700 rounded-full p-1 shadow-md"
-      >
-        {colapsado ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
-      </button>
-
-      {/* Encabezado */}
-      <div className="p-6 border-b border-gray-700 bg-gray-900">
+      <div className="relative flex h-14 shrink-0 items-center border-b border-slate-300/40 px-3">
         {!colapsado && (
-          <>
-            <h2 className="text-2xl font-bold text-white mb-2">
-              {rol === "admin" ? "Panel Administrativo" : "Panel Docente"}
-            </h2>
-            <p className="text-base text-gray-300">
-              {rol === "admin" ? "Administrador del sistema" : "Área docente"}
+          <div className="min-w-0 pl-1">
+            <p className="truncate text-xs font-medium tracking-tight text-slate-500">
+              {rol === "admin" ? "Administración" : "Docente"}
             </p>
-          </>
+            <p className="truncate text-sm font-semibold tracking-tight text-slate-900">
+              {rol === "admin" ? "Panel" : "Tu espacio"}
+            </p>
+          </div>
         )}
-      </div>
-
-      {/* Menú */}
-      <nav className="flex-1 overflow-y-auto py-4">
-        <ul className="space-y-3 px-2">
-          {opciones.map((opcion, index) => (
-            <li key={index}>
-              <Link
-                to={opcion.ruta}
-                className="flex items-center p-3 rounded-lg hover:bg-gray-700 transition-all duration-200 group"
-              >
-                <span className="text-2xl group-hover:text-blue-400 transition-colors">
-                  {opcion.icono}
-                </span>
-                {!colapsado && (
-                  <span className="ml-4 font-medium text-lg">
-                    {opcion.nombre}
-                  </span>
-                )}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
-
-      {/* Botón cerrar sesión */}
-      <div className="p-5 border-t border-gray-700 bg-gray-900 flex justify-center">
         <button
-          onClick={handleCerrarSesion}
-          className={`flex items-center justify-center gap-3 transition-all duration-200 
-      ${colapsado ? "w-12 h-10" : "w-full py-3 px-10"} 
-      bg-blue-600 hover:bg-red-600 rounded-lg font-semibold shadow-md hover:shadow-lg text-lg`}
+          type="button"
+          onClick={() => setColapsado(!colapsado)}
+          className="absolute -right-3 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-slate-300/50 bg-[var(--color-sidebar)] text-slate-600 shadow-[var(--shadow-sm)] transition duration-200 ease-out hover:scale-[1.02] hover:bg-white/60 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2"
+          aria-label={colapsado ? "Expandir menú lateral" : "Contraer menú lateral"}
         >
-          <LogOut className="w-6 h-6 text-white" />
-          {!colapsado && <span>Cerrar sesión</span>}
+          {colapsado ? (
+            <ChevronRight {...iconProps} className="h-4 w-4" />
+          ) : (
+            <ChevronLeft {...iconProps} className="h-4 w-4" />
+          )}
         </button>
       </div>
 
+      <nav
+        className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-2 py-3"
+        aria-label={rol === "admin" ? "Navegación administración" : "Navegación docente"}
+      >
+        <ul className="flex flex-col gap-0.5">
+          {opciones.map((opcion) => {
+            const Icon = opcion.Icon;
+            return (
+              <li key={opcion.ruta + opcion.nombre}>
+                <Link
+                  to={opcion.ruta}
+                  title={colapsado ? opcion.nombre : undefined}
+                  onClick={() => onNavigate?.()}
+                  className="group flex min-h-[44px] items-center gap-3 rounded-xl px-2.5 py-2 text-sm font-medium text-slate-600 transition-colors duration-200 ease-out hover:bg-white/55 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2 active:scale-[0.98]"
+                >
+                  <Icon {...iconProps} className="text-slate-500 group-hover:text-slate-800" />
+                  {!colapsado && (
+                    <span className="truncate tracking-tight">{opcion.nombre}</span>
+                  )}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+
+      <div className="shrink-0 border-t border-slate-300/40 p-3">
+        <button
+          type="button"
+          onClick={handleCerrarSesion}
+          className={`flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg bg-slate-900 px-3 py-2.5 text-sm font-medium text-white shadow-[var(--shadow-sm)] transition duration-200 ease-out hover:scale-[1.01] hover:bg-slate-800 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2 ${colapsado ? "px-2" : ""}`}
+          aria-label="Cerrar sesión"
+        >
+          <LogOut className="h-5 w-5 shrink-0 text-white" strokeWidth={1.75} />
+          {!colapsado && <span className="tracking-tight">Cerrar sesión</span>}
+        </button>
+      </div>
     </div>
   );
 };

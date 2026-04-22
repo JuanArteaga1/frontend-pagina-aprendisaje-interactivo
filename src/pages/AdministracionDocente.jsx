@@ -13,6 +13,7 @@ const AdministrarDocente = () => {
   const location = useLocation();
   const [tipoMensaje, setTipoMensaje] = useState("success");
   const [mensaje, setMensaje] = useState(null);
+  const [railColapsado, setRailColapsado] = useState(false);
 
   useEffect(() => {
     TraerDocentes();
@@ -50,11 +51,9 @@ const AdministrarDocente = () => {
           if (result.isConfirmed) {
             try {
               await EliminarDocentes(fila._id);
-              Swal.fire('¡Eliminado!', 'El docente ha sido eliminado.', 'success');
               TraerDocentes();
             } catch (error) {
               console.error(error);
-              Swal.fire('Error', 'Hubo un problema al eliminar el docente.', 'error');
             }
           }
         });
@@ -76,13 +75,18 @@ const AdministrarDocente = () => {
   }, [location.state, navigate, location.pathname]);
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      {/* Menú Lateral */}
-      <div className="fixed h-full w-64 bg-gray-800 text-white z-10">
-        <MenuAdministrador rol="admin" />
-      </div>
+    <div className="flex min-h-[100dvh] bg-[var(--color-background)]">
+      <aside className="fixed inset-y-0 left-0 z-20 h-[100dvh] max-h-[100dvh]">
+        <MenuAdministrador
+          rol="admin"
+          colapsado={railColapsado}
+          setColapsado={setRailColapsado}
+        />
+      </aside>
 
-      <main className="flex-1 overflow-y-auto p-4 lg:p-8 ml-64">
+      <main
+        className={`flex-1 overflow-y-auto p-4 lg:p-8 ${railColapsado ? "pl-16" : "pl-[17.5rem]"}`}
+      >
         <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
           <h1 className="text-2xl font-bold text-gray-800 mb-4 md:mb-0">
             Administrar Usuarios
@@ -135,11 +139,9 @@ const AdministrarDocente = () => {
                   if (result.isConfirmed) {
                     try {
                       await EliminarSolicitud(fila.id);
-                      Swal.fire('¡Eliminada!', 'La solicitud ha sido eliminada.', 'success');
                       TraerSolicitudes();
                     } catch (error) {
                       console.error(error);
-                      Swal.fire('Error', 'Hubo un problema al eliminar la solicitud.', 'error');
                     }
                   }
                 });

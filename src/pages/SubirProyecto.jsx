@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import MenuLateral from "../components/MenuAdmi_Doc";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { useProyectos } from "../context/ProyectoContext";
 import { UseCategoria } from "../context/CategoriaContext";
 import Alerta from "../components/AlertasDocente";
@@ -16,7 +17,7 @@ function SubirProyecto() {
   const { sigout, Proyectos, errors: ProyectosErrors, mensaje, setMensaje, setErrors } = useProyectos();
   const { TraerCategoria, Categoria } = UseCategoria();
   const { Usuario } = useLogin();
-  const [registroExitoso, setRegistroExitoso] = useState(false);
+  const navigate = useNavigate();
   const [pasoActual, setPasoActual] = useState(1);
   const MAX_SIZE = 10 * 1024 * 1024; // 10MB
   const [materias, setMaterias] = useState([]);
@@ -47,13 +48,6 @@ function SubirProyecto() {
     TraerCategoria();
     cargarMaterias();
   }, []);
-
-  useEffect(() => {
-    if (mensaje) {
-      const timer = setTimeout(() => setRegistroExitoso(false), 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [mensaje]);
 
   useEffect(() => {
     if (ProyectosErrors.length > 0) {
@@ -149,7 +143,14 @@ function SubirProyecto() {
               formData.append("seccion", "Proyectos");
 
               const resultado = await sigout(formData);
-              if (resultado?.success) setRegistroExitoso(true);
+              if (resultado?.success) {
+                navigate("/misproyectos", {
+                  state: {
+                    mensaje: "Proyecto creado correctamente.",
+                    tipo: "success",
+                  },
+                });
+              }
             })}
             className="space-y-6 bg-white p-8 rounded-2xl shadow-xl"
           >

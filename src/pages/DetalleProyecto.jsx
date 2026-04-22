@@ -91,7 +91,6 @@ const DetalleProyecto = () => {
         if (result.isConfirmed) {
             await EliminarReview(proyecto._id, reviewId);
             await TraerProyectos();
-            Swal.fire('¡Eliminado!', 'El comentario ha sido eliminado.', 'success');
         }
     };
 

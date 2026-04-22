@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import MenuDocente from "../components/MenuAdmi_Doc";
 import Alerta from "../components/AlertasDocente";
 import Swal from 'sweetalert2';
+import { notifyApiError, notifySuccess } from "../lib/notify";
 
 import {
     GetAllCategoria,
@@ -45,18 +46,10 @@ function ListaCategorias() {
             if (result.isConfirmed) {
                 try {
                     await DeleteCategoria(id);
-                    Swal.fire(
-                        "¡Eliminado!",
-                        "La categoría ha sido eliminada con éxito.",
-                        "success"
-                    );
+                    notifySuccess("Categoría eliminada", "Se eliminó correctamente.");
                     cargarCategorias();
                 } catch (error) {
-                    Swal.fire(
-                        "Error",
-                        "Hubo un problema al eliminar la categoría.",
-                        "error"
-                    );
+                    notifyApiError(error, "Error al eliminar");
                 }
             }
         });
@@ -90,19 +83,11 @@ function ListaCategorias() {
             if (result.isConfirmed) {
                 try {
                     await PutCategoria(id, formEdit);
-                    Swal.fire(
-                        "¡Actualizado!",
-                        "La categoría ha sido modificada con éxito.",
-                        "success"
-                    );
+                    notifySuccess("Categoría actualizada", "Los cambios se guardaron.");
                     setEditandoId(null);
                     cargarCategorias();
                 } catch (error) {
-                    Swal.fire(
-                        "Error",
-                        "Hubo un problema al actualizar la categoría.",
-                        "error"
-                    );
+                    notifyApiError(error, "Error al actualizar");
                 }
             }
         });

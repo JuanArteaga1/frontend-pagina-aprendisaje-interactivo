@@ -1,64 +1,64 @@
-import React from 'react';
-import { Outlet } from 'react-router-dom';
-import MenuDocente from '../components/MenuAdmi_Doc';
+import React, { useState } from "react";
+import { Outlet } from "react-router-dom";
+import MenuDocente from "../components/MenuAdmi_Doc";
 
-function MenuDocen() {
-  const userRole = 'admin';
-  
+function MenuAdmin() {
+  const userRole = "admin";
+  const [colapsado, setColapsado] = useState(false);
+  const mainPad = colapsado ? "pl-16" : "pl-[17.5rem]";
+
   return (
-    <div className="flex h-screen bg-gray-100">
-      {/* Menú Lateral Fijo */}
-      <div className="fixed h-full w-64 bg-gray-800 text-white z-10">
-        <MenuDocente rol={userRole} />
-      </div>
+    <div className="min-h-[100dvh] bg-[var(--color-background)] text-slate-900">
+      <aside
+        className="fixed inset-y-0 left-0 z-20 h-[100dvh] max-h-[100dvh]"
+        aria-label="Navegación del panel administrador"
+      >
+        <MenuDocente
+          rol={userRole}
+          colapsado={colapsado}
+          setColapsado={setColapsado}
+        />
+      </aside>
 
-      {/* Contenido Principal */}
-      <main className="flex-1 ml-68 p-8 overflow-y-auto">
-        {/* Sección de Bienvenida */}
-        <div className="text-center mt-24 mb-12">
-          {/* Título principal con efecto de gradiente */}
-          <div className="relative inline-block mb-6">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent">
-              ¡Bienvenido Administrador!
+      <main
+        className={`min-h-[100dvh] overflow-y-auto px-4 py-10 sm:px-6 lg:px-10 lg:py-14 ${mainPad}`}
+      >
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-12 text-center">
+            <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+              Panel administración
+            </p>
+            <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
+              Bienvenido, administrador
             </h1>
-            <span className="absolute -top-4 -right-6 text-2xl">👋</span>
+            <p className="mt-3 text-base text-slate-600">
+              Gestiona usuarios, categorías y contenidos desde un solo lugar.
+            </p>
           </div>
-          
-          {/* Subtítulo */}
-          <p className="text-xl md:text-2xl text-gray-600">
-            Tu panel de control para gestionar proyectos educativos
-          </p>
-        </div>
-  
-        {/* Tarjetas de Acceso Rápido */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          {/* Tarjeta 1 - Proyectos Activos */}
-          <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow duration-300">
-            <div className="text-blue-500 text-3xl mb-3">📚</div>
-            <h2 className="text-xl font-semibold text-gray-800 mb-2">Proyectos Activos</h2>
-            <p className="text-gray-600">Revisa tus proyectos en desarrollo</p>
-          </div>
-          
-          {/* Tarjeta 2 - Tareas Pendientes */}
-          <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow duration-300">
-            <div className="text-blue-500 text-3xl mb-3">✅</div>
-            <h2 className="text-xl font-semibold text-gray-800 mb-2">Tareas Pendientes</h2>
-            <p className="text-gray-600">Administra tus actividades próximas</p>
-          </div>
-          
-          {/* Tarjeta 3 - Nuevo Proyecto */}
-          <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow duration-300">
-            <div className="text-blue-500 text-3xl mb-3">💡</div>
-            <h2 className="text-xl font-semibold text-gray-800 mb-2">Nuevo Proyecto</h2>
-            <p className="text-gray-600">Comienza una nueva iniciativa educativa</p>
-          </div>
-        </div>
 
-        {/* Contenido dinámico de rutas */}
-        <Outlet />
+          <div className="mb-10 grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
+            {[
+              { t: "Resumen", d: "Accede a listas y altas desde el menú lateral." },
+              { t: "Docentes", d: "Cuentas y solicitudes de registro." },
+              { t: "Contenidos", d: "Proyectos, categorías y materias." },
+            ].map((card) => (
+              <div
+                key={card.t}
+                className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-[var(--shadow-sm)]"
+              >
+                <h2 className="text-sm font-semibold tracking-tight text-slate-900">
+                  {card.t}
+                </h2>
+                <p className="mt-2 text-sm text-slate-600">{card.d}</p>
+              </div>
+            ))}
+          </div>
+
+          <Outlet />
+        </div>
       </main>
     </div>
   );
 }
 
-export default MenuDocen;
+export default MenuAdmin;

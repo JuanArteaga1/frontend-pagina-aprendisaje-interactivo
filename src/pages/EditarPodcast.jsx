@@ -7,6 +7,7 @@ import { useLogin } from "../context/LoginContext";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { UseCategoria } from "../context/CategoriaContext";
 import { ImageIcon, FileText, Sliders, UploadCloud, ArrowRight, ArrowLeft } from 'lucide-react';
+import { useMateriasFromBackend } from "../hooks/useMateriasFromBackend";
 
 function EditarPodcast() {
     const location = useLocation();
@@ -19,6 +20,7 @@ function EditarPodcast() {
     const { Usuario } = useLogin();
     const { TraerCategoria, Categoria } = UseCategoria();
     const { id } = useParams();
+    const materias = useMateriasFromBackend();
     const [fechaFormateada, setFechaFormateada] = useState("");
     const portada = watch('portada');
     const [imagenExistente, setImagenExistente] = useState(null);
@@ -319,9 +321,11 @@ function EditarPodcast() {
                           focus:ring-blue-500 focus:border-blue-500"
                                             >
                                                 <option value="">Seleccionar materia</option>
-                                                <option value="fisica">Física</option>
-                                                <option value="ingenieria_civil">Ingeniería Civil</option>
-                                                <option value="matematicas">Matemáticas</option>
+                                                {materias.map((m) => (
+                                                    <option key={m._id || m.id} value={m.nombre}>
+                                                        {m.nombre}
+                                                    </option>
+                                                ))}
                                             </select>
                                             {errors.materia && (
                                                 <p className="mt-1 text-red-500 text-sm">La materia es requerida</p>

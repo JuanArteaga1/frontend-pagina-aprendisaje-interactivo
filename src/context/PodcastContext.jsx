@@ -1,5 +1,6 @@
 import { Children, createContext, useEffect, useState, useContext } from "react";
 import { GetAllPodcast, subirPodcastAPI, PutPodcast, DeletePodcast, GetIdPodcast } from "../api/AdmiPodcast";
+import { notifyApiError, notifySuccess } from "../lib/notify";
 
 export const PodcastContext = createContext();
 
@@ -24,7 +25,7 @@ export const PodcastProvider = ({ children }) => {
             SetPodcast(podcast)
         } catch (error) {
             console.log(error)
-
+            notifyApiError(error, "No se pudieron cargar los podcasts");
         }
     } // <-- mensaje de éxito
 
@@ -32,12 +33,12 @@ export const PodcastProvider = ({ children }) => {
         try {
             const response = await PutPodcast(Id, data);
             SetPodcast(response);
-
+            notifySuccess("Podcast actualizado", "Los cambios se guardaron correctamente.");
             return { success: true, data: response };
         } catch (error) {
             setMensaje(null);
             setErrors(error.response?.data?.errors || [{ msg: "Error desconocido" }]);
-
+            notifyApiError(error, "Error al actualizar podcast");
             return { success: false, error: error.response?.data?.errors };
         }
     };
@@ -46,9 +47,11 @@ export const PodcastProvider = ({ children }) => {
         try {
             await DeletePodcast(id);
             await TraerPodcast();
+            notifySuccess("Podcast eliminado", "");
             return { success: true };
         } catch (error) {
             console.log("Error al eliminar el podcast:", error);
+            notifyApiError(error, "Error al eliminar podcast");
             return { success: false, error };
         }
     };
@@ -72,6 +75,7 @@ export const PodcastProvider = ({ children }) => {
             if (response.status >= 200 && response.status <= 399) {
                 setMensaje("¡Podcast registrado correctamente!");
                 setErrors([]); // Limpiar errores anteriores
+                notifySuccess("Podcast creado", "Registro guardado correctamente.");
             }
 
         } catch (error) {
@@ -83,7 +87,7 @@ export const PodcastProvider = ({ children }) => {
             } else {
                 setErrors([{ msg: "Error desconocido. Intenta más tarde." }]);
             }
-
+            notifyApiError(error, "Error al crear podcast");
         }
     };
 

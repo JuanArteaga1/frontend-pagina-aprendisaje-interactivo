@@ -101,19 +101,8 @@ const MisProyectos = () => {
           }
           
           await TraerProyectosId(Usuario.Id || localStorage.getItem('Id'));
-
-          Swal.fire(
-            "¡Eliminado!",
-            `${fila.proyecto.toLowerCase()} fue eliminado correctamente.`,
-            "success"
-          );
         } catch (error) {
           console.error(error);
-          Swal.fire(
-            "Error",
-            `Hubo un problema al eliminar ${fila.proyecto.toLowerCase()}.`,
-            "error"
-          );
         }
       },
       mostrar: (fila) =>
