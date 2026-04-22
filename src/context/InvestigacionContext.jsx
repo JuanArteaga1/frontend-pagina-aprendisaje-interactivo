@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import { GetAllInvestigacion, subirInvestigacionAPI, PutInvestigacion, GetIdInvestigacion, DeleteInvestigacion } from "../api/AdmiInvestigacion";
+import { notifyApiError, notifySuccess } from "../lib/notify";
 
 const InvestigacionContext = createContext();
 
@@ -23,12 +24,12 @@ export const InvestigacionProvider = ({ children }) => {
     try {
       const response = await PutInvestigacion(Id, data);
       setInvestigaciones(response.data);
-
+      notifySuccess("Investigación actualizada", "Los cambios se guardaron correctamente.");
       return { success: true, data: response };
     } catch (error) {
       setMensaje(null);
       setErrors(error.response?.data?.errors || [{ msg: "Error desconocido" }]);
-
+      notifyApiError(error, "Error al actualizar investigación");
       return { success: false, error: error.response?.data?.errors };
     }
   };
@@ -38,9 +39,11 @@ export const InvestigacionProvider = ({ children }) => {
       await DeleteInvestigacion(id);
       // Opcional: volver a cargar la lista actualizada
       await traerInvestigaciones();
+      notifySuccess("Investigación eliminada", "");
       return { success: true };
     } catch (error) {
       console.log("Error al eliminar el proyecto:", error);
+      notifyApiError(error, "Error al eliminar investigación");
       return { success: false, error };
     }
   };
@@ -52,6 +55,7 @@ export const InvestigacionProvider = ({ children }) => {
       setInvestigaciones(response.data);
     } catch (error) {
       console.error("Error al traer investigaciones:", error);
+      notifyApiError(error, "No se pudieron cargar las investigaciones");
     }
   };
 
@@ -64,10 +68,12 @@ export const InvestigacionProvider = ({ children }) => {
       if (response.status >= 200 && response.status <= 399) {
         setMensaje("¡Investigación registrada correctamente!");
         setErrors([]);
+        notifySuccess("Investigación creada", "Registro guardado correctamente.");
       }
     } catch (error) {
       setMensaje(null);
       setErrors(error.response?.data?.errors || [{ msg: "Error desconocido" }]);
+      notifyApiError(error, "Error al crear investigación");
     }
   };
 

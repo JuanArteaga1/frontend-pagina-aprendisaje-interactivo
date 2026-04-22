@@ -10,14 +10,14 @@ import { UseDocente } from "../context/DocenteContext";
 import Swal from 'sweetalert2';
 
 const AdministrarDocente = () => {
-    // --- Lógica y Contexto (SIN MODIFICAR) ---
-    const { EliminarSolicitud, Docente, TraerDocentes, EliminarDocentes, Solicitudes, TraerSolicitudes } = UseDocente();
-    const [columnas, setColumnas] = useState([]);
-    const [columnasSolicitudes, setColumnasSolicitudes] = useState([]);
-    const navigate = useNavigate();
-    const location = useLocation();
-    const [tipoMensaje, setTipoMensaje] = useState("success");
-    const [mensaje, setMensaje] = useState(null);
+  const { EliminarSolicitud, Docente, TraerDocentes, EliminarDocentes, Solicitudes, TraerSolicitudes } = UseDocente();
+  const [columnas, setColumnas] = useState([]);
+  const [columnasSolicitudes, setColumnasSolicitudes] = useState([]);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [tipoMensaje, setTipoMensaje] = useState("success");
+  const [mensaje, setMensaje] = useState(null);
+  const [railColapsado, setRailColapsado] = useState(false);
 
     useEffect(() => {
         TraerDocentes();
@@ -38,32 +38,32 @@ const AdministrarDocente = () => {
         ]);
     }, []);
 
-    const acciones = [
-        {
-            nombre: "Eliminar",
-            fn: (fila) => {
-                Swal.fire({
-                    title: '¿Estás seguro?',
-                    text: `Esta acción eliminará al docente "${fila.NombreCompleto || fila.nombre}"`,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#ef4444', // Rojo más profesional (Red-500)
-                    cancelButtonColor: '#6b7280', // Gris para cancelar
-                    confirmButtonText: 'Sí, eliminar',
-                    cancelButtonText: 'Cancelar',
-                    customClass: {
-                        popup: 'rounded-xl shadow-xl' // Estilo de Swal
-                    }
-                }).then(async (result) => {
-                    if (result.isConfirmed) {
-                        try {
-                            await EliminarDocentes(fila._id);
-                            Swal.fire('¡Eliminado!', 'El docente ha sido eliminado.', 'success');
-                            TraerDocentes();
-                        } catch (error) {
-                            console.error(error);
-                            Swal.fire('Error', 'Hubo un problema al eliminar el docente.', 'error');
-                        }
+  const acciones = [
+    {
+      nombre: "Eliminar",
+      fn: (fila) => {
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: `Esta acción eliminará al docente "${fila.NombreCompleto || fila.nombre}"`,
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#ef4444',
+          cancelButtonColor: '#6b7280',
+          confirmButtonText: 'Sí, eliminar',
+          cancelButtonText: 'Cancelar',
+          customClass: {
+            popup: 'rounded-xl shadow-xl'
+          }
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            try {
+              await EliminarDocentes(fila._id);
+              Swal.fire('¡Eliminado!', 'El docente ha sido eliminado.', 'success');
+              TraerDocentes();
+            } catch (error) {
+              console.error(error);
+              Swal.fire('Error', 'Hubo un problema al eliminar el docente.', 'error');
+            }
                     }
                 });
             },
@@ -84,14 +84,19 @@ const AdministrarDocente = () => {
         }
     }, [location.state, navigate, location.pathname]);
 
-    // --- Diseño Mejorado (MODIFICADO AQUÍ) ---
+    // --- Diseño Mejorado ---
     return (
-        <div className="flex h-screen bg-gray-50 font-sans">
-            {/* El sidebar ahora está fuera del main y es estático */}
-            <MenuAdministrador rol="admin" />
+        <div className="flex min-h-[100dvh] bg-gray-50 font-sans">
+            <aside className="fixed inset-y-0 left-0 z-20 h-[100dvh] max-h-[100dvh]">
+              <MenuAdministrador
+                rol="admin"
+                colapsado={railColapsado}
+                setColapsado={setRailColapsado}
+              />
+            </aside>
 
             {/* Contenido Principal con overflow-y-auto */}
-            <main className="flex-1 overflow-y-auto p-6 md:p-10">
+            <main className={`flex-1 overflow-y-auto p-6 md:p-10 ${railColapsado ? "pl-20 lg:pl-24" : "pl-[18.5rem] lg:pl-[19rem]"}`}>
                 <div className="max-w-7xl mx-auto">
 
                     {/* HEADER DE SECCIÓN (Estilo Comentarios) */}

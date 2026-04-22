@@ -7,9 +7,9 @@ import {
     PutMateria
 } from "../api/AdmiMateria";
 import MenuDocente from "../components/MenuAdmi_Doc";
+import { notifyApiError, notifySuccess } from "../lib/notify";
 
 function ListaMaterias() {
-    2
     const [materias, setMaterias] = useState([]);
     const [editandoId, setEditandoId] = useState(null);
     const [formEdit, setFormEdit] = useState({ nombre: "" });
@@ -21,6 +21,7 @@ function ListaMaterias() {
             setMaterias(res.data);
         } catch (error) {
             console.error("Error cargando materias", error);
+            notifyApiError(error, "No se pudieron cargar las materias");
         }
     };
 
@@ -43,10 +44,10 @@ function ListaMaterias() {
             if (result.isConfirmed) {
                 try {
                     await DeleteMateria(id);
-                    Swal.fire("¡Eliminado!", "La materia ha sido eliminada con éxito.", "exito");
+                    notifySuccess("Materia eliminada", "Se eliminó correctamente.");
                     cargarMaterias();
                 } catch (error) {
-                    Swal.fire("Error", "Hubo un problema al eliminar la materia.", "error");
+                    notifyApiError(error, "Error al eliminar");
                 }
             }
         });
@@ -67,11 +68,11 @@ function ListaMaterias() {
             if (result.isConfirmed) {
                 try {
                     await PutMateria(id, { nombre: formEdit.nombre });
-                    Swal.fire("¡Actualizado!", "La materia ha sido modificada con éxito.", "exito");
+                    notifySuccess("Materia actualizada", "Los cambios se guardaron.");
                     setEditandoId(null);
                     cargarMaterias();
                 } catch (error) {
-                    Swal.fire("Error", "Hubo un problema al actualizar la materia.", "error");
+                    notifyApiError(error, "Error al actualizar");
                 }
             }
         });

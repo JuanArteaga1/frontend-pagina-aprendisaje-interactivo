@@ -1,6 +1,7 @@
 // src/context/LoginContext.jsx
 import { createContext, useState, useContext, useEffect } from "react";
 import { LoginUsuario, outUsuario, verificarToken } from "../api/LoginApi";
+import { notifyApiError } from "../lib/notify";
 
 export const LoginContext = createContext();
 
@@ -74,11 +75,11 @@ export const LoginProvider = ({ children }) => {
                 localStorage.setItem("Id", usuarioNormalizado.id);
                 localStorage.setItem("Rol", usuarioNormalizado.Rol);
             }
-
         } catch (error) {
             setMensaje(null);
             const errores = error.response?.data?.errors || [{ message: "Error desconocido" }];
             setErrors(errores);
+            notifyApiError(error, "No se pudo iniciar sesión");
         }
     };
 

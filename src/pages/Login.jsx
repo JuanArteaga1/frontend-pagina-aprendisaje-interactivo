@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import imagenlogin from "../img/logou.png";
-import { useLogin } from "../context/LoginContext"
-import { useForm } from "react-hook-form"
-import { useNavigate } from "react-router-dom"
+import { useLogin } from "../context/LoginContext";
+import { useForm } from "react-hook-form";
+import { useNavigate, Link } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import Alerta from "../components/AlertasDocente";
 
@@ -13,131 +13,111 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Debug logs
-console.log(localStorage.getItem('Rol'));
-
   useEffect(() => {
-    if (isAuthenticated && Usuario?.rol || localStorage.getItem('Rol')) { // Cambiar Rol por rol
-
-      switch (Usuario?.rol || localStorage.getItem('Rol')) { 
-        
-        case "Docente":
-          navigate("/menudocente");
-          break;
-        case "Administrador":
-          navigate("/menuadministrador");
-          break;
-        default:
-          console.log("Rol no reconocido:", Usuario.rol);
-          navigate("/");
-          break;
-      }
+    if (!isAuthenticated) return;
+    const rol = Usuario?.Rol ?? Usuario?.rol ?? localStorage.getItem("Rol");
+    switch (rol) {
+      case "Docente":
+        navigate("/menudocente");
+        break;
+      case "Administrador":
+        navigate("/menuadministrador");
+        break;
+      default:
+        navigate("/");
+        break;
     }
-}, [isAuthenticated, Usuario, navigate]);
+  }, [isAuthenticated, Usuario, navigate]);
 
   const onSubmit = handleSubmit(async (values) => {
-    console.log("🔍 Iniciando login con valores:", values);
     setLoading(true);
-    
     try {
-      await signin(values); // ✅ Esperar a que termine la función signin
-      console.log("✅ signin completado");
+      await signin(values);
     } catch (error) {
-      console.error("❌ Error al iniciar sesión:", error);
+      console.error("Error al iniciar sesión:", error);
     } finally {
       setLoading(false);
     }
   });
 
   return (
-    <>
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <div className="w-full max-w-md p-8 bg-white rounded shadow-md">
-          {LoginErrors.map((error, i) => (
-            <Alerta key={i} tipo="error" mensaje={error.msg || error.message} />
-          ))}
+    <div className="flex min-h-screen items-center justify-center bg-[var(--color-background)] px-4 py-12">
+      <div className="w-full max-w-md rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-8 shadow-[var(--shadow-md)]">
+        {LoginErrors.map((error, i) => (
+          <Alerta key={i} tipo="error" mensaje={error.msg || error.message} />
+        ))}
 
-          <div className="flex justify-center mb-6">
-            <img src={imagenlogin} alt="Logo" className="h-24" />
+        <div className="mb-8 flex justify-center">
+          <img src={imagenlogin} alt="Logo institucional" className="h-24 w-auto" width={120} height={96} />
+        </div>
+
+        <h1 className="mb-6 text-center text-2xl font-bold text-slate-900">Iniciar sesión</h1>
+
+        <form onSubmit={onSubmit} className="space-y-5">
+          <div>
+            <label htmlFor="login-email" className="mb-1 block text-sm font-medium text-slate-700">
+              Correo
+            </label>
+            <input
+              id="login-email"
+              type="email"
+              autoComplete="email"
+              {...register("email", { required: true })}
+              className="w-full rounded-xl border border-[var(--color-border)] px-4 py-3 text-slate-900 shadow-sm focus:border-[var(--color-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/25"
+              placeholder="ejemplo@correo.com"
+              disabled={loading}
+            />
+            {errors.email && (
+              <p className="mt-1 text-sm text-red-600">Ingrese un correo válido.</p>
+            )}
           </div>
 
-          <form onSubmit={onSubmit} className="space-y-4">
-            <div>
+          <div>
+            <label htmlFor="login-password" className="mb-1 block text-sm font-medium text-slate-700">
+              Contraseña
+            </label>
+            <div className="relative">
               <input
-                type="email"
-                {...register('email', { required: true })}
-                className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="ejemplo@correo.com"
+                id="login-password"
+                type={showPassword ? "text" : "password"}
+                autoComplete="current-password"
+                {...register("contrasena", { required: true })}
+                className="w-full rounded-xl border border-[var(--color-border)] px-4 py-3 pr-12 text-slate-900 shadow-sm focus:border-[var(--color-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/25"
+                placeholder="••••••••"
                 disabled={loading}
               />
-              {errors.email && (
-                <p className="text-red-500 text-sm mt-1">INGRESE CORREO</p>
-              )}
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 rounded p-1 text-slate-500 hover:bg-slate-100 hover:text-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]"
+                aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                disabled={loading}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
             </div>
-
-            <div>
-              <div className="relative">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  {...register('contrasena', { required: true })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="**********"
-                  disabled={loading}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-2.5 text-gray-500"
-                  disabled={loading}
-                >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                </button>
-              </div>
-              {errors.contrasena && (
-                <p className="text-red-500 text-sm mt-1">INGRESE CONTRASEÑA</p>
-              )}
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-colors hover:scale-103 disabled:bg-blue-400 disabled:cursor-not-allowed"
-            >
-              {loading ? "Ingresando..." : "Acceder"}
-            </button>
-          </form>
-
-          <div className="mt-4 text-center">
-            <a href="#" className="text-blue-600 hover:underline text-sm">¿Olvidó su contraseña?</a>
+            {errors.contrasena && (
+              <p className="mt-1 text-sm text-red-600">Ingrese su contraseña.</p>
+            )}
           </div>
 
-          <hr className="my-6 border-gray-300 opacity-90" />
+          <button
+            type="submit"
+            disabled={loading}
+            className="flex min-h-[44px] w-full items-center justify-center rounded-xl bg-[var(--color-primary)] px-4 py-3 font-semibold text-white shadow-sm transition hover:bg-[var(--color-primary-dark)] disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {loading ? "Ingresando…" : "Acceder"}
+          </button>
+        </form>
 
-          <div className="text-center">
-            <p className="text-sm text-gray-600 mb-2">Identifíquese usando su cuenta en:</p>
-            <button
-              type="button"
-              className="flex items-center justify-center w-full px-4 py-2 border border-gray-300 rounded hover:bg-gray-100 hover:scale-104"
-              disabled={loading}
-            >
-              <img
-                src="https://www.svgrepo.com/show/475656/google-color.svg"
-                alt="Google"
-                className="w-5 h-5 mr-2"
-              />
-              Google
-            </button>
-          </div>
-
-          {/* Debug info - remover en producción */}
-          <div className="mt-4 p-2 bg-gray-100 text-xs rounded">
-            <p>Debug: Auth={isAuthenticated ? "✅" : "❌"}</p>
-            <p>Rol: {Usuario?.rol || "Sin rol"}</p>
-            <p>Usuario: {Usuario?.nombre || "Sin usuario"}</p>
-          </div>
-        </div>
+        <p className="mt-6 text-center text-sm text-slate-500">
+          <span className="text-slate-400">¿Problemas para entrar?</span>{" "}
+          <Link to="/ayuda" className="font-medium text-[var(--color-primary)] hover:underline">
+            Ver ayuda
+          </Link>
+        </p>
       </div>
-    </>
+    </div>
   );
 };
 

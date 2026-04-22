@@ -2,13 +2,68 @@
 @import "slick-carousel/slick/slick.css";
 @import "slick-carousel/slick/slick-theme.css";
 
+/* Design tokens (frontend-pro) — no modificar bloques .card* (tarjetas interactivas de proyectos) */
+:root {
+  --color-primary: #2563eb;
+  --color-primary-dark: #1d4ed8;
+  --color-primary-foreground: #ffffff;
+  --color-surface: #ffffff;
+  /* Menú lateral admin/docente: tono frío, no blanco puro */
+  --color-sidebar: #e4e9f2;
+  --color-background: #fafafa;
+  --color-muted: #64748b;
+  --color-border: #e8e8ec;
+  /* Inter primero (carga desde index.html); fallback system-ui */
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --shadow-sm: 0 1px 2px rgb(15 23 42 / 0.04), 0 1px 3px rgb(15 23 42 / 0.06);
+  --shadow-md: 0 4px 6px -1px rgb(15 23 42 / 0.05), 0 2px 4px -2px rgb(15 23 42 / 0.05);
+  --shadow-sidebar: 1px 0 0 rgb(15 23 42 / 0.06), 4px 0 24px rgb(15 23 42 / 0.04);
+  --nav-h: 4rem;
+  --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Navbar: blur solo desde md; en móvil superficie sólida (rendimiento). */
+@media (min-width: 768px) {
+  .nav-surface {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+}
+
+@media (max-width: 767px) {
+  .nav-surface {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
 
 body {
-  font-family: sans-serif;
-  background-color: #f8f9fa;
+  font-family: var(--font-sans);
+  font-weight: 400;
+  background-color: var(--color-background);
+  color: #0f172a;
   margin: 0;
   padding: 0;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* SweetAlert2 toast legible con tokens */
+.swal2-popup.swal2-toast {
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-md) !important;
 }
 
 /*Home + Carrusel*/

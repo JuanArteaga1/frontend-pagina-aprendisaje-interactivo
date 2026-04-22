@@ -7,6 +7,7 @@ import { UseSimulaciones } from "../context/SimulacionesContex";
 import Alerta from "../components/AlertasDocente";
 import { UseCategoria } from "../context/CategoriaContext"
 import { Image, FileUp, UploadIcon, FileText, Sliders, UploadCloud, ArrowRight, ArrowLeft } from "lucide-react";
+import { useMateriasFromBackend } from "../hooks/useMateriasFromBackend";
 
 function EditarSimulaciones() {
     const location = useLocation();
@@ -18,6 +19,7 @@ function EditarSimulaciones() {
     const [simulacionActual, setSimulacionActual] = useState(null);
     const { id } = useParams();
     const { TraerCategoria, Categoria } = UseCategoria()
+    const materias = useMateriasFromBackend();
     const [fechaFormateada, setFechaFormateada] = useState("");
     const [pasoActual, setPasoActual] = useState(1);
 
@@ -252,9 +254,11 @@ function EditarSimulaciones() {
                                             className="mt-1 block w-full border-2 border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 px-4 py-2"
                                         >
                                             <option value="">Seleccionar materia</option>
-                                            <option value="Fisica">Fisica</option>
-                                            <option value="ingenieria civil">Ingeniería Civil</option>
-                                            <option value="Matematicas">Matematicas</option>
+                                            {materias.map((m) => (
+                                                <option key={m._id || m.id} value={m.nombre}>
+                                                    {m.nombre}
+                                                </option>
+                                            ))}
                                         </select>
                                         {errors.materia && (
                                             <p className="text-red-500 font-semibold text-sm">La materia es requerida</p>

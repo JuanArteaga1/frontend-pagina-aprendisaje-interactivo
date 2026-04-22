@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import TablaDinamica from "../components/Tabla";
 import MenuAdministrador from "../components/MenuAdmi_Doc";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import { notifySuccess, notifyWarning } from "../lib/notify";
 
 const ProyectosPorAprobar = () => {
   // Datos de ejemplo para proyectos pendientes
@@ -59,15 +60,15 @@ const ProyectosPorAprobar = () => {
   // Funciones de acciones
   const handleAprobar = (proyecto) => {
     if (window.confirm(`¿Aprobar el proyecto "${proyecto.nombre}"?`)) {
-      setProyectos(proyectos.filter(p => p.id !== proyecto.id));
-      // Aquí iría la lógica para mover a proyectos aprobados
+      setProyectos(proyectos.filter((p) => p.id !== proyecto.id));
+      notifySuccess("Proyecto aprobado", `${proyecto.nombre} quedó marcado como aprobado.`);
     }
   };
 
   const handleRechazar = (proyecto) => {
     if (window.confirm(`¿Rechazar el proyecto "${proyecto.nombre}"?`)) {
-      setProyectos(proyectos.filter(p => p.id !== proyecto.id));
-      // Aquí iría la lógica para mover a proyectos rechazados
+      setProyectos(proyectos.filter((p) => p.id !== proyecto.id));
+      notifyWarning("Proyecto rechazado", `${proyecto.nombre} se retiró de la lista pendiente.`);
     }
   };
 

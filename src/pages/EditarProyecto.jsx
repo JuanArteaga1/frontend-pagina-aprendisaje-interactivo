@@ -7,6 +7,7 @@ import { useLogin } from "../context/LoginContext";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Alerta from "../components/AlertasDocente";
 import { Image, Upload, FileUp, ArrowRight, ArrowLeft, FileText, Sliders, UploadCloud } from "lucide-react";
+import { useMateriasFromBackend } from "../hooks/useMateriasFromBackend";
 
 function EditarProyecto() {
     const location = useLocation();
@@ -16,6 +17,7 @@ function EditarProyecto() {
     const { TraerCategoria, Categoria } = UseCategoria();
     const { Usuario } = useLogin();
     const { id } = useParams();
+    const materias = useMateriasFromBackend();
 
     const [pasoActual, setPasoActual] = useState(1);
     const MAX_SIZE = 10 * 1024 * 1024; // 10MB
@@ -269,14 +271,15 @@ function EditarProyecto() {
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700">Materia</label>
                                         <select
-                                            defaultValue={proyecto.materia || ""}
                                             {...register('materia', { required: true })}
                                             className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                                         >
                                             <option value="">Seleccionar materia</option>
-                                            <option value="Fisica">Física</option>
-                                            <option value="ingenieria civil">Ingeniería Civil</option>
-                                            <option value="Matematicas">Matemáticas</option>
+                                            {materias.map((m) => (
+                                                <option key={m._id || m.id} value={m.nombre}>
+                                                    {m.nombre}
+                                                </option>
+                                            ))}
                                         </select>
                                         {errors.materia && (<p className="mt-1 text-red-500 text-sm">Materia es requerida</p>)}
                                     </div>

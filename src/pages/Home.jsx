@@ -25,7 +25,7 @@ const Home = () => {
   
 
   return (
-    <div className="w-full overflow-x-hidden bg-gray-50">
+    <div className="w-full overflow-x-hidden bg-[var(--color-background)] text-slate-900">
       <Navbar />
 
       {/* Carrusel Hero */}
@@ -72,29 +72,17 @@ const Home = () => {
       </div>
 
       {/* Sección de categorías */}
-      <section className="py-16 px-4 max-w-7xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800">
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        <h2 className="mb-4 text-center text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">
           Explora nuestras categorías
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <CategoryBox
-            title="FÍSICA"
-            image="/img/physics.png"
-            path="/Fisica"
-            className="hover:shadow-xl transition-all duration-300 "
-          />
-          <CategoryBox
-            title="ING CIVIL"
-            image="/img/civil.png"
-            path="/IngCivil"
-            className="hover:shadow-xl transition-all duration-300"
-          />
-          <CategoryBox
-            title="MATEMÁTICAS"
-            image="/img/math.png"
-            path="/Matematicas"
-            className="hover:shadow-xl transition-all duration-300"
-          />
+        <p className="mx-auto mb-12 max-w-2xl text-center text-lg text-slate-600">
+          Elige un área y accede a simulaciones, apps y materiales curados.
+        </p>
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-8">
+          <CategoryBox title="FÍSICA" image="/img/physics.png" path="/Fisica" />
+          <CategoryBox title="ING CIVIL" image="/img/civil.png" path="/IngCivil" />
+          <CategoryBox title="MATEMÁTICAS" image="/img/math.png" path="/Matematicas" />
         </div>
       </section>
 
@@ -138,7 +126,7 @@ const Home = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white pt-16 pb-8 px-4">
+      <footer className="border-t border-slate-800 bg-slate-950 px-4 pb-10 pt-16 text-slate-100">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <h4 className="text-2xl font-bold mb-4">Universidad Autónoma</h4>

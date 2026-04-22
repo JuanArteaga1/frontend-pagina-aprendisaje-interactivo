@@ -6,6 +6,7 @@ import Alerta from "../components/AlertasDocente";
 import { useLogin } from "../context/LoginContext";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { ImageIcon, UploadIcon, FileText, Sliders, UploadCloud, ArrowRight, ArrowLeft } from "lucide-react";
+import { useMateriasFromBackend } from "../hooks/useMateriasFromBackend";
 
 function EditarInvestigacion() {
     const location = useLocation();
@@ -34,6 +35,7 @@ function EditarInvestigacion() {
     const portada = watch("portada");
     const urlDoc = watch("urlDoc");
     const { id } = useParams();
+    const materias = useMateriasFromBackend();
 
     const pasosInfo = [
         { id: 1, titulo: "Información General", icono: <FileText className="w-5 h-5 mr-2" /> },
@@ -269,9 +271,11 @@ function EditarInvestigacion() {
                                         className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg"
                                     >
                                         <option value="">Seleccionar materia</option>
-                                        <option value="Fisica">Fisica</option>
-                                        <option value="Ingenieria Civil">Ingeniería Civil</option>
-                                        <option value="Matematicas">Matematicas</option>
+                                        {materias.map((m) => (
+                                            <option key={m._id || m.id} value={m.nombre}>
+                                                {m.nombre}
+                                            </option>
+                                        ))}
                                     </select>
                                     {errors.materia && <p className="text-red-500 text-sm">{errors.materia.message}</p>}
                                 </div>
