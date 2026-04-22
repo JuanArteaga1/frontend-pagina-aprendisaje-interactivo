@@ -1,9 +1,6 @@
 import { useLogin} from "./context/LoginContext"
 import { Navigate,Outlet} from "react-router-dom";
 
-
-
-
 function ProtectedRote() {
     const {isAuthenticated} = useLogin()
     if (!isAuthenticated) return <Navigate to='/login' replace/>
@@ -11,6 +8,5 @@ function ProtectedRote() {
         <Outlet/>
     )
 }
-
 
 export default ProtectedRote

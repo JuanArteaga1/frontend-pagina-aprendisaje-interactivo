@@ -16,6 +16,7 @@ import {
   Settings,
   ChevronLeft,
   ChevronRight,
+  MessageSquare,
 } from "lucide-react";
 
 const iconProps = { className: "h-5 w-5 shrink-0", strokeWidth: 1.75 };
@@ -31,11 +32,16 @@ const MenuAdministrador = ({
   onNavigate,
 }) => {
   const navigate = useNavigate();
+  // Asume que useLogin proporciona la función signout
   const { signout } = useLogin();
   const [colapsadoLocal, setColapsadoLocal] = useState(false);
   const colapsado = colapsadoProp !== undefined ? colapsadoProp : colapsadoLocal;
   const setColapsado = setColapsadoProp ?? setColapsadoLocal;
 
+  /**
+   * Muestra un SweetAlert2 para confirmar el cierre de sesión.
+   * Si se confirma, llama a signout() y navega a la página de inicio.
+   */
   const handleCerrarSesion = () => {
     Swal.fire({
       title: "¿Cerrar sesión?",
@@ -54,6 +60,9 @@ const MenuAdministrador = ({
     });
   };
 
+  /**
+   * Opciones de menú definidas por rol.
+   */
   const opcionesMenu = {
     admin: [
       { nombre: "Inicio", ruta: "/", Icon: Home },
@@ -64,6 +73,7 @@ const MenuAdministrador = ({
       { nombre: "Lista de Categorías", ruta: "/categorias", Icon: Folder },
       { nombre: "Lista de Materias", ruta: "/materias", Icon: Folder },
       { nombre: "Proyectos", ruta: "/VerProyectos", Icon: FileText },
+      { nombre: "Comentarios", ruta: "/comentarios", Icon: MessageSquare },
       { nombre: "Menú Docente", ruta: "/menudocente", Icon: CheckCircle },
     ],
     docente: [
@@ -76,10 +86,12 @@ const MenuAdministrador = ({
     ],
   };
 
+  // Selecciona las opciones basadas en el rol, o usa las de docente como fallback
   const opciones = opcionesMenu[rol] || opcionesMenu.docente;
   const anchoRail = colapsado ? "w-16" : "w-[17.5rem]";
 
   return (
+    // Contenedor principal: usa 'flex flex-col' para apilar elementos y 'h-full' para tomar toda la altura.
     <div
       className={`flex h-full min-h-0 flex-col border-r border-slate-300/50 bg-[var(--color-sidebar)] text-slate-900 shadow-[var(--shadow-sidebar)] transition-[width] duration-200 ease-out ${anchoRail}`}
     >
